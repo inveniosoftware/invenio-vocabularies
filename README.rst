@@ -24,9 +24,10 @@
 .. image:: https://img.shields.io/github/license/inveniosoftware/invenio-vocabularies.svg
         :target: https://github.com/inveniosoftware/invenio-vocabularies/blob/master/LICENSE
 
-Invenio module for managing vocabularies.
+Invenio module for managing vocabularies, based on Invenio-Records and Invenio-Records-Resources. This module provides:
 
-TODO: Please provide feature overview of module
+- Factories for easily generating models, record API classes, services, and resources
+- Helpers for importing vocabularies
 
 Further documentation is available on
 https://invenio-vocabularies.readthedocs.io/

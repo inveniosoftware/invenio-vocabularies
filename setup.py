@@ -68,20 +68,19 @@ setup(
         'invenio_base.blueprints': [
             'invenio_vocabularies = invenio_vocabularies.views:blueprint',
         ],
+        'invenio_base.api_apps': [
+            'invenio_vocabularies = invenio_vocabularies:InvenioVocabularies',
+        ],
         'invenio_i18n.translations': [
             'messages = invenio_vocabularies',
         ],
-        # TODO: Edit these entry points to fit your needs.
-        # 'invenio_access.actions': [],
-        # 'invenio_admin.actions': [],
+        # TODO: See which of the following we truly need
         # 'invenio_assets.bundles': [],
-        # 'invenio_base.api_apps': [],
         # 'invenio_base.api_blueprints': [],
         # 'invenio_base.blueprints': [],
         # 'invenio_celery.tasks': [],
         # 'invenio_db.models': [],
         # 'invenio_pidstore.minters': [],
-        # 'invenio_records.jsonresolver': [],
     },
     extras_require=extras_require,
     install_requires=install_requires,

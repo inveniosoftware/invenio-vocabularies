@@ -7,11 +7,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-
-# TODO: Pass the services required by your module to the
-# docker-services-cli e.g. `docker-services-cli up es postgresql redis`
-# remove docker-services-cli if you don't need any of the services.
-docker-services-cli up && \
+docker-services-cli up es postgresql redis && \
 python -m check_manifest --ignore ".travis-*" && \
 python -m sphinx.cmd.build -qnNW docs docs/_build/html && \
 python -m pytest

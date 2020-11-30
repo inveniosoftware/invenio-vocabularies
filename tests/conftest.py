@@ -25,10 +25,7 @@ from invenio_vocabularies.views import blueprint
 
 @pytest.fixture(scope='module')
 def celery_config():
-    """Override pytest-invenio fixture.
-
-    TODO: Remove this fixture if you add Celery support.
-    """
+    """Override pytest-invenio fixture."""
     return {}
 
 
