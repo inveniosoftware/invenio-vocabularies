@@ -18,25 +18,31 @@ import tempfile
 import pytest
 from flask import Flask
 from flask_babelex import Babel
+from invenio_app.factory import create_api as _create_api
 
 from invenio_vocabularies import InvenioVocabularies
-from invenio_vocabularies.views import blueprint
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def celery_config():
     """Override pytest-invenio fixture."""
     return {}
 
 
-@pytest.fixture(scope='module')
-def create_app(instance_path):
+# @pytest.fixture(scope='module')
+# def create_app(instance_path):
+#     """Application factory fixture."""
+#     def factory(**config):
+#         app = Flask('testapp', instance_path=instance_path)
+#         import ipdb;ipdb.set_trace()
+#         app.config.update(**config)
+#         Babel(app)
+#         InvenioVocabularies(app)
+#         return app
+#     return factory
+
+
+@pytest.fixture(scope="module")
+def create_app(instance_path, entry_points):
     """Application factory fixture."""
-    def factory(**config):
-        app = Flask('testapp', instance_path=instance_path)
-        app.config.update(**config)
-        Babel(app)
-        InvenioVocabularies(app)
-        app.register_blueprint(blueprint)
-        return app
-    return factory
+    return _create_api

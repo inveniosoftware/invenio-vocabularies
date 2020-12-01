@@ -12,8 +12,3 @@ API Docs
 .. automodule:: invenio_vocabularies.ext
    :members:
 
-Views
------
-
-.. automodule:: invenio_vocabularies.views
-   :members:

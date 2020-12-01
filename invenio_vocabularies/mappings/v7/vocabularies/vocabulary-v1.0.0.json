@@ -1,0 +1,44 @@
+{
+  "mappings": {
+    "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "text"
+            },
+            "vocabulary_type": {
+              "type": "text"
+            },
+            "description": {
+              "type": "text"
+            },
+            "icon": {
+              "type": "keyword"
+            },
+            "props": {
+              "type": "object"
+            }
+          }
+        },
+        "created": {
+          "type": "date"
+        },
+        "updated": {
+          "type": "date"
+        },
+        "vocabulary_type": {
+          "type": "integer"
+        },
+        "uuid": {
+          "type": "keyword"
+        },
+        "version_id": {
+          "type": "integer"
+        }
+    }
+  }
+}
