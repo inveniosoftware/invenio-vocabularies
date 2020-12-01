@@ -11,4 +11,4 @@
 from .ext import InvenioVocabularies
 from .version import __version__
 
-__all__ = ('__version__', 'InvenioVocabularies')
+__all__ = ("__version__", "InvenioVocabularies")

@@ -8,8 +8,5 @@
 
 """Invenio module for managing vocabularies."""
 
-VOCABULARIES_DEFAULT_VALUE = 'foobar'
+VOCABULARIES_DEFAULT_VALUE = "foobar"
 """Default value for the application."""
-
-VOCABULARIES_BASE_TEMPLATE = 'invenio_vocabularies/base.html'
-"""Default base template for the demo page."""

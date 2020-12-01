@@ -16,24 +16,18 @@ from invenio_vocabularies import InvenioVocabularies
 def test_version():
     """Test version import."""
     from invenio_vocabularies import __version__
+
     assert __version__
 
 
 def test_init():
     """Test extension initialization."""
-    app = Flask('testapp')
+    app = Flask("testapp")
     ext = InvenioVocabularies(app)
-    assert 'invenio-vocabularies' in app.extensions
+    assert "invenio-vocabularies" in app.extensions
 
-    app = Flask('testapp')
+    app = Flask("testapp")
     ext = InvenioVocabularies()
-    assert 'invenio-vocabularies' not in app.extensions
+    assert "invenio-vocabularies" not in app.extensions
     ext.init_app(app)
-    assert 'invenio-vocabularies' in app.extensions
-
-
-def test_view(base_client):
-    """Test view."""
-    res = base_client.get("/")
-    assert res.status_code == 200
-    assert 'Welcome to Invenio-Vocabularies' in str(res.data)
+    assert "invenio-vocabularies" in app.extensions

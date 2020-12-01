@@ -24,16 +24,10 @@ class InvenioVocabularies(object):
     def init_app(self, app):
         """Flask application initialization."""
         self.init_config(app)
-        app.extensions['invenio-vocabularies'] = self
+        app.extensions["invenio-vocabularies"] = self
 
     def init_config(self, app):
         """Initialize configuration."""
-        # Use theme's base template if theme is installed
-        if 'BASE_TEMPLATE' in app.config:
-            app.config.setdefault(
-                'VOCABULARIES_BASE_TEMPLATE',
-                app.config['BASE_TEMPLATE'],
-            )
         for k in dir(config):
-            if k.startswith('VOCABULARIES_'):
+            if k.startswith("VOCABULARIES_"):
                 app.config.setdefault(k, getattr(config, k))
