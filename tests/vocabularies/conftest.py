@@ -19,7 +19,22 @@ from invenio_vocabularies.records.models import VocabularyType
 @pytest.fixture()
 def example_data():
     """Example data."""
-    return {"metadata": {"title": "Test"}}
+    return {
+        "metadata": {
+            "title": {
+                "en": "Test title",
+                "fr": "Titre test"
+            },
+            "description": {
+                "en": "Test description",
+                "de": "Textbeschreibung"
+            },
+            "icon": "icon-identifier",
+            "props": {
+                "key": "value"
+            }
+        }
+    }
 
 
 @pytest.fixture()

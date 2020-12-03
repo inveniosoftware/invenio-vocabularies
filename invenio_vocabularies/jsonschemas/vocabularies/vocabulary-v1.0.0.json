@@ -9,16 +9,31 @@
       "type": "object",
       "properties": {
         "title": {
-          "type": "string"
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string"
+            }
+          }
         },
-        "description":  {
-          "type": "object"
+        "description": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string"
+            }
+          }
         },
         "icon": {
           "type": "string"
         },
         "props": {
-          "type": "object"
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
+              "type": "string"
+            }
+          }
         }
       }
     },
