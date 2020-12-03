@@ -11,10 +11,12 @@
 from flask import g
 from flask_resources.context import resource_requestctx
 from invenio_records_resources.resources import RecordResource, \
-    RecordResourceConfig
+    RecordResourceConfig, RecordResponse
 
 from invenio_vocabularies.resources.records.schema import SearchLinksSchema, \
     VocabularyLinksSchema
+from invenio_vocabularies.resources.records.serializers import \
+    PresentationJSONSerializer
 
 
 class VocabularyResourceConfig(RecordResourceConfig):
@@ -26,6 +28,12 @@ class VocabularyResourceConfig(RecordResourceConfig):
     links_config = {
         "record": VocabularyLinksSchema,
         "search": SearchLinksSchema,
+    }
+
+    response_handlers = {
+        **RecordResourceConfig.response_handlers,
+        "application/json": RecordResponse(
+            PresentationJSONSerializer())
     }
 
 

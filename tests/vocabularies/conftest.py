@@ -10,10 +10,13 @@
 """Vocabularies test config."""
 
 import pytest
+from flask_principal import Identity
+from invenio_access import any_user
 from invenio_indexer.api import RecordIndexer
 
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
+from invenio_vocabularies.services.records.service import Service
 
 
 @pytest.fixture()
@@ -38,17 +41,33 @@ def example_data():
 
 
 @pytest.fixture()
-def example_record(db, example_data):
+def identity():
+    """Simple identity to interact with the service."""
+    identity = Identity(1)
+    identity.provides.add(any_user)
+    return identity
+
+
+@pytest.fixture()
+def service():
+    """Vocabularies service object."""
+    return Service()
+
+
+@pytest.fixture()
+def example_record(db, identity, service, example_data):
     """Example record."""
     vocabulary_type = VocabularyType(name="languages")
     db.session.add(vocabulary_type)
     db.session.commit()
 
-    record = Vocabulary.create(
-        example_data, vocabulary_type=vocabulary_type.id
+    record = service.create(
+        identity=identity, data=dict(
+            **example_data,
+            vocabulary_type_id=vocabulary_type.id
+        )
     )
-    record.commit()
-    db.session.commit()
+
     return record
 
 
@@ -57,5 +76,5 @@ def indexer():
     """Indexer instance with correct Record class."""
     return RecordIndexer(
         record_cls=Vocabulary,
-        record_to_index=lambda r: (r.index._name, "_doc"),
+        record_to_index=lambda r: (r._record.index._name, "_doc"),
     )
