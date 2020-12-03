@@ -97,9 +97,6 @@ setup(
         "invenio_base.api_apps": [
             "invenio_vocabularies = invenio_vocabularies:InvenioVocabularies",
         ],
-        "invenio_base.api_blueprints": [
-            "invenio_vocabularies = invenio_vocabularies.records.views:create_blueprints"
-        ],
         "flask.commands": [
             "load = invenio_vocabularies.cli:load",
         ],
