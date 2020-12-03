@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://localhost/schemas/vocabularies/vocabulary-v1.0.0.json",
   "type": "object",
   "properties": {
     "id": {
@@ -22,6 +21,9 @@
           "type": "object"
         }
       }
+    },
+    "vocabulary_type": {
+      "type": "integer"
     }
   }
 }
