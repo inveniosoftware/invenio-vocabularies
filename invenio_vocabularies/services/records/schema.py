@@ -10,9 +10,8 @@
 from invenio_records_resources.services.records.schema import RecordSchema
 from marshmallow import EXCLUDE, Schema, fields, validate
 
-
 i18n_string = fields.Dict(
-    required=True,
+    allow_none=False,
     keys=fields.Str(validate=validate.Regexp("^[a-z]{2}$")),
     values=fields.Str()
 )
@@ -26,10 +25,13 @@ class VocabularyMetadataSchema(Schema):
 
         unknown = EXCLUDE
 
+    id = fields.Str(allow_none=False)
     title = i18n_string
     description = i18n_string
-    icon = fields.Str(required=True, allow_none=True)
-    props = fields.Dict(required=True, keys=fields.Str(), values=fields.Str())
+    icon = fields.Str(allow_none=False)
+    props = fields.Dict(
+        allow_none=False, keys=fields.Str(), values=fields.Str()
+    )
 
 
 class VocabularySchema(RecordSchema):

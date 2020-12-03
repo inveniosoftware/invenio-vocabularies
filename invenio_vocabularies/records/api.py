@@ -8,13 +8,11 @@
 # details.
 
 """Vocabulary API."""
-from invenio_pidstore.models import PIDStatus
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
 from invenio_records.dumpers import ElasticsearchDumper
 from invenio_records.systemfields import ConstantField, ModelField
 from invenio_records_resources.records.api import Record as RecordBase
-from invenio_records_resources.records.systemfields import IndexField, \
-    PIDField, PIDStatusCheckField
+from invenio_records_resources.records.systemfields import IndexField, PIDField
 
 from . import models
 from .dumper_extensions import VocabularyTypeElasticsearchDumperExt

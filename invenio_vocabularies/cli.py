@@ -62,18 +62,20 @@ def load_vocabulary(source, filename):
         db.session.add(vocabulary_type)
         db.session.commit()
 
-        # === TODO remove this when 429 issue is fixed ===
-        json_array = json_array[:10]
-        # ======
-
         with click.progressbar(json_array) as bar:
             for item_data in bar:
                 # ensure each item is of the same type
                 assert item_data["type"] == vocabulary_type_name
 
+                copied_data = {}
+                for key in item_data:
+                    value = item_data[key]
+                    if key != "type" and value is not None:
+                        copied_data[key] = value
+
                 vocabulary_item_record = service.create(
                     identity=identity, data={
-                        "metadata": item_data,
+                        "metadata": copied_data,
                         "vocabulary_type_id": vocabulary_type.id
                     }
                 )
