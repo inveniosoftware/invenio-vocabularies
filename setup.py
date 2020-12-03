@@ -63,6 +63,7 @@ install_requires = [
     "invenio-i18n>=1.2.0",
     "invenio-records-resources>=0.8.7",
     "invenio-pidstore>=1.2.1",
+    "invenio-jsonschemas>=1.1.0",
 ]
 
 packages = find_packages()

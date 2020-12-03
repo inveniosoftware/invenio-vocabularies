@@ -70,25 +70,26 @@ def test_record_indexing(app, db, es, example_record, indexer):
     assert record.metadata == example_record["metadata"]
 
 
-def test_record_delete_reindex(app, db, es, example_record, example_data,
-                               indexer):
+def test_record_delete_reindex(
+    app, db, es, example_record, example_data, indexer
+):
     """Test reindexing of a deleted record."""
     record = example_record
 
     # Index record
-    assert indexer.index(record)['result'] == 'created'
+    assert indexer.index(record)["result"] == "created"
 
     # Delete record.
     record.delete()
     db.session.commit()
-    assert indexer.delete(record)['result'] == 'deleted'
+    assert indexer.delete(record)["result"] == "deleted"
 
     # Update record and reindex (this will cause troubles unless proper
     # optimistic concurrency control is used).
     record.undelete()
     record.commit()
     db.session.commit()
-    assert indexer.index(record)['result'] == 'created'
+    assert indexer.index(record)["result"] == "created"
 
 
 def test_record_validation(app, db):

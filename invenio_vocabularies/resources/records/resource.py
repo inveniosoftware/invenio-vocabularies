@@ -20,19 +20,7 @@ from invenio_vocabularies.resources.records.schema import SearchLinksSchema, \
 class VocabularyResourceConfig(RecordResourceConfig):
     """Custom record resource configuration."""
 
-    list_route = "/vocabularies"
-    item_route = f"{list_route}/<pid_value>"
-
-    links_config = {
-        "record": VocabularyLinksSchema,
-        "search": SearchLinksSchema,
-    }
-
-
-class VocabularyTypeResourceConfig(RecordResourceConfig):
-    """Custom record resource configuration."""
-
-    list_route = "/vocabularies/<vocabulary_type>/"
+    list_route = "/vocabularies/<vocabulary_type>"
     item_route = f"{list_route}/<pid_value>"
 
     links_config = {
@@ -46,22 +34,21 @@ class VocabularyResource(RecordResource):
 
     default_config = VocabularyResourceConfig
 
-
-class VocabularyTypeResource(RecordResource):
-    """Custom record resource"."""
-
-    default_config = VocabularyTypeResourceConfig
-
     def search(self):
         """Perform a search over the items."""
         identity = g.identity
         params = resource_requestctx.url_args
-        params.update({'vocabulary_type': resource_requestctx.route[
-            "vocabulary_type"], })
+        params.update(
+            {
+                "vocabulary_type": resource_requestctx.route[
+                    "vocabulary_type"
+                ],
+            }
+        )
         hits = self.service.search(
             identity=identity,
             params=params,
             links_config=self.config.links_config,
-            es_preference=self._get_es_preference()
+            es_preference=self._get_es_preference(),
         )
         return hits.to_dict(), 200

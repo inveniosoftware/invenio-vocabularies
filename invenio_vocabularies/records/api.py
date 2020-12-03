@@ -18,6 +18,7 @@ from invenio_records_resources.records.systemfields import IndexField, \
 
 from . import models
 from .dumper_extensions import VocabularyTypeElasticsearchDumperExt
+from .systemfields.VocabularyTypeField import VocabularyTypeField
 
 
 class Vocabulary(RecordBase):
@@ -33,7 +34,7 @@ class Vocabulary(RecordBase):
     # System fields
     schema = ConstantField(
         "$schema",
-        "http://127.0.0.1:5000/schemas/vocabularies/vocabulary-v1.0.0.json"
+        "https://localhost/schemas/vocabularies/vocabulary-v1.0.0.json",
     )
 
     index = IndexField(
@@ -42,3 +43,4 @@ class Vocabulary(RecordBase):
 
     pid = PIDField("id", provider=RecordIdProviderV2)
     vocabulary_type_id = ModelField()
+    vocabulary_type = VocabularyTypeField(dump=False)
