@@ -9,10 +9,10 @@
           "type": "object",
           "properties": {
             "title": {
-              "type": "text"
+              "type": "object"
             },
             "description": {
-              "type": "text"
+              "type": "object"
             },
             "icon": {
               "type": "keyword"

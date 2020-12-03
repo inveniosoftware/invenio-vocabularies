@@ -22,4 +22,3 @@ class PermissionPolicy(RecordPermissionPolicy):
     can_delete = [AnyUser()]
     can_read_files = [AnyUser()]
     can_update_files = [AnyUser()]
-

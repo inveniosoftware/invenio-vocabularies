@@ -26,7 +26,9 @@ class Vocabulary(RecordBase):
     # Configuration
     model_cls = models.VocabularyMetadata
 
-    dumper = ElasticsearchDumper(extensions=[VocabularyTypeElasticsearchDumperExt()])
+    dumper = ElasticsearchDumper(
+        extensions=[VocabularyTypeElasticsearchDumperExt()]
+    )
 
     # System fields
     schema = ConstantField(
@@ -40,4 +42,3 @@ class Vocabulary(RecordBase):
 
     pid = PIDField("id", provider=RecordIdProviderV2)
     vocabulary_type_id = ModelField()
-

@@ -13,9 +13,8 @@ from flask_resources.context import resource_requestctx
 from invenio_records_resources.resources import RecordResource, \
     RecordResourceConfig
 
-from invenio_vocabularies.resources.records.schema import \
-    VocabularyLinksSchema, \
-    SearchLinksSchema
+from invenio_vocabularies.resources.records.schema import SearchLinksSchema, \
+    VocabularyLinksSchema
 
 
 class VocabularyResourceConfig(RecordResourceConfig):

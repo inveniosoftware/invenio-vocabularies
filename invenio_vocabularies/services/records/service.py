@@ -12,10 +12,10 @@ from invenio_records_resources.services import RecordService, \
     RecordServiceConfig
 from invenio_records_resources.services.records.search import terms_filter
 
-from .components import VocabularyTypeComponent
-from .schema import VocabularySchema
 from ...records.api import Vocabulary
+from .components import VocabularyTypeComponent
 from .permissions import PermissionPolicy
+from .schema import VocabularySchema
 
 
 class ServiceConfig(RecordServiceConfig):
@@ -44,4 +44,3 @@ class Service(RecordService):
     """Mock service."""
 
     default_config = ServiceConfig
-

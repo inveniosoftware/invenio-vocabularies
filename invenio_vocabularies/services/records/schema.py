@@ -8,7 +8,27 @@
 
 """Vocabulary service schema."""
 from invenio_records_resources.services.records.schema import RecordSchema
-from marshmallow import EXCLUDE, fields
+from marshmallow import EXCLUDE, Schema, fields, validate
+
+i18n_string = fields.Dict(
+    required=True,
+    keys=fields.Str(validate=validate.Regexp("^[a-z]{2}$")),
+    values=fields.Str()
+)
+
+
+class VocabularyMetadataSchema(Schema):
+    """."""
+
+    class Meta:
+        """Meta class to reject unknown fields."""
+
+        unknown = EXCLUDE
+
+    title = i18n_string
+    description = i18n_string
+    icon = fields.Str(required=True, allow_none=True)
+    props = fields.Dict(required=True, keys=fields.Str(), values=fields.Str())
 
 
 class VocabularySchema(RecordSchema):
@@ -20,3 +40,5 @@ class VocabularySchema(RecordSchema):
         unknown = EXCLUDE
 
     vocabulary_type_id = fields.Integer()
+
+    metadata = fields.Nested(VocabularyMetadataSchema, required=True)

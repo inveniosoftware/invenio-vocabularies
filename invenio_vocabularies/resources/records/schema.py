@@ -1,9 +1,19 @@
-from marshmallow import Schema
-from marshmallow_utils.fields import Link
-from uritemplate import URITemplate
+# -*- coding: utf-8 -*-
+#
+# This file is part of Invenio.
+# Copyright (C) 2020 CERN.
+#
+# Invenio-Records-Resources is free software; you can redistribute it and/or
+# modify it under the terms of the MIT License; see LICENSE file for more
+# details.
+
+"""Vocabulary links schemas."""
 
 from invenio_records_resources.resources import search_link_params, \
     search_link_when
+from marshmallow import Schema
+from marshmallow_utils.fields import Link
+from uritemplate import URITemplate
 
 
 class VocabularyLinksSchema(Schema):
