@@ -40,8 +40,7 @@ def json_files(filenames):
         click.echo("creating vocabularies in {}...".format(filename))
         items = load_vocabulary(source, filename)
         click.echo(
-            "created {} vocabulary items successfully"
-            .format(len(items))
+            "created {} vocabulary items successfully".format(len(items))
         )
 
 
@@ -70,14 +69,15 @@ def load_vocabulary(source, filename):
                 copied_data = {}
                 for key in item_data:
                     value = item_data[key]
-                    if key != "type" and value is not None:
+                    if key != "type" and key != "id" and value is not None:
                         copied_data[key] = value
 
                 vocabulary_item_record = service.create(
-                    identity=identity, data={
+                    identity=identity,
+                    data={
                         "metadata": copied_data,
-                        "vocabulary_type_id": vocabulary_type.id
-                    }
+                        "vocabulary_type_id": vocabulary_type.id,
+                    },
                 )
                 records.append(vocabulary_item_record)
     return records

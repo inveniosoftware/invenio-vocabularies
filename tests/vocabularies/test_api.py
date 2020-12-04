@@ -104,10 +104,10 @@ def test_record_validation(app, db, identity, service):
 
     def create(metadata):
         return service.create(
-            identity=identity, data=dict(
-                metadata=metadata,
-                vocabulary_type_id=vocabulary_type.id
-            )
+            identity=identity,
+            data=dict(
+                metadata=metadata, vocabulary_type_id=vocabulary_type.id
+            ),
         )
 
     def check_invalid(metadata):
@@ -127,51 +127,5 @@ def test_record_validation(app, db, identity, service):
     # missing foreign key
     with pytest.raises(IntegrityError):
         service.create(
-            identity=identity, data=dict(
-                metadata={},
-                vocabulary_type_id=-1
-            )
+            identity=identity, data=dict(metadata={}, vocabulary_type_id=-1)
         )
-
-
-def test_endpoint_list(app, client, example_record):
-    """Test the list endpoint."""
-
-    Vocabulary.index.refresh()  # Required!
-
-    res = client.get("/vocabularies/languages",
-                     headers={"accept": "application/json"})
-
-    assert res.status_code == 200
-    assert res.json["hits"]["total"] == 1
-
-
-def test_endpoint_filter(app, db, client, identity, service):
-    """Test the list endpoint while filtering by vocabulary type."""
-
-    vocabulary_type_1 = VocabularyType(name="type1")
-    db.session.add(vocabulary_type_1)
-    vocabulary_type_2 = VocabularyType(name="type2")
-    db.session.add(vocabulary_type_2)
-    db.session.commit()
-
-    record1 = service.create(
-        identity=identity, data=dict(
-            metadata=dict(id="id1"),
-            vocabulary_type_id=vocabulary_type_1.id
-        )
-    )
-    record2 = service.create(
-        identity=identity, data=dict(
-            metadata=dict(id="id2"),
-            vocabulary_type_id=vocabulary_type_2.id
-        )
-    )
-
-    Vocabulary.index.refresh()
-
-    res = client.get("/vocabularies/type1",
-                     headers={"accept": "application/json"})
-    assert res.status_code == 200
-    assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["id"] == "id1"
