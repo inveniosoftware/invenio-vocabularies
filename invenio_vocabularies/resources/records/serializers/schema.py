@@ -34,7 +34,7 @@ FormatLocalizedText = partial(LocalizedText, locale=get_locale)
 class PresentationVocabularySchema(Schema):
     """Vocabulary presentation."""
 
-    id = fields.Str(attribute="metadata.id")
+    id = fields.Str(attribute="id")
     type = fields.Str(attribute="vocabulary_type")
     subtype = fields.Str()  # TODO what is this?
     title_l10n = FormatLocalizedText(attribute="metadata.title")
@@ -50,16 +50,16 @@ class PresentationVocabularyListSchema(Schema):
 
         unknown = INCLUDE
 
-    hits = fields.Method('get_hits')
-    aggregations = fields.Method('get_aggs')
+    hits = fields.Method("get_hits")
+    aggregations = fields.Method("get_aggs")
 
     def get_hits(self, obj_list):
         """Apply hits transformation."""
-        hits = obj_list['hits']['hits']
+        hits = obj_list["hits"]["hits"]
         for i in range(len(hits)):
             obj = hits[i]
-            hits[i] = self.context['object_schema_cls']().dump(obj)
-        return obj_list['hits']
+            hits[i] = self.context["object_schema_cls"]().dump(obj)
+        return obj_list["hits"]
 
     def get_aggs(self, obj_list):
         """Apply aggregations transformation."""

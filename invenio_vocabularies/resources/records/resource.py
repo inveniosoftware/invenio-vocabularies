@@ -32,8 +32,7 @@ class VocabularyResourceConfig(RecordResourceConfig):
 
     response_handlers = {
         **RecordResourceConfig.response_handlers,
-        "application/json": RecordResponse(
-            PresentationJSONSerializer())
+        "application/json": RecordResponse(PresentationJSONSerializer()),
     }
 
 

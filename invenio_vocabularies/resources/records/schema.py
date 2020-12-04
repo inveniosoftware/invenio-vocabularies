@@ -18,14 +18,16 @@ from uritemplate import URITemplate
 
 def vocabularies_search_link_params(page_offset):
     """Params function factory."""
+
     def _inner(search_dict):
         # Filter out internal parameters
         params = {
-            k: v for k, v in search_dict.items() if not k.startswith('_')
+            k: v for k, v in search_dict.items() if not k.startswith("_")
         }
-        params['page'] += page_offset
-        vocabulary_type = params.get('vocabulary_type')
-        return {'params': params, 'vocabulary_type': vocabulary_type}
+        params["page"] += page_offset
+        vocabulary_type = params.get("vocabulary_type")
+        return {"params": params, "vocabulary_type": vocabulary_type}
+
     return _inner
 
 
@@ -36,10 +38,14 @@ class VocabularyLinksSchema(Schema):
     #   - /api prefix is needed here because above are mounted on /api
     self = Link(
         template=URITemplate(
-            "/api/vocabularies/{vocabulary_type}/{pid_value}"),
+            "/api/vocabularies/{vocabulary_type}/{pid_value}"
+        ),
         permission="read",
-        params=lambda record: {"pid_value": record.pid.pid_value,
-                               "vocabulary_type": record.vocabulary_type or record.get('vocabulary_type')},
+        params=lambda record: {
+            "pid_value": record.pid.pid_value,
+            "vocabulary_type":
+                record.vocabulary_type or record.get('vocabulary_type')
+        },
         data_key="self",  # To avoid using self since is python reserved key
     )
 

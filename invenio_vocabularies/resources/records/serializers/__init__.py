@@ -28,7 +28,7 @@ class PresentationJSONSerializer(JSONSerializer):
     def dump_list(self, obj_list):
         """Dump the list of objects with extra information."""
         ctx = {
-            'object_schema_cls': self.object_schema_cls,
+            "object_schema_cls": self.object_schema_cls,
         }
         return self.list_schema_cls(context=ctx).dump(obj_list)
 

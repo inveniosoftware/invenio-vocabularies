@@ -20,55 +20,11 @@ from invenio_vocabularies.services.records.service import Service
 
 
 @pytest.fixture()
-def example_data():
-    """Example data."""
-    return {
-        "metadata": {
-            "title": {
-                "en": "Test title",
-                "fr": "Titre test"
-            },
-            "description": {
-                "en": "Test description",
-                "de": "Textbeschreibung"
-            },
-            "icon": "icon-identifier",
-            "props": {
-                "key": "value"
-            }
-        }
-    }
-
-
-@pytest.fixture()
 def identity():
     """Simple identity to interact with the service."""
     identity = Identity(1)
     identity.provides.add(any_user)
     return identity
-
-
-@pytest.fixture()
-def service():
-    """Vocabularies service object."""
-    return Service()
-
-
-@pytest.fixture()
-def example_record(db, identity, service, example_data):
-    """Example record."""
-    vocabulary_type = VocabularyType(name="languages")
-    db.session.add(vocabulary_type)
-    db.session.commit()
-
-    record = service.create(
-        identity=identity, data=dict(
-            **example_data,
-            vocabulary_type_id=vocabulary_type.id
-        )
-    )
-
-    return record
 
 
 @pytest.fixture()

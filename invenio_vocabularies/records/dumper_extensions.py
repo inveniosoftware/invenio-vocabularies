@@ -19,20 +19,24 @@ class VocabularyTypeElasticsearchDumperExt(ElasticsearchDumperExt):
 
     def dump(self, record, data):
         """Dump data."""
-        vocabulary_type_id = data.get('vocabulary_type_id')
+        vocabulary_type_id = data.get("vocabulary_type_id")
         if vocabulary_type_id:
-            data["vocabulary_type"] =\
-                VocabularyType.query.get(vocabulary_type_id).name
-            data["vocabulary_type_id"] = \
-                VocabularyType.query.get(vocabulary_type_id).id
+            data["vocabulary_type"] = VocabularyType.query.get(
+                vocabulary_type_id
+            ).name
+            data["vocabulary_type_id"] = VocabularyType.query.get(
+                vocabulary_type_id
+            ).id
         super().dump(record, data)
 
     def load(self, data, record_cls):
         """Load data."""
-        vocabulary_type_id = data.get('vocabulary_type_id')
+        vocabulary_type_id = data.get("vocabulary_type_id")
         if vocabulary_type_id:
-            data["vocabulary_type"] = \
-                VocabularyType.query.get(vocabulary_type_id).name
-            data["vocabulary_type_id"] = \
-                VocabularyType.query.get(vocabulary_type_id).id
+            data["vocabulary_type"] = VocabularyType.query.get(
+                vocabulary_type_id
+            ).name
+            data["vocabulary_type_id"] = VocabularyType.query.get(
+                vocabulary_type_id
+            ).id
         super().load(data, record_cls)
