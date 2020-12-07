@@ -96,7 +96,7 @@ def test_record_delete_reindex(
     assert indexer.index(record)["result"] == "created"
 
 
-def test_record_validation(app, db, identity, service):
+def test_record_validation(app, db, identity, service, example_record):
     """Test vocabulary item validation."""
     vocabulary_type = VocabularyType(name="test")
     db.session.add(vocabulary_type)
@@ -129,3 +129,15 @@ def test_record_validation(app, db, identity, service):
         service.create(
             identity=identity, data=dict(metadata={}, vocabulary_type_id=-1)
         )
+    db.session.rollback()
+
+    # invalid update
+    with pytest.raises(MarshmallowValidationError):
+        service.update(example_record.id, identity, dict(
+            metadata={"description": 1}
+        ))
+
+    # valid update
+    service.update(example_record.id, identity, dict(
+        metadata={"title": {"en": "Other title"}}
+    ))
