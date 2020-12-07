@@ -61,7 +61,7 @@ setup_requires = [
 
 install_requires = [
     "invenio-i18n>=1.2.0",
-    "invenio-records-resources>=0.8.7",
+    "invenio-records-resources>=0.8.8",
     "invenio-pidstore>=1.2.1",
     "invenio-jsonschemas>=1.1.0",
 ]
