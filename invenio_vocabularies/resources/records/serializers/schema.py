@@ -9,26 +9,18 @@
 """Record serializer."""
 from functools import partial
 
-from flask_babelex import get_locale
+import flask_babelex
 from marshmallow import INCLUDE, Schema, fields
 
 
 class LocalizedText(fields.Dict):
-    """."""
+    """A localized text field."""
 
     def _serialize(self, value, attr, obj, **kwargs):
-        return value.get(self.locale().language, None)
+        return value.get(flask_babelex.get_locale().language, None)
 
     def _deserialize(self, value, attr, data, **kwargs):
         raise NotImplementedError  # Unsupported operation
-
-    def __init__(self, locale=None, **kwargs):
-        """."""
-        fields.Dict.__init__(self, **kwargs)
-        self.locale = locale
-
-
-FormatLocalizedText = partial(LocalizedText, locale=get_locale)
 
 
 class PresentationVocabularySchema(Schema):
@@ -36,9 +28,8 @@ class PresentationVocabularySchema(Schema):
 
     id = fields.Str(attribute="id")
     type = fields.Str(attribute="vocabulary_type")
-    subtype = fields.Str()  # TODO what is this?
-    title_l10n = FormatLocalizedText(attribute="metadata.title")
-    description_l10n = FormatLocalizedText(attribute="metadata.description")
+    title = LocalizedText(attribute="metadata.title")
+    description = LocalizedText(attribute="metadata.description")
     icon = fields.Str(attribute="metadata.icon")
 
 
@@ -46,7 +37,7 @@ class PresentationVocabularyListSchema(Schema):
     """Schema for dumping extra information in the UI."""
 
     class Meta:
-        """."""
+        """Ignore other fields."""
 
         unknown = INCLUDE
 

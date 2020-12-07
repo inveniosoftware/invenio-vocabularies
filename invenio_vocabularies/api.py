@@ -9,7 +9,7 @@
 
 """Vocabulary API."""
 
-from babel import default_locale
+from babel import Locale, default_locale
 from flask_babelex import lazy_gettext as _
 
 from invenio_vocabularies.records.api import Vocabulary
@@ -21,7 +21,9 @@ class VocabularyItem(dict):
     def _get_l10n(self, prop, locale):
         """Collapses an internationalized field into a localized one."""
         messages = self.get("metadata", {}).get(prop, {})
-        return messages.get(locale) or messages.get(default_locale())
+        return messages.get(locale) or messages.get(
+            Locale.parse(default_locale()).language
+        )
 
     def get_description(self, locale):
         """Localized description."""
@@ -47,9 +49,7 @@ class VocabularyBackend:
 
     def get(self, identifier):
         """Returns the vocabulary item matching this identifier."""
-        return VocabularyItem(
-            self.record_cls.pid.resolve(identifier)
-        )
+        return VocabularyItem(self.record_cls.pid.resolve(identifier))
 
     def get_all(self, vocabulary_type_name):
         """Returns all the vocabulary of this type. Potentially costly."""

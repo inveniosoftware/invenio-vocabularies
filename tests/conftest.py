@@ -22,6 +22,7 @@ from flask_principal import Identity, Need, UserNeed
 from invenio_app.factory import create_api as _create_api
 
 from invenio_vocabularies import InvenioVocabularies
+from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.records.service import Service
 
@@ -82,5 +83,7 @@ def example_record(db, identity_simple, service, example_data):
         identity=identity_simple,
         data=dict(**example_data, vocabulary_type_id=vocabulary_type.id),
     )
+
+    Vocabulary.index.refresh()  # Refresh the index
 
     return record
