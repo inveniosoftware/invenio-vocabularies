@@ -20,7 +20,7 @@ from invenio_db import db
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyMetadata, \
     VocabularyType
-from invenio_vocabularies.services.records.service import Service
+from invenio_vocabularies.services.records.service import VocabulariesService
 
 
 @click.group()
@@ -51,7 +51,7 @@ def load_vocabulary(source, filename):
 
     identity = Identity(1)
     identity.provides.add(any_user)
-    service = Service()
+    service = VocabulariesService()
 
     with open(filename) as json_file:
         json_array = json.load(json_file)

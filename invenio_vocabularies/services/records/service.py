@@ -17,7 +17,7 @@ from .permissions import PermissionPolicy
 from .schema import VocabularySchema
 
 
-class ServiceConfig(RecordServiceConfig):
+class VocabulariesServiceConfig(RecordServiceConfig):
     """Mock service configuration."""
 
     permission_policy_cls = PermissionPolicy
@@ -39,7 +39,7 @@ class ServiceConfig(RecordServiceConfig):
     ]
 
 
-class Service(RecordService):
+class VocabulariesService(RecordService):
     """Mock service."""
 
-    default_config = ServiceConfig
+    default_config = VocabulariesServiceConfig

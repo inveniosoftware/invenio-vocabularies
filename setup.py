@@ -116,6 +116,9 @@ setup(
         "invenio_search.mappings": [
             "vocabularies = invenio_vocabularies.mappings",
         ],
+        'invenio_base.api_blueprints': [
+            'invenio_vocabularies = invenio_vocabularies.views:create_blueprint_from_app',
+        ],
         # TODO: See which of the following we truly need
         # 'invenio_assets.bundles': [],
         # 'invenio_base.api_blueprints': [],

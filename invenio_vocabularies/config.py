@@ -7,6 +7,13 @@
 # details.
 
 """Invenio module for managing vocabularies."""
+from invenio_vocabularies.resources.records.resource import \
+    VocabulariesResourceConfig
+from invenio_vocabularies.services.records.service import \
+    VocabulariesServiceConfig
 
-VOCABULARIES_DEFAULT_VALUE = "foobar"
-"""Default value for the application."""
+VOCABULARIES_RESOURCE_CONFIG = VocabulariesResourceConfig
+"""Configure the resource."""
+
+VOCABULARIES_SERVICE_CONFIG = VocabulariesServiceConfig
+"""Configure the service."""
