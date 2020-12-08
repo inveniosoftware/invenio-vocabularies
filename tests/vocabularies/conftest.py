@@ -16,7 +16,7 @@ from invenio_indexer.api import RecordIndexer
 
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
-from invenio_vocabularies.services.records.service import Service
+from invenio_vocabularies.services.records.service import VocabulariesService
 
 
 @pytest.fixture()

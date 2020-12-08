@@ -19,7 +19,7 @@ from invenio_vocabularies.resources.records.serializers import \
     PresentationJSONSerializer
 
 
-class VocabularyResourceConfig(RecordResourceConfig):
+class VocabulariesResourceConfig(RecordResourceConfig):
     """Custom record resource configuration."""
 
     list_route = "/vocabularies/<vocabulary_type>"
@@ -36,10 +36,10 @@ class VocabularyResourceConfig(RecordResourceConfig):
     }
 
 
-class VocabularyResource(RecordResource):
+class VocabulariesResource(RecordResource):
     """Custom record resource"."""
 
-    default_config = VocabularyResourceConfig
+    default_config = VocabulariesResourceConfig
 
     def search(self):
         """Perform a search over the items."""

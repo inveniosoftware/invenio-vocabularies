@@ -8,12 +8,11 @@
 
 """Invenio module for managing vocabularies."""
 
-from flask_babelex import gettext as _
-
 from . import config
-from .resources.records.resource import VocabularyResource, \
-    VocabularyResourceConfig
-from .services.records.service import Service, ServiceConfig
+from .resources.records.resource import VocabulariesResource, \
+    VocabulariesResourceConfig
+from .services.records.service import VocabulariesService, \
+    VocabulariesServiceConfig
 
 
 class InvenioVocabularies(object):
@@ -21,21 +20,39 @@ class InvenioVocabularies(object):
 
     def __init__(self, app=None):
         """Extension initialization."""
+        self.resource = None
+        self.service = None
         if app:
             self.init_app(app)
 
+    def init_resource(self, app):
+        """Initialize vocabulary resources."""
+        # The config must be overwritable by an instance, hence we use this
+        # pattern
+        self.service = VocabulariesService(
+            config=app.config["VOCABULARIES_SERVICE_CONFIG"],
+        )
+        self.resource = VocabulariesResource(
+            service=self.service,
+            config=app.config["VOCABULARIES_RESOURCE_CONFIG"],
+        )
+
     def init_app(self, app):
         """Flask application initialization."""
-        self.init_config(app)
-        resource = VocabularyResource(
-            config=VocabularyResourceConfig,
-            service=Service(config=ServiceConfig),
-        )
-        app.register_blueprint(resource.as_blueprint("vocabularies_types"))
         app.extensions["invenio-vocabularies"] = self
+        self.init_config(app)
+        self.init_resource(app)
 
     def init_config(self, app):
         """Initialize configuration."""
+        app.config.setdefault(
+            "VOCABULARIES_RESOURCE",
+            VocabulariesResource,
+        )
+        app.config.setdefault(
+            "VOCABULARIES_SERVICE",
+            VocabulariesService,
+        )
         for k in dir(config):
             if k.startswith("VOCABULARIES_"):
                 app.config.setdefault(k, getattr(config, k))
