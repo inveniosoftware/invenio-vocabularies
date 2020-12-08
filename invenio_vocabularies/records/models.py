@@ -31,4 +31,5 @@ class VocabularyMetadata(db.Model, RecordMetadataBase):
     vocabulary_type_id = db.Column(
         db.Integer, db.ForeignKey(VocabularyType.id)
     )
+
     vocabulary_type = db.relationship(VocabularyType)

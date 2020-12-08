@@ -17,7 +17,6 @@ history = open("CHANGES.rst").read()
 
 tests_require = [
     "invenio-app>=1.3.0",
-    # "invenio-search[elasticsearch7]>=1.4.1,<2.0.0",
     "pytest-invenio>=1.4.0",
 ]
 
@@ -60,10 +59,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-i18n>=1.2.0",
     "invenio-records-resources>=0.8.8",
-    "invenio-pidstore>=1.2.1",
-    "invenio-jsonschemas>=1.1.0",
 ]
 
 packages = find_packages()
@@ -79,7 +75,7 @@ setup(
     version=version,
     description=__doc__,
     long_description=readme + "\n\n" + history,
-    keywords="invenio TODO",
+    keywords="invenio vocabulary management",
     license="MIT",
     author="CERN",
     author_email="info@inveniosoftware.org",
@@ -89,8 +85,8 @@ setup(
     include_package_data=True,
     platforms="any",
     entry_points={
-        "console_scripts": [
-            "vocabularies = invenio_app.cli:cli",
+        "flask.commands": [
+            "load = invenio_vocabularies.cli:load",
         ],
         "invenio_base.apps": [
             "invenio_vocabularies = invenio_vocabularies:InvenioVocabularies",
@@ -98,17 +94,11 @@ setup(
         "invenio_base.api_apps": [
             "invenio_vocabularies = invenio_vocabularies:InvenioVocabularies",
         ],
-        "flask.commands": [
-            "load = invenio_vocabularies.cli:load",
-        ],
-        "invenio_config.module": [
-            "invenio_vocabularies = invenio_vocabularies.config",
+        "invenio_base.api_blueprints": [
+            'invenio_vocabularies = invenio_vocabularies.views:create_blueprint_from_app',
         ],
         "invenio_db.model": [
             "vocabulary_model = invenio_vocabularies.vocabularies.models",
-        ],
-        "invenio_i18n.translations": [
-            "messages = invenio_vocabularies",
         ],
         "invenio_jsonschemas.schemas": [
             "jsonschemas = invenio_vocabularies.jsonschemas",
@@ -116,16 +106,6 @@ setup(
         "invenio_search.mappings": [
             "vocabularies = invenio_vocabularies.mappings",
         ],
-        'invenio_base.api_blueprints': [
-            'invenio_vocabularies = invenio_vocabularies.views:create_blueprint_from_app',
-        ],
-        # TODO: See which of the following we truly need
-        # 'invenio_assets.bundles': [],
-        # 'invenio_base.api_blueprints': [],
-        # 'invenio_base.blueprints': [],
-        # 'invenio_celery.tasks': [],
-        # 'invenio_db.models': [],
-        # 'invenio_pidstore.minters': [],
     },
     extras_require=extras_require,
     install_requires=install_requires,

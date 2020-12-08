@@ -20,7 +20,7 @@ from invenio_db import db
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyMetadata, \
     VocabularyType
-from invenio_vocabularies.services.records.service import VocabulariesService
+from invenio_vocabularies.services.service import VocabulariesService
 
 
 @click.group()

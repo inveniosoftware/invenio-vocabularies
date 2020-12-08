@@ -9,7 +9,7 @@
 
 """Tests links schema."""
 
-from invenio_vocabularies.resources.records.schema import SearchLinksSchema, \
+from invenio_vocabularies.resources.schema import SearchLinksSchema, \
     VocabularyLinksSchema
 
 

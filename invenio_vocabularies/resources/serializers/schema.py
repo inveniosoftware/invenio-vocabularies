@@ -7,6 +7,7 @@
 # details.
 
 """Record serializer."""
+
 from functools import partial
 
 import flask_babelex

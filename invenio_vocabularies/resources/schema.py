@@ -15,6 +15,8 @@ from marshmallow import Schema
 from marshmallow_utils.fields import Link
 from uritemplate import URITemplate
 
+# TODO: See how much can be reused from Invenio-Records-Resources
+
 
 def vocabularies_search_link_params(page_offset):
     """Params function factory."""

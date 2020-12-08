@@ -8,14 +8,15 @@
 # details.
 
 """Vocabulary API."""
+
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
 from invenio_records.dumpers import ElasticsearchDumper
 from invenio_records.systemfields import ConstantField, ModelField
 from invenio_records_resources.records.api import Record as RecordBase
 from invenio_records_resources.records.systemfields import IndexField, PIDField
 
-from . import models
 from .dumper_extensions import VocabularyTypeElasticsearchDumperExt
+from .models import VocabularyMetadata
 from .systemfields.VocabularyTypeField import VocabularyTypeField
 
 
@@ -23,7 +24,7 @@ class Vocabulary(RecordBase):
     """Example record API."""
 
     # Configuration
-    model_cls = models.VocabularyMetadata
+    model_cls = VocabularyMetadata
 
     dumper = ElasticsearchDumper(
         extensions=[VocabularyTypeElasticsearchDumperExt()]
@@ -39,6 +40,9 @@ class Vocabulary(RecordBase):
         "vocabularies-vocabulary-v1.0.0", search_alias="vocabularies"
     )
 
+    # TODO: This should be changed to use something else than the recidv2
     pid = PIDField("id", provider=RecordIdProviderV2)
+
     vocabulary_type_id = ModelField()
+
     vocabulary_type = VocabularyTypeField(dump=False)

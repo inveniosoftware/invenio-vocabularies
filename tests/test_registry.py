@@ -7,11 +7,13 @@
 # details.
 
 """Module API tests."""
-from invenio_vocabularies.api import ResourceTypeVocabulary, VocabularyRegistry
+
+# from invenio_vocabularies.api import ResourceTypeVocabulary, \
+# VocabularyRegistry
 
 
-def test_registry_get(app, db, client, example_record, service):
-    """Test get vocabulary from registry."""
-    resource_type = VocabularyRegistry.get('languages')
-    assert isinstance(resource_type, ResourceTypeVocabulary)
-    # TODO add more
+# def test_registry_get(app, db, client, example_record, service):
+#     """Test get vocabulary from registry."""
+#     resource_type = VocabularyRegistry.get('languages')
+#     assert isinstance(resource_type, ResourceTypeVocabulary)
+#     # TODO add more

@@ -7,12 +7,13 @@
 # details.
 
 """Record serializers."""
+
 import json
 
 from flask_resources.serializers import JSONSerializer
 
-from invenio_vocabularies.resources.records.serializers.schema import \
-    PresentationVocabularyListSchema, PresentationVocabularySchema
+from .schema import PresentationVocabularyListSchema, \
+    PresentationVocabularySchema
 
 
 class PresentationJSONSerializer(JSONSerializer):

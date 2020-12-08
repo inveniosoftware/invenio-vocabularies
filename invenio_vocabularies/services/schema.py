@@ -7,6 +7,7 @@
 # details.
 
 """Vocabulary service schema."""
+
 from invenio_records_resources.services.records.schema import RecordSchema
 from marshmallow import EXCLUDE, Schema, fields, validate
 
