@@ -86,7 +86,7 @@ setup(
     platforms="any",
     entry_points={
         "flask.commands": [
-            "load = invenio_vocabularies.cli:load",
+            "vocabularies = invenio_vocabularies.cli:vocabularies",
         ],
         "invenio_base.apps": [
             "invenio_vocabularies = invenio_vocabularies:InvenioVocabularies",
