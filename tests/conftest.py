@@ -67,15 +67,17 @@ def service():
 @pytest.fixture()
 def example_record(db, identity_simple, service, example_data):
     """Example record."""
-    vocabulary_type = VocabularyType(name="languages")
-    vocabulary_type2 = VocabularyType(name="licenses")
-    db.session.add(vocabulary_type)
-    db.session.add(vocabulary_type2)
+    vocabulary_type_languages = VocabularyType(name="languages")
+    vocabulary_type_licenses = VocabularyType(name="licenses")
+    db.session.add(vocabulary_type_languages)
+    db.session.add(vocabulary_type_licenses)
     db.session.commit()
 
     record = service.create(
         identity=identity_simple,
-        data=dict(**example_data, vocabulary_type_id=vocabulary_type.id),
+        data=dict(
+            **example_data, vocabulary_type_id=vocabulary_type_languages.id
+        ),
     )
 
     Vocabulary.index.refresh()  # Refresh the index
