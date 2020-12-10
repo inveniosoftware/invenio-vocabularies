@@ -28,7 +28,8 @@ class PresentationVocabularySchema(Schema):
     """Vocabulary presentation."""
 
     id = fields.Str(attribute="id")
-    type = fields.Str(attribute="vocabulary_type")
+    # TODO change for resolved type name
+    type = fields.Int(attribute="vocabulary_type_id")
     title = LocalizedText(attribute="metadata.title")
     description = LocalizedText(attribute="metadata.description")
     icon = fields.Str(attribute="metadata.icon")

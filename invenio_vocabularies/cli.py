@@ -28,7 +28,7 @@ available_vocabularies = {
     },
     "licenses": {
         "path": join(data_directory, "licenses.csv"),
-    }
+    },
 }
 
 
@@ -57,11 +57,7 @@ def _create_vocabulary(vocabulary_type_name, source_path):
 
     default_language = "en"  # Static (dependent on the files)
 
-    metadata = {
-        "title": {},
-        "description": {},
-        "props": {}
-    }
+    metadata = {"title": {}, "description": {}, "props": {}}
 
     records = []
     for row in rows:
@@ -69,8 +65,8 @@ def _create_vocabulary(vocabulary_type_name, source_path):
             value = row[attribute]
             if attribute in i18n:
                 metadata[attribute][default_language] = value
-            elif any(map(lambda s: value.startswith(s + '_'), i18n)):
-                [prefix_attr, language] = attribute.split('_', 1)
+            elif any(map(lambda s: value.startswith(s + "_"), i18n)):
+                [prefix_attr, language] = attribute.split("_", 1)
                 metadata[prefix_attr][language] = value
             elif attribute in other:
                 metadata[attribute] = value
@@ -98,9 +94,11 @@ def vocabularies():
 
 
 @vocabularies.command(name="import")
-@click.argument("vocabulary_types",
-                nargs=-1,
-                type=click.Choice([v for v in available_vocabularies]))
+@click.argument(
+    "vocabulary_types",
+    nargs=-1,
+    type=click.Choice([v for v in available_vocabularies]),
+)
 @with_appcontext
 def load(vocabulary_types):
     """Index CSV-based vocabularies in Elasticsearch."""
@@ -109,19 +107,23 @@ def load(vocabulary_types):
     for vocabulary_type in vocabulary_types:
         vocabulary = available_vocabularies[vocabulary_type]
         if VocabularyType.query.filter_by(name=vocabulary_type).count() > 0:
-            click.echo("vocabulary type {} already exists, skipping"
-                       .format(vocabulary_type), color="red")
+            click.echo(
+                "vocabulary type {} already exists, skipping".format(
+                    vocabulary_type
+                ),
+                color="red",
+            )
             continue
 
         click.echo(
             "creating vocabulary type {}...".format(vocabulary_type),
-            color="blue"
+            color="blue",
         )
 
         items = _create_vocabulary(vocabulary_type, vocabulary["path"])
 
         click.echo(
             "created {} vocabulary items successfully".format(len(items)),
-            color="green"
+            color="green",
         )
     click.echo("vocabularies created", color="green")

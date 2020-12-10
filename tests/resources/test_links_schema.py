@@ -26,7 +26,7 @@ def test_search_links(app, service, identity_simple, example_data, es_clear):
     resource_requestctx = MockResourceRequestCtx()
     links_config = {
         "record": VocabularyLinksSchema,
-        "search": SearchLinksSchema
+        "search": SearchLinksSchema,
     }
     result_list = service.search(
         identity=identity_simple,
@@ -36,7 +36,7 @@ def test_search_links(app, service, identity_simple, example_data, es_clear):
 
     expected_search_links = {
         "self": "https://localhost:5000/api/vocabularies/"
-                "?page=1&q=&size=25&sort=newest"
+        "?page=1&q=&size=25&sort=newest"
     }
 
     assert result_list["links"] == expected_search_links

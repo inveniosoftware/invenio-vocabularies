@@ -45,8 +45,8 @@ class VocabularyLinksSchema(Schema):
         permission="read",
         params=lambda record: {
             "pid_value": record.pid.pid_value,
-            "vocabulary_type":
-                record.vocabulary_type or record.get('vocabulary_type')
+            "vocabulary_type": record.vocabulary_type
+            or record.get("vocabulary_type"),
         },
         data_key="self",  # To avoid using self since is python reserved key
     )

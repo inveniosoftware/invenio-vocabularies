@@ -11,9 +11,6 @@
 import pytest
 from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
-from marshmallow.exceptions import \
-    ValidationError as MarshmallowValidationError
-from sqlalchemy.exc import IntegrityError
 
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
@@ -44,9 +41,16 @@ def test_vocabulary_type(app, db):
     db.session.add(vocabulary_type)
     db.session.commit()
     record = Vocabulary.create(
-        {}, metadata={"title": "test-item", "type": "test-type"}
+        {}, metadata={"title": {"en": "test-item"}, "type": "test-type"}
     )
-    assert record.metadata == {"title": "test-item", "type": "test-type"}
+    record.commit()
+    db.session.commit()
+    assert record.metadata == {
+        "title": {"en": "test-item"},
+        "type": "test-type",
+    }
+    assert record.pid.status == "R"
+    assert record.id
 
 
 @pytest.mark.skip()
@@ -94,50 +98,3 @@ def test_record_delete_reindex(
     record.commit()
     db.session.commit()
     assert indexer.index(record)["result"] == "created"
-
-
-def test_record_validation(app, db, identity, service, example_record):
-    """Test vocabulary item validation."""
-    vocabulary_type = VocabularyType(name="test")
-    db.session.add(vocabulary_type)
-    db.session.commit()
-
-    def create(metadata):
-        return service.create(
-            identity=identity,
-            data=dict(
-                metadata=metadata, vocabulary_type_id=vocabulary_type.id
-            ),
-        )
-
-    def check_invalid(metadata):
-        with pytest.raises(MarshmallowValidationError):
-            create(metadata)
-
-    # valid items
-    create({})
-    create({"title": {}})
-    assert create({"nonexistent": "value"}).data["metadata"] == {}
-
-    # invalid items
-    check_invalid({"title": "Title"})
-    check_invalid({"title": {"not a language": "Title"}})
-    check_invalid({"props": {"key": {}}})
-
-    # missing foreign key
-    with pytest.raises(IntegrityError):
-        service.create(
-            identity=identity, data=dict(metadata={}, vocabulary_type_id=-1)
-        )
-    db.session.rollback()
-
-    # invalid update
-    with pytest.raises(MarshmallowValidationError):
-        service.update(example_record.id, identity, dict(
-            metadata={"description": 1}
-        ))
-
-    # valid update
-    service.update(example_record.id, identity, dict(
-        metadata={"title": {"en": "Other title"}}
-    ))
