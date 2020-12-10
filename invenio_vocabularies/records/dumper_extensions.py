@@ -18,7 +18,7 @@ class VocabularyTypeElasticsearchDumperExt(ElasticsearchDumperExt):
     """Elasticsearch vocabulary dumper."""
 
     def dump(self, record, data):
-        """Dump data."""
+        """Dump the data from a record."""
         vocabulary_type_id = data.get("vocabulary_type_id")
         if vocabulary_type_id:
             data["vocabulary_type"] = VocabularyType.query.get(
@@ -26,5 +26,5 @@ class VocabularyTypeElasticsearchDumperExt(ElasticsearchDumperExt):
             ).name
 
     def load(self, data, record_cls):
-        """Load data."""
+        """Load the data into a record."""
         data.pop("vocabulary_type", None)

@@ -1,0 +1,449 @@
+id,title,url
+0BSD,BSD Zero Clause License,http://spdx.org/licenses/0BSD.json
+AAL,Attribution Assurance License,http://spdx.org/licenses/AAL.json
+ADSL,Amazon Digital Services License,http://spdx.org/licenses/ADSL.json
+AFL-1.1,Academic Free License v1.1,http://spdx.org/licenses/AFL-1.1.json
+AFL-1.2,Academic Free License v1.2,http://spdx.org/licenses/AFL-1.2.json
+AFL-2.0,Academic Free License v2.0,http://spdx.org/licenses/AFL-2.0.json
+AFL-2.1,Academic Free License v2.1,http://spdx.org/licenses/AFL-2.1.json
+AFL-3.0,Academic Free License v3.0,http://spdx.org/licenses/AFL-3.0.json
+AGPL-1.0,Affero General Public License v1.0,http://spdx.org/licenses/AGPL-1.0.json
+AGPL-1.0-only,Affero General Public License v1.0 only,http://spdx.org/licenses/AGPL-1.0-only.json
+AGPL-1.0-or-later,Affero General Public License v1.0 or later,http://spdx.org/licenses/AGPL-1.0-or-later.json
+AGPL-3.0,GNU Affero General Public License v3.0,http://spdx.org/licenses/AGPL-3.0.json
+AGPL-3.0-only,GNU Affero General Public License v3.0 only,http://spdx.org/licenses/AGPL-3.0-only.json
+AGPL-3.0-or-later,GNU Affero General Public License v3.0 or later,http://spdx.org/licenses/AGPL-3.0-or-later.json
+AMDPLPA,AMD's plpa_map.c License,http://spdx.org/licenses/AMDPLPA.json
+AML,Apple MIT License,http://spdx.org/licenses/AML.json
+AMPAS,Academy of Motion Picture Arts and Sciences BSD,http://spdx.org/licenses/AMPAS.json
+ANTLR-PD,ANTLR Software Rights Notice,http://spdx.org/licenses/ANTLR-PD.json
+ANTLR-PD-fallback,ANTLR Software Rights Notice with license fallback,http://spdx.org/licenses/ANTLR-PD-fallback.json
+APAFML,Adobe Postscript AFM License,http://spdx.org/licenses/APAFML.json
+APL-1.0,Adaptive Public License 1.0,http://spdx.org/licenses/APL-1.0.json
+APSL-1.0,Apple Public Source License 1.0,http://spdx.org/licenses/APSL-1.0.json
+APSL-1.1,Apple Public Source License 1.1,http://spdx.org/licenses/APSL-1.1.json
+APSL-1.2,Apple Public Source License 1.2,http://spdx.org/licenses/APSL-1.2.json
+APSL-2.0,Apple Public Source License 2.0,http://spdx.org/licenses/APSL-2.0.json
+Abstyles,Abstyles License,http://spdx.org/licenses/Abstyles.json
+Adobe-2006,Adobe Systems Incorporated Source Code License Agreement,http://spdx.org/licenses/Adobe-2006.json
+Adobe-Glyph,Adobe Glyph List License,http://spdx.org/licenses/Adobe-Glyph.json
+Afmparse,Afmparse License,http://spdx.org/licenses/Afmparse.json
+Aladdin,Aladdin Free Public License,http://spdx.org/licenses/Aladdin.json
+Apache-1.0,Apache License 1.0,http://spdx.org/licenses/Apache-1.0.json
+Apache-1.1,Apache License 1.1,http://spdx.org/licenses/Apache-1.1.json
+Apache-2.0,Apache License 2.0,http://spdx.org/licenses/Apache-2.0.json
+Artistic-1.0,Artistic License 1.0,http://spdx.org/licenses/Artistic-1.0.json
+Artistic-1.0-Perl,Artistic License 1.0 (Perl),http://spdx.org/licenses/Artistic-1.0-Perl.json
+Artistic-1.0-cl8,Artistic License 1.0 w/clause 8,http://spdx.org/licenses/Artistic-1.0-cl8.json
+Artistic-2.0,Artistic License 2.0,http://spdx.org/licenses/Artistic-2.0.json
+BSD-1-Clause,BSD 1-Clause License,http://spdx.org/licenses/BSD-1-Clause.json
+BSD-2-Clause,"BSD 2-Clause ""Simplified"" License",http://spdx.org/licenses/BSD-2-Clause.json
+BSD-2-Clause-FreeBSD,BSD 2-Clause FreeBSD License,http://spdx.org/licenses/BSD-2-Clause-FreeBSD.json
+BSD-2-Clause-NetBSD,BSD 2-Clause NetBSD License,http://spdx.org/licenses/BSD-2-Clause-NetBSD.json
+BSD-2-Clause-Patent,BSD-2-Clause Plus Patent License,http://spdx.org/licenses/BSD-2-Clause-Patent.json
+BSD-2-Clause-Views,BSD 2-Clause with views sentence,http://spdx.org/licenses/BSD-2-Clause-Views.json
+BSD-3-Clause,"BSD 3-Clause ""New"" or ""Revised"" License",http://spdx.org/licenses/BSD-3-Clause.json
+BSD-3-Clause-Attribution,BSD with attribution,http://spdx.org/licenses/BSD-3-Clause-Attribution.json
+BSD-3-Clause-Clear,BSD 3-Clause Clear License,http://spdx.org/licenses/BSD-3-Clause-Clear.json
+BSD-3-Clause-LBNL,Lawrence Berkeley National Labs BSD variant license,http://spdx.org/licenses/BSD-3-Clause-LBNL.json
+BSD-3-Clause-No-Nuclear-License,BSD 3-Clause No Nuclear License,http://spdx.org/licenses/BSD-3-Clause-No-Nuclear-License.json
+BSD-3-Clause-No-Nuclear-License-2014,BSD 3-Clause No Nuclear License 2014,http://spdx.org/licenses/BSD-3-Clause-No-Nuclear-License-2014.json
+BSD-3-Clause-No-Nuclear-Warranty,BSD 3-Clause No Nuclear Warranty,http://spdx.org/licenses/BSD-3-Clause-No-Nuclear-Warranty.json
+BSD-3-Clause-Open-MPI,BSD 3-Clause Open MPI variant,http://spdx.org/licenses/BSD-3-Clause-Open-MPI.json
+BSD-4-Clause,"BSD 4-Clause ""Original"" or ""Old"" License",http://spdx.org/licenses/BSD-4-Clause.json
+BSD-4-Clause-UC,BSD-4-Clause (University of California-Specific),http://spdx.org/licenses/BSD-4-Clause-UC.json
+BSD-Protection,BSD Protection License,http://spdx.org/licenses/BSD-Protection.json
+BSD-Source-Code,BSD Source Code Attribution,http://spdx.org/licenses/BSD-Source-Code.json
+BSL-1.0,Boost Software License 1.0,http://spdx.org/licenses/BSL-1.0.json
+BUSL-1.1,Business Source License 1.1,http://spdx.org/licenses/BUSL-1.1.json
+Bahyph,Bahyph License,http://spdx.org/licenses/Bahyph.json
+Barr,Barr License,http://spdx.org/licenses/Barr.json
+Beerware,Beerware License,http://spdx.org/licenses/Beerware.json
+BitTorrent-1.0,BitTorrent Open Source License v1.0,http://spdx.org/licenses/BitTorrent-1.0.json
+BitTorrent-1.1,BitTorrent Open Source License v1.1,http://spdx.org/licenses/BitTorrent-1.1.json
+BlueOak-1.0.0,Blue Oak Model License 1.0.0,http://spdx.org/licenses/BlueOak-1.0.0.json
+Borceux,Borceux license,http://spdx.org/licenses/Borceux.json
+CAL-1.0,Cryptographic Autonomy License 1.0,http://spdx.org/licenses/CAL-1.0.json
+CAL-1.0-Combined-Work-Exception,Cryptographic Autonomy License 1.0 (Combined Work Exception),http://spdx.org/licenses/CAL-1.0-Combined-Work-Exception.json
+CATOSL-1.1,Computer Associates Trusted Open Source License 1.1,http://spdx.org/licenses/CATOSL-1.1.json
+CC-BY-1.0,Creative Commons Attribution 1.0 Generic,http://spdx.org/licenses/CC-BY-1.0.json
+CC-BY-2.0,Creative Commons Attribution 2.0 Generic,http://spdx.org/licenses/CC-BY-2.0.json
+CC-BY-2.5,Creative Commons Attribution 2.5 Generic,http://spdx.org/licenses/CC-BY-2.5.json
+CC-BY-3.0,Creative Commons Attribution 3.0 Unported,http://spdx.org/licenses/CC-BY-3.0.json
+CC-BY-3.0-AT,Creative Commons Attribution 3.0 Austria,http://spdx.org/licenses/CC-BY-3.0-AT.json
+CC-BY-3.0-US,Creative Commons Attribution 3.0 United States,http://spdx.org/licenses/CC-BY-3.0-US.json
+CC-BY-4.0,Creative Commons Attribution 4.0 International,http://spdx.org/licenses/CC-BY-4.0.json
+CC-BY-NC-1.0,Creative Commons Attribution Non Commercial 1.0 Generic,http://spdx.org/licenses/CC-BY-NC-1.0.json
+CC-BY-NC-2.0,Creative Commons Attribution Non Commercial 2.0 Generic,http://spdx.org/licenses/CC-BY-NC-2.0.json
+CC-BY-NC-2.5,Creative Commons Attribution Non Commercial 2.5 Generic,http://spdx.org/licenses/CC-BY-NC-2.5.json
+CC-BY-NC-3.0,Creative Commons Attribution Non Commercial 3.0 Unported,http://spdx.org/licenses/CC-BY-NC-3.0.json
+CC-BY-NC-4.0,Creative Commons Attribution Non Commercial 4.0 International,http://spdx.org/licenses/CC-BY-NC-4.0.json
+CC-BY-NC-ND-1.0,Creative Commons Attribution Non Commercial No Derivatives 1.0 Generic,http://spdx.org/licenses/CC-BY-NC-ND-1.0.json
+CC-BY-NC-ND-2.0,Creative Commons Attribution Non Commercial No Derivatives 2.0 Generic,http://spdx.org/licenses/CC-BY-NC-ND-2.0.json
+CC-BY-NC-ND-2.5,Creative Commons Attribution Non Commercial No Derivatives 2.5 Generic,http://spdx.org/licenses/CC-BY-NC-ND-2.5.json
+CC-BY-NC-ND-3.0,Creative Commons Attribution Non Commercial No Derivatives 3.0 Unported,http://spdx.org/licenses/CC-BY-NC-ND-3.0.json
+CC-BY-NC-ND-3.0-IGO,Creative Commons Attribution Non Commercial No Derivatives 3.0 IGO,http://spdx.org/licenses/CC-BY-NC-ND-3.0-IGO.json
+CC-BY-NC-ND-4.0,Creative Commons Attribution Non Commercial No Derivatives 4.0 International,http://spdx.org/licenses/CC-BY-NC-ND-4.0.json
+CC-BY-NC-SA-1.0,Creative Commons Attribution Non Commercial Share Alike 1.0 Generic,http://spdx.org/licenses/CC-BY-NC-SA-1.0.json
+CC-BY-NC-SA-2.0,Creative Commons Attribution Non Commercial Share Alike 2.0 Generic,http://spdx.org/licenses/CC-BY-NC-SA-2.0.json
+CC-BY-NC-SA-2.5,Creative Commons Attribution Non Commercial Share Alike 2.5 Generic,http://spdx.org/licenses/CC-BY-NC-SA-2.5.json
+CC-BY-NC-SA-3.0,Creative Commons Attribution Non Commercial Share Alike 3.0 Unported,http://spdx.org/licenses/CC-BY-NC-SA-3.0.json
+CC-BY-NC-SA-4.0,Creative Commons Attribution Non Commercial Share Alike 4.0 International,http://spdx.org/licenses/CC-BY-NC-SA-4.0.json
+CC-BY-ND-1.0,Creative Commons Attribution No Derivatives 1.0 Generic,http://spdx.org/licenses/CC-BY-ND-1.0.json
+CC-BY-ND-2.0,Creative Commons Attribution No Derivatives 2.0 Generic,http://spdx.org/licenses/CC-BY-ND-2.0.json
+CC-BY-ND-2.5,Creative Commons Attribution No Derivatives 2.5 Generic,http://spdx.org/licenses/CC-BY-ND-2.5.json
+CC-BY-ND-3.0,Creative Commons Attribution No Derivatives 3.0 Unported,http://spdx.org/licenses/CC-BY-ND-3.0.json
+CC-BY-ND-4.0,Creative Commons Attribution No Derivatives 4.0 International,http://spdx.org/licenses/CC-BY-ND-4.0.json
+CC-BY-SA-1.0,Creative Commons Attribution Share Alike 1.0 Generic,http://spdx.org/licenses/CC-BY-SA-1.0.json
+CC-BY-SA-2.0,Creative Commons Attribution Share Alike 2.0 Generic,http://spdx.org/licenses/CC-BY-SA-2.0.json
+CC-BY-SA-2.0-UK,Creative Commons Attribution Share Alike 2.0 England and Wales,http://spdx.org/licenses/CC-BY-SA-2.0-UK.json
+CC-BY-SA-2.5,Creative Commons Attribution Share Alike 2.5 Generic,http://spdx.org/licenses/CC-BY-SA-2.5.json
+CC-BY-SA-3.0,Creative Commons Attribution Share Alike 3.0 Unported,http://spdx.org/licenses/CC-BY-SA-3.0.json
+CC-BY-SA-3.0-AT,Creative Commons Attribution-Share Alike 3.0 Austria,http://spdx.org/licenses/CC-BY-SA-3.0-AT.json
+CC-BY-SA-4.0,Creative Commons Attribution Share Alike 4.0 International,http://spdx.org/licenses/CC-BY-SA-4.0.json
+CC-PDDC,Creative Commons Public Domain Dedication and Certification,http://spdx.org/licenses/CC-PDDC.json
+CC0-1.0,Creative Commons Zero v1.0 Universal,http://spdx.org/licenses/CC0-1.0.json
+CDDL-1.0,Common Development and Distribution License 1.0,http://spdx.org/licenses/CDDL-1.0.json
+CDDL-1.1,Common Development and Distribution License 1.1,http://spdx.org/licenses/CDDL-1.1.json
+CDLA-Permissive-1.0,Community Data License Agreement Permissive 1.0,http://spdx.org/licenses/CDLA-Permissive-1.0.json
+CDLA-Sharing-1.0,Community Data License Agreement Sharing 1.0,http://spdx.org/licenses/CDLA-Sharing-1.0.json
+CECILL-1.0,CeCILL Free Software License Agreement v1.0,http://spdx.org/licenses/CECILL-1.0.json
+CECILL-1.1,CeCILL Free Software License Agreement v1.1,http://spdx.org/licenses/CECILL-1.1.json
+CECILL-2.0,CeCILL Free Software License Agreement v2.0,http://spdx.org/licenses/CECILL-2.0.json
+CECILL-2.1,CeCILL Free Software License Agreement v2.1,http://spdx.org/licenses/CECILL-2.1.json
+CECILL-B,CeCILL-B Free Software License Agreement,http://spdx.org/licenses/CECILL-B.json
+CECILL-C,CeCILL-C Free Software License Agreement,http://spdx.org/licenses/CECILL-C.json
+CERN-OHL-1.1,CERN Open Hardware Licence v1.1,http://spdx.org/licenses/CERN-OHL-1.1.json
+CERN-OHL-1.2,CERN Open Hardware Licence v1.2,http://spdx.org/licenses/CERN-OHL-1.2.json
+CERN-OHL-P-2.0,CERN Open Hardware Licence Version 2 - Permissive,http://spdx.org/licenses/CERN-OHL-P-2.0.json
+CERN-OHL-S-2.0,CERN Open Hardware Licence Version 2 - Strongly Reciprocal,http://spdx.org/licenses/CERN-OHL-S-2.0.json
+CERN-OHL-W-2.0,CERN Open Hardware Licence Version 2 - Weakly Reciprocal,http://spdx.org/licenses/CERN-OHL-W-2.0.json
+CNRI-Jython,CNRI Jython License,http://spdx.org/licenses/CNRI-Jython.json
+CNRI-Python,CNRI Python License,http://spdx.org/licenses/CNRI-Python.json
+CNRI-Python-GPL-Compatible,CNRI Python Open Source GPL Compatible License Agreement,http://spdx.org/licenses/CNRI-Python-GPL-Compatible.json
+CPAL-1.0,Common Public Attribution License 1.0,http://spdx.org/licenses/CPAL-1.0.json
+CPL-1.0,Common Public License 1.0,http://spdx.org/licenses/CPL-1.0.json
+CPOL-1.02,Code Project Open License 1.02,http://spdx.org/licenses/CPOL-1.02.json
+CUA-OPL-1.0,CUA Office Public License v1.0,http://spdx.org/licenses/CUA-OPL-1.0.json
+Caldera,Caldera License,http://spdx.org/licenses/Caldera.json
+ClArtistic,Clarified Artistic License,http://spdx.org/licenses/ClArtistic.json
+Condor-1.1,Condor Public License v1.1,http://spdx.org/licenses/Condor-1.1.json
+Crossword,Crossword License,http://spdx.org/licenses/Crossword.json
+CrystalStacker,CrystalStacker License,http://spdx.org/licenses/CrystalStacker.json
+Cube,Cube License,http://spdx.org/licenses/Cube.json
+D-FSL-1.0,Deutsche Freie Software Lizenz,http://spdx.org/licenses/D-FSL-1.0.json
+DOC,DOC License,http://spdx.org/licenses/DOC.json
+DSDP,DSDP License,http://spdx.org/licenses/DSDP.json
+Dotseqn,Dotseqn License,http://spdx.org/licenses/Dotseqn.json
+ECL-1.0,Educational Community License v1.0,http://spdx.org/licenses/ECL-1.0.json
+ECL-2.0,Educational Community License v2.0,http://spdx.org/licenses/ECL-2.0.json
+EFL-1.0,Eiffel Forum License v1.0,http://spdx.org/licenses/EFL-1.0.json
+EFL-2.0,Eiffel Forum License v2.0,http://spdx.org/licenses/EFL-2.0.json
+EPICS,EPICS Open License,http://spdx.org/licenses/EPICS.json
+EPL-1.0,Eclipse Public License 1.0,http://spdx.org/licenses/EPL-1.0.json
+EPL-2.0,Eclipse Public License 2.0,http://spdx.org/licenses/EPL-2.0.json
+EUDatagrid,EU DataGrid Software License,http://spdx.org/licenses/EUDatagrid.json
+EUPL-1.0,European Union Public License 1.0,http://spdx.org/licenses/EUPL-1.0.json
+EUPL-1.1,European Union Public License 1.1,http://spdx.org/licenses/EUPL-1.1.json
+EUPL-1.2,European Union Public License 1.2,http://spdx.org/licenses/EUPL-1.2.json
+Entessa,Entessa Public License v1.0,http://spdx.org/licenses/Entessa.json
+ErlPL-1.1,Erlang Public License v1.1,http://spdx.org/licenses/ErlPL-1.1.json
+Eurosym,Eurosym License,http://spdx.org/licenses/Eurosym.json
+FSFAP,FSF All Permissive License,http://spdx.org/licenses/FSFAP.json
+FSFUL,FSF Unlimited License,http://spdx.org/licenses/FSFUL.json
+FSFULLR,FSF Unlimited License (with License Retention),http://spdx.org/licenses/FSFULLR.json
+FTL,Freetype Project License,http://spdx.org/licenses/FTL.json
+Fair,Fair License,http://spdx.org/licenses/Fair.json
+Frameworx-1.0,Frameworx Open License 1.0,http://spdx.org/licenses/Frameworx-1.0.json
+FreeImage,FreeImage Public License v1.0,http://spdx.org/licenses/FreeImage.json
+GFDL-1.1,GNU Free Documentation License v1.1,http://spdx.org/licenses/GFDL-1.1.json
+GFDL-1.1-invariants-only,GNU Free Documentation License v1.1 only - invariants,http://spdx.org/licenses/GFDL-1.1-invariants-only.json
+GFDL-1.1-invariants-or-later,GNU Free Documentation License v1.1 or later - invariants,http://spdx.org/licenses/GFDL-1.1-invariants-or-later.json
+GFDL-1.1-no-invariants-only,GNU Free Documentation License v1.1 only - no invariants,http://spdx.org/licenses/GFDL-1.1-no-invariants-only.json
+GFDL-1.1-no-invariants-or-later,GNU Free Documentation License v1.1 or later - no invariants,http://spdx.org/licenses/GFDL-1.1-no-invariants-or-later.json
+GFDL-1.1-only,GNU Free Documentation License v1.1 only,http://spdx.org/licenses/GFDL-1.1-only.json
+GFDL-1.1-or-later,GNU Free Documentation License v1.1 or later,http://spdx.org/licenses/GFDL-1.1-or-later.json
+GFDL-1.2,GNU Free Documentation License v1.2,http://spdx.org/licenses/GFDL-1.2.json
+GFDL-1.2-invariants-only,GNU Free Documentation License v1.2 only - invariants,http://spdx.org/licenses/GFDL-1.2-invariants-only.json
+GFDL-1.2-invariants-or-later,GNU Free Documentation License v1.2 or later - invariants,http://spdx.org/licenses/GFDL-1.2-invariants-or-later.json
+GFDL-1.2-no-invariants-only,GNU Free Documentation License v1.2 only - no invariants,http://spdx.org/licenses/GFDL-1.2-no-invariants-only.json
+GFDL-1.2-no-invariants-or-later,GNU Free Documentation License v1.2 or later - no invariants,http://spdx.org/licenses/GFDL-1.2-no-invariants-or-later.json
+GFDL-1.2-only,GNU Free Documentation License v1.2 only,http://spdx.org/licenses/GFDL-1.2-only.json
+GFDL-1.2-or-later,GNU Free Documentation License v1.2 or later,http://spdx.org/licenses/GFDL-1.2-or-later.json
+GFDL-1.3,GNU Free Documentation License v1.3,http://spdx.org/licenses/GFDL-1.3.json
+GFDL-1.3-invariants-only,GNU Free Documentation License v1.3 only - invariants,http://spdx.org/licenses/GFDL-1.3-invariants-only.json
+GFDL-1.3-invariants-or-later,GNU Free Documentation License v1.3 or later - invariants,http://spdx.org/licenses/GFDL-1.3-invariants-or-later.json
+GFDL-1.3-no-invariants-only,GNU Free Documentation License v1.3 only - no invariants,http://spdx.org/licenses/GFDL-1.3-no-invariants-only.json
+GFDL-1.3-no-invariants-or-later,GNU Free Documentation License v1.3 or later - no invariants,http://spdx.org/licenses/GFDL-1.3-no-invariants-or-later.json
+GFDL-1.3-only,GNU Free Documentation License v1.3 only,http://spdx.org/licenses/GFDL-1.3-only.json
+GFDL-1.3-or-later,GNU Free Documentation License v1.3 or later,http://spdx.org/licenses/GFDL-1.3-or-later.json
+GL2PS,GL2PS License,http://spdx.org/licenses/GL2PS.json
+GLWTPL,Good Luck With That Public License,http://spdx.org/licenses/GLWTPL.json
+GPL-1.0,GNU General Public License v1.0 only,http://spdx.org/licenses/GPL-1.0.json
+GPL-1.0+,GNU General Public License v1.0 or later,http://spdx.org/licenses/GPL-1.0+.json
+GPL-1.0-only,GNU General Public License v1.0 only,http://spdx.org/licenses/GPL-1.0-only.json
+GPL-1.0-or-later,GNU General Public License v1.0 or later,http://spdx.org/licenses/GPL-1.0-or-later.json
+GPL-2.0,GNU General Public License v2.0 only,http://spdx.org/licenses/GPL-2.0.json
+GPL-2.0+,GNU General Public License v2.0 or later,http://spdx.org/licenses/GPL-2.0+.json
+GPL-2.0-only,GNU General Public License v2.0 only,http://spdx.org/licenses/GPL-2.0-only.json
+GPL-2.0-or-later,GNU General Public License v2.0 or later,http://spdx.org/licenses/GPL-2.0-or-later.json
+GPL-2.0-with-GCC-exception,GNU General Public License v2.0 w/GCC Runtime Library exception,http://spdx.org/licenses/GPL-2.0-with-GCC-exception.json
+GPL-2.0-with-autoconf-exception,GNU General Public License v2.0 w/Autoconf exception,http://spdx.org/licenses/GPL-2.0-with-autoconf-exception.json
+GPL-2.0-with-bison-exception,GNU General Public License v2.0 w/Bison exception,http://spdx.org/licenses/GPL-2.0-with-bison-exception.json
+GPL-2.0-with-classpath-exception,GNU General Public License v2.0 w/Classpath exception,http://spdx.org/licenses/GPL-2.0-with-classpath-exception.json
+GPL-2.0-with-font-exception,GNU General Public License v2.0 w/Font exception,http://spdx.org/licenses/GPL-2.0-with-font-exception.json
+GPL-3.0,GNU General Public License v3.0 only,http://spdx.org/licenses/GPL-3.0.json
+GPL-3.0+,GNU General Public License v3.0 or later,http://spdx.org/licenses/GPL-3.0+.json
+GPL-3.0-only,GNU General Public License v3.0 only,http://spdx.org/licenses/GPL-3.0-only.json
+GPL-3.0-or-later,GNU General Public License v3.0 or later,http://spdx.org/licenses/GPL-3.0-or-later.json
+GPL-3.0-with-GCC-exception,GNU General Public License v3.0 w/GCC Runtime Library exception,http://spdx.org/licenses/GPL-3.0-with-GCC-exception.json
+GPL-3.0-with-autoconf-exception,GNU General Public License v3.0 w/Autoconf exception,http://spdx.org/licenses/GPL-3.0-with-autoconf-exception.json
+Giftware,Giftware License,http://spdx.org/licenses/Giftware.json
+Glide,3dfx Glide License,http://spdx.org/licenses/Glide.json
+Glulxe,Glulxe License,http://spdx.org/licenses/Glulxe.json
+HPND,Historical Permission Notice and Disclaimer,http://spdx.org/licenses/HPND.json
+HPND-sell-variant,Historical Permission Notice and Disclaimer - sell variant,http://spdx.org/licenses/HPND-sell-variant.json
+HTMLTIDY,HTML Tidy License,http://spdx.org/licenses/HTMLTIDY.json
+HaskellReport,Haskell Language Report License,http://spdx.org/licenses/HaskellReport.json
+Hippocratic-2.1,Hippocratic License 2.1,http://spdx.org/licenses/Hippocratic-2.1.json
+IBM-pibs,IBM PowerPC Initialization and Boot Software,http://spdx.org/licenses/IBM-pibs.json
+ICU,ICU License,http://spdx.org/licenses/ICU.json
+IJG,Independent JPEG Group License,http://spdx.org/licenses/IJG.json
+IPA,IPA Font License,http://spdx.org/licenses/IPA.json
+IPL-1.0,IBM Public License v1.0,http://spdx.org/licenses/IPL-1.0.json
+ISC,ISC License,http://spdx.org/licenses/ISC.json
+ImageMagick,ImageMagick License,http://spdx.org/licenses/ImageMagick.json
+Imlib2,Imlib2 License,http://spdx.org/licenses/Imlib2.json
+Info-ZIP,Info-ZIP License,http://spdx.org/licenses/Info-ZIP.json
+Intel,Intel Open Source License,http://spdx.org/licenses/Intel.json
+Intel-ACPI,Intel ACPI Software License Agreement,http://spdx.org/licenses/Intel-ACPI.json
+Interbase-1.0,Interbase Public License v1.0,http://spdx.org/licenses/Interbase-1.0.json
+JPNIC,Japan Network Information Center License,http://spdx.org/licenses/JPNIC.json
+JSON,JSON License,http://spdx.org/licenses/JSON.json
+JasPer-2.0,JasPer License,http://spdx.org/licenses/JasPer-2.0.json
+LAL-1.2,Licence Art Libre 1.2,http://spdx.org/licenses/LAL-1.2.json
+LAL-1.3,Licence Art Libre 1.3,http://spdx.org/licenses/LAL-1.3.json
+LGPL-2.0,GNU Library General Public License v2 only,http://spdx.org/licenses/LGPL-2.0.json
+LGPL-2.0+,GNU Library General Public License v2 or later,http://spdx.org/licenses/LGPL-2.0+.json
+LGPL-2.0-only,GNU Library General Public License v2 only,http://spdx.org/licenses/LGPL-2.0-only.json
+LGPL-2.0-or-later,GNU Library General Public License v2 or later,http://spdx.org/licenses/LGPL-2.0-or-later.json
+LGPL-2.1,GNU Lesser General Public License v2.1 only,http://spdx.org/licenses/LGPL-2.1.json
+LGPL-2.1+,GNU Library General Public License v2.1 or later,http://spdx.org/licenses/LGPL-2.1+.json
+LGPL-2.1-only,GNU Lesser General Public License v2.1 only,http://spdx.org/licenses/LGPL-2.1-only.json
+LGPL-2.1-or-later,GNU Lesser General Public License v2.1 or later,http://spdx.org/licenses/LGPL-2.1-or-later.json
+LGPL-3.0,GNU Lesser General Public License v3.0 only,http://spdx.org/licenses/LGPL-3.0.json
+LGPL-3.0+,GNU Lesser General Public License v3.0 or later,http://spdx.org/licenses/LGPL-3.0+.json
+LGPL-3.0-only,GNU Lesser General Public License v3.0 only,http://spdx.org/licenses/LGPL-3.0-only.json
+LGPL-3.0-or-later,GNU Lesser General Public License v3.0 or later,http://spdx.org/licenses/LGPL-3.0-or-later.json
+LGPLLR,Lesser General Public License For Linguistic Resources,http://spdx.org/licenses/LGPLLR.json
+LPL-1.0,Lucent Public License Version 1.0,http://spdx.org/licenses/LPL-1.0.json
+LPL-1.02,Lucent Public License v1.02,http://spdx.org/licenses/LPL-1.02.json
+LPPL-1.0,LaTeX Project Public License v1.0,http://spdx.org/licenses/LPPL-1.0.json
+LPPL-1.1,LaTeX Project Public License v1.1,http://spdx.org/licenses/LPPL-1.1.json
+LPPL-1.2,LaTeX Project Public License v1.2,http://spdx.org/licenses/LPPL-1.2.json
+LPPL-1.3a,LaTeX Project Public License v1.3a,http://spdx.org/licenses/LPPL-1.3a.json
+LPPL-1.3c,LaTeX Project Public License v1.3c,http://spdx.org/licenses/LPPL-1.3c.json
+Latex2e,Latex2e License,http://spdx.org/licenses/Latex2e.json
+Leptonica,Leptonica License,http://spdx.org/licenses/Leptonica.json
+LiLiQ-P-1.1,Licence Libre du Québec – Permissive version 1.1,http://spdx.org/licenses/LiLiQ-P-1.1.json
+LiLiQ-R-1.1,Licence Libre du Québec – Réciprocité version 1.1,http://spdx.org/licenses/LiLiQ-R-1.1.json
+LiLiQ-Rplus-1.1,Licence Libre du Québec – Réciprocité forte version 1.1,http://spdx.org/licenses/LiLiQ-Rplus-1.1.json
+Libpng,libpng License,http://spdx.org/licenses/Libpng.json
+Linux-OpenIB,Linux Kernel Variant of OpenIB.org license,http://spdx.org/licenses/Linux-OpenIB.json
+MIT,MIT License,http://spdx.org/licenses/MIT.json
+MIT-0,MIT No Attribution,http://spdx.org/licenses/MIT-0.json
+MIT-CMU,CMU License,http://spdx.org/licenses/MIT-CMU.json
+MIT-advertising,Enlightenment License (e16),http://spdx.org/licenses/MIT-advertising.json
+MIT-enna,enna License,http://spdx.org/licenses/MIT-enna.json
+MIT-feh,feh License,http://spdx.org/licenses/MIT-feh.json
+MIT-open-group,MIT Open Group variant,http://spdx.org/licenses/MIT-open-group.json
+MITNFA,MIT +no-false-attribs license,http://spdx.org/licenses/MITNFA.json
+MPL-1.0,Mozilla Public License 1.0,http://spdx.org/licenses/MPL-1.0.json
+MPL-1.1,Mozilla Public License 1.1,http://spdx.org/licenses/MPL-1.1.json
+MPL-2.0,Mozilla Public License 2.0,http://spdx.org/licenses/MPL-2.0.json
+MPL-2.0-no-copyleft-exception,Mozilla Public License 2.0 (no copyleft exception),http://spdx.org/licenses/MPL-2.0-no-copyleft-exception.json
+MS-PL,Microsoft Public License,http://spdx.org/licenses/MS-PL.json
+MS-RL,Microsoft Reciprocal License,http://spdx.org/licenses/MS-RL.json
+MTLL,Matrix Template Library License,http://spdx.org/licenses/MTLL.json
+MakeIndex,MakeIndex License,http://spdx.org/licenses/MakeIndex.json
+MirOS,The MirOS Licence,http://spdx.org/licenses/MirOS.json
+Motosoto,Motosoto License,http://spdx.org/licenses/Motosoto.json
+MulanPSL-1.0,"Mulan Permissive Software License, Version 1",http://spdx.org/licenses/MulanPSL-1.0.json
+MulanPSL-2.0,"Mulan Permissive Software License, Version 2",http://spdx.org/licenses/MulanPSL-2.0.json
+Multics,Multics License,http://spdx.org/licenses/Multics.json
+Mup,Mup License,http://spdx.org/licenses/Mup.json
+NASA-1.3,NASA Open Source Agreement 1.3,http://spdx.org/licenses/NASA-1.3.json
+NBPL-1.0,Net Boolean Public License v1,http://spdx.org/licenses/NBPL-1.0.json
+NCGL-UK-2.0,Non-Commercial Government Licence,http://spdx.org/licenses/NCGL-UK-2.0.json
+NCSA,University of Illinois/NCSA Open Source License,http://spdx.org/licenses/NCSA.json
+NGPL,Nethack General Public License,http://spdx.org/licenses/NGPL.json
+NIST-PD,NIST Public Domain Notice,http://spdx.org/licenses/NIST-PD.json
+NIST-PD-fallback,NIST Public Domain Notice with license fallback,http://spdx.org/licenses/NIST-PD-fallback.json
+NLOD-1.0,Norwegian Licence for Open Government Data,http://spdx.org/licenses/NLOD-1.0.json
+NLPL,No Limit Public License,http://spdx.org/licenses/NLPL.json
+NOSL,Netizen Open Source License,http://spdx.org/licenses/NOSL.json
+NPL-1.0,Netscape Public License v1.0,http://spdx.org/licenses/NPL-1.0.json
+NPL-1.1,Netscape Public License v1.1,http://spdx.org/licenses/NPL-1.1.json
+NPOSL-3.0,Non-Profit Open Software License 3.0,http://spdx.org/licenses/NPOSL-3.0.json
+NRL,NRL License,http://spdx.org/licenses/NRL.json
+NTP,NTP License,http://spdx.org/licenses/NTP.json
+NTP-0,NTP No Attribution,http://spdx.org/licenses/NTP-0.json
+Naumen,Naumen Public License,http://spdx.org/licenses/Naumen.json
+Net-SNMP,Net-SNMP License,http://spdx.org/licenses/Net-SNMP.json
+NetCDF,NetCDF license,http://spdx.org/licenses/NetCDF.json
+Newsletr,Newsletr License,http://spdx.org/licenses/Newsletr.json
+Nokia,Nokia Open Source License,http://spdx.org/licenses/Nokia.json
+Noweb,Noweb License,http://spdx.org/licenses/Noweb.json
+Nunit,Nunit License,http://spdx.org/licenses/Nunit.json
+O-UDA-1.0,Open Use of Data Agreement v1.0,http://spdx.org/licenses/O-UDA-1.0.json
+OCCT-PL,Open CASCADE Technology Public License,http://spdx.org/licenses/OCCT-PL.json
+OCLC-2.0,OCLC Research Public License 2.0,http://spdx.org/licenses/OCLC-2.0.json
+ODC-By-1.0,Open Data Commons Attribution License v1.0,http://spdx.org/licenses/ODC-By-1.0.json
+ODbL-1.0,ODC Open Database License v1.0,http://spdx.org/licenses/ODbL-1.0.json
+OFL-1.0,SIL Open Font License 1.0,http://spdx.org/licenses/OFL-1.0.json
+OFL-1.0-RFN,SIL Open Font License 1.0 with Reserved Font Name,http://spdx.org/licenses/OFL-1.0-RFN.json
+OFL-1.0-no-RFN,SIL Open Font License 1.0 with no Reserved Font Name,http://spdx.org/licenses/OFL-1.0-no-RFN.json
+OFL-1.1,SIL Open Font License 1.1,http://spdx.org/licenses/OFL-1.1.json
+OFL-1.1-RFN,SIL Open Font License 1.1 with Reserved Font Name,http://spdx.org/licenses/OFL-1.1-RFN.json
+OFL-1.1-no-RFN,SIL Open Font License 1.1 with no Reserved Font Name,http://spdx.org/licenses/OFL-1.1-no-RFN.json
+OGC-1.0,"OGC Software License, Version 1.0",http://spdx.org/licenses/OGC-1.0.json
+OGL-Canada-2.0,Open Government Licence - Canada,http://spdx.org/licenses/OGL-Canada-2.0.json
+OGL-UK-1.0,Open Government Licence v1.0,http://spdx.org/licenses/OGL-UK-1.0.json
+OGL-UK-2.0,Open Government Licence v2.0,http://spdx.org/licenses/OGL-UK-2.0.json
+OGL-UK-3.0,Open Government Licence v3.0,http://spdx.org/licenses/OGL-UK-3.0.json
+OGTSL,Open Group Test Suite License,http://spdx.org/licenses/OGTSL.json
+OLDAP-1.1,Open LDAP Public License v1.1,http://spdx.org/licenses/OLDAP-1.1.json
+OLDAP-1.2,Open LDAP Public License v1.2,http://spdx.org/licenses/OLDAP-1.2.json
+OLDAP-1.3,Open LDAP Public License v1.3,http://spdx.org/licenses/OLDAP-1.3.json
+OLDAP-1.4,Open LDAP Public License v1.4,http://spdx.org/licenses/OLDAP-1.4.json
+OLDAP-2.0,Open LDAP Public License v2.0 (or possibly 2.0A and 2.0B),http://spdx.org/licenses/OLDAP-2.0.json
+OLDAP-2.0.1,Open LDAP Public License v2.0.1,http://spdx.org/licenses/OLDAP-2.0.1.json
+OLDAP-2.1,Open LDAP Public License v2.1,http://spdx.org/licenses/OLDAP-2.1.json
+OLDAP-2.2,Open LDAP Public License v2.2,http://spdx.org/licenses/OLDAP-2.2.json
+OLDAP-2.2.1,Open LDAP Public License v2.2.1,http://spdx.org/licenses/OLDAP-2.2.1.json
+OLDAP-2.2.2,Open LDAP Public License 2.2.2,http://spdx.org/licenses/OLDAP-2.2.2.json
+OLDAP-2.3,Open LDAP Public License v2.3,http://spdx.org/licenses/OLDAP-2.3.json
+OLDAP-2.4,Open LDAP Public License v2.4,http://spdx.org/licenses/OLDAP-2.4.json
+OLDAP-2.5,Open LDAP Public License v2.5,http://spdx.org/licenses/OLDAP-2.5.json
+OLDAP-2.6,Open LDAP Public License v2.6,http://spdx.org/licenses/OLDAP-2.6.json
+OLDAP-2.7,Open LDAP Public License v2.7,http://spdx.org/licenses/OLDAP-2.7.json
+OLDAP-2.8,Open LDAP Public License v2.8,http://spdx.org/licenses/OLDAP-2.8.json
+OML,Open Market License,http://spdx.org/licenses/OML.json
+OPL-1.0,Open Public License v1.0,http://spdx.org/licenses/OPL-1.0.json
+OSET-PL-2.1,OSET Public License version 2.1,http://spdx.org/licenses/OSET-PL-2.1.json
+OSL-1.0,Open Software License 1.0,http://spdx.org/licenses/OSL-1.0.json
+OSL-1.1,Open Software License 1.1,http://spdx.org/licenses/OSL-1.1.json
+OSL-2.0,Open Software License 2.0,http://spdx.org/licenses/OSL-2.0.json
+OSL-2.1,Open Software License 2.1,http://spdx.org/licenses/OSL-2.1.json
+OSL-3.0,Open Software License 3.0,http://spdx.org/licenses/OSL-3.0.json
+OpenSSL,OpenSSL License,http://spdx.org/licenses/OpenSSL.json
+PDDL-1.0,ODC Public Domain Dedication & License 1.0,http://spdx.org/licenses/PDDL-1.0.json
+PHP-3.0,PHP License v3.0,http://spdx.org/licenses/PHP-3.0.json
+PHP-3.01,PHP License v3.01,http://spdx.org/licenses/PHP-3.01.json
+PSF-2.0,Python Software Foundation License 2.0,http://spdx.org/licenses/PSF-2.0.json
+Parity-6.0.0,The Parity Public License 6.0.0,http://spdx.org/licenses/Parity-6.0.0.json
+Parity-7.0.0,The Parity Public License 7.0.0,http://spdx.org/licenses/Parity-7.0.0.json
+Plexus,Plexus Classworlds License,http://spdx.org/licenses/Plexus.json
+PolyForm-Noncommercial-1.0.0,PolyForm Noncommercial License 1.0.0,http://spdx.org/licenses/PolyForm-Noncommercial-1.0.0.json
+PolyForm-Small-Business-1.0.0,PolyForm Small Business License 1.0.0,http://spdx.org/licenses/PolyForm-Small-Business-1.0.0.json
+PostgreSQL,PostgreSQL License,http://spdx.org/licenses/PostgreSQL.json
+Python-2.0,Python License 2.0,http://spdx.org/licenses/Python-2.0.json
+QPL-1.0,Q Public License 1.0,http://spdx.org/licenses/QPL-1.0.json
+Qhull,Qhull License,http://spdx.org/licenses/Qhull.json
+RHeCos-1.1,Red Hat eCos Public License v1.1,http://spdx.org/licenses/RHeCos-1.1.json
+RPL-1.1,Reciprocal Public License 1.1,http://spdx.org/licenses/RPL-1.1.json
+RPL-1.5,Reciprocal Public License 1.5,http://spdx.org/licenses/RPL-1.5.json
+RPSL-1.0,RealNetworks Public Source License v1.0,http://spdx.org/licenses/RPSL-1.0.json
+RSA-MD,RSA Message-Digest License,http://spdx.org/licenses/RSA-MD.json
+RSCPL,Ricoh Source Code Public License,http://spdx.org/licenses/RSCPL.json
+Rdisc,Rdisc License,http://spdx.org/licenses/Rdisc.json
+Ruby,Ruby License,http://spdx.org/licenses/Ruby.json
+SAX-PD,Sax Public Domain Notice,http://spdx.org/licenses/SAX-PD.json
+SCEA,SCEA Shared Source License,http://spdx.org/licenses/SCEA.json
+SGI-B-1.0,SGI Free Software License B v1.0,http://spdx.org/licenses/SGI-B-1.0.json
+SGI-B-1.1,SGI Free Software License B v1.1,http://spdx.org/licenses/SGI-B-1.1.json
+SGI-B-2.0,SGI Free Software License B v2.0,http://spdx.org/licenses/SGI-B-2.0.json
+SHL-0.5,Solderpad Hardware License v0.5,http://spdx.org/licenses/SHL-0.5.json
+SHL-0.51,"Solderpad Hardware License, Version 0.51",http://spdx.org/licenses/SHL-0.51.json
+SISSL,Sun Industry Standards Source License v1.1,http://spdx.org/licenses/SISSL.json
+SISSL-1.2,Sun Industry Standards Source License v1.2,http://spdx.org/licenses/SISSL-1.2.json
+SMLNJ,Standard ML of New Jersey License,http://spdx.org/licenses/SMLNJ.json
+SMPPL,Secure Messaging Protocol Public License,http://spdx.org/licenses/SMPPL.json
+SNIA,SNIA Public License 1.1,http://spdx.org/licenses/SNIA.json
+SPL-1.0,Sun Public License v1.0,http://spdx.org/licenses/SPL-1.0.json
+SSH-OpenSSH,SSH OpenSSH license,http://spdx.org/licenses/SSH-OpenSSH.json
+SSH-short,SSH short notice,http://spdx.org/licenses/SSH-short.json
+SSPL-1.0,"Server Side Public License, v 1",http://spdx.org/licenses/SSPL-1.0.json
+SWL,Scheme Widget Library (SWL) Software License Agreement,http://spdx.org/licenses/SWL.json
+Saxpath,Saxpath License,http://spdx.org/licenses/Saxpath.json
+Sendmail,Sendmail License,http://spdx.org/licenses/Sendmail.json
+Sendmail-8.23,Sendmail License 8.23,http://spdx.org/licenses/Sendmail-8.23.json
+SimPL-2.0,Simple Public License 2.0,http://spdx.org/licenses/SimPL-2.0.json
+Sleepycat,Sleepycat License,http://spdx.org/licenses/Sleepycat.json
+Spencer-86,Spencer License 86,http://spdx.org/licenses/Spencer-86.json
+Spencer-94,Spencer License 94,http://spdx.org/licenses/Spencer-94.json
+Spencer-99,Spencer License 99,http://spdx.org/licenses/Spencer-99.json
+StandardML-NJ,Standard ML of New Jersey License,http://spdx.org/licenses/StandardML-NJ.json
+SugarCRM-1.1.3,SugarCRM Public License v1.1.3,http://spdx.org/licenses/SugarCRM-1.1.3.json
+TAPR-OHL-1.0,TAPR Open Hardware License v1.0,http://spdx.org/licenses/TAPR-OHL-1.0.json
+TCL,TCL/TK License,http://spdx.org/licenses/TCL.json
+TCP-wrappers,TCP Wrappers License,http://spdx.org/licenses/TCP-wrappers.json
+TMate,TMate Open Source License,http://spdx.org/licenses/TMate.json
+TORQUE-1.1,TORQUE v2.5+ Software License v1.1,http://spdx.org/licenses/TORQUE-1.1.json
+TOSL,Trusster Open Source License,http://spdx.org/licenses/TOSL.json
+TU-Berlin-1.0,Technische Universitaet Berlin License 1.0,http://spdx.org/licenses/TU-Berlin-1.0.json
+TU-Berlin-2.0,Technische Universitaet Berlin License 2.0,http://spdx.org/licenses/TU-Berlin-2.0.json
+UCL-1.0,Upstream Compatibility License v1.0,http://spdx.org/licenses/UCL-1.0.json
+UPL-1.0,Universal Permissive License v1.0,http://spdx.org/licenses/UPL-1.0.json
+Unicode-DFS-2015,Unicode License Agreement - Data Files and Software (2015),http://spdx.org/licenses/Unicode-DFS-2015.json
+Unicode-DFS-2016,Unicode License Agreement - Data Files and Software (2016),http://spdx.org/licenses/Unicode-DFS-2016.json
+Unicode-TOU,Unicode Terms of Use,http://spdx.org/licenses/Unicode-TOU.json
+Unlicense,The Unlicense,http://spdx.org/licenses/Unlicense.json
+VOSTROM,VOSTROM Public License for Open Source,http://spdx.org/licenses/VOSTROM.json
+VSL-1.0,Vovida Software License v1.0,http://spdx.org/licenses/VSL-1.0.json
+Vim,Vim License,http://spdx.org/licenses/Vim.json
+W3C,W3C Software Notice and License (2002-12-31),http://spdx.org/licenses/W3C.json
+W3C-19980720,W3C Software Notice and License (1998-07-20),http://spdx.org/licenses/W3C-19980720.json
+W3C-20150513,W3C Software Notice and Document License (2015-05-13),http://spdx.org/licenses/W3C-20150513.json
+WTFPL,Do What The F*ck You Want To Public License,http://spdx.org/licenses/WTFPL.json
+Watcom-1.0,Sybase Open Watcom Public License 1.0,http://spdx.org/licenses/Watcom-1.0.json
+Wsuipa,Wsuipa License,http://spdx.org/licenses/Wsuipa.json
+X11,X11 License,http://spdx.org/licenses/X11.json
+XFree86-1.1,XFree86 License 1.1,http://spdx.org/licenses/XFree86-1.1.json
+XSkat,XSkat License,http://spdx.org/licenses/XSkat.json
+Xerox,Xerox License,http://spdx.org/licenses/Xerox.json
+Xnet,X.Net License,http://spdx.org/licenses/Xnet.json
+YPL-1.0,Yahoo! Public License v1.0,http://spdx.org/licenses/YPL-1.0.json
+YPL-1.1,Yahoo! Public License v1.1,http://spdx.org/licenses/YPL-1.1.json
+ZPL-1.1,Zope Public License 1.1,http://spdx.org/licenses/ZPL-1.1.json
+ZPL-2.0,Zope Public License 2.0,http://spdx.org/licenses/ZPL-2.0.json
+ZPL-2.1,Zope Public License 2.1,http://spdx.org/licenses/ZPL-2.1.json
+Zed,Zed License,http://spdx.org/licenses/Zed.json
+Zend-2.0,Zend License v2.0,http://spdx.org/licenses/Zend-2.0.json
+Zimbra-1.3,Zimbra Public License v1.3,http://spdx.org/licenses/Zimbra-1.3.json
+Zimbra-1.4,Zimbra Public License v1.4,http://spdx.org/licenses/Zimbra-1.4.json
+Zlib,zlib License,http://spdx.org/licenses/Zlib.json
+blessing,SQLite Blessing,http://spdx.org/licenses/blessing.json
+bzip2-1.0.5,bzip2 and libbzip2 License v1.0.5,http://spdx.org/licenses/bzip2-1.0.5.json
+bzip2-1.0.6,bzip2 and libbzip2 License v1.0.6,http://spdx.org/licenses/bzip2-1.0.6.json
+copyleft-next-0.3.0,copyleft-next 0.3.0,http://spdx.org/licenses/copyleft-next-0.3.0.json
+copyleft-next-0.3.1,copyleft-next 0.3.1,http://spdx.org/licenses/copyleft-next-0.3.1.json
+curl,curl License,http://spdx.org/licenses/curl.json
+diffmark,diffmark license,http://spdx.org/licenses/diffmark.json
+dvipdfm,dvipdfm License,http://spdx.org/licenses/dvipdfm.json
+eCos-2.0,eCos license version 2.0,http://spdx.org/licenses/eCos-2.0.json
+eGenix,eGenix.com Public License 1.1.0,http://spdx.org/licenses/eGenix.json
+etalab-2.0,Etalab Open License 2.0,http://spdx.org/licenses/etalab-2.0.json
+gSOAP-1.3b,gSOAP Public License v1.3b,http://spdx.org/licenses/gSOAP-1.3b.json
+gnuplot,gnuplot License,http://spdx.org/licenses/gnuplot.json
+iMatix,iMatix Standard Function Library Agreement,http://spdx.org/licenses/iMatix.json
+libpng-2.0,PNG Reference Library version 2,http://spdx.org/licenses/libpng-2.0.json
+libselinux-1.0,libselinux public domain notice,http://spdx.org/licenses/libselinux-1.0.json
+libtiff,libtiff License,http://spdx.org/licenses/libtiff.json
+mpich2,mpich2 License,http://spdx.org/licenses/mpich2.json
+psfrag,psfrag License,http://spdx.org/licenses/psfrag.json
+psutils,psutils License,http://spdx.org/licenses/psutils.json
+wxWindows,wxWindows Library License,http://spdx.org/licenses/wxWindows.json
+xinetd,xinetd License,http://spdx.org/licenses/xinetd.json
+xpp,XPP License,http://spdx.org/licenses/xpp.json
+zlib-acknowledgement,zlib/libpng License with Acknowledgement,http://spdx.org/licenses/zlib-acknowledgement.json

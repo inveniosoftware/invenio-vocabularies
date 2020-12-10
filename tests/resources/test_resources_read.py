@@ -18,20 +18,20 @@ def test_endpoint_read(app, client, example_record):
     """Test the endpoint to retrieve a single item."""
     res = client.get(
         "/vocabularies/languages/{}".format(example_record.id),
-        headers={"accept": "application/json"}
+        headers={"accept": "application/json"},
     )
     assert res.status_code == 200
     assert res.json["id"] == example_record.id
 
     res = client.get(
         "/vocabularies/nonexistent/{}".format(example_record.id),
-        headers={"accept": "application/json"}
+        headers={"accept": "application/json"},
     )
     assert res.status_code == 200  # (!) current behavior, might change
     assert res.json["id"] == example_record.id
 
     res = client.get(
         "/vocabularies/languages/{}".format("nonexistent"),
-        headers={"accept": "application/json"}
+        headers={"accept": "application/json"},
     )
     assert res.status_code == 404
