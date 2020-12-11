@@ -24,6 +24,7 @@ data_directory = join(dirname(__file__), "data")
 
 
 def get_available_vocabularies():
+    """Specify the available vocabularies."""
     return {
         "languages": {
             "path": join(data_directory, "languages.csv"),
