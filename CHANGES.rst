@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 0.1.3 (released 2020-12-11)
+
+- Include csv vocabularies data
+
 Version 0.1.2 (released 2020-12-11)
 
 - CI changes
