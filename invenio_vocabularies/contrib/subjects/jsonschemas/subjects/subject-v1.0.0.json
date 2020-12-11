@@ -1,6 +1,5 @@
 {
   "description": "Subjects from specific vocabularies.",
-  "additionalProperties": false,
   "properties": {
     "identifier": {
       "description": "Subjects term identifier.",
