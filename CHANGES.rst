@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 0.1.5 (released 2020-12-11)
+
+- Bug fixes in contrib vocabulary
+
 Version 0.1.4 (released 2020-12-11)
 
 - Add subjects vocabulary
