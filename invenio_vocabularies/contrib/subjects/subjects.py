@@ -16,5 +16,6 @@ from invenio_vocabularies.contrib.subjects.schema import SubjectSchema
 
 subject_record_type = RecordTypeFactory(
     "Subject", SubjectSchema,
-    permission_policy_cls=PermissionPolicy
+    permission_policy_cls=PermissionPolicy,
+    endpoint_route='/subjects'
 )
