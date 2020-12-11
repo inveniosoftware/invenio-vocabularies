@@ -12,6 +12,10 @@
     "term": {
       "description": "Subject term value.",
       "type": "string"
+    },
+    "title": {
+      "description": "Subject title.",
+      "type": "string"
     }
   },
   "type": "object"

@@ -62,8 +62,9 @@ def _create_subjects_vocabulary(vocabulary_type_name, source_path):
             "title": {
                 "en": row["title"],
             },
-            "term": row["term"],
-            "identifier": row["identifier"],
+            "term": row["id"],
+            "identifier": row["id"],
+            "scheme": row["scheme"],
         }
 
         record = service.create(

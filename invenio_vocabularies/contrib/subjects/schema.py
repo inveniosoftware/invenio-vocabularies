@@ -14,6 +14,7 @@ class MetadataSchema(Schema):
     scheme = fields.Str(required=True, validate=validate.Length(min=3))
     term = fields.Str(required=True, validate=validate.Length(min=3))
     identifier = fields.Str(required=True, validate=validate.Length(min=3))
+    scheme = fields.Str(required=True, validate=validate.Length(min=3))
 
 
 class SubjectSchema(Schema):
