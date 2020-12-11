@@ -17,6 +17,7 @@ from flask_principal import Identity
 from invenio_access import any_user
 from invenio_db import db
 
+from invenio_vocabularies.contrib.subjects.subjects import subject_record_type
 from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.service import VocabulariesService
 
@@ -49,20 +50,14 @@ def _load_csv_data(path):
 def _create_subjects_vocabulary(vocabulary_type_name, source_path):
     identity = Identity(1)
     identity.provides.add(any_user)
-    service = VocabulariesService()
+    service = subject_record_type.service_cls()
 
     rows = _load_csv_data(source_path)
-
-    vocabulary_type = VocabularyType(name=vocabulary_type_name)
-    db.session.add(vocabulary_type)
-    db.session.commit()
 
     records = []
     for row in rows:
         metadata = {
-            "title": {
-                "en": row["title"],
-            },
+            "title": row["title"],
             "term": row["id"],
             "identifier": row["id"],
             "scheme": row["scheme"],
@@ -72,7 +67,6 @@ def _create_subjects_vocabulary(vocabulary_type_name, source_path):
             identity=identity,
             data={
                 "metadata": metadata,
-                "vocabulary_type_id": vocabulary_type.id,
             },
         )
 
