@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 0.1.2 (released 2020-12-11)
+
+- CI changes
+
 Version 0.1.1 (released 2020-12-11)
 
 - Add vocabulary import command
