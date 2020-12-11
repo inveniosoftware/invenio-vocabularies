@@ -20,6 +20,8 @@ class InvenioVocabularies(object):
         """Extension initialization."""
         self.resource = None
         self.service = None
+        self.subjects_service = None
+        self.subjects_resource = None
         if app:
             self.init_app(app)
 

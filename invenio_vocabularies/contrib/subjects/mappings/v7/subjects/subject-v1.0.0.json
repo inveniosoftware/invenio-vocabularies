@@ -1,0 +1,18 @@
+{
+  "mappings": {
+    "properties": {
+      "term": {
+        "type": "keyword"
+      },
+      "identifier": {
+        "type": "keyword"
+      },
+      "scheme": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "text"
+      }
+    }
+  }
+}

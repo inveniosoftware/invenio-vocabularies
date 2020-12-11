@@ -1,0 +1,22 @@
+{
+  "description": "Subjects from specific vocabularies.",
+  "properties": {
+    "identifier": {
+      "description": "Subjects term identifier.",
+      "type": "string"
+    },
+    "scheme": {
+      "description": "Identifier scheme.",
+      "type": "string"
+    },
+    "term": {
+      "description": "Subject term value.",
+      "type": "string"
+    },
+    "title": {
+      "description": "Subject title.",
+      "type": "string"
+    }
+  },
+  "type": "object"
+}

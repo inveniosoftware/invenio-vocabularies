@@ -1,0 +1,1373 @@
+id,title,scheme
+oefos:101,Statistics,oefos
+oefos:105,Geosciences,oefos
+oefos:201,Construction Engineering,oefos
+oefos:207,"Environmental Engineering, Applied Geosciences",oefos
+oefos:211,Other Technical Sciences,oefos
+oefos:301,"Medical-Theoretical Sciences, Pharmacy",oefos
+oefos:305,"Other Human Medicine, Health Sciences",oefos
+oefos:401,"Agriculture and Forestry, Fishery",oefos
+oefos:603,"Philosophy, Ethics, Religion",oefos
+oefos:1010,Mathematics,oefos
+oefos:1020,Computer Sciences,oefos
+oefos:1030,"Physics, Astronomy",oefos
+oefos:1040,Chemistry,oefos
+oefos:1051,"Geology, Mineralogy",oefos
+oefos:1052,"Meteorology, Climatology",oefos
+oefos:1054,Physical Geography,oefos
+oefos:1059,Interdisciplinary Geosciences not elsewhere classified,oefos
+oefos:1060,Biology,oefos
+oefos:1070,Other Natural Sciences,oefos
+oefos:2011,Civil Engineering,oefos
+oefos:2012,Architecture,oefos
+oefos:2013,Transportation,oefos
+oefos:2019,Construction Engineering not elsewhere classified,oefos
+oefos:2020,"Electrical Engineering, Electronics, Information Engineering",oefos
+oefos:2030,Mechanical Engineering,oefos
+oefos:2040,Chemical Process Engineering,oefos
+oefos:2050,Materials Engineering,oefos
+oefos:2060,Medical Engineering,oefos
+oefos:2071,Environmental Engineering,oefos
+oefos:2072,"Engineering Geology, Geotechnics",oefos
+oefos:2073,"Mining, Petroleum Engineering",oefos
+oefos:2074,"Geodesy, Surveying",oefos
+oefos:2079,"Environmental Engineering, Applied Geosciences not elsewhere classified",oefos
+oefos:2080,Environmental Biotechnology,oefos
+oefos:2090,Industrial Biotechnology,oefos
+oefos:2112,Food Technology,oefos
+oefos:2119,Technical Sciences not elsewhere classified,oefos
+oefos:3011,"Anatomy, Pathology, Physiology",oefos
+oefos:3012,"Pharmacy, Pharmacology, Toxicology",oefos
+oefos:3013,"Medical Biochemistry, Human Genetics",oefos
+oefos:3014,Neurosciences,oefos
+oefos:3019,Medical-Theoretical Sciences not elsewhere classified,oefos
+oefos:3020,Clinical Medicine,oefos
+oefos:3030,Health Sciences,oefos
+oefos:3040,Medical Biotechnology,oefos
+oefos:3051,Forensic Medicine,oefos
+oefos:3059,"Human Medicine, Health Sciences not elsewhere classified",oefos
+oefos:4011,"Cultivation of Land, Horticulture",oefos
+oefos:4012,Forestry and Wood Industry,oefos
+oefos:4019,"Agriculture and Forestry, Fishery not elsewhere classified",oefos
+oefos:4020,"Animal Breeding, Animal Production",oefos
+oefos:4030,Veterinary Medicine,oefos
+oefos:4040,"Agricultural Biotechnology, Food Biotechnology",oefos
+oefos:4050,Other Agricultural Sciences,oefos
+oefos:5010,Psychology,oefos
+oefos:5030,Educational Sciences,oefos
+oefos:5040,Sociology,oefos
+oefos:5050,Law,oefos
+oefos:5060,Political Science,oefos
+oefos:5070,"Human Geography, Regional Geography, Regional Planning",oefos
+oefos:5080,Media and Communication Sciences,oefos
+oefos:5090,Other Social Sciences,oefos
+oefos:6010,"History, Archaeology",oefos
+oefos:6020,Linguistics and Literature,oefos
+oefos:6031,"Philosophy, Ethics",oefos
+oefos:6032,Theology,oefos
+oefos:6039,"Religion, Religious Studies not elsewhere classified",oefos
+oefos:6040,Arts,oefos
+oefos:6050,Other Humanities,oefos
+oefos:101001,Algebra,oefos
+oefos:101002,Analysis,oefos
+oefos:101003,Applied geometry,oefos
+oefos:101004,Biomathematics,oefos
+oefos:101005,Computer algebra,oefos
+oefos:101006,Differential geometry,oefos
+oefos:101007,Financial mathematics,oefos
+oefos:101008,Complex analysis,oefos
+oefos:101009,Geometry,oefos
+oefos:101010,History of mathematics,oefos
+oefos:101011,Graph theory,oefos
+oefos:101012,Combinatorics,oefos
+oefos:101013,Mathematical logic,oefos
+oefos:101014,Numerical mathematics,oefos
+oefos:101015,Operations research,oefos
+oefos:101016,Optimisation,oefos
+oefos:101017,Game theory,oefos
+oefos:101019,Stochastics,oefos
+oefos:101020,Technical mathematics,oefos
+oefos:101021,Theoretical cybernetics,oefos
+oefos:101022,Topology,oefos
+oefos:101023,Actuarial mathematics,oefos
+oefos:101024,Probability theory,oefos
+oefos:101025,Number theory,oefos
+oefos:101026,Time series analysis,oefos
+oefos:101027,Dynamical systems,oefos
+oefos:101028,Mathematical modelling,oefos
+oefos:101029,Mathematical statistics,oefos
+oefos:101030,Reliability theory,oefos
+oefos:101031,Approximation theory,oefos
+oefos:101032,Functional analysis,oefos
+oefos:102001,Artificial intelligence,oefos
+oefos:102002,Augmented reality,oefos
+oefos:102003,Image processing,oefos
+oefos:102005,Computer aided design (CAD),oefos
+oefos:102006,Computer supported cooperative work (CSCW),oefos
+oefos:102007,Computer animation,oefos
+oefos:102008,Computer graphics,oefos
+oefos:102009,Computer simulation,oefos
+oefos:102010,Database systems,oefos
+oefos:102011,Formal languages,oefos
+oefos:102012,History of computer science,oefos
+oefos:102013,Human-computer interaction,oefos
+oefos:102014,Information design,oefos
+oefos:102015,Information systems,oefos
+oefos:102016,IT security,oefos
+oefos:102017,Cryptology,oefos
+oefos:102018,Artificial neural networks,oefos
+oefos:102019,Machine learning,oefos
+oefos:102021,Pervasive computing,oefos
+oefos:102022,Software development,oefos
+oefos:102023,Supercomputing,oefos
+oefos:102024,Usability research,oefos
+oefos:102025,Distributed systems,oefos
+oefos:102026,Virtual reality,oefos
+oefos:102027,Web engineering,oefos
+oefos:102028,Knowledge engineering,oefos
+oefos:102029,Practical computer science,oefos
+oefos:102030,Semantic technologies,oefos
+oefos:102031,Theoretical computer science,oefos
+oefos:102032,Computational intelligence,oefos
+oefos:102033,Data mining,oefos
+oefos:102034,Cyber-physical systems,oefos
+oefos:102035,Data science,oefos
+oefos:102036,Digital accessibility,oefos
+oefos:102037,Visualisation,oefos
+oefos:103001,Aerodynamics,oefos
+oefos:103002,Acoustics,oefos
+oefos:103003,Astronomy,oefos
+oefos:103004,Astrophysics,oefos
+oefos:103005,Atomic physics,oefos
+oefos:103006,Chemical physics,oefos
+oefos:103007,Dosimetry,oefos
+oefos:103008,Experimental physics,oefos
+oefos:103009,Solid state physics,oefos
+oefos:103010,History of physics,oefos
+oefos:103011,Semiconductor physics,oefos
+oefos:103012,High energy physics,oefos
+oefos:103013,Ion physics,oefos
+oefos:103014,Nuclear physics,oefos
+oefos:103015,Condensed matter,oefos
+oefos:103016,Laser physics,oefos
+oefos:103017,Magnetism,oefos
+oefos:103018,Materials physics,oefos
+oefos:103019,Mathematical physics,oefos
+oefos:103020,Surface physics,oefos
+oefos:103021,Optics,oefos
+oefos:103022,Plasma physics,oefos
+oefos:103023,Polymer physics,oefos
+oefos:103024,Quantum field theory,oefos
+oefos:103025,Quantum mechanics,oefos
+oefos:103026,Quantum optics,oefos
+oefos:103027,Reactor physics,oefos
+oefos:103028,Theory of relativity,oefos
+oefos:103029,Statistical physics,oefos
+oefos:103030,Radiation physics,oefos
+oefos:103032,Fluid mechanics,oefos
+oefos:103033,Superconductivity,oefos
+oefos:103034,Particle physics,oefos
+oefos:103035,Theoretical mechanics,oefos
+oefos:103036,Theoretical physics,oefos
+oefos:103037,Environmental physics,oefos
+oefos:103038,Space exploration,oefos
+oefos:103039,Aerosol physics,oefos
+oefos:103040,Photonics,oefos
+oefos:103041,Astroparticle physics,oefos
+oefos:103042,Electron microscopy,oefos
+oefos:103043,Computational physics,oefos
+oefos:104001,General chemistry,oefos
+oefos:104002,Analytical chemistry,oefos
+oefos:104003,Inorganic chemistry,oefos
+oefos:104004,Chemical biology,oefos
+oefos:104005,Electrochemistry,oefos
+oefos:104006,Solid state chemistry,oefos
+oefos:104007,History of chemistry,oefos
+oefos:104008,Catalysis,oefos
+oefos:104009,Food chemistry,oefos
+oefos:104010,Macromolecular chemistry,oefos
+oefos:104011,Materials chemistry,oefos
+oefos:104012,Microanalysis,oefos
+oefos:104013,Natural product chemistry,oefos
+oefos:104014,Surface chemistry,oefos
+oefos:104015,Organic chemistry,oefos
+oefos:104016,Photochemistry,oefos
+oefos:104017,Physical chemistry,oefos
+oefos:104018,Polymer chemistry,oefos
+oefos:104019,Polymer sciences,oefos
+oefos:104020,Radiochemistry,oefos
+oefos:104021,Structural chemistry,oefos
+oefos:104022,Theoretical chemistry,oefos
+oefos:104023,Environmental chemistry,oefos
+oefos:104024,X-ray structural analysis,oefos
+oefos:104025,Single-molecule chemistry,oefos
+oefos:104026,Spectroscopy,oefos
+oefos:105101,General geology,oefos
+oefos:105102,General geophysics,oefos
+oefos:105104,Erosion,oefos
+oefos:105105,Geochemistry,oefos
+oefos:105106,Geodynamics,oefos
+oefos:105107,Geoelectrics,oefos
+oefos:105108,Geostatistics,oefos
+oefos:105109,Geothermics,oefos
+oefos:105110,History of geology,oefos
+oefos:105111,Gravimetry,oefos
+oefos:105112,Historical geology,oefos
+oefos:105113,Crystallography,oefos
+oefos:105114,Cultural geology,oefos
+oefos:105115,Magnetics,oefos
+oefos:105116,Mineralogy,oefos
+oefos:105117,Palaeobotany,oefos
+oefos:105118,Palaeontology,oefos
+oefos:105119,Petrography,oefos
+oefos:105120,Petrology,oefos
+oefos:105121,Sedimentology,oefos
+oefos:105122,Seismic,oefos
+oefos:105123,Stratigraphy,oefos
+oefos:105124,Tectonics,oefos
+oefos:105125,Petrophysics,oefos
+oefos:105126,Applied geophysics,oefos
+oefos:105127,Geochronology,oefos
+oefos:105128,Geomicrobiology,oefos
+oefos:105201,Aeronomy,oefos
+oefos:105202,Agricultural meteorology,oefos
+oefos:105203,Bioclimatology,oefos
+oefos:105204,Climatology,oefos
+oefos:105205,Climate change,oefos
+oefos:105206,Meteorology,oefos
+oefos:105207,Mountain meteorology,oefos
+oefos:105208,Atmospheric chemistry,oefos
+oefos:105301,Water protection,oefos
+oefos:105302,Hydrochemistry,oefos
+oefos:105303,Hydrogeology,oefos
+oefos:105304,Hydrology,oefos
+oefos:105305,Hydrometry,oefos
+oefos:105306,Oceanography,oefos
+oefos:105307,Water quality,oefos
+oefos:105308,Water resources,oefos
+oefos:105401,Biogeography,oefos
+oefos:105402,Soil geography,oefos
+oefos:105404,Geomorphology,oefos
+oefos:105405,Geoecology,oefos
+oefos:105408,Physical geography,oefos
+oefos:105409,Topography,oefos
+oefos:105901,Glaciology,oefos
+oefos:105902,Natural hazards,oefos
+oefos:105903,Speleology,oefos
+oefos:105904,Environmental research,oefos
+oefos:105905,Environmental protection,oefos
+oefos:105906,Environmental geosciences,oefos
+oefos:105907,Polar research,oefos
+oefos:106001,General biology,oefos
+oefos:106002,Biochemistry,oefos
+oefos:106003,Biodiversity research,oefos
+oefos:106004,Bioethics,oefos
+oefos:106005,Bioinformatics,oefos
+oefos:106006,Biophysics,oefos
+oefos:106007,Biostatistics,oefos
+oefos:106008,Botany,oefos
+oefos:106009,Chronobiology,oefos
+oefos:106010,Developmental biology,oefos
+oefos:106011,Alternatives to animal testing,oefos
+oefos:106012,Evolutionary research,oefos
+oefos:106013,Genetics,oefos
+oefos:106014,Genomics,oefos
+oefos:106015,Geobotany,oefos
+oefos:106016,History of biology,oefos
+oefos:106017,Glycobiology,oefos
+oefos:106018,Human biology,oefos
+oefos:106019,Hydrobiology,oefos
+oefos:106020,Limnology,oefos
+oefos:106021,Marine biology,oefos
+oefos:106022,Microbiology,oefos
+oefos:106023,Molecular biology,oefos
+oefos:106024,Mycology,oefos
+oefos:106026,Ecosystem research,oefos
+oefos:106027,Ecotoxicology,oefos
+oefos:106028,Plant anatomy,oefos
+oefos:106029,Plant morphology,oefos
+oefos:106030,Plant ecology,oefos
+oefos:106031,Plant physiology,oefos
+oefos:106032,Photobiology,oefos
+oefos:106033,Phylogeny,oefos
+oefos:106034,Phytochemistry,oefos
+oefos:106035,Phytogeography,oefos
+oefos:106036,Population genetics,oefos
+oefos:106037,Proteomics,oefos
+oefos:106038,Reproductive biology,oefos
+oefos:106039,Stem cell research,oefos
+oefos:106040,Radiation biology,oefos
+oefos:106041,Structural biology,oefos
+oefos:106042,Systematic botany,oefos
+oefos:106043,Systematic zoology,oefos
+oefos:106044,Systems biology,oefos
+oefos:106045,Theoretical biology,oefos
+oefos:106046,Animal anatomy,oefos
+oefos:106047,Animal ecology,oefos
+oefos:106048,Animal physiology,oefos
+oefos:106049,Ultrastructure research,oefos
+oefos:106050,Vegetation science,oefos
+oefos:106051,Behavioural biology,oefos
+oefos:106053,Zoogeography,oefos
+oefos:106054,Zoology,oefos
+oefos:106055,Aerobiology,oefos
+oefos:106056,Biological anthropology,oefos
+oefos:106057,Metabolomics,oefos
+oefos:107001,Archaeometry,oefos
+oefos:107003,History of natural sciences,oefos
+oefos:107004,Human ecology,oefos
+oefos:107006,Nature conservation,oefos
+oefos:107008,Archaeobotany,oefos
+oefos:201101,Construction operation,oefos
+oefos:201102,Structural dynamics,oefos
+oefos:201103,Building physics,oefos
+oefos:201104,Structural analysis,oefos
+oefos:201105,Construction material practice,oefos
+oefos:201106,Structural engineering,oefos
+oefos:201109,Bridge construction,oefos
+oefos:201111,River engineering,oefos
+oefos:201112,Building construction,oefos
+oefos:201113,Timber engineering,oefos
+oefos:201114,Industrial building,oefos
+oefos:201115,Structural hydraulic engineering,oefos
+oefos:201116,Agricultural civil engineering,oefos
+oefos:201118,Urban water supply and sanitation,oefos
+oefos:201119,Steel construction,oefos
+oefos:201120,Reinforced concrete construction,oefos
+oefos:201122,Technical flood protection,oefos
+oefos:201123,Underground engineering,oefos
+oefos:201124,Structural design,oefos
+oefos:201125,Hydraulic engineering,oefos
+oefos:201126,Hydropower plant construction,oefos
+oefos:201127,Torrent and avalanche control,oefos
+oefos:201128,Sustainable building,oefos
+oefos:201129,Earthquake engineering,oefos
+oefos:201130,Structural glass construction,oefos
+oefos:201131,Building history,oefos
+oefos:201201,History of architecture,oefos
+oefos:201202,Architectural modelling,oefos
+oefos:201203,Architectural theory,oefos
+oefos:201204,Barrier-free building,oefos
+oefos:201205,Building research,oefos
+oefos:201206,Designing,oefos
+oefos:201207,Building typology,oefos
+oefos:201208,Industrial architecture,oefos
+oefos:201209,Interior design,oefos
+oefos:201210,Landscape architecture,oefos
+oefos:201211,Solar architecture,oefos
+oefos:201212,Urban design,oefos
+oefos:201213,Housing,oefos
+oefos:201214,Experimental architecture,oefos
+oefos:201215,Building cultural heritage,oefos
+oefos:201301,Railway construction,oefos
+oefos:201302,Railway engineering,oefos
+oefos:201303,Ropeways,oefos
+oefos:201304,Road construction,oefos
+oefos:201305,Traffic engineering,oefos
+oefos:201306,Traffic telematics,oefos
+oefos:201901,Old building renovation,oefos
+oefos:201902,Building ecology,oefos
+oefos:201903,Soil bioengineering,oefos
+oefos:201904,Vegetation technology,oefos
+oefos:201905,Building within existing structures,oefos
+oefos:201906,Building-integrated vegetation,oefos
+oefos:202001,Audio technology,oefos
+oefos:202003,Automation,oefos
+oefos:202004,Brain-computer interface,oefos
+oefos:202005,Computer architecture,oefos
+oefos:202006,Computer hardware,oefos
+oefos:202007,Computer integrated manufacturing (CIM),oefos
+oefos:202008,Electrical power systems,oefos
+oefos:202009,Electrical drive engineering,oefos
+oefos:202010,Electric power engineering,oefos
+oefos:202011,Electrical machines,oefos
+oefos:202012,Electrical measurement technology,oefos
+oefos:202013,Electromagnetic compatibility,oefos
+oefos:202014,Electromagnetism,oefos
+oefos:202015,Electronics,oefos
+oefos:202016,Electrical engineering,oefos
+oefos:202017,Embedded systems,oefos
+oefos:202018,Semiconductor electronics,oefos
+oefos:202019,High frequency engineering,oefos
+oefos:202020,High voltage engineering,oefos
+oefos:202021,Industrial electronics,oefos
+oefos:202022,Information technology,oefos
+oefos:202023,Integrated circuits,oefos
+oefos:202024,Laser technology,oefos
+oefos:202025,Power electronics,oefos
+oefos:202026,Light technology,oefos
+oefos:202028,Microelectronics,oefos
+oefos:202029,Microwave engineering,oefos
+oefos:202030,Communication engineering,oefos
+oefos:202031,Network engineering,oefos
+oefos:202032,Photovoltaics,oefos
+oefos:202033,Radar technology,oefos
+oefos:202034,Control engineering,oefos
+oefos:202035,Robotics,oefos
+oefos:202036,Sensor systems,oefos
+oefos:202037,Signal processing,oefos
+oefos:202038,Telecommunications,oefos
+oefos:202039,Theoretical electrical engineering,oefos
+oefos:202040,Transmission technology,oefos
+oefos:202041,Computer engineering,oefos
+oefos:202042,Optical communication engineering,oefos
+oefos:202043,Network security,oefos
+oefos:203001,Apparatus engineering,oefos
+oefos:203002,Endurance strength,oefos
+oefos:203003,Fracture mechanics,oefos
+oefos:203004,Automotive technology,oefos
+oefos:203005,Precision engineering,oefos
+oefos:203006,Production engineering,oefos
+oefos:203007,Strength of materials,oefos
+oefos:203008,Conveyor technology,oefos
+oefos:203009,Refrigeration engineering,oefos
+oefos:203010,Air conditioning technology,oefos
+oefos:203011,Lightweight design,oefos
+oefos:203012,Aerospace engineering,oefos
+oefos:203013,Mechanical engineering,oefos
+oefos:203014,Machine dynamics,oefos
+oefos:203015,Mechatronics,oefos
+oefos:203016,Measurement engineering,oefos
+oefos:203017,Micromechanics,oefos
+oefos:203018,Heavy machinery construction,oefos
+oefos:203019,Reactor technology,oefos
+oefos:203020,Welding engineering,oefos
+oefos:203021,Fluid-flow machinery,oefos
+oefos:203022,Technical mechanics,oefos
+oefos:203023,Thermal turbomachinery,oefos
+oefos:203024,Thermodynamics,oefos
+oefos:203025,Tribology,oefos
+oefos:203026,Forming,oefos
+oefos:203027,Internal combustion engines,oefos
+oefos:203028,Thermal engineering,oefos
+oefos:203029,Tool construction,oefos
+oefos:203030,Fuel cell technology,oefos
+oefos:203031,Engineering design,oefos
+oefos:203032,Additive manufacturing,oefos
+oefos:203033,Hydraulic drive technology,oefos
+oefos:203034,Continuum mechanics,oefos
+oefos:203035,Thermal processing technology,oefos
+oefos:203036,Weapons and munitions technology,oefos
+oefos:203037,Computational engineering,oefos
+oefos:204001,Inorganic chemical technology,oefos
+oefos:204002,Chemical reaction engineering,oefos
+oefos:204003,Chemical process engineering,oefos
+oefos:204004,Organic chemical technology,oefos
+oefos:204005,Refining technology,oefos
+oefos:204006,Mechanical process engineering,oefos
+oefos:204007,Thermal process engineering,oefos
+oefos:205001,Building materials testing,oefos
+oefos:205002,Coating technology,oefos
+oefos:205003,Refractories,oefos
+oefos:205004,Functional materials,oefos
+oefos:205005,Ceramics engineering,oefos
+oefos:205006,Wood research,oefos
+oefos:205007,Wood preservatives,oefos
+oefos:205008,Wood technology,oefos
+oefos:205009,Ceramic materials,oefos
+oefos:205010,Anticorrosives,oefos
+oefos:205011,Polymer engineering,oefos
+oefos:205012,Polymer processing,oefos
+oefos:205013,Failure analysis,oefos
+oefos:205014,Textile technology,oefos
+oefos:205015,Composites,oefos
+oefos:205016,Materials testing,oefos
+oefos:205017,Materials engineering,oefos
+oefos:205018,Pulp and paper technology,oefos
+oefos:205019,Material sciences,oefos
+oefos:206001,Biomedical engineering,oefos
+oefos:206002,Electro-medical engineering,oefos
+oefos:206004,Medical engineering,oefos
+oefos:206005,Prosthetics,oefos
+oefos:206006,Rehabilitation technology,oefos
+oefos:207101,Waste engineering,oefos
+oefos:207102,Exhaust air purification,oefos
+oefos:207103,Wastewater treatment,oefos
+oefos:207104,Remediation of contaminated sites,oefos
+oefos:207105,Landfill technology,oefos
+oefos:207106,Renewable energy,oefos
+oefos:207107,Air pollution control,oefos
+oefos:207108,Recycling,oefos
+oefos:207109,Pollutant emission,oefos
+oefos:207110,Technical environmental protection,oefos
+oefos:207111,Environmental engineering,oefos
+oefos:207112,Water treatment,oefos
+oefos:207113,Water infrastructure,oefos
+oefos:207114,Water management,oefos
+oefos:207201,Soil mechanics,oefos
+oefos:207202,Earthworks,oefos
+oefos:207203,Rock mechanics,oefos
+oefos:207204,Geotechnics,oefos
+oefos:207205,Foundation engineering,oefos
+oefos:207206,Engineering geology,oefos
+oefos:207207,Tunnelling,oefos
+oefos:207208,Tunnel ventilation,oefos
+oefos:207301,Processing of mineral raw materials,oefos
+oefos:207302,Mining engineering,oefos
+oefos:207303,Mining damage,oefos
+oefos:207304,Natural gas production,oefos
+oefos:207305,Natural gas engineering,oefos
+oefos:207306,Petroleum geology,oefos
+oefos:207307,Petroleum production,oefos
+oefos:207308,Petroleum engineering,oefos
+oefos:207309,History of mining,oefos
+oefos:207310,Extraction of mineral raw materials,oefos
+oefos:207311,Economic geology,oefos
+oefos:207312,Mine surveying,oefos
+oefos:207313,Drilling engineering,oefos
+oefos:207314,Underground mining,oefos
+oefos:207401,3D-surveying,oefos
+oefos:207402,Remote sensing,oefos
+oefos:207403,Geodesy,oefos
+oefos:207405,Engineering geodesy,oefos
+oefos:207407,Cadastral surveying,oefos
+oefos:207408,Land surveying,oefos
+oefos:207409,Navigation systems,oefos
+oefos:207410,Photogrammetry,oefos
+oefos:207411,Satellite geodesy,oefos
+oefos:207412,Satellite-based coordinate measuring,oefos
+oefos:207413,Surveying,oefos
+oefos:207901,Offshore technology,oefos
+oefos:207902,Computational geosciences,oefos
+oefos:208001,Bioremediation,oefos
+oefos:208002,Environmental biotechnology related ethics,oefos
+oefos:208003,Environmental biotechnology,oefos
+oefos:209001,Biocatalysis,oefos
+oefos:209002,Bioprocess technology,oefos
+oefos:209003,Biofuels,oefos
+oefos:209004,Enzyme technology,oefos
+oefos:209006,Industrial biotechnology,oefos
+oefos:210001,Nanoanalytics,oefos
+oefos:210002,Nanobiotechnology,oefos
+oefos:210003,Nanoelectronics,oefos
+oefos:210004,Nanomaterials,oefos
+oefos:210005,Nanophotonics,oefos
+oefos:210006,Nanotechnology,oefos
+oefos:211101,Iron and steel metallurgy,oefos
+oefos:211102,Casting technology,oefos
+oefos:211103,Physical metallurgy,oefos
+oefos:211104,Metallurgy,oefos
+oefos:211105,Nonferrous metallurgy,oefos
+oefos:211106,Light metals,oefos
+oefos:211107,Secondary metallurgy,oefos
+oefos:211201,Grain technology,oefos
+oefos:211202,Food technology,oefos
+oefos:211203,Food processing engineering,oefos
+oefos:211204,Meat technology,oefos
+oefos:211901,Waste prevention,oefos
+oefos:211902,Assistive technologies,oefos
+oefos:211903,Science of management,oefos
+oefos:211904,Biomechanics,oefos
+oefos:211905,Bionics,oefos
+oefos:211906,Fire protection,oefos
+oefos:211907,Energy saving,oefos
+oefos:211908,Energy research,oefos
+oefos:211909,Energy technology,oefos
+oefos:211910,Noise protection,oefos
+oefos:211911,Sustainable technologies,oefos
+oefos:211912,Product design,oefos
+oefos:211913,Quality assurance,oefos
+oefos:211914,Risk research,oefos
+oefos:211915,Solar technology,oefos
+oefos:211916,Blasting engineering,oefos
+oefos:211917,Technology assessment,oefos
+oefos:211918,Technical history,oefos
+oefos:211919,Thermography,oefos
+oefos:211920,Packaging technology,oefos
+oefos:211921,Civil protection and disaster control,oefos
+oefos:211922,Energy storage,oefos
+oefos:211923,Factory planning,oefos
+oefos:211924,Process and plant safety,oefos
+oefos:211925,Explosion research,oefos
+oefos:211926,Technology ethics,oefos
+oefos:301101,General pathology,oefos
+oefos:301102,Anatomy,oefos
+oefos:301104,Embryology,oefos
+oefos:301105,Experimental pathology,oefos
+oefos:301106,Functional anatomy,oefos
+oefos:301107,Histology,oefos
+oefos:301108,Molecular pathology,oefos
+oefos:301109,Pathophysiology,oefos
+oefos:301110,Physiology,oefos
+oefos:301111,Radiologic anatomy,oefos
+oefos:301112,Systematic anatomy,oefos
+oefos:301113,Topographic anatomy,oefos
+oefos:301114,Cell biology,oefos
+oefos:301115,Sonoanatomy,oefos
+oefos:301201,Pharmaceutical and drug analysis,oefos
+oefos:301202,History of pharmacy,oefos
+oefos:301203,Pharmacodynamics,oefos
+oefos:301204,Pharmacognosy,oefos
+oefos:301205,Pharmacokinetics,oefos
+oefos:301206,Pharmacology,oefos
+oefos:301207,Pharmaceutical chemistry,oefos
+oefos:301208,Pharmaceutical technology,oefos
+oefos:301209,Pharmacy,oefos
+oefos:301210,Psychopharmacology,oefos
+oefos:301211,Toxicology,oefos
+oefos:301212,Clinical pharmacy,oefos
+oefos:301213,Drug targeting,oefos
+oefos:301214,Biopharmacy,oefos
+oefos:301301,Human genetics,oefos
+oefos:301302,Lipidomics research,oefos
+oefos:301303,Medical biochemistry,oefos
+oefos:301304,Medical biology,oefos
+oefos:301305,Medical chemistry,oefos
+oefos:301306,Medical molecular biology,oefos
+oefos:301307,Cytogenetics,oefos
+oefos:301308,Ageing research,oefos
+oefos:301401,Brain research,oefos
+oefos:301402,Neurobiology,oefos
+oefos:301403,Neurochemistry,oefos
+oefos:301404,Neuroimmunology,oefos
+oefos:301405,Neuropathology,oefos
+oefos:301406,Neuropharmacology,oefos
+oefos:301407,Neurophysiology,oefos
+oefos:301408,Psychophysiology,oefos
+oefos:301409,Neuroanatomy,oefos
+oefos:301901,Blood group serology,oefos
+oefos:301902,Immunology,oefos
+oefos:301903,Vaccine development,oefos
+oefos:301904,Cancer research,oefos
+oefos:301905,Psychoneuroimmunology,oefos
+oefos:301906,Serology,oefos
+oefos:301907,Biobanking,oefos
+oefos:302001,Acupuncture,oefos
+oefos:302002,Allergology,oefos
+oefos:302003,General surgery,oefos
+oefos:302004,Anaesthesiology,oefos
+oefos:302005,Andrology,oefos
+oefos:302006,Angiology,oefos
+oefos:302007,Ophthalmology,oefos
+oefos:302008,Balneology,oefos
+oefos:302009,Chemotherapy,oefos
+oefos:302010,Computed tomography (CT),oefos
+oefos:302011,Dermatology,oefos
+oefos:302012,Diabetology,oefos
+oefos:302013,Medical diagnostics,oefos
+oefos:302014,Endocrinology,oefos
+oefos:302015,Experimental surgery,oefos
+oefos:302016,Gastroenterology,oefos
+oefos:302017,Obstetrics,oefos
+oefos:302018,Vascular surgery,oefos
+oefos:302019,Geriatrics,oefos
+oefos:302021,History of psychiatry,oefos
+oefos:302022,Gynaecology,oefos
+oefos:302023,"Ear, nose and throat medicine",oefos
+oefos:302024,Haematology,oefos
+oefos:302025,Hepatology,oefos
+oefos:302026,Heart surgery,oefos
+oefos:302027,"Hearing, voice and language disorders",oefos
+oefos:302028,Hyperbaric medicine,oefos
+oefos:302029,Implantology,oefos
+oefos:302030,Internal medicine,oefos
+oefos:302031,Intensive care medicine,oefos
+oefos:302032,Cardiology,oefos
+oefos:302033,Jaw surgery,oefos
+oefos:302034,Orthodontics,oefos
+oefos:302035,Paediatrics and adolescent medicine,oefos
+oefos:302036,Child and adolescent psychiatry,oefos
+oefos:302037,Paediatric surgery,oefos
+oefos:302038,Clinical neuropsychology,oefos
+oefos:302039,Complementary medicine,oefos
+oefos:302040,Laboratory diagnostics,oefos
+oefos:302041,Laser surgery,oefos
+oefos:302042,Logopedics,oefos
+oefos:302043,Magnetic resonance imaging (MRI),oefos
+oefos:302044,Medical physics,oefos
+oefos:302045,Medical psychology,oefos
+oefos:302046,Medical psychotherapy,oefos
+oefos:302047,Microsurgery,oefos
+oefos:302048,Minimally invasive surgery,oefos
+oefos:302049,Neonatology,oefos
+oefos:302050,Nephrology,oefos
+oefos:302051,Neurosurgery,oefos
+oefos:302052,Neurology,oefos
+oefos:302053,Emergency medicine,oefos
+oefos:302054,Nuclear medicine,oefos
+oefos:302055,Oncology,oefos
+oefos:302056,Oncological surgery,oefos
+oefos:302057,Orthopaedics,oefos
+oefos:302058,Palliative medicine,oefos
+oefos:302059,Periodontology,oefos
+oefos:302060,Perinatology,oefos
+oefos:302061,Physical medicine,oefos
+oefos:302062,Plastic and reconstructive surgery,oefos
+oefos:302063,Multiple trauma care,oefos
+oefos:302064,Prenatal diagnostics,oefos
+oefos:302065,Clinical psychiatry,oefos
+oefos:302066,Psychopathology,oefos
+oefos:302067,Psychosomatics,oefos
+oefos:302068,Pulmology,oefos
+oefos:302069,Radiosurgery,oefos
+oefos:302070,Radiodiagnostics,oefos
+oefos:302071,Radiology,oefos
+oefos:302072,Rheumatology,oefos
+oefos:302073,Sleep medicine,oefos
+oefos:302074,Pain medicine,oefos
+oefos:302075,Sonography,oefos
+oefos:302076,Social psychiatry,oefos
+oefos:302077,Stem cell transplantation,oefos
+oefos:302078,Metabolic diseases,oefos
+oefos:302079,Radiation protection,oefos
+oefos:302080,Radiotherapy,oefos
+oefos:302081,Thoracic surgery,oefos
+oefos:302082,Transfusion medicine,oefos
+oefos:302083,Transplant surgery,oefos
+oefos:302084,Transplantation medicine,oefos
+oefos:302085,Trauma surgery,oefos
+oefos:302086,Urology,oefos
+oefos:302087,Venereology,oefos
+oefos:302088,Dentistry,oefos
+oefos:302089,Reproductive medicine,oefos
+oefos:302090,General practice,oefos
+oefos:302091,Immunotherapy,oefos
+oefos:302092,Oral surgery,oefos
+oefos:302093,Restorative dentistry,oefos
+oefos:303001,Occupational medicine,oefos
+oefos:303002,Bacteriology,oefos
+oefos:303003,Occupational diseases,oefos
+oefos:303004,Kinesiology,oefos
+oefos:303005,Sports biomechanics,oefos
+oefos:303006,Dietetics,oefos
+oefos:303007,Epidemiology,oefos
+oefos:303008,Ergonomics,oefos
+oefos:303009,Nutritional sciences,oefos
+oefos:303010,Health economics,oefos
+oefos:303011,Health policy,oefos
+oefos:303012,Health sciences,oefos
+oefos:303013,Hygiene,oefos
+oefos:303014,Vaccine protection,oefos
+oefos:303015,Hospital hygiene,oefos
+oefos:303016,Hospital management,oefos
+oefos:303017,Food hygiene,oefos
+oefos:303018,Air hygiene,oefos
+oefos:303019,Medical ethics,oefos
+oefos:303020,Medical microbiology,oefos
+oefos:303021,Medical rehabilitation,oefos
+oefos:303022,Palliative care,oefos
+oefos:303023,Parasitology,oefos
+oefos:303024,Nursing science,oefos
+oefos:303025,Preventive medicine,oefos
+oefos:303026,Public health,oefos
+oefos:303027,Social medicine,oefos
+oefos:303028,Sport science,oefos
+oefos:303029,Addiction research,oefos
+oefos:303030,Training science,oefos
+oefos:303031,Tropical medicine,oefos
+oefos:303032,Environmental hygiene,oefos
+oefos:303033,Environmental medicine,oefos
+oefos:303034,Virology,oefos
+oefos:303035,Water hygiene,oefos
+oefos:303036,Patient safety,oefos
+oefos:303037,Occupational therapy,oefos
+oefos:303038,Physiotherapy,oefos
+oefos:303039,Radiological technology,oefos
+oefos:303040,Health services research,oefos
+oefos:304001,Medical biotechnology related ethics,oefos
+oefos:304002,Genetic diagnostics,oefos
+oefos:304004,Gene therapy,oefos
+oefos:304005,Medical biotechnology,oefos
+oefos:304006,Pharmacogenomics,oefos
+oefos:304007,Tissue engineering,oefos
+oefos:304008,Regenerative medicine,oefos
+oefos:305101,Bloodstain pattern analysis,oefos
+oefos:305102,DNA analysis (Forensic medicine),oefos
+oefos:305103,Forensic biology,oefos
+oefos:305104,Forensic chemistry,oefos
+oefos:305105,Forensic psychiatry,oefos
+oefos:305106,Forensic radiology,oefos
+oefos:305107,Forensic toxicology,oefos
+oefos:305108,Forensic human medicine,oefos
+oefos:305109,Forensic anthropology,oefos
+oefos:305901,Computer-aided diagnosis and therapy,oefos
+oefos:305902,Gender medicine,oefos
+oefos:305903,History of medicine,oefos
+oefos:305904,Medical documentation,oefos
+oefos:305905,Medical informatics,oefos
+oefos:305906,Medical cybernetics,oefos
+oefos:305907,Medical statistics,oefos
+oefos:305908,Sports medicine,oefos
+oefos:305909,Stress research,oefos
+oefos:305910,Traffic medicine,oefos
+oefos:401101,Cultivation of land,oefos
+oefos:401102,Irrigation management,oefos
+oefos:401103,Horticulture,oefos
+oefos:401104,Vegetable growing,oefos
+oefos:401105,Grain cultivation,oefos
+oefos:401106,Landscape conservation,oefos
+oefos:401107,Agricultural engineering,oefos
+oefos:401108,Fruit growing,oefos
+oefos:401109,Organic farming,oefos
+oefos:401110,Plant cultivation,oefos
+oefos:401111,Plant nutrition,oefos
+oefos:401112,Plant protection,oefos
+oefos:401113,Plant breeding,oefos
+oefos:401114,Seed breeding,oefos
+oefos:401115,Seed cultivation,oefos
+oefos:401116,Special crops,oefos
+oefos:401117,Viticulture,oefos
+oefos:401118,Cultivation of ornamental plants,oefos
+oefos:401119,Field forage growing,oefos
+oefos:401201,Forest entomology,oefos
+oefos:401202,Forest pathology,oefos
+oefos:401203,Forest protection,oefos
+oefos:401204,Forest engineering,oefos
+oefos:401205,Forestry,oefos
+oefos:401206,Wood industry,oefos
+oefos:401207,Silviculture,oefos
+oefos:401208,Forest ecology,oefos
+oefos:401209,Forest growth,oefos
+oefos:401901,Soil erosion,oefos
+oefos:401902,Soil science,oefos
+oefos:401903,Fishery,oefos
+oefos:401904,History of agriculture and forestry,oefos
+oefos:401905,Renewable resources,oefos
+oefos:401906,Game management,oefos
+oefos:402001,Apiology,oefos
+oefos:402002,Ichthyology,oefos
+oefos:402003,Meat hygiene,oefos
+oefos:402004,Meat production,oefos
+oefos:402005,Feed analysis,oefos
+oefos:402006,Pet breeding,oefos
+oefos:402007,Apiculture,oefos
+oefos:402008,Artificial insemination,oefos
+oefos:402009,Food testing,oefos
+oefos:402010,Milk hygiene,oefos
+oefos:402011,Milk production,oefos
+oefos:402012,Livestock ethology,oefos
+oefos:402014,Animal husbandry,oefos
+oefos:402015,Animal production,oefos
+oefos:402016,Animal welfare,oefos
+oefos:402017,Animal breeding,oefos
+oefos:402018,Laboratory animal science,oefos
+oefos:403001,Veterinary anaesthesiology,oefos
+oefos:403002,Veterinary anatomy,oefos
+oefos:403003,Veterinary andrology,oefos
+oefos:403004,Veterinary ophthalmology,oefos
+oefos:403005,Veterinary bacteriology,oefos
+oefos:403006,Veterinary diagnostic imaging,oefos
+oefos:403007,Veterinary surgery,oefos
+oefos:403008,Veterinary diagnostics,oefos
+oefos:403009,Veterinary embryology,oefos
+oefos:403010,Veterinary obstetrics,oefos
+oefos:403011,Forensic veterinary medicine,oefos
+oefos:403012,History of veterinary medicine,oefos
+oefos:403013,Veterinary gynaecology,oefos
+oefos:403014,Veterinary histology,oefos
+oefos:403015,Veterinary hygiene,oefos
+oefos:403016,Veterinary immunology,oefos
+oefos:403017,Veterinary internal medicine,oefos
+oefos:403018,Veterinary laboratory diagnostics,oefos
+oefos:403019,Veterinary medical biochemistry,oefos
+oefos:403020,Veterinary medical chemistry,oefos
+oefos:403021,Veterinary neurology,oefos
+oefos:403022,Veterinary orthopaedics,oefos
+oefos:403023,Veterinary parasitology,oefos
+oefos:403024,Veterinary pathology,oefos
+oefos:403025,Veterinary pharmacology,oefos
+oefos:403026,Veterinary physiology,oefos
+oefos:403027,Veterinary phytotherapy,oefos
+oefos:403028,Animal nutrition,oefos
+oefos:403029,Control of animal diseases,oefos
+oefos:403030,Veterinary toxicology,oefos
+oefos:403031,Veterinary virology,oefos
+oefos:403032,Veterinary dentistry,oefos
+oefos:403033,Veterinary regenerative medicine,oefos
+oefos:403034,Veterinary pain medicine,oefos
+oefos:403035,Herd health management,oefos
+oefos:404001,Agricultural biotechnology,oefos
+oefos:404002,Biopharming,oefos
+oefos:404003,Agricultural and food biotechnology related ethics,oefos
+oefos:404004,Fermentation,oefos
+oefos:404005,Fermentation technology,oefos
+oefos:404006,Genetic engineering,oefos
+oefos:404007,Food biotechnology,oefos
+oefos:405001,Agroecology,oefos
+oefos:405002,Agricultural economics,oefos
+oefos:405003,Agricultural policy,oefos
+oefos:405004,Sustainable agriculture,oefos
+oefos:405005,Wildlife science,oefos
+oefos:405006,Agricultural sociology,oefos
+oefos:405007,Wildlife management,oefos
+oefos:501001,General psychology,oefos
+oefos:501002,Applied psychology,oefos
+oefos:501003,Occupational psychology,oefos
+oefos:501004,Differential psychology,oefos
+oefos:501005,Developmental psychology,oefos
+oefos:501006,Experimental psychology,oefos
+oefos:501007,History of psychology,oefos
+oefos:501008,Group dynamics,oefos
+oefos:501009,Child and adolescent psychology,oefos
+oefos:501010,Clinical psychology,oefos
+oefos:501011,Cognitive psychology,oefos
+oefos:501012,Media psychology,oefos
+oefos:501013,Motivational psychology,oefos
+oefos:501014,Neuropsychology,oefos
+oefos:501015,Organisational psychology,oefos
+oefos:501016,Educational psychology,oefos
+oefos:501017,Psychoanalysis,oefos
+oefos:501018,Psychological diagnostics,oefos
+oefos:501019,Psychotherapy,oefos
+oefos:501020,Legal psychology,oefos
+oefos:501021,Social psychology,oefos
+oefos:501022,Suicidology,oefos
+oefos:501023,Depth psychology,oefos
+oefos:501024,Behavioural therapy,oefos
+oefos:501025,Traffic psychology,oefos
+oefos:501026,Psychology of perception,oefos
+oefos:501027,Music therapy,oefos
+oefos:501028,Psychosocial support in emergencies,oefos
+oefos:501029,Economic psychology,oefos
+oefos:501030,Cognitive science,oefos
+oefos:502001,Labour market policy,oefos
+oefos:502002,Labour economics,oefos
+oefos:502003,Foreign trade,oefos
+oefos:502004,Banking management,oefos
+oefos:502005,Economics of education,oefos
+oefos:502006,Controlling,oefos
+oefos:502007,E-commerce,oefos
+oefos:502008,Development economics,oefos
+oefos:502009,Corporate finance,oefos
+oefos:502010,Public finance,oefos
+oefos:502011,Cooperative systems,oefos
+oefos:502012,Industrial management,oefos
+oefos:502013,Industrial economics,oefos
+oefos:502014,Innovation research,oefos
+oefos:502015,Innovation management,oefos
+oefos:502016,SME-research,oefos
+oefos:502017,Logistics,oefos
+oefos:502018,Macroeconomics,oefos
+oefos:502019,Marketing,oefos
+oefos:502020,Market research,oefos
+oefos:502021,Microeconomics,oefos
+oefos:502022,Sustainable economics,oefos
+oefos:502023,NPO research,oefos
+oefos:502024,Public economy,oefos
+oefos:502025,Econometrics,oefos
+oefos:502026,Human resource management,oefos
+oefos:502027,Political economy,oefos
+oefos:502028,Production management,oefos
+oefos:502029,Product management,oefos
+oefos:502030,Project management,oefos
+oefos:502031,Public management,oefos
+oefos:502032,Quality management,oefos
+oefos:502033,Accounting,oefos
+oefos:502034,Regulatory economics,oefos
+oefos:502035,Auditing and trusts,oefos
+oefos:502036,Risk management,oefos
+oefos:502037,Location planning,oefos
+oefos:502038,Taxation,oefos
+oefos:502039,Structural policy,oefos
+oefos:502040,Tourism research,oefos
+oefos:502041,Environmental management,oefos
+oefos:502042,Environmental economics,oefos
+oefos:502043,Business consultancy,oefos
+oefos:502044,Business management,oefos
+oefos:502045,Behavioural economics,oefos
+oefos:502046,Economic policy,oefos
+oefos:502047,Economic theory,oefos
+oefos:502048,Business ethics,oefos
+oefos:502049,Economic history,oefos
+oefos:502050,Business informatics,oefos
+oefos:502051,Economic statistics,oefos
+oefos:502052,Business administration,oefos
+oefos:502053,Economics,oefos
+oefos:502054,Entrepreneurship,oefos
+oefos:502055,Distribution economics,oefos
+oefos:502056,Auditing,oefos
+oefos:502057,Experimental economics,oefos
+oefos:503001,General education,oefos
+oefos:503002,Applied education,oefos
+oefos:503003,Talent research,oefos
+oefos:503004,Vocational studies,oefos
+oefos:503005,Vocational education,oefos
+oefos:503006,Educational research,oefos
+oefos:503007,Didactics,oefos
+oefos:503008,E-learning,oefos
+oefos:503009,Adult education,oefos
+oefos:503010,"Subject didactics of agricultural sciences, veterinary medicine",oefos
+oefos:503011,Subject didactics of humanities,oefos
+oefos:503012,Subject didactics of human medicine and health sciences,oefos
+oefos:503013,Subject didactics of natural sciences,oefos
+oefos:503014,Subject didactics of social sciences,oefos
+oefos:503015,Subject didactics of technical sciences,oefos
+oefos:503016,Leisure education,oefos
+oefos:503017,History of education,oefos
+oefos:503018,University didactics,oefos
+oefos:503019,Art education,oefos
+oefos:503020,Media education,oefos
+oefos:503021,Museum education,oefos
+oefos:503022,Music education,oefos
+oefos:503023,Qualification research,oefos
+oefos:503024,Religious education,oefos
+oefos:503025,School pedagogy,oefos
+oefos:503026,Orthopaedagogy,oefos
+oefos:503027,Social pedagogy,oefos
+oefos:503028,Sport pedagogy,oefos
+oefos:503029,Language teaching research,oefos
+oefos:503030,Business education,oefos
+oefos:503031,Elementary pedagogy,oefos
+oefos:503032,Teaching and learning research,oefos
+oefos:503033,Political education,oefos
+oefos:503034,Inclusive education,oefos
+oefos:503035,Sex education,oefos
+oefos:503036,Vocal research,oefos
+oefos:504001,General sociology,oefos
+oefos:504002,Sociology of work,oefos
+oefos:504003,Poverty and social exclusion,oefos
+oefos:504004,Population statistics,oefos
+oefos:504005,Educational sociology,oefos
+oefos:504006,Demography,oefos
+oefos:504007,Empirical social research,oefos
+oefos:504008,Ethnography,oefos
+oefos:504009,Ethnology,oefos
+oefos:504010,European ethnology,oefos
+oefos:504011,Genealogy,oefos
+oefos:504012,Leisure research,oefos
+oefos:504013,Gender mainstreaming,oefos
+oefos:504014,Gender studies,oefos
+oefos:504015,History of sociology,oefos
+oefos:504016,Sociology of youth,oefos
+oefos:504017,Cultural anthropology,oefos
+oefos:504018,Sociology of culture,oefos
+oefos:504019,Media sociology,oefos
+oefos:504020,Medical sociology,oefos
+oefos:504021,Migration research,oefos
+oefos:504022,Music sociology,oefos
+oefos:504023,Political sociology,oefos
+oefos:504024,Sociology of law,oefos
+oefos:504025,Sociology of religion,oefos
+oefos:504026,Social history,oefos
+oefos:504027,Special sociology,oefos
+oefos:504028,Sociology of technology,oefos
+oefos:504029,Environmental sociology,oefos
+oefos:504030,Economic sociology,oefos
+oefos:504031,Diversity research,oefos
+oefos:505001,Labour law,oefos
+oefos:505002,Data protection,oefos
+oefos:505003,European law,oefos
+oefos:505004,Financial law,oefos
+oefos:505005,Intellectual property,oefos
+oefos:505006,Fundamental rights,oefos
+oefos:505007,Insolvency law,oefos
+oefos:505008,Criminology,oefos
+oefos:505009,Mediation,oefos
+oefos:505010,Medical law,oefos
+oefos:505011,Human rights,oefos
+oefos:505012,Public law,oefos
+oefos:505013,Private law,oefos
+oefos:505014,Legal history,oefos
+oefos:505015,Legal informatics,oefos
+oefos:505016,Legal theory,oefos
+oefos:505017,Comparative law,oefos
+oefos:505018,Religious law,oefos
+oefos:505019,Roman law,oefos
+oefos:505020,Social law,oefos
+oefos:505022,Tax law,oefos
+oefos:505023,Criminal procedural law,oefos
+oefos:505024,Criminal law,oefos
+oefos:505025,Business law,oefos
+oefos:505026,Constitutional law,oefos
+oefos:505027,Administrative studies,oefos
+oefos:505028,Administrative law,oefos
+oefos:505029,International law,oefos
+oefos:505030,Commercial law,oefos
+oefos:505031,Civil law,oefos
+oefos:505032,Civil procedure law,oefos
+oefos:505033,Anti-discrimination law,oefos
+oefos:505034,Banking and capital market law,oefos
+oefos:505035,Building law,oefos
+oefos:505036,Energy law,oefos
+oefos:505037,Family and inheritance law,oefos
+oefos:505038,Trademark and patent law,oefos
+oefos:505039,Media law,oefos
+oefos:505040,Sports law,oefos
+oefos:505041,Environmental law,oefos
+oefos:505042,Traffic law,oefos
+oefos:505043,Competition and antitrust law,oefos
+oefos:505044,Corporate law,oefos
+oefos:505045,Higher education law,oefos
+oefos:505046,Air and space law,oefos
+oefos:505047,General procedural law,oefos
+oefos:505048,Property law,oefos
+oefos:505049,Arbitration law,oefos
+oefos:505050,Animal protection law,oefos
+oefos:506001,General theory of the state,oefos
+oefos:506002,E-government,oefos
+oefos:506003,Development policy,oefos
+oefos:506004,European integration,oefos
+oefos:506005,Research policy,oefos
+oefos:506006,Peace studies,oefos
+oefos:506007,International relations,oefos
+oefos:506008,Conflict research,oefos
+oefos:506009,Organisation theory,oefos
+oefos:506010,Policy analysis,oefos
+oefos:506011,Political history,oefos
+oefos:506012,Political systems,oefos
+oefos:506013,Political theory,oefos
+oefos:506014,Comparative politics,oefos
+oefos:506015,Asylum policy,oefos
+oefos:506016,Migration policy,oefos
+oefos:506017,Science and technology policy,oefos
+oefos:507001,Applied geography,oefos
+oefos:507002,Population geography,oefos
+oefos:507003,Geoinformatics,oefos
+oefos:507004,History of geography,oefos
+oefos:507005,Cultural geography,oefos
+oefos:507006,Cultural landscape research,oefos
+oefos:507007,Land use planning,oefos
+oefos:507008,Landscape planning,oefos
+oefos:507009,Regional planning,oefos
+oefos:507010,Political geography,oefos
+oefos:507011,Spatial research,oefos
+oefos:507012,Spatial structure,oefos
+oefos:507013,Regional geography,oefos
+oefos:507014,Regional development,oefos
+oefos:507015,Regional research,oefos
+oefos:507016,Regional economy,oefos
+oefos:507017,Social geography,oefos
+oefos:507018,Urban and village renewal,oefos
+oefos:507019,Urban development planning,oefos
+oefos:507020,Urbanism,oefos
+oefos:507021,Urban history,oefos
+oefos:507022,Urban planning,oefos
+oefos:507023,Location development,oefos
+oefos:507024,Environmental policy,oefos
+oefos:507025,Transport planning,oefos
+oefos:507026,Economic geography,oefos
+oefos:507027,Sustainable urban development,oefos
+oefos:507028,Cartography,oefos
+oefos:508001,Archive studies,oefos
+oefos:508002,Audiovisual media,oefos
+oefos:508003,Library science,oefos
+oefos:508004,Intercultural communication,oefos
+oefos:508006,Communication theory,oefos
+oefos:508007,Communication science,oefos
+oefos:508008,Media analysis,oefos
+oefos:508009,Media research,oefos
+oefos:508010,Media history,oefos
+oefos:508011,Media theory,oefos
+oefos:508012,Media impact studies,oefos
+oefos:508013,Public relations,oefos
+oefos:508014,Journalism,oefos
+oefos:508015,Business communication,oefos
+oefos:508016,Science communication,oefos
+oefos:508017,Organisational communication,oefos
+oefos:508018,Reception research,oefos
+oefos:508019,Media ethics,oefos
+oefos:508020,Political communication,oefos
+oefos:509001,Action research,oefos
+oefos:509002,Disability studies,oefos
+oefos:509003,Development cooperation,oefos
+oefos:509004,Evaluation research,oefos
+oefos:509005,Gerontology,oefos
+oefos:509006,History of social sciences,oefos
+oefos:509007,Graffiti research,oefos
+oefos:509008,"Child research, youth research",oefos
+oefos:509009,Military strategic research,oefos
+oefos:509010,Minority research,oefos
+oefos:509011,Organisational development,oefos
+oefos:509012,Social policy,oefos
+oefos:509013,Social statistics,oefos
+oefos:509014,Game research,oefos
+oefos:509015,Accident research,oefos
+oefos:509016,Transport economics,oefos
+oefos:509017,Social studies of science,oefos
+oefos:509018,Knowledge management,oefos
+oefos:509019,Futurology,oefos
+oefos:509020,Military ethics,oefos
+oefos:509021,Military science,oefos
+oefos:509022,Polemology,oefos
+oefos:509023,Development research,oefos
+oefos:509024,Security research,oefos
+oefos:509025,Technology studies,oefos
+oefos:601001,Ancient history,oefos
+oefos:601002,Classical studies,oefos
+oefos:601003,Archaeology,oefos
+oefos:601004,Epigraphy,oefos
+oefos:601005,European history,oefos
+oefos:601006,Early history,oefos
+oefos:601007,Historical regional studies,oefos
+oefos:601008,Science of history,oefos
+oefos:601009,Historical auxiliary sciences,oefos
+oefos:601010,Classical archaeology,oefos
+oefos:601011,Codicology,oefos
+oefos:601012,Medieval history,oefos
+oefos:601013,Museology,oefos
+oefos:601014,Modern history,oefos
+oefos:601015,Numismatics,oefos
+oefos:601016,Austrian history,oefos
+oefos:601017,Palaeography,oefos
+oefos:601018,Papyrology,oefos
+oefos:601019,Source studies,oefos
+oefos:601020,Regional history,oefos
+oefos:601021,Prehistory,oefos
+oefos:601022,Contemporary history,oefos
+oefos:601023,Global history,oefos
+oefos:601024,Archaeological prospection,oefos
+oefos:601025,Experimental archaeology,oefos
+oefos:601026,Virtual archeology,oefos
+oefos:601027,Deserted settlement research,oefos
+oefos:602001,African studies,oefos
+oefos:602002,Egyptology,oefos
+oefos:602003,General literature studies,oefos
+oefos:602004,General linguistics,oefos
+oefos:602005,American studies,oefos
+oefos:602006,Applied literature studies,oefos
+oefos:602007,Applied linguistics,oefos
+oefos:602008,English studies,oefos
+oefos:602009,Arabic studies,oefos
+oefos:602010,Byzantine studies,oefos
+oefos:602011,Computational linguistics,oefos
+oefos:602012,Finno-Ugrian studies,oefos
+oefos:602013,Sign language research,oefos
+oefos:602014,German studies,oefos
+oefos:602015,Greek studies,oefos
+oefos:602017,Indo-European studies,oefos
+oefos:602018,Indology,oefos
+oefos:602019,Iranian studies,oefos
+oefos:602020,Japanese studies,oefos
+oefos:602021,Yiddish studies,oefos
+oefos:602022,Jewish studies,oefos
+oefos:602023,Celtic studies,oefos
+oefos:602024,Classical philology,oefos
+oefos:602025,Clinical linguistics,oefos
+oefos:602026,Cognitive linguistics,oefos
+oefos:602027,Coptic studies,oefos
+oefos:602028,Korean studies,oefos
+oefos:602029,Latin studies,oefos
+oefos:602030,Lexicography,oefos
+oefos:602031,History of literature,oefos
+oefos:602032,Dialectology,oefos
+oefos:602033,Onomastics,oefos
+oefos:602034,Dutch studies,oefos
+oefos:602035,Modern Greek studies,oefos
+oefos:602036,Neurolinguistics,oefos
+oefos:602037,Oriental studies,oefos
+oefos:602038,Phonetics,oefos
+oefos:602039,Phonology,oefos
+oefos:602040,Psycholinguistics,oefos
+oefos:602041,Rhetoric,oefos
+oefos:602042,Romance studies,oefos
+oefos:602043,Semiotics,oefos
+oefos:602044,Semitic studies,oefos
+oefos:602045,Sinology,oefos
+oefos:602046,Scandinavian studies,oefos
+oefos:602047,Slavonic studies,oefos
+oefos:602048,Sociolinguistics,oefos
+oefos:602049,Terminology science,oefos
+oefos:602050,Tibetan studies,oefos
+oefos:602051,Translation studies,oefos
+oefos:602052,Turkish studies,oefos
+oefos:602053,Comparative literature studies,oefos
+oefos:602054,Comparative linguistics,oefos
+oefos:602055,Patholinguistics,oefos
+oefos:602056,Ancient Oriental studies,oefos
+oefos:602057,Historical linguistics,oefos
+oefos:602058,Corpus linguistics,oefos
+oefos:602059,Writing studies,oefos
+oefos:603101,Aesthetics,oefos
+oefos:603102,Epistemology,oefos
+oefos:603103,Ethics,oefos
+oefos:603104,History of philosophy,oefos
+oefos:603105,Philosophy of history,oefos
+oefos:603106,Hermeneutics,oefos
+oefos:603107,Critique of ideology,oefos
+oefos:603108,Cultural philosophy,oefos
+oefos:603109,Logic,oefos
+oefos:603110,Metaphysics,oefos
+oefos:603111,Natural philosophy,oefos
+oefos:603112,Phenomenology,oefos
+oefos:603113,Philosophy,oefos
+oefos:603114,Philosophy of mind,oefos
+oefos:603115,Philosophical anthropology,oefos
+oefos:603117,Philosophy of law,oefos
+oefos:603118,Philosophy of religion,oefos
+oefos:603119,Social philosophy,oefos
+oefos:603120,Philosophy of language,oefos
+oefos:603121,Political philosophy,oefos
+oefos:603122,Philosophy of technology,oefos
+oefos:603123,History of science,oefos
+oefos:603124,Theory of science,oefos
+oefos:603125,Metaethics,oefos
+oefos:603126,Intercultural philosophy,oefos
+oefos:603201,Old Testament studies,oefos
+oefos:603202,Christian archaeology,oefos
+oefos:603203,Christian philosophy,oefos
+oefos:603204,Christian social doctrine,oefos
+oefos:603205,Dogmatic theology,oefos
+oefos:603206,Fundamental theology,oefos
+oefos:603207,Homiletics,oefos
+oefos:603208,Intercultural theology,oefos
+oefos:603209,Canon law,oefos
+oefos:603210,Catechetics,oefos
+oefos:603211,Church history,oefos
+oefos:603212,Liturgical studies,oefos
+oefos:603213,Moral theology,oefos
+oefos:603214,New Testament studies,oefos
+oefos:603215,Ecumenical theology,oefos
+oefos:603216,Pastoral psychology,oefos
+oefos:603217,Pastoral theology,oefos
+oefos:603218,Patrology,oefos
+oefos:603219,Practical theology,oefos
+oefos:603220,Pastoral care,oefos
+oefos:603221,Spiritual theology,oefos
+oefos:603222,Systematic theology,oefos
+oefos:603223,Theological anthropology,oefos
+oefos:603901,Atheism,oefos
+oefos:603902,Buddhism,oefos
+oefos:603903,Exegesis,oefos
+oefos:603904,Hinduism,oefos
+oefos:603905,Islam,oefos
+oefos:603906,Jewish religion,oefos
+oefos:603907,Church law,oefos
+oefos:603908,History of religion,oefos
+oefos:603909,Religious studies,oefos
+oefos:603910,Psychology of religion,oefos
+oefos:604001,Applied arts,oefos
+oefos:604002,Architectural design,oefos
+oefos:604003,Performance practice,oefos
+oefos:604004,Fine arts,oefos
+oefos:604005,Stage design,oefos
+oefos:604006,Performing arts,oefos
+oefos:604007,Historic preservation,oefos
+oefos:604008,Design,oefos
+oefos:604009,Ethnomusicology,oefos
+oefos:604010,Film design,oefos
+oefos:604011,Film studies,oefos
+oefos:604012,Photography,oefos
+oefos:604013,Garden art,oefos
+oefos:604014,Singing,oefos
+oefos:604015,Industrial design,oefos
+oefos:604016,Jazz studies,oefos
+oefos:604017,Church music,oefos
+oefos:604018,"Conservation, restoration",oefos
+oefos:604019,Art history,oefos
+oefos:604020,Art theory,oefos
+oefos:604021,Media arts,oefos
+oefos:604022,Music history,oefos
+oefos:604023,Music theory,oefos
+oefos:604024,Musicology,oefos
+oefos:604025,Popular music studies,oefos
+oefos:604026,Spatial arts,oefos
+oefos:604027,Scenography,oefos
+oefos:604028,Dance studies,oefos
+oefos:604029,Theatre studies,oefos
+oefos:604030,Folk music research,oefos
+oefos:604031,Historical technology,oefos
+oefos:604032,Instrumental studies,oefos
+oefos:604033,Composition,oefos
+oefos:604034,Music theatre,oefos
+oefos:604035,Organ research,oefos
+oefos:604036,Provenance research,oefos
+oefos:604037,Collection care,oefos
+oefos:604038,Digital arts,oefos
+oefos:605001,History of humanities,oefos
+oefos:605002,Cultural history,oefos
+oefos:605003,Cultural economics,oefos
+oefos:605004,Cultural studies,oefos
+oefos:605005,Audience research,oefos
+oefos:605006,Cultural management,oefos
+oefos:605007,Digital humanities,oefos
+oefos:605008,Cultural heritage,oefos

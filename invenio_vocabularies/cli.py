@@ -17,19 +17,27 @@ from flask_principal import Identity
 from invenio_access import any_user
 from invenio_db import db
 
+from invenio_vocabularies.contrib.subjects.subjects import subject_record_type
 from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.service import VocabulariesService
 
 data_directory = join(dirname(__file__), "data")
 
-available_vocabularies = {
-    "languages": {
-        "path": join(data_directory, "languages.csv"),
-    },
-    "licenses": {
-        "path": join(data_directory, "licenses.csv"),
-    },
-}
+
+def get_available_vocabularies():
+    """Specify the available vocabularies."""
+    return {
+        "languages": {
+            "path": join(data_directory, "languages.csv"),
+        },
+        "licenses": {
+            "path": join(data_directory, "licenses.csv"),
+        },
+        "subjects": {
+            "path": join(data_directory, "subjects.csv"),
+            "specific": _create_subjects_vocabulary,
+        },
+    }
 
 
 def _load_csv_data(path):
@@ -37,6 +45,34 @@ def _load_csv_data(path):
         reader = csv.DictReader(f, skipinitialspace=True)
         dicts = [row for row in reader]
         return dicts
+
+
+def _create_subjects_vocabulary(vocabulary_type_name, source_path):
+    identity = Identity(1)
+    identity.provides.add(any_user)
+    service = subject_record_type.service_cls()
+
+    rows = _load_csv_data(source_path)
+
+    records = []
+    for row in rows:
+        metadata = {
+            "title": row["title"],
+            "term": row["id"],
+            "identifier": row["id"],
+            "scheme": row["scheme"],
+        }
+
+        record = service.create(
+            identity=identity,
+            data={
+                "metadata": metadata,
+            },
+        )
+
+        records.append(record)
+
+    return records
 
 
 def _create_vocabulary(vocabulary_type_name, source_path):
@@ -97,7 +133,7 @@ def vocabularies():
 @click.argument(
     "vocabulary_types",
     nargs=-1,
-    type=click.Choice([v for v in available_vocabularies]),
+    type=click.Choice([v for v in get_available_vocabularies()]),
 )
 @with_appcontext
 def load(vocabulary_types):
@@ -105,7 +141,7 @@ def load(vocabulary_types):
     click.echo("creating vocabularies...", color="blue")
 
     for vocabulary_type in vocabulary_types:
-        vocabulary = available_vocabularies[vocabulary_type]
+        vocabulary = get_available_vocabularies()[vocabulary_type]
         if VocabularyType.query.filter_by(name=vocabulary_type).count() > 0:
             click.echo(
                 "vocabulary type {} already exists, skipping".format(
@@ -120,7 +156,8 @@ def load(vocabulary_types):
             color="blue",
         )
 
-        items = _create_vocabulary(vocabulary_type, vocabulary["path"])
+        fun_create_vocabulary = vocabulary.get("specific", _create_vocabulary)
+        items = fun_create_vocabulary(vocabulary_type, vocabulary["path"])
 
         click.echo(
             "created {} vocabulary items successfully".format(len(items)),
