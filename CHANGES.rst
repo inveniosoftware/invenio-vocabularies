@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 0.1.4 (released 2020-12-11)
+
+- Add subjects vocabulary
+
 Version 0.1.3 (released 2020-12-11)
 
 - Include csv vocabularies data
