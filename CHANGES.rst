@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 0.1.1 (released 2020-12-11)
+
+- Add vocabulary import command
+
 Version 0.1.0 (released 2020-12-08)
 
 - Initial public release.
