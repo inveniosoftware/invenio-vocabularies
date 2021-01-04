@@ -28,6 +28,7 @@ def test_endpoint_list(app, db, client, example_record):
     res = client.get(
         "/vocabularies/nonexistent", headers={"accept": "application/json"}
     )
+    # FIXME: Shouldn't be a 404
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 0
 

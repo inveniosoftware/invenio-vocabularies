@@ -24,6 +24,7 @@ from invenio_vocabularies.services.service import VocabulariesService
 data_directory = join(dirname(__file__), "data")
 
 
+# QUESTION: Moved to RDM? is specific to it
 def get_available_vocabularies():
     """Specify the available vocabularies."""
     return {
@@ -47,6 +48,8 @@ def _load_csv_data(path):
         return dicts
 
 
+# QUESTION: Moved to RDM? is specific to it
+# Or change name with no `subjects`
 def _create_subjects_vocabulary(vocabulary_type_name, source_path):
     identity = Identity(1)
     identity.provides.add(any_user)
@@ -76,6 +79,8 @@ def _create_subjects_vocabulary(vocabulary_type_name, source_path):
 
 
 def _create_vocabulary(vocabulary_type_name, source_path):
+    # FIXME: This is a hardcoded permission, if need to allow should be
+    # done through better specified permission policies
     identity = Identity(1)
     identity.provides.add(any_user)
     service = VocabulariesService()
@@ -84,6 +89,7 @@ def _create_vocabulary(vocabulary_type_name, source_path):
     rows = _load_csv_data(source_path)
 
     # Create vocabulary type
+    # FIXME: Accesing DB directly, api.py better?
     vocabulary_type = VocabularyType(name=vocabulary_type_name)
     db.session.add(vocabulary_type)
     db.session.commit()
@@ -142,6 +148,8 @@ def load(vocabulary_types):
 
     for vocabulary_type in vocabulary_types:
         vocabulary = get_available_vocabularies()[vocabulary_type]
+        # FIXME: Here it queries directly a DB with a model class
+        # Should it be class method on the api.py
         if VocabularyType.query.filter_by(name=vocabulary_type).count() > 0:
             click.echo(
                 "vocabulary type {} already exists, skipping".format(

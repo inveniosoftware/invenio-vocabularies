@@ -14,6 +14,7 @@
 
 # from invenio_vocabularies.records.api import Vocabulary
 
+#TODO REMOVE file?
 
 # class VocabularyItem(dict):
 #     """A wrapper for a single vocabulary item."""

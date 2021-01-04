@@ -19,10 +19,10 @@ function cleanup {
 }
 trap cleanup EXIT
 
-# python -m check_manifest --ignore ".*-requirements.txt"
-# python -m sphinx.cmd.build -qnNW docs docs/_build/html
+python -m check_manifest --ignore ".*-requirements.txt"
+python -m sphinx.cmd.build -qnNW docs docs/_build/html
 docker-services-cli up --db ${DB:-postgresql} --search ${ES:-elasticsearch} --mq ${CACHE:-redis}
 python -m pytest
-# python -m sphinx.cmd.build -qnNW -b doctest docs docs/_build/doctest
+python -m sphinx.cmd.build -qnNW -b doctest docs docs/_build/doctest
 tests_exit_code=$?
 exit "$tests_exit_code"

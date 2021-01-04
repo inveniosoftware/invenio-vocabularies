@@ -21,6 +21,7 @@ class VocabularyTypeElasticsearchDumperExt(ElasticsearchDumperExt):
         """Dump the data from a record."""
         vocabulary_type_id = data.get("vocabulary_type_id")
         if vocabulary_type_id:
+            # FIXME: class method in the model class? (e.g. query_by_name)
             data["vocabulary_type"] = VocabularyType.query.get(
                 vocabulary_type_id
             ).name

@@ -21,6 +21,8 @@ class VocabularyType(db.Model):
     name = db.Column(db.String, unique=True)
 
 
+# FIXME: The `db.relationship` should be from VocabularyType to VocabularyMetadata
+# According to https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many
 class VocabularyMetadata(db.Model, RecordMetadataBase):
     """Model for vocabulary metadata."""
 

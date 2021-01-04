@@ -26,6 +26,7 @@ def test_record_validation(app, db, identity, service, example_record):
 
     # valid items
     create({})
+    # FIXME: Should fail by "allow_none=False" in schema?
     create({"title": {}})
     assert create({"nonexistent": "value"}).data["metadata"] == {}
 

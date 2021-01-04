@@ -19,7 +19,7 @@ i18n_string = fields.Dict(
 
 
 class VocabularyMetadataSchema(Schema):
-    """."""
+    """Vocabulary metadata marshmallow schema."""
 
     class Meta:
         """Meta class to reject unknown fields."""
