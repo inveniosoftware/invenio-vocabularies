@@ -21,6 +21,13 @@ from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.service import VocabulariesService
 
 
+@pytest.fixture(scope='module')
+def app_config(app_config):
+    """Mimic an instance's configuration."""
+    app_config["JSONSCHEMAS_HOST"] = 'localhost'
+    return app_config
+
+
 @pytest.fixture()
 def example_data():
     """Example data."""
