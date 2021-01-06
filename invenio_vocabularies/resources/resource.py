@@ -12,10 +12,7 @@
 from flask import g
 from flask_resources.context import resource_requestctx
 from invenio_records_resources.resources import RecordResource, \
-    RecordResourceConfig, RecordResponse
-
-from .schema import SearchLinksSchema, VocabularyLinksSchema
-from .serializers import PresentationJSONSerializer
+    RecordResourceConfig
 
 
 class VocabulariesResourceConfig(RecordResourceConfig):
@@ -24,15 +21,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
     list_route = "/vocabularies/<vocabulary_type>"
     item_route = f"{list_route}/<pid_value>"
 
-    links_config = {
-        "record": VocabularyLinksSchema,
-        "search": SearchLinksSchema,
-    }
-
-    response_handlers = {
-        **RecordResourceConfig.response_handlers,
-        "application/json": RecordResponse(PresentationJSONSerializer()),
-    }
+    links_config = {}
 
 
 class VocabulariesResource(RecordResource):
@@ -44,6 +33,9 @@ class VocabulariesResource(RecordResource):
         """Perform a search over the items."""
         identity = g.identity
         params = resource_requestctx.url_args
+
+        # Pass the vocabulary_type in params so we can apply a post_filter
+        # on it
         params.update(
             {
                 "vocabulary_type": resource_requestctx.route[

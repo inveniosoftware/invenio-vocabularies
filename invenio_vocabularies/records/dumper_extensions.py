@@ -27,4 +27,8 @@ class VocabularyTypeElasticsearchDumperExt(ElasticsearchDumperExt):
 
     def load(self, data, record_cls):
         """Load the data into a record."""
-        data.pop("vocabulary_type", None)
+        # TODO: The below line is a temporary **HACK** and is **WRONG**
+        # The entire dumper should be removed!
+        # The vocabulary_type requires some caching similar to pid ModelField
+        # and the dumper is not the right place to do that!
+        # data.pop("vocabulary_type", None)

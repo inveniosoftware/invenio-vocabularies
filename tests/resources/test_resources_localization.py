@@ -14,11 +14,12 @@ from flask_babelex import Babel
 def test_endpoint_localization(app, client, example_record, monkeypatch):
     """Test that the endpoint returns the correct translation."""
 
-    monkeypatch.setattr(
-        "flask_babelex.get_locale", lambda: Babel().load_locale("fr")
-    )
+    # monkeypatch.setattr(
+    #     "flask_babelex.get_locale", lambda: Babel().load_locale("fr")
+    # )
     res = client.get(
         "/vocabularies/languages", headers={"accept": "application/json"}
     )
     assert res.status_code == 200
-    assert res.json["hits"]["hits"][0]["title"] == "Titre test"
+    es_record = res.json["hits"]["hits"][0]
+    assert es_record["metadata"]["title"]["fr"] == "Titre test"
