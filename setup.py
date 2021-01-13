@@ -26,7 +26,7 @@ invenio_db_version = ">=1.0.5,<2.0.0"
 
 extras_require = {
     "docs": [
-        "Sphinx>=3",
+        "Sphinx>=3,<4",
     ],
     "elasticsearch6": [
         "invenio-search[elasticsearch6]{}".format(invenio_search_version),
@@ -125,6 +125,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Development Status :: 1 - Planning",
+        "Programming Language :: Python :: 3.9",
+        "Development Status :: 3 - Alpha",
     ],
 )

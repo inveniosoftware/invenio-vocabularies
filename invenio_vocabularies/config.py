@@ -6,7 +6,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Invenio module for managing vocabularies."""
+"""Vocabularies configuration."""
 
 from .resources.resource import VocabulariesResourceConfig
 from .services.service import VocabulariesServiceConfig

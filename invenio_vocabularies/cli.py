@@ -8,6 +8,7 @@
 # details.
 
 """Commands to create and manage vocabulary."""
+
 import csv
 from os.path import dirname, join
 
