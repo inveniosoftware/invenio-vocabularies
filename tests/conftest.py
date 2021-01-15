@@ -21,6 +21,25 @@ from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.service import VocabulariesService
 
 
+pytest_plugins = ("celery.contrib.pytest", )
+
+
+@pytest.fixture(scope="module")
+def extra_entry_points():
+    """Extra entry points to load the mock_module features."""
+    return {
+        'invenio_db.model': [
+            'mock_module = mock_module.models',
+        ],
+        'invenio_jsonschemas.schemas': [
+            'mock_module = mock_module.jsonschemas',
+        ],
+        'invenio_search.mappings': [
+            'records = mock_module.mappings',
+        ]
+    }
+
+
 @pytest.fixture(scope='module')
 def app_config(app_config):
     """Mimic an instance's configuration."""
@@ -42,12 +61,6 @@ def example_data():
             "props": {"key": "value"},
         }
     }
-
-
-@pytest.fixture(scope="module")
-def celery_config():
-    """Override pytest-invenio fixture."""
-    return {}
 
 
 @pytest.fixture(scope="module")

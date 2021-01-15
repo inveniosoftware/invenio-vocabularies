@@ -17,7 +17,7 @@ history = open("CHANGES.rst").read()
 
 tests_require = [
     "invenio-app>=1.3.0",
-    "pytest-invenio>=1.4.0",
+    "pytest-invenio>=1.4.1",
 ]
 
 # Should follow inveniosoftware/invenio versions
@@ -59,7 +59,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-records-resources>=0.9.4",
+    "invenio-records-resources>=0.10.0",
     "invenio-i18n>=1.3.0",
     "pycountry>=18.12.8",
 ]
@@ -103,10 +103,10 @@ setup(
             "vocabulary_model = invenio_vocabularies.vocabularies.models",
         ],
         "invenio_jsonschemas.schemas": [
-            "jsonschemas = invenio_vocabularies.jsonschemas",
+            "jsonschemas = invenio_vocabularies.records.jsonschemas",
         ],
         "invenio_search.mappings": [
-            "vocabularies = invenio_vocabularies.mappings",
+            "vocabularies = invenio_vocabularies.records.mappings",
         ],
     },
     extras_require=extras_require,

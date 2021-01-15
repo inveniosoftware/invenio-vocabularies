@@ -1,68 +1,60 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2021 CERN.
 #
-# Invenio-Records-Resources is free software; you can redistribute it and/or
+# Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
 """Data access layer tests."""
 
 import pytest
-from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
+from sqlalchemy import inspect
 
 from invenio_vocabularies.records.api import Vocabulary
-from invenio_vocabularies.records.models import VocabularyType
 
 
-def test_record_empty(app, db):
-    """Test record creation."""
-    # Empty record creation works, and injects a schema.
-    record = Vocabulary.create({})
-    db.session.commit()
+def test_record_schema_validation(app, db, lang_type):
+    """Record schema validation."""
+    # Good data
+    record = Vocabulary.create({
+        'id': 'eng',
+        'title': {'en': 'English', 'da': 'Engelsk'},
+        'description': {'en': 'English', 'da': 'Engelsk'},
+        'icon': 'en',
+        'props': {
+            'akey': 'a value'
+        },
+    }, type=lang_type)
     assert record.schema
 
-    # JSONSchema validation works.
-    pytest.raises(
-        SchemaValidationError, Vocabulary.create, {"metadata": {"title": 1}}
-    )
+    # Bad data
+    examples = [
+        # title/descriptions are objects of key/string.
+        {'id': 'en', 'title': 'not a string'},
+        {'id': 'en', 'title': {'en': 123}},
+        {'id': 'en', 'description': 'not a string'},
+        # icon must be strings
+        {'id': 'en', 'icon': 123},
+        # props values must be strings
+        {'id': 'en', 'props': {'key': 123}},
+        {'id': 'en', 'props': {'key': {'test': 'test'}}},
+        # Additional properties false
+        {'id': 'en', 'metadata': {'title': 'test'}},
+    ]
+
+    for ex in examples:
+        pytest.raises(SchemaValidationError, Vocabulary.create, ex)
 
 
-def test_record_via_field(app, db):
-    """Record creation via field."""
-    record = Vocabulary.create({}, metadata={"title": "test"})
-    assert record.metadata == {"title": "test"}
-
-
-def test_vocabulary_type(app, db):
-    """Vocabulary creation."""
-    vocabulary_type = VocabularyType(**{"name": "test-type"})
-    db.session.add(vocabulary_type)
-    db.session.commit()
-    record = Vocabulary.create(
-        {}, metadata={"title": {"en": "test-item"}, "type": "test-type"}
-    )
-    record.commit()
-    db.session.commit()
-    assert record.metadata == {
-        "title": {"en": "test-item"},
-        "type": "test-type",
-    }
-    assert record.pid.status == "R"
-    assert record.id
-
-
-@pytest.mark.skip()
-def test_record_indexing(app, db, es, example_record, indexer):
+def test_record_indexing(app, db, es, example_record, indexer, search_get):
     """Test indexing of a record."""
     # Index document in ES
     assert indexer.index(example_record)["result"] == "created"
 
     # Retrieve document from ES
-    data = current_search_client.get(
-        "vocabularies-vocabulary-v1.0.0", id=example_record.id, doc_type="_doc"
-    )
+    data = search_get(id=example_record.id)
 
     # Loads the ES data and compare
     record = Vocabulary.loads(data["_source"])
@@ -71,30 +63,58 @@ def test_record_indexing(app, db, es, example_record, indexer):
     assert record.revision_id == example_record.revision_id
     assert record.created == example_record.created
     assert record.updated == example_record.updated
-    assert record.vocabulary_type_id == example_record.vocabulary_type_id
 
-    # Check system fields
-    assert record.metadata == example_record["metadata"]
+    # Check system fields - i.e reading related type object from
+    assert record == example_record
+    assert record.type.id == 'languages'
+    assert record.type.pid_type == 'lng'
+
+    # Check that object was recrated without hitting DB
+    assert inspect(record.type).persistent is False
+    Vocabulary.type.session_merge(record)
+    assert inspect(record.type).persistent is True
 
 
-@pytest.mark.skip()
-def test_record_delete_reindex(
-    app, db, es, example_record, example_data, indexer
-):
-    """Test reindexing of a deleted record."""
-    record = example_record
+def test_record_pids(app, db, lang_type, lic_type):
+    """Test record pid creation."""
+    record = Vocabulary.create({
+        'id': 'eng', 'title': {'en': 'English', 'da': 'Engelsk'}},
+        type=lang_type
+    )
+    assert record.type == lang_type
+    assert record.pid.pid_value == 'eng'
+    assert record.pid.pid_type == 'lng'
+    assert Vocabulary.pid.resolve(('languages', 'eng'))
 
-    # Index record
-    assert indexer.index(record)["result"] == "created"
+    record = Vocabulary.create({
+        'id': 'cc-by', 'title': {'en': 'CC-BY', 'da': 'CC-BY'}
+    }, type=lic_type)
+    assert record.type == lic_type
+    assert record.pid.pid_value == 'cc-by'
+    assert record.pid.pid_type == 'lic'
+    assert Vocabulary.pid.resolve(('licenses', 'cc-by'))
 
-    # Delete record.
-    record.delete()
-    db.session.commit()
-    assert indexer.delete(record)["result"] == "deleted"
 
-    # Update record and reindex (this will cause troubles unless proper
-    # optimistic concurrency control is used).
-    record.undelete()
-    record.commit()
-    db.session.commit()
-    assert indexer.index(record)["result"] == "created"
+# service.search(...,type='languages')
+#
+# service.create(
+#     identity,
+#     {'id': 'cc-by', 'title': {'en': 'CC-BY', 'da': 'CC-BY',
+#      'type': 'languages'}
+# )
+# service.read(
+#     ('languages', 'eng'),
+#     identity,
+#     links_config=links_config
+# )
+# service.update(
+#     ('languages', 'eng'),
+#     {'id': 'cc-by', 'title': {'en': 'CC-BY', 'da': 'CC-BY'},
+#     links_config=links_config,
+#     revision_id=...
+# )
+# service.delete(
+#     ('languages', 'eng')
+#     identity,
+#     revision_id=...
+# )

@@ -8,28 +8,23 @@
 
 """Vocabulary data API."""
 
-from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
-from invenio_records.dumpers import ElasticsearchDumper
-from invenio_records.systemfields import ConstantField, ModelField
-from invenio_records_resources.records.api import Record as RecordBase
+from invenio_records.systemfields import ConstantField, RelatedModelField
+from invenio_records_resources.records.api import Record
 from invenio_records_resources.records.systemfields import IndexField, PIDField
 
-from .dumper_extensions import VocabularyTypeElasticsearchDumperExt
-from .models import VocabularyMetadata
-from .systemfields.VocabularyTypeField import VocabularyTypeField
+from .models import VocabularyMetadata, VocabularyType
+from .pidprovider import VocabularyIdProvider
+from .systemfields import VocabularyPIDFieldContext
 
 
-class Vocabulary(RecordBase):
-    """Example record API."""
+class Vocabulary(Record):
+    """A generic vocabulary record."""
 
     # Configuration
     model_cls = VocabularyMetadata
 
-    dumper = ElasticsearchDumper(
-        extensions=[VocabularyTypeElasticsearchDumperExt()]
-    )
-
     # System fields
+    # TODO: Can schema name be changed (remove localhost)
     schema = ConstantField(
         "$schema",
         "https://localhost/schemas/vocabularies/vocabulary-v1.0.0.json",
@@ -39,9 +34,13 @@ class Vocabulary(RecordBase):
         "vocabularies-vocabulary-v1.0.0", search_alias="vocabularies"
     )
 
-    # TODO: This should be changed to use something else than the recidv2
-    pid = PIDField("id", provider=RecordIdProviderV2)
+    #: Disable the metadata system field.
+    metadata = None
 
-    vocabulary_type_id = ModelField()
+    type = RelatedModelField(VocabularyType, required=True)
 
-    vocabulary_type = VocabularyTypeField(dump=False)
+    pid = PIDField(
+        'id',
+        provider=VocabularyIdProvider,
+        context_cls=VocabularyPIDFieldContext
+    )
