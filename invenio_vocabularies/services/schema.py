@@ -8,41 +8,29 @@
 
 """Vocabulary service schema."""
 
-from invenio_records_resources.services.records.schema import RecordSchema
-from marshmallow import EXCLUDE, Schema, fields, validate
+from invenio_records_resources.services.records.schema import BaseRecordSchema
+from marshmallow import EXCLUDE, RAISE, Schema, fields, validate
 
-i18n_string = fields.Dict(
+i18n_strings = fields.Dict(
     allow_none=False,
     keys=fields.Str(validate=validate.Regexp("^[a-z]{2}$")),
     values=fields.Str(),
 )
+"""Field definition for language aware strings."""
 
 
-class VocabularyMetadataSchema(Schema):
-    """."""
+class BaseVocabularySchema(BaseRecordSchema):
+    """Base schema for vocabularies."""
 
-    class Meta:
-        """Meta class to reject unknown fields."""
-
-        unknown = EXCLUDE
-
-    title = i18n_string
-    description = i18n_string
+    title = i18n_strings
+    description = i18n_strings
     icon = fields.Str(allow_none=False)
+
+
+class VocabularySchema(BaseVocabularySchema):
+    """Service schema for vocabulary records.."""
+
+    type = fields.Str(attribute='type.id', required=True)
     props = fields.Dict(
         allow_none=False, keys=fields.Str(), values=fields.Str()
     )
-
-
-class VocabularySchema(RecordSchema):
-    """Schema for records v1 in JSON."""
-
-    class Meta:
-        """Meta class to reject unknown fields."""
-
-        unknown = EXCLUDE
-
-    vocabulary_type_id = fields.Integer()
-    vocabulary_type = fields.Str()
-
-    metadata = fields.Nested(VocabularyMetadataSchema, required=True)

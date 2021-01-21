@@ -54,6 +54,14 @@ class VocabularyPIDFieldContext(RelatedModelFieldContext):
     for vocabulary records.
     """
 
+    def create(self, record):
+        """Proxy to the field's create method."""
+        return self.field.create(record)
+
+    def delete(self, record):
+        """Proxy to the field's delete method."""
+        return self.field.delete(record)
+
     def resolve(self, pid_value):
         """Resolve identifier.
 

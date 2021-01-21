@@ -37,12 +37,6 @@ def search_get():
 
 
 @pytest.fixture()
-def lang_type():
-    """Get a language vocabulary type."""
-    return VocabularyType.create(id='languages', pid_type='lng')
-
-
-@pytest.fixture()
 def lic_type():
     """Get a language vocabulary type."""
     return VocabularyType.create(id='licenses', pid_type='lic')
@@ -66,6 +60,7 @@ def example_data():
 def example_record(db, example_data, lang_type):
     """Example record."""
     record = Vocabulary.create(example_data, type=lang_type)
+    Vocabulary.pid.create(record)
     record.commit()
     db.session.commit()
     return record

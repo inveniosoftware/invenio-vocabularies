@@ -21,3 +21,7 @@ class PermissionPolicy(RecordPermissionPolicy):
     can_read = [AnyUser()]
     can_update = [AnyUser()]
     can_delete = [AnyUser()]
+    can_manage = [AnyUser()]
+
+    # Type permissions
+    can_manage = [AnyUser()]

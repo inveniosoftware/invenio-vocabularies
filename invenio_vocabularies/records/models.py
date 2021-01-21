@@ -38,7 +38,7 @@ class VocabularyType(db.Model):
 
     @classmethod
     def load_obj(cls, field, record):
-        """Serializer the object into a record."""
+        """Deserializer the object from a record."""
         data = record.get(field.attr_name)
         if data:
             obj = cls(

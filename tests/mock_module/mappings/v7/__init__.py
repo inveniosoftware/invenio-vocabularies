@@ -1,0 +1,1 @@
+"""Mock module for testing."""

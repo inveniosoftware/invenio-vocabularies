@@ -81,6 +81,7 @@ def test_record_pids(app, db, lang_type, lic_type):
         'id': 'eng', 'title': {'en': 'English', 'da': 'Engelsk'}},
         type=lang_type
     )
+    Vocabulary.pid.create(record)
     assert record.type == lang_type
     assert record.pid.pid_value == 'eng'
     assert record.pid.pid_type == 'lng'
@@ -89,6 +90,7 @@ def test_record_pids(app, db, lang_type, lic_type):
     record = Vocabulary.create({
         'id': 'cc-by', 'title': {'en': 'CC-BY', 'da': 'CC-BY'}
     }, type=lic_type)
+    Vocabulary.pid.create(record)
     assert record.type == lic_type
     assert record.pid.pid_value == 'cc-by'
     assert record.pid.pid_type == 'lic'

@@ -42,5 +42,6 @@ class Vocabulary(Record):
     pid = PIDField(
         'id',
         provider=VocabularyIdProvider,
-        context_cls=VocabularyPIDFieldContext
+        context_cls=VocabularyPIDFieldContext,
+        create=False,
     )

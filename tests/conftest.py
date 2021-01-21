@@ -47,22 +47,6 @@ def app_config(app_config):
     return app_config
 
 
-@pytest.fixture()
-def example_data():
-    """Example data."""
-    return {
-        "metadata": {
-            "title": {"en": "Test title", "fr": "Titre test"},
-            "description": {
-                "en": "Test description",
-                "de": "Textbeschreibung",
-            },
-            "icon": "icon-identifier",
-            "props": {"key": "value"},
-        }
-    }
-
-
 @pytest.fixture(scope="module")
 def create_app(instance_path, entry_points):
     """Application factory fixture."""
@@ -79,9 +63,41 @@ def identity_simple():
 
 
 @pytest.fixture()
-def service():
+def service(app):
     """Vocabularies service object."""
-    return VocabulariesService()
+    return app.extensions['invenio-vocabularies'].service
+
+
+@pytest.fixture()
+def lang_type():
+    """Get a language vocabulary type."""
+    return VocabularyType.create(id='languages', pid_type='lng')
+
+
+@pytest.fixture()
+def lang_data():
+    """Example data."""
+    return {
+        'id': 'eng',
+        'title': {'en': 'English', 'da': 'Engelsk'},
+        'description': {
+            'en': 'English description',
+            'da': 'Engelsk beskrivelse'
+        },
+        'icon': 'file-o',
+        'props': {
+            'akey': 'avalue',
+        },
+        'type': 'languages',
+    }
+
+
+@pytest.fixture()
+def lang_data2(lang_data):
+    """Example data for testing invalid cases."""
+    data = dict(lang_data)
+    data['id'] = 'new'
+    return data
 
 
 @pytest.fixture()
