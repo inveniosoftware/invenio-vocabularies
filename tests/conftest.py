@@ -14,14 +14,20 @@ fixtures are available.
 
 import pytest
 from flask_principal import Identity, Need, UserNeed
+from invenio_access import any_user
 from invenio_app.factory import create_api as _create_api
 
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.service import VocabulariesService
 
-
 pytest_plugins = ("celery.contrib.pytest", )
+
+
+@pytest.fixture()
+def h():
+    """Accept JSON headers."""
+    return {"accept": "application/json"}
 
 
 @pytest.fixture(scope="module")
@@ -44,6 +50,8 @@ def extra_entry_points():
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["JSONSCHEMAS_HOST"] = 'localhost'
+    app_config["BABEL_DEFAULT_LOCALE"] = 'en'
+    app_config["I18N_LANGUAGES"] = [('da', 'Danish')]
     return app_config
 
 
@@ -62,19 +70,28 @@ def identity_simple():
     return i
 
 
-@pytest.fixture()
+@pytest.fixture(scope='module')
+def identity():
+    """Simple identity to interact with the service."""
+    i = Identity(1)
+    i.provides.add(UserNeed(1))
+    i.provides.add(any_user)
+    return i
+
+
+@pytest.fixture(scope='module')
 def service(app):
     """Vocabularies service object."""
     return app.extensions['invenio-vocabularies'].service
 
 
 @pytest.fixture()
-def lang_type():
+def lang_type(db):
     """Get a language vocabulary type."""
     return VocabularyType.create(id='languages', pid_type='lng')
 
 
-@pytest.fixture()
+@pytest.fixture(scope='module')
 def lang_data():
     """Example data."""
     return {
@@ -101,7 +118,7 @@ def lang_data2(lang_data):
 
 
 @pytest.fixture()
-def example_record(db, identity_simple, service, example_data):
+def example_record(db, identity, service, example_data):
     """Example record."""
     vocabulary_type_languages = VocabularyType(name="languages")
     vocabulary_type_licenses = VocabularyType(name="licenses")
@@ -110,7 +127,7 @@ def example_record(db, identity_simple, service, example_data):
     db.session.commit()
 
     record = service.create(
-        identity=identity_simple,
+        identity=identity,
         data=dict(
             **example_data, vocabulary_type_id=vocabulary_type_languages.id
         ),

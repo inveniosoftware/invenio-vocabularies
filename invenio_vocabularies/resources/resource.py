@@ -8,19 +8,94 @@
 
 """Vocabulary resource."""
 
-from flask import g
+from functools import wraps
+
 from flask_resources.context import resource_requestctx
-from invenio_records_resources.resources import RecordResource, \
-    RecordResourceConfig
+from flask_resources.serializers import MarshmallowJSONSerializer
+from invenio_records_resources.resources import ItemLinksSchema, \
+    RecordResource, RecordResourceConfig, RecordResponse, SearchLinksSchema, \
+    search_link_params
+
+from .serializer import VocabularyL10NItemSchema, VocabularyL10NListSchema
 
 
+def item_link_params(record):
+    """Create URITemplate variables for item links."""
+    return {
+        'pid_value': record.pid.pid_value,
+        'vocabulary_type': record.type.id,
+    }
+
+
+def search_link_params(page_offset):
+    """Create URITemplate variables for search links."""
+    def _inner(search_dict):
+        # Filter out internal parameters
+        params = {
+            k: v for k, v in search_dict.items() if not k.startswith('_')
+        }
+        params['page'] += page_offset
+        return {
+            'params': params,
+            'vocabulary_type': search_dict['_type'].id
+        }
+    return _inner
+
+
+#
+# Resource config
+#
 class VocabulariesResourceConfig(RecordResourceConfig):
-    """Custom record resource configuration."""
+    """Vocabulary resource configuration."""
 
-    list_route = "/vocabularies/<vocabulary_type>"
-    item_route = f"{list_route}/<pid_value>"
+    list_route = '/vocabularies/<vocabulary_type>'
+    item_route = f'{list_route}/<pid_value>'
 
-    links_config = {}
+    links_config = {
+        "record": ItemLinksSchema.create(
+            template='/api/vocabularies/{vocabulary_type}/{pid_value}',
+            params=item_link_params,
+        ),
+        "search": SearchLinksSchema.create(
+            template='/api/vocabularies/{vocabulary_type}{?params*}',
+            params_func=search_link_params,
+        ),
+    }
+
+    response_handlers = {
+        **RecordResourceConfig.response_handlers,
+        'application/vnd.inveniordm.v1+json': RecordResponse(
+            MarshmallowJSONSerializer(
+                item_schema=VocabularyL10NItemSchema,
+                list_schema=VocabularyL10NListSchema,
+            )
+        )
+    }
+
+
+#
+# Resource definition
+#
+def list_route(f):
+    """Decorator for list routes to inject the vocabulary type."""
+    @wraps(f)
+    def inner(*args, **kwargs):
+        resource_requestctx.url_args["type"] = \
+            resource_requestctx.route["vocabulary_type"],
+        return f(*args, **kwargs)
+    return inner
+
+
+def item_route(f):
+    """Decorator for item routes to inject the vocabulary type."""
+    @wraps(f)
+    def inner(*args, **kwars):
+        resource_requestctx.route["pid_value"] = (
+            resource_requestctx.route["vocabulary_type"],
+            resource_requestctx.route["pid_value"]
+        )
+        return f(*args, **kwars)
+    return inner
 
 
 class VocabulariesResource(RecordResource):
@@ -28,24 +103,22 @@ class VocabulariesResource(RecordResource):
 
     default_config = VocabulariesResourceConfig
 
+    @item_route
+    def read(self):
+        """Read an item."""
+        return super().read()
+
+    @item_route
+    def delete(self):
+        """Delete an item."""
+        return super().read()
+
+    @item_route
+    def update(self):
+        """Update an item."""
+        return super().read()
+
+    @list_route
     def search(self):
         """Perform a search over the items."""
-        identity = g.identity
-        params = resource_requestctx.url_args
-
-        # Pass the vocabulary_type in params so we can apply a post_filter
-        # on it
-        params.update(
-            {
-                "vocabulary_type": resource_requestctx.route[
-                    "vocabulary_type"
-                ],
-            }
-        )
-        hits = self.service.search(
-            identity=identity,
-            params=params,
-            links_config=self.config.links_config,
-            es_preference=self._get_es_preference(),
-        )
-        return hits.to_dict(), 200
+        return super().search()
