@@ -1,0 +1,53 @@
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "$schema": {
+        "type": "keyword"
+      },
+      "created": {
+        "type": "date"
+      },
+      "updated": {
+        "type": "date"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "version_id": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "pid": {
+        "type": "object",
+        "properties": {
+          "pk": {
+            "type": "integer"
+          },
+          "pid_type": {
+            "type": "keyword"
+          },
+          "obj_type": {
+            "type": "keyword"
+          },
+          "status": {
+            "type": "keyword"
+          }
+        }
+      },
+      "title": {
+        "type": "object",
+        "dynamic": true
+      },
+      "description": {
+        "type": "object",
+        "dynamic": true
+      },
+      "icon": {
+        "type": "keyword"
+      }
+    }
+  }
+}
