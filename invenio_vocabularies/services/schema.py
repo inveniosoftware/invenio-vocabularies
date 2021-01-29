@@ -10,6 +10,7 @@
 
 from invenio_records_resources.services.records.schema import BaseRecordSchema
 from marshmallow import EXCLUDE, RAISE, Schema, fields, validate
+from marshmallow_utils.fields import SanitizedUnicode
 
 i18n_strings = fields.Dict(
     allow_none=False,
@@ -30,6 +31,7 @@ class BaseVocabularySchema(BaseRecordSchema):
 class VocabularySchema(BaseVocabularySchema):
     """Service schema for vocabulary records.."""
 
+    tags = fields.List(SanitizedUnicode())
     type = fields.Str(attribute='type.id', required=True)
     props = fields.Dict(
         allow_none=False, keys=fields.Str(), values=fields.Str()

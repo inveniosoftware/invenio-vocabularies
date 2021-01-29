@@ -21,7 +21,8 @@ def example_data():
     """Example data for records."""
     return [
         {'id': 'text', 'title': {'en': 'Text'}, 'type': 'resourcetypes'},
-        {'id': 'data', 'title': {'en': 'Data'}, 'type': 'resourcetypes'},
+        {'id': 'data', 'title': {'en': 'Data'}, 'type': 'resourcetypes',
+         'tags': ['recommended']},
     ]
 
 
@@ -98,3 +99,11 @@ def test_query_q(client, example_records, h, prefix):
     assert res.json['hits']['total'] == 2
     assert len(res.json['hits']['hits']) == 1
     assert 'next' in res.json['links']
+
+
+def test_tags_filter(client, example_records, h, prefix):
+    """Test filter on tags."""
+    # Test query (q=)
+    res = client.get(f'{prefix}?tags=recommended', headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1

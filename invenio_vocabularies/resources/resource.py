@@ -11,10 +11,14 @@
 from functools import wraps
 
 from flask_resources.context import resource_requestctx
+from flask_resources.parsers import URLArgsParser
 from flask_resources.serializers import MarshmallowJSONSerializer
 from invenio_records_resources.resources import ItemLinksSchema, \
     RecordResource, RecordResourceConfig, RecordResponse, SearchLinksSchema, \
     search_link_params
+from invenio_records_resources.resources.records.schemas_url_args import \
+    SearchURLArgsSchema
+from marshmallow import fields
 
 from .serializer import VocabularyL10NItemSchema, VocabularyL10NListSchema
 
@@ -43,6 +47,15 @@ def search_link_params(page_offset):
 
 
 #
+# URL args
+#
+class VocabularySearchURLArgsSchema(SearchURLArgsSchema):
+    """Add parameter to parse tags."""
+
+    tags = fields.Str()
+
+
+#
 # Resource config
 #
 class VocabulariesResourceConfig(RecordResourceConfig):
@@ -50,6 +63,10 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 
     list_route = '/vocabularies/<vocabulary_type>'
     item_route = f'{list_route}/<pid_value>'
+
+    request_url_args_parser = {
+        "search": URLArgsParser(VocabularySearchURLArgsSchema)
+    }
 
     links_config = {
         "record": ItemLinksSchema.create(

@@ -35,6 +35,7 @@ class VocabularyL10NItemSchema(Schema):
     description = L10NString(data_key='description_l10n')
     props = fields.Dict(dump_only=True)
     icon = fields.String(dump_only=True)
+    tags = fields.List(fields.Str(), dump_only=True)
 
 
 class VocabularyL10NListSchema(Schema):

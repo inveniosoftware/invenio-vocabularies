@@ -105,6 +105,7 @@ def lang_data():
         'props': {
             'akey': 'avalue',
         },
+        'tags': ['recommended'],
         'type': 'languages',
     }
 
