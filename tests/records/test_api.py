@@ -26,6 +26,7 @@ def test_record_schema_validation(app, db, lang_type):
         'props': {
             'akey': 'a value'
         },
+        'tags': ['recommended'],
     }, type=lang_type)
     assert record.schema
 
@@ -95,28 +96,3 @@ def test_record_pids(app, db, lang_type, lic_type):
     assert record.pid.pid_value == 'cc-by'
     assert record.pid.pid_type == 'lic'
     assert Vocabulary.pid.resolve(('licenses', 'cc-by'))
-
-
-# service.search(...,type='languages')
-#
-# service.create(
-#     identity,
-#     {'id': 'cc-by', 'title': {'en': 'CC-BY', 'da': 'CC-BY',
-#      'type': 'languages'}
-# )
-# service.read(
-#     ('languages', 'eng'),
-#     identity,
-#     links_config=links_config
-# )
-# service.update(
-#     ('languages', 'eng'),
-#     {'id': 'cc-by', 'title': {'en': 'CC-BY', 'da': 'CC-BY'},
-#     links_config=links_config,
-#     revision_id=...
-# )
-# service.delete(
-#     ('languages', 'eng')
-#     identity,
-#     revision_id=...
-# )

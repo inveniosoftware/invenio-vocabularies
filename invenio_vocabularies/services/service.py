@@ -33,6 +33,7 @@ class VocabulariesServiceConfig(RecordServiceConfig):
 
     search_params_interpreters_cls = [
         FilterParam.factory(param='type', field='type.id'),
+        FilterParam.factory(param='tags', field='tags'),
     ] + RecordServiceConfig.search_params_interpreters_cls
 
     components = [

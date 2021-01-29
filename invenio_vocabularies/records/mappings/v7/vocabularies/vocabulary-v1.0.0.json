@@ -59,6 +59,9 @@
       "icon": {
         "type": "keyword"
       },
+      "tags": {
+        "type": "keyword"
+      },
       "props": {
         "type": "object",
         "dynamic": true

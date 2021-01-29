@@ -61,6 +61,12 @@
     "icon": {
       "type": "string"
     },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "props": {
       "type": "object",
       "patternProperties": {
