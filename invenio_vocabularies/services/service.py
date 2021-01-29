@@ -8,6 +8,7 @@
 
 """Vocabulary service."""
 
+from flask_babelex import lazy_gettext as _
 from invenio_db import db
 from invenio_records_resources.services import RecordService, \
     RecordServiceConfig
@@ -35,6 +36,29 @@ class VocabulariesServiceConfig(RecordServiceConfig):
         FilterParam.factory(param='type', field='type.id'),
         FilterParam.factory(param='tags', field='tags'),
     ] + RecordServiceConfig.search_params_interpreters_cls
+
+    search_sort_default = 'bestmatch'
+
+    search_sort_default_no_query = 'title'
+
+    search_sort_options = {
+        "bestmatch": dict(
+            title=_('Best match'),
+            fields=['_score'],  # ES defaults to desc on `_score` field
+        ),
+        "title": dict(
+            title=_('Title'),
+            fields=['title.en.keyword'],
+        ),
+        "newest": dict(
+            title=_('Newest'),
+            fields=['-created'],
+        ),
+        "oldest": dict(
+            title=_('Oldest'),
+            fields=['created'],
+        ),
+    }
 
     components = [
         # Order of component is important!
