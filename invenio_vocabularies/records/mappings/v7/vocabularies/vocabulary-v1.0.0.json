@@ -50,7 +50,17 @@
       },
       "title": {
         "type": "object",
-        "dynamic": true
+        "dynamic": true,
+        "properties": {
+          "en": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
       },
       "description": {
         "type": "object",

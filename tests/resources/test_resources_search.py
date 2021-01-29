@@ -77,7 +77,7 @@ def test_search(client, example_records, h, prefix):
     res = client.get(prefix, headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
-    assert res.json['sortBy'] == 'newest'
+    assert res.json['sortBy'] == 'title'
 
 
 def test_query_q(client, example_records, h, prefix):
