@@ -99,8 +99,11 @@ setup(
         "invenio_base.api_blueprints": [
             'invenio_vocabularies = invenio_vocabularies.views:create_blueprint_from_app',
         ],
-        "invenio_db.model": [
-            "vocabulary_model = invenio_vocabularies.vocabularies.models",
+        "invenio_db.alembic": [
+            "invenio_vocabularies = invenio_vocabularies:alembic",
+        ],
+        "invenio_db.models": [
+            "vocabulary_model = invenio_vocabularies.records.models",
         ],
         "invenio_jsonschemas.schemas": [
             "jsonschemas = invenio_vocabularies.records.jsonschemas",
