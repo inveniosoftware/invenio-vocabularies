@@ -59,7 +59,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-records-resources>=0.10.1",
+    "invenio-records-resources>=0.11.0",
     "invenio-i18n>=1.3.0",
     "pycountry>=18.12.8",
 ]
