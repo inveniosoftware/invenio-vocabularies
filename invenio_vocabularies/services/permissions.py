@@ -9,19 +9,19 @@
 """Vocabulary permissions."""
 
 from invenio_records_permissions import RecordPermissionPolicy
-from invenio_records_permissions.generators import AnyUser
+from invenio_records_permissions.generators import AnyUser, SystemProcess
 
 
 class PermissionPolicy(RecordPermissionPolicy):
     """Permission policy."""
 
     # TODO: restrict to not allow create/update/delete
-    can_search = [AnyUser()]
-    can_create = [AnyUser()]
-    can_read = [AnyUser()]
-    can_update = [AnyUser()]
-    can_delete = [AnyUser()]
-    can_manage = [AnyUser()]
+    can_search = [SystemProcess(), AnyUser()]
+    can_read = [SystemProcess(), AnyUser()]
+    can_create = [SystemProcess()]
+    can_update = [SystemProcess()]
+    can_delete = [SystemProcess()]
+    can_manage = [SystemProcess()]
 
     # Type permissions
-    can_manage = [AnyUser()]
+    can_manage = [SystemProcess()]
