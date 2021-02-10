@@ -10,7 +10,7 @@
 
 import pytest
 from flask_principal import Identity
-from invenio_access import any_user
+from invenio_access.permissions import any_user, system_process
 from invenio_indexer.api import RecordIndexer
 
 from invenio_vocabularies.records.api import Vocabulary
@@ -21,6 +21,7 @@ def identity():
     """Simple identity to interact with the service."""
     identity = Identity(1)
     identity.provides.add(any_user)
+    identity.provides.add(system_process)
     return identity
 
 

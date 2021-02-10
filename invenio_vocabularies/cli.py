@@ -13,13 +13,10 @@ import csv
 from os.path import dirname, join
 
 import click
-import pycountry
-from babel import Locale, UnknownLocaleError
 from flask.cli import with_appcontext
 from flask_principal import Identity
 from invenio_access import any_user
 from invenio_db import db
-from invenio_i18n.ext import current_i18n
 
 from invenio_vocabularies.contrib.subjects.subjects import subject_record_type
 from invenio_vocabularies.records.models import VocabularyType

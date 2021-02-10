@@ -15,7 +15,7 @@ fixtures are available.
 
 import pytest
 from flask_principal import Identity, Need, UserNeed
-from invenio_access import any_user
+from invenio_access.permissions import any_user, system_process
 from invenio_app.factory import create_api as _create_api
 
 from invenio_vocabularies.records.api import Vocabulary
@@ -76,6 +76,7 @@ def identity():
     i = Identity(1)
     i.provides.add(UserNeed(1))
     i.provides.add(any_user)
+    i.provides.add(system_process)
     return i
 
 

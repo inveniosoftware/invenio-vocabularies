@@ -128,12 +128,12 @@ class VocabulariesResource(RecordResource):
     @item_route
     def delete(self):
         """Delete an item."""
-        return super().read()
+        return super().delete()
 
     @item_route
     def update(self):
         """Update an item."""
-        return super().read()
+        return super().update()
 
     @list_route
     def search(self):
