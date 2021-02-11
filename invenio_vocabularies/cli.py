@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2021 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -30,10 +31,6 @@ data_directory = join(dirname(__file__), "data")
 def get_available_vocabularies():
     """Specify the available vocabularies."""
     return {
-        "languages": {
-            "path": join(data_directory, "languages.csv"),
-            "specific": _create_languages_vocabulary,
-        },
         "licenses": {
             "path": join(data_directory, "licenses.csv"),
         },
@@ -49,52 +46,6 @@ def _load_csv_data(path):
         reader = csv.DictReader(f, skipinitialspace=True)
         dicts = [row for row in reader]
         return dicts
-
-
-def _create_languages_vocabulary(vocabulary_type_name, source_path):
-    """Load languages vocabulary."""
-    identity = Identity(1)
-    identity.provides.add(any_user)
-    service = VocabulariesService()
-
-    # Create vocabulary type
-    vocabulary_type = VocabularyType(name="languages")
-    db.session.add(vocabulary_type)
-    db.session.commit()
-
-    # Load data
-    records = []
-    instance_languages = [lang[0] for lang in current_i18n.get_languages()]
-
-    for pycountry_language in pycountry.languages:
-        pycountry_language_code = pycountry_language.alpha_3
-        try:
-            # Parse the locale for the pycountry language entry
-            locale = Locale.parse(pycountry_language_code)
-            # Create the title dict for all the configured instance languages
-            title = {}
-            for instance_lang in instance_languages:
-                title[instance_lang] = locale.get_display_name(instance_lang)
-            # Create record
-            metadata = {
-                "id": pycountry_language_code,
-                "title": title,
-            }
-            service.create(
-                identity=identity,
-                data={
-                    "metadata": metadata,
-                    "vocabulary_type_id": vocabulary_type.id,
-                    "vocabulary_type": vocabulary_type.name
-                },
-            )
-            records.append(metadata)
-        except UnknownLocaleError:
-            # Pass for the pycountry languages
-            # that babel cannot parse the locale
-            pass
-
-    return records
 
 
 def _create_subjects_vocabulary(vocabulary_type_name, source_path):
