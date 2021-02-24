@@ -61,7 +61,7 @@ class VocabulariesServiceConfig(RecordServiceConfig):
     }
 
     components = [
-        # Order of component is important!
+        # Order of components are important!
         VocabularyTypeComponent,
         DataComponent,
         PIDComponent,
@@ -80,7 +80,7 @@ class VocabulariesService(RecordService):
         db.session.commit()
         return type_
 
-    def search_request(self, identity, params, record_cls, preference=None):
+    def search_request(self, identity, params, record_cls, **kwargs):
         """Create a search request.
 
         This method just ensures that the vocabulary type is validated.
@@ -93,4 +93,4 @@ class VocabulariesService(RecordService):
             # Pass the type so it's available for link generation
             params['_type'] = vocabulary_type
         return super().search_request(
-            identity, params, record_cls, preference=preference)
+            identity, params, record_cls, **kwargs)
