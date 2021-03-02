@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2021 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -12,4 +13,4 @@ This file is imported by ``invenio_vocabularies.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = "0.3.3"
+__version__ = "0.4.0"
