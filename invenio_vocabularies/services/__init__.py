@@ -7,3 +7,10 @@
 # details.
 
 """Services module."""
+
+from .service import VocabulariesService, VocabulariesServiceConfig
+
+__all__ = (
+    "VocabulariesService",
+    "VocabulariesServiceConfig",
+)

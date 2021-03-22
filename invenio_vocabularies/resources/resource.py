@@ -118,8 +118,6 @@ def item_route(f):
 class VocabulariesResource(RecordResource):
     """Custom record resource"."""
 
-    default_config = VocabulariesResourceConfig
-
     @item_route
     def read(self):
         """Read an item."""

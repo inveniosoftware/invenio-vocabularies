@@ -14,8 +14,6 @@ from invenio_records_resources.services import RecordService, \
     RecordServiceConfig
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import FilterParam
-from invenio_records_resources.services.records.search import terms_filter
-from marshmallow.exceptions import ValidationError
 
 from invenio_vocabularies.records.models import VocabularyType
 
@@ -70,8 +68,6 @@ class VocabulariesServiceConfig(RecordServiceConfig):
 
 class VocabulariesService(RecordService):
     """Vocabulary service."""
-
-    default_config = VocabulariesServiceConfig
 
     def create_type(self, identity, id, pid_type):
         """Create a new vocabulary type."""
