@@ -8,38 +8,33 @@
 
 """Vocabulary service."""
 
+from elasticsearch_dsl.query import Q
 from flask_babelex import lazy_gettext as _
 from invenio_db import db
-from invenio_records_resources.services import RecordService, \
-    RecordServiceConfig
+from invenio_records_resources.services import Link, LinksTemplate, \
+    RecordService, RecordServiceConfig, SearchOptions, pagination_links
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import FilterParam
 
-from invenio_vocabularies.records.models import VocabularyType
-
 from ..records.api import Vocabulary
+from ..records.models import VocabularyType
 from .components import PIDComponent, VocabularyTypeComponent
 from .permissions import PermissionPolicy
 from .schema import VocabularySchema
 
 
-class VocabulariesServiceConfig(RecordServiceConfig):
-    """Vocabulary service configuration."""
+class VocabularySearchOptions(SearchOptions):
+    """Search options."""
 
-    permission_policy_cls = PermissionPolicy
-    record_cls = Vocabulary
-    schema = VocabularySchema
-
-    search_params_interpreters_cls = [
-        FilterParam.factory(param='type', field='type.id'),
+    params_interpreters_cls = [
         FilterParam.factory(param='tags', field='tags'),
-    ] + RecordServiceConfig.search_params_interpreters_cls
+    ] + SearchOptions.params_interpreters_cls
 
-    search_sort_default = 'bestmatch'
+    sort_default = 'bestmatch'
 
-    search_sort_default_no_query = 'title'
+    sort_default_no_query = 'title'
 
-    search_sort_options = {
+    sort_options = {
         "bestmatch": dict(
             title=_('Best match'),
             fields=['_score'],  # ES defaults to desc on `_score` field
@@ -58,12 +53,34 @@ class VocabulariesServiceConfig(RecordServiceConfig):
         ),
     }
 
+
+class VocabulariesServiceConfig(RecordServiceConfig):
+    """Vocabulary service configuration."""
+
+    permission_policy_cls = PermissionPolicy
+    record_cls = Vocabulary
+    schema = VocabularySchema
+
+    search = VocabularySearchOptions
+
     components = [
         # Order of components are important!
         VocabularyTypeComponent,
         DataComponent,
         PIDComponent,
     ]
+
+    links_item = {
+        "self": Link(
+            "{+api}/vocabularies/{type}/{id}",
+            vars=lambda record, vars: vars.update({
+                "id": record.pid.pid_value,
+                "type": record.type.id,
+            })
+        ),
+    }
+
+    links_search = pagination_links("{+api}/vocabularies/{type}/{?args*}")
 
 
 class VocabulariesService(RecordService):
@@ -76,17 +93,33 @@ class VocabulariesService(RecordService):
         db.session.commit()
         return type_
 
-    def search_request(self, identity, params, record_cls, **kwargs):
-        """Create a search request.
+    def search(self, identity, params=None, es_preference=None, type=None,
+               **kwargs):
+        """Search for vocabulary entries."""
+        self.require_permission(identity, 'search')
 
-        This method just ensures that the vocabulary type is validated.
-        """
-        # Validate type parameter
-        if 'type' in params:
-            # If not found, NoResultFound is raised (caught by the resource).
-            vocabulary_type = VocabularyType.query.filter_by(
-                id=params['type']).one()
-            # Pass the type so it's available for link generation
-            params['_type'] = vocabulary_type
-        return super().search_request(
-            identity, params, record_cls, **kwargs)
+        # If not found, NoResultFound is raised (caught by the resource).
+        vocabulary_type = VocabularyType.query.filter_by(id=type).one()
+
+        # Prepare and execute the search
+        params = params or {}
+        search_result = self._search(
+            'search',
+            identity,
+            params,
+            es_preference,
+            extra_filter=Q('term', type__id=vocabulary_type.id),
+            **kwargs
+        ).execute()
+
+        return self.result_list(
+            self,
+            identity,
+            search_result,
+            params,
+            links_tpl=LinksTemplate(self.config.links_search, context={
+                "args": params,
+                "type": vocabulary_type.id,
+            }),
+            links_item_tpl=self.links_item_tpl,
+        )

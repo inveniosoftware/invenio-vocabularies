@@ -11,6 +11,4 @@
 
 def create_blueprint_from_app(app):
     """Create app blueprint."""
-    return app.extensions["invenio-vocabularies"].resource.as_blueprint(
-        "vocabularies"
-    )
+    return app.extensions["invenio-vocabularies"].resource.as_blueprint()

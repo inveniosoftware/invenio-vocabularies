@@ -43,8 +43,8 @@ def test_permissions_readonly(anyuser_idty, lang_type, lang_data, service):
     id_ = item.id
 
     # Read - both allowed
-    item = service.read(('languages', id_), anyuser_idty, lang_data)
-    item = service.read(('languages', id_), system_identity, lang_data)
+    item = service.read(('languages', id_), anyuser_idty)
+    item = service.read(('languages', id_), system_identity)
 
     # Refresh index to make changes live.
     Vocabulary.index.refresh()

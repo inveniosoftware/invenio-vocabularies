@@ -45,7 +45,7 @@ class VocabularyL10NListSchema(Schema):
 
     def get_hits(self, obj_list):
         """Apply hits transformation."""
-        schema = self.context['item_schema_cls']()
+        schema = self.context['schema_cls']()
         obj_list['hits']['hits'] = [
             schema.dump(h) for h in obj_list['hits']['hits']
         ]

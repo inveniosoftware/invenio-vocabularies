@@ -77,7 +77,8 @@ def test_simple_flow(lang_type, lic_type, lang_data, service, identity):
     pytest.raises(
         PIDDeletedError, service.read, ('languages', id_), identity)
     # - search
-    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(
+        identity, type='languages', q=f"id:{id_}", size=25, page=1)
     assert res.total == 0
 
 

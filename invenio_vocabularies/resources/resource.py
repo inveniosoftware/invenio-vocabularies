@@ -10,46 +10,24 @@
 
 from functools import wraps
 
-from flask_resources.context import resource_requestctx
-from flask_resources.parsers import URLArgsParser
-from flask_resources.serializers import MarshmallowJSONSerializer
-from invenio_records_resources.resources import ItemLinksSchema, \
-    RecordResource, RecordResourceConfig, RecordResponse, SearchLinksSchema, \
-    search_link_params
-from invenio_records_resources.resources.records.schemas_url_args import \
-    SearchURLArgsSchema
+import marshmallow as ma
+from flask import g
+from flask_resources import JSONSerializer, MarshmallowJSONSerializer, \
+    ResponseHandler, from_conf, request_body_parser, request_parser, \
+    resource_requestctx, response_handler
+from invenio_records_resources.resources import RecordResource, \
+    RecordResourceConfig, SearchRequestArgsSchema
+from invenio_records_resources.resources.records.headers import etag_headers
+from invenio_records_resources.resources.records.utils import es_preference
 from marshmallow import fields
 
 from .serializer import VocabularyL10NItemSchema, VocabularyL10NListSchema
 
 
-def item_link_params(record):
-    """Create URITemplate variables for item links."""
-    return {
-        'pid_value': record.pid.pid_value,
-        'vocabulary_type': record.type.id,
-    }
-
-
-def search_link_params(page_offset):
-    """Create URITemplate variables for search links."""
-    def _inner(search_dict):
-        # Filter out internal parameters
-        params = {
-            k: v for k, v in search_dict.items() if not k.startswith('_')
-        }
-        params['page'] += page_offset
-        return {
-            'params': params,
-            'vocabulary_type': search_dict['_type'].id
-        }
-    return _inner
-
-
 #
-# URL args
+# Request args
 #
-class VocabularySearchURLArgsSchema(SearchURLArgsSchema):
+class VocabularySearchRequestArgsSchema(SearchRequestArgsSchema):
     """Add parameter to parse tags."""
 
     tags = fields.Str()
@@ -61,79 +39,126 @@ class VocabularySearchURLArgsSchema(SearchURLArgsSchema):
 class VocabulariesResourceConfig(RecordResourceConfig):
     """Vocabulary resource configuration."""
 
-    list_route = '/vocabularies/<vocabulary_type>'
-    item_route = f'{list_route}/<pid_value>'
-
-    request_url_args_parser = {
-        "search": URLArgsParser(VocabularySearchURLArgsSchema)
+    blueprint_name = "vocabularies"
+    url_prefix = "/vocabularies"
+    routes = {
+        "list": "/<type>",
+        "item": "/<type>/<pid_value>",
     }
 
-    links_config = {
-        "record": ItemLinksSchema.create(
-            template='/api/vocabularies/{vocabulary_type}/{pid_value}',
-            params=item_link_params,
-        ),
-        "search": SearchLinksSchema.create(
-            template='/api/vocabularies/{vocabulary_type}{?params*}',
-            params_func=search_link_params,
-        ),
+    request_view_args = {
+        "pid_value": ma.fields.Str(),
+        "type": ma.fields.Str(required=True),
     }
+
+    request_args = VocabularySearchRequestArgsSchema
 
     response_handlers = {
-        **RecordResourceConfig.response_handlers,
-        'application/vnd.inveniordm.v1+json': RecordResponse(
+        "application/json": ResponseHandler(
+            JSONSerializer(),
+            headers=etag_headers
+        ),
+        "application/vnd.inveniordm.v1+json": ResponseHandler(
             MarshmallowJSONSerializer(
-                item_schema=VocabularyL10NItemSchema,
-                list_schema=VocabularyL10NListSchema,
-            )
-        )
+                schema_cls=VocabularyL10NItemSchema,
+                many_schema_cls=VocabularyL10NListSchema,
+            ),
+            headers=etag_headers,
+        ),
     }
 
 
 #
-# Resource definition
+# Decorators
 #
-def list_route(f):
-    """Decorator for list routes to inject the vocabulary type."""
-    @wraps(f)
-    def inner(*args, **kwargs):
-        resource_requestctx.url_args["type"] = \
-            resource_requestctx.route["vocabulary_type"],
-        return f(*args, **kwargs)
-    return inner
+request_search_args = request_parser(
+    from_conf("request_args"), location="args"
+)
+
+request_view_args = request_parser(
+    from_conf("request_view_args"), location="view_args"
+)
+
+request_headers = request_parser(
+    {"if_match": ma.fields.Int()}, location='headers'
+)
+
+request_data = request_body_parser(
+    parsers=from_conf('request_body_parsers'),
+    default_content_type=from_conf('default_content_type')
+)
 
 
-def item_route(f):
-    """Decorator for item routes to inject the vocabulary type."""
-    @wraps(f)
-    def inner(*args, **kwars):
-        resource_requestctx.route["pid_value"] = (
-            resource_requestctx.route["vocabulary_type"],
-            resource_requestctx.route["pid_value"]
-        )
-        return f(*args, **kwars)
-    return inner
-
-
+#
+# Resource
+#
 class VocabulariesResource(RecordResource):
-    """Custom record resource"."""
+    """Resource for generic vocabularies."""
 
-    @item_route
-    def read(self):
-        """Read an item."""
-        return super().read()
-
-    @item_route
-    def delete(self):
-        """Delete an item."""
-        return super().delete()
-
-    @item_route
-    def update(self):
-        """Update an item."""
-        return super().update()
-
-    @list_route
+    @request_search_args
+    @request_view_args
+    @response_handler(many=True)
     def search(self):
         """Perform a search over the items."""
-        return super().search()
+        hits = self.service.search(
+            identity=g.identity,
+            params=resource_requestctx.args,
+            type=resource_requestctx.view_args["type"],
+            es_preference=es_preference(),
+        )
+        return hits.to_dict(), 200
+
+    @request_view_args
+    @request_data
+    @response_handler()
+    def create(self):
+        """Create an item."""
+        item = self.service.create(
+            g.identity,
+            resource_requestctx.data or {},
+        )
+        return item.to_dict(), 201
+
+    @request_view_args
+    @response_handler()
+    def read(self):
+        """Read an item."""
+        pid_value = (
+            resource_requestctx.view_args["type"],
+            resource_requestctx.view_args["pid_value"]
+        )
+        item = self.service.read(pid_value, g.identity)
+        return item.to_dict(), 200
+
+    @request_headers
+    @request_view_args
+    @request_data
+    @response_handler()
+    def update(self):
+        """Update an item."""
+        pid_value = (
+            resource_requestctx.view_args["type"],
+            resource_requestctx.view_args["pid_value"]
+        )
+        item = self.service.update(
+            pid_value,
+            g.identity,
+            resource_requestctx.data,
+            revision_id=resource_requestctx.headers.get("if_match"),
+        )
+        return item.to_dict(), 200
+
+    @request_headers
+    @request_view_args
+    def delete(self):
+        """Delete an item."""
+        pid_value = (
+            resource_requestctx.view_args["type"],
+            resource_requestctx.view_args["pid_value"]
+        )
+        self.service.delete(
+            pid_value,
+            g.identity,
+            revision_id=resource_requestctx.headers.get("if_match"),
+        )
+        return "", 204
