@@ -28,7 +28,7 @@ class Record(RecordBase):
 
     model_cls = models.RecordMetadata
     schema = ConstantField(
-        '$schema', 'http://localhost/schemas/records/record-v1.0.0.json')
+        '$schema', 'local://records/record-v1.0.0.json')
     index = IndexField('records-record-v1.0.0', search_alias='records')
     pid = PIDField('id', provider=RecordIdProviderV2)
 

@@ -52,6 +52,10 @@ def app_config(app_config):
     app_config["JSONSCHEMAS_HOST"] = 'localhost'
     app_config["BABEL_DEFAULT_LOCALE"] = 'en'
     app_config["I18N_LANGUAGES"] = [('da', 'Danish')]
+    app_config['RECORDS_REFRESOLVER_CLS'] = \
+        "invenio_records.resolver.InvenioRefResolver"
+    app_config['RECORDS_REFRESOLVER_STORE'] = \
+        "invenio_jsonschemas.proxies.current_refresolver_store"
     return app_config
 
 
