@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "id": "https://inveniosoftware.org/schemas/test/records/record-v1.0.0.json",
+  "id": "local://test/records/record-v1.0.0.json",
   "title": "Test Record Schema v1.0.0",
   "type": "object",
   "additionalProperties": false,

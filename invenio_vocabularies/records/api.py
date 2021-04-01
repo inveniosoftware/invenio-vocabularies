@@ -27,7 +27,7 @@ class Vocabulary(Record):
     # TODO: Can schema name be changed (remove localhost)
     schema = ConstantField(
         "$schema",
-        "https://localhost/schemas/vocabularies/vocabulary-v1.0.0.json",
+        "local://vocabularies/vocabulary-v1.0.0.json",
     )
 
     index = IndexField(
