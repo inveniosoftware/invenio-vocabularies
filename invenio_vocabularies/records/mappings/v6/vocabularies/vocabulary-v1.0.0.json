@@ -19,7 +19,12 @@
           "type": "integer"
         },
         "id": {
-          "type": "keyword"
+          "type": "keyword",
+          "fields": {
+            "text": {
+              "type": "text"
+            }
+          }
         },
         "type": {
           "type": "object",
@@ -49,17 +54,16 @@
             }
           }
         },
+        "title_sort": {
+          "type": "keyword"
+        },
         "title": {
           "type": "object",
           "dynamic": true,
           "properties": {
             "en": {
               "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
+              "copy_to": "title_sort"
             }
           }
         },

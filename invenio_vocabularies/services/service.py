@@ -14,7 +14,8 @@ from invenio_db import db
 from invenio_records_resources.services import Link, LinksTemplate, \
     RecordService, RecordServiceConfig, SearchOptions, pagination_links
 from invenio_records_resources.services.records.components import DataComponent
-from invenio_records_resources.services.records.params import FilterParam
+from invenio_records_resources.services.records.params import FilterParam, \
+    SuggestQueryParser
 
 from ..records.api import Vocabulary
 from ..records.models import VocabularyType
@@ -30,6 +31,17 @@ class VocabularySearchOptions(SearchOptions):
         FilterParam.factory(param='tags', field='tags'),
     ] + SearchOptions.params_interpreters_cls
 
+    suggest_parser_cls = SuggestQueryParser.factory(
+        fields=[
+            'id.text^100',
+            'id.text._2gram',
+            'id.text._3gram',
+            'title.en^5',
+            'title.en._2gram',
+            'title.en._3gram',
+        ],
+    )
+
     sort_default = 'bestmatch'
 
     sort_default_no_query = 'title'
@@ -41,7 +53,7 @@ class VocabularySearchOptions(SearchOptions):
         ),
         "title": dict(
             title=_('Title'),
-            fields=['title.en.keyword'],
+            fields=['title_sort'],
         ),
         "newest": dict(
             title=_('Newest'),
