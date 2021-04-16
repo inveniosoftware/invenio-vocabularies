@@ -56,7 +56,7 @@ def test_get(client, example_records, h, prefix):
     assert res.json['id'] == id_
     # Test links
     assert res.json['links'] == {
-        'self': 'https://localhost:5000/api/vocabularies/licenses/cc-by'
+        'self': 'https://127.0.0.1:5000/api/vocabularies/licenses/cc-by'
     }
 
 
