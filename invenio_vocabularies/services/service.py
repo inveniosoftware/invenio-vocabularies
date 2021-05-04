@@ -92,7 +92,7 @@ class VocabulariesServiceConfig(RecordServiceConfig):
         ),
     }
 
-    links_search = pagination_links("{+api}/vocabularies/{type}/{?args*}")
+    links_search = pagination_links("{+api}/vocabularies/{type}{?args*}")
 
 
 class VocabulariesService(RecordService):
