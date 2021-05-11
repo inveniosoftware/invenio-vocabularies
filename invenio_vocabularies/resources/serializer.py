@@ -12,7 +12,7 @@ from functools import partial
 
 from flask import current_app
 from flask_babelex import get_locale
-from marshmallow import INCLUDE, Schema, fields, post_dump
+from marshmallow import Schema, fields
 from marshmallow_utils.fields import BabelGettextDictField
 
 

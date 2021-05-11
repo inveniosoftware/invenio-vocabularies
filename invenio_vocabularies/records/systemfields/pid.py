@@ -69,18 +69,14 @@ class VocabularyPIDFieldContext(RelatedModelFieldContext):
             ``pid_value`` if the type context has been initialized using
             ``with_type_ctx()``.
         """
-        type_id = self.type_id
-        if type_id is None:
+        pid_type = self.pid_type
+        if pid_type is None:
             type_id, pid_value = pid_value
-
-        # Get type based on name.
-        vocab_type = VocabularyType.query.filter_by(id=type_id).one_or_none()
-        if vocab_type is None:
-            raise PIDDoesNotExistError(None, pid_value)
+            pid_type = self.get_pid_type(type_id)
 
         # Create resolver
         resolver = self.field._resolver_cls(
-            pid_type=vocab_type.pid_type,
+            pid_type=pid_type,
             object_type=self.field._object_type,
             getter=self.record_cls.get_record
         )
@@ -93,10 +89,26 @@ class VocabularyPIDFieldContext(RelatedModelFieldContext):
 
         return record
 
+    def get_pid_type(self, type_id):
+        """Get the PID type for a vocabulary type."""
+        # Get type based on name.
+        vocab_type = VocabularyType.query.filter_by(id=type_id).one_or_none()
+        if vocab_type is None:
+            raise PIDDoesNotExistError(None, pid_value)
+        return vocab_type.pid_type
+
     @property
-    def type_id(self):
+    def pid_type(self):
         """Get the current defined type."""
-        return getattr(self, '_type_id', None)
+        # This ensures that when we use Vocabulary.pid.with_type_ctx('...')
+        # we cache the pid type to avoid querying the database every time.
+        type_id = getattr(self, '_type_id', None)
+        if type_id:
+            pid_type = getattr(self, '_pid_type', None)
+            if pid_type is None:
+                pid_type = self.get_pid_type(type_id)
+                self._pid_type = pid_type
+            return pid_type
 
     def with_type_ctx(self, type_id):
         """Returns a new context initialized with the type context."""
