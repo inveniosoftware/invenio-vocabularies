@@ -94,7 +94,7 @@ class VocabularyPIDFieldContext(RelatedModelFieldContext):
         # Get type based on name.
         vocab_type = VocabularyType.query.filter_by(id=type_id).one_or_none()
         if vocab_type is None:
-            raise PIDDoesNotExistError(None, pid_value)
+            raise PIDDoesNotExistError(None, None)
         return vocab_type.pid_type
 
     @property

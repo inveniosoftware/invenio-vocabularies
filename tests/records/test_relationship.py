@@ -65,14 +65,18 @@ def test_dereferencing(mock_record):
     mock_record.relations.languages.dereference()
     deferenced_lang_record = mock_record.metadata['languages'][0]
     # Test that only part of the language record is denormalised.
-    assert sorted(deferenced_lang_record.keys()) == ['id', 'title']
+    assert sorted(deferenced_lang_record.keys()) == ['@v', 'id', 'title']
 
 
-def test_dumping(mock_record):
+def test_dumping(mock_record, example_record):
     """Record schema validation."""
     # Create a record linked to a language record.
     lang = mock_record.dumps()['metadata']['languages'][0]
-    assert lang == {'id': 'eng', 'title': {'da': 'Engelsk', 'en': 'English'}}
+    assert lang == {
+        'id': 'eng',
+        'title': {'da': 'Engelsk', 'en': 'English'},
+        '@v': str(example_record.id) + '::' + str(example_record.revision_id),
+    }
 
 
 def test_indexing(mock_record, mock_indexer, mock_search, example_record):
@@ -90,4 +94,4 @@ def test_indexing(mock_record, mock_indexer, mock_search, example_record):
     # Dereferencing also works
     record.relations.languages.dereference()
     deferenced_lang_record = mock_record.metadata['languages'][0]
-    assert sorted(deferenced_lang_record.keys()) == ['id', 'title']
+    assert sorted(deferenced_lang_record.keys()) == ['@v', 'id', 'title']
