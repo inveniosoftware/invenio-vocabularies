@@ -17,15 +17,6 @@ from invenio_vocabularies.records.api import Vocabulary
 
 
 @pytest.fixture()
-def identity():
-    """Simple identity to interact with the service."""
-    identity = Identity(1)
-    identity.provides.add(any_user)
-    identity.provides.add(system_process)
-    return identity
-
-
-@pytest.fixture()
 def indexer():
     """Indexer instance with correct Record class."""
     return RecordIndexer(
