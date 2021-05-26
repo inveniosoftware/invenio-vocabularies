@@ -44,7 +44,8 @@ class VocabularyLabels:
             vocabs = current_service.read_many(
                 identity, ids, fields=self.fields)
         else:
-            vocabs = current_service.read_all(identity, fields=self.fields)
+            vocabs = current_service.read_all(
+                identity, type=self.vocabulary, fields=self.fields)
 
         labels = {}
         vocab_list = list(vocabs.hits)  # the service returns a generator

@@ -9,7 +9,9 @@
 """Vocabulary service."""
 
 from elasticsearch_dsl.query import Q
+from elasticsearch_dsl.response import Response
 from flask_babelex import lazy_gettext as _
+from invenio_cache import current_cache
 from invenio_db import db
 from invenio_records_resources.services import Link, LinksTemplate, \
     RecordService, RecordServiceConfig, SearchOptions, pagination_links
@@ -135,3 +137,34 @@ class VocabulariesService(RecordService):
             }),
             links_item_tpl=self.links_item_tpl,
         )
+
+    def read_all(self, identity, fields, type, cache=True, **kwargs):
+        """Search for records matching the querystring."""
+        cache_key = "-".join(fields)
+        results = current_cache.get(cache_key)
+        es_query = Q("match_all")
+
+        if not results:
+            # If not found, NoResultFound is raised (caught by the resource).
+            vocabulary_type = VocabularyType.query.filter_by(id=type).one()
+            vocab_id_filter = Q('term', type__id=vocabulary_type.id)
+
+            results = self._read_many(
+                identity, es_query, fields,
+                extra_filter=vocab_id_filter, **kwargs)
+            if cache:
+                # ES DSL Response is not pickable.
+                # If saved in cache serialization wont work with to_dict()
+                current_cache.set(cache_key, results.to_dict())
+
+        else:
+            search = self.create_search(
+                identity=identity,
+                record_cls=self.record_cls,
+                search_opts=self.config.search,
+                permission_action='search',
+            ).query(es_query)
+
+            results = Response(search, results)
+
+        return self.result_list(self, identity, results)
