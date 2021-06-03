@@ -12,7 +12,8 @@
 import pytest
 
 from invenio_vocabularies.records.api import Vocabulary
-from invenio_vocabularies.services.facets import VocabularyLabels
+from invenio_vocabularies.services.facets import NestedVocabularyLabels, \
+    VocabularyLabels
 
 
 @pytest.fixture(scope='module')
@@ -75,3 +76,8 @@ def test_vocabulary_label_not_found(example_records):
 
     assert labels["eng"] == "English"
     assert not labels.get("glg")  # search wont fail
+
+def test_nested_vocabulary_label_cache(example_records):
+    # Uses example record to have two languages created on the vocabulary
+    labels_instance = NestedVocabularyLabels(vocabulary="resource_type", cache=True)
+    _assert_vocabs(labels_instance)
