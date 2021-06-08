@@ -6,14 +6,14 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Vocabulary facets."""
+"""Vocabulary facet labels."""
 
 from flask_principal import AnonymousIdentity
 from invenio_i18n.ext import current_i18n
 from marshmallow_utils.fields.babel import gettext_from_dict
 from speaklater import make_lazy_string
 
-from ..proxies import current_service
+from ...proxies import current_service
 
 
 def lazy_get_label(vocab_item):

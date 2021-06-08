@@ -9,8 +9,6 @@
 """Vocabularies test config."""
 
 import pytest
-from flask_principal import Identity
-from invenio_access.permissions import any_user, system_process
 from invenio_indexer.api import RecordIndexer
 
 from invenio_vocabularies.records.api import Vocabulary
