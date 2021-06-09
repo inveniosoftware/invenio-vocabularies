@@ -139,9 +139,12 @@ class NestedVocabularyTermsFacet(TermsFacet):
         label_buckets = self._build_nested_buckets(data.buckets)
         label_map = self.get_label_mapping(label_buckets)
 
-        _, out = self._build_bucket_list(
-            label_buckets, label_map, key_prefix, filter_values
-        )
+        assert len(label_buckets) == len(label_map)
+
+        if label_buckets:
+            _, out = self._build_bucket_list(
+                label_buckets, label_map, key_prefix, filter_values
+            )
         ret_val = {'buckets': out}
 
         if bucket_label:

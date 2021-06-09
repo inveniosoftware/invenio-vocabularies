@@ -148,3 +148,25 @@ def test_nested_vocabulary_facet_labelling(app):
         data=nested_buckets, filter_values=())
 
     assert nested_item_labels == aggs_labels
+
+
+def test_nested_vocabulary_facet_labelling_empty_agg(app):
+    # expected data
+    nested_item_labels = {
+        'buckets': [],
+        'label': 'Nested Aggs'
+    }
+
+    resource_type_facet = NestedVocabularyTermsFacet(
+        field='dummy.not.used',
+        label=_("Nested Aggs"),
+        value_labels=VocabularyLabels('nested_vocab')
+    )
+
+    data = DummyData()
+    data.buckets = []
+
+    aggs_labels = resource_type_facet.get_labelled_values(
+        data=data, filter_values=())
+
+    assert nested_item_labels == aggs_labels
