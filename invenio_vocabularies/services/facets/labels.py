@@ -39,10 +39,9 @@ class VocabularyLabels:
     def __call__(self, ids):
         """Return the mapping when evaluated."""
         identity = AnonymousIdentity()
-
         if not self.cache:
             vocabs = current_service.read_many(
-                identity, ids, fields=self.fields)
+                identity, type=self.vocabulary, ids=ids, fields=self.fields)
         else:
             vocabs = current_service.read_all(
                 identity, type=self.vocabulary, fields=self.fields)

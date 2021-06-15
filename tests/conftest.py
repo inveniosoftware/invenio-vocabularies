@@ -96,7 +96,7 @@ def lang_type(db):
     return VocabularyType.create(id='languages', pid_type='lng')
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='function')
 def lang_data():
     """Example data."""
     return {
@@ -135,10 +135,23 @@ def example_record(db, identity, service, example_data):
     record = service.create(
         identity=identity,
         data=dict(
-            **example_data, vocabulary_type_id=vocabulary_type_languages.id
+            **example_data,
+            vocabulary_type_id=vocabulary_type_languages.id
         ),
     )
 
     Vocabulary.index.refresh()  # Refresh the index
-
     return record
+
+
+@pytest.fixture(scope='function')
+def lang_data_many(lang_type, lic_type, lang_data, service, identity):
+    """Create many language vocabulary."""
+    lang_ids = ['fr', 'tr', 'gr', 'ger', 'es']
+    data = dict(lang_data)
+
+    for lang_id in lang_ids:
+        data['id'] = lang_id
+        service.create(identity, data)
+    Vocabulary.index.refresh()  # Refresh the index
+    return lang_ids
