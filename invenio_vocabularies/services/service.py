@@ -168,3 +168,20 @@ class VocabulariesService(RecordService):
             results = Response(search, results)
 
         return self.result_list(self, identity, results)
+
+    def read_many(self, identity, type, ids, fields=None, **kwargs):
+        """Search for records matching the querystring filtered by ids."""
+        es_query = Q("match_all")
+        vocabulary_type = VocabularyType.query.filter_by(id=type).one()
+        vocab_id_filter = Q('term', type__id=vocabulary_type.id)
+        filters = []
+
+        for id_ in ids:
+            filters.append(Q('term', **{"id": id_}))
+        filter = Q('bool', minimum_should_match=1, should=filters)
+        filter = filter & vocab_id_filter
+        results = self._read_many(
+            identity, es_query, fields,
+            extra_filter=filter, **kwargs)
+
+        return self.result_list(self, identity, results)

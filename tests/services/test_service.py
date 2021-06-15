@@ -136,3 +136,18 @@ def test_missing_or_invalid_type(lang_data2, service, identity):
         lang_data2['props']['newkey'] = v
         pytest.raises(
             ValidationError, service.create, identity, lang_data2)
+
+
+def test_read_all_no_cache(lang_type, lang_data_many, service, identity):
+    """ read_all method should return all languages created in this scope. """
+    items = service.read_all(identity, fields=[],
+                             type='languages', cache=False)
+    assert set(lang_data_many).issubset(set([i.id for i in items._results]))
+
+
+def test_read_many(lang_type, lang_data_many, service, identity):
+    """ read_many method should return all requested languages. """
+    ids_ = ['fr', 'tr', 'es']
+    items = service.read_many(identity, type='languages', ids=ids_, fields=[])
+    item_ids = [i.id for i in items._results]
+    assert {'fr', 'tr', 'es'} == set(item_ids)
