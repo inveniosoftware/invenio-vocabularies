@@ -5,49 +5,7 @@
   "additionalProperties": false,
   "properties": {
     "$schema": {
-      "type": "string"
-    },
-    "id": {
-      "type": "string"
-    },
-    "type": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "pid_type": {
-          "type": "string"
-        }
-      }
-    },
-    "pid": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "pk": {
-          "type": "integer"
-        },
-        "pid_type": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "obj_type": {
-          "type": "string"
-        }
-      }
-    },
-    "title": {
-      "type": "object",
-      "description": "Title of vocabulary item. Key are locale codes.",
-      "patternProperties": {
-        "^[a-z]{2}$": {
-          "type": "string"
-        }
-      }
+      "$ref": "local://definitions-v1.0.0.json#/$schema"
     },
     "description": {
       "type": "object",
@@ -59,7 +17,21 @@
       }
     },
     "icon": {
-      "type": "string"
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/icon"
+    },
+    "id": {
+      "$ref": "local://definitions-v1.0.0.json#/identifier"
+    },
+    "pid": {
+      "$ref": "local://definitions-v1.0.0.json#/internal-pid"
+    },
+    "props": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "string"
+        }
+      }
     },
     "tags": {
       "type": "array",
@@ -67,10 +39,17 @@
         "type": "string"
       }
     },
-    "props": {
+    "title": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
+    },
+    "type": {
       "type": "object",
-      "patternProperties": {
-        "^.*$": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "pid_type": {
           "type": "string"
         }
       }
