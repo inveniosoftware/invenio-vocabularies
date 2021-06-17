@@ -3,7 +3,8 @@
     "dynamic": "strict",
     "properties": {
       "$schema": {
-        "type": "keyword"
+        "type": "keyword",
+        "index": "false"
       },
       "created": {
         "type": "date"
@@ -19,6 +20,32 @@
       },
       "id": {
         "type": "keyword"
+      },
+      "name": {
+        "type": "text",
+        "fields": {
+          "suggest": {
+            "type": "search_as_you_type"
+          }
+        }
+      },
+      "acronym": {
+        "type": "text",
+        "fields": {
+          "suggest": {
+            "type": "search_as_you_type"
+          }
+        }
+      },
+      "identifiers" : {
+        "properties": {
+          "identifier" : {
+            "type" : "keyword"
+          },
+          "scheme" : {
+            "type" : "keyword"
+          }
+        }
       },
       "pid": {
         "type": "object",
@@ -40,13 +67,6 @@
       "title": {
         "type": "object",
         "dynamic": true
-      },
-      "description": {
-        "type": "object",
-        "dynamic": true
-      },
-      "icon": {
-        "type": "keyword"
       }
     }
   }
