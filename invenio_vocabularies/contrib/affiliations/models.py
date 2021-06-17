@@ -6,4 +6,8 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Affiliations module."""
+"""Vocabulary affiliations."""
+
+from .affiliations import affiliation_record_type
+
+AffiliationsMetadata = affiliation_record_type.model_cls

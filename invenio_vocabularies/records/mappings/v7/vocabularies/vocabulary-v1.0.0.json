@@ -3,7 +3,8 @@
     "dynamic": "strict",
     "properties": {
       "$schema": {
-        "type": "keyword"
+        "type": "keyword",
+        "index": "false"
       },
       "created": {
         "type": "date"
@@ -71,7 +72,8 @@
         "dynamic": true
       },
       "icon": {
-        "type": "keyword"
+        "type": "keyword",
+        "index": "false"
       },
       "tags": {
         "type": "keyword"

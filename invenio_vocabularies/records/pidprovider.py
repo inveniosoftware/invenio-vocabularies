@@ -45,7 +45,7 @@ class VocabularyIdProvider(BaseProvider):
 
         # Retrieve pid type from type.
         pid_type = record.type.pid_type
-        # Retrieve pid type from type.
+        # Retrieve pid value form record.
         pid_value = record['id']
 
         # You must assign immediately.
@@ -58,4 +58,62 @@ class VocabularyIdProvider(BaseProvider):
             object_type=object_type,
             object_uuid=object_uuid,
             status=PIDStatus.REGISTERED
+        )
+
+
+class CustomVocabularyPIDProvider(BaseProvider):
+    """Affiliations PID provider."""
+
+    pid_type = None
+    """Type of persistent identifier."""
+
+    @classmethod
+    def create(cls, object_type=None, object_uuid=None, record=None, **kwargs):
+        """Create a new affiliation identifier.
+
+        Relies on the record having already a pid_value.
+
+        For more information about parameters,
+        see :meth:`invenio_pidstore.providers.base.BaseProvider.create`.
+
+        :param object_type: The object type. (Default: None.)
+        :param object_uuid: The object identifier. (Default: None).
+        :param record: An affiliation vocabulary record.
+        :param kwargs: Addtional options
+        :returns: A :class:`AffiliationProvider` instance.
+        """
+        assert record is not None, "Missing or invalid 'record'."
+        assert 'id' in record and \
+            isinstance(record['id'], str), "Missing 'id' key in record."
+
+        # Retrieve pid value form record.
+        pid_value = record['id']
+
+        # You must assign immediately.
+        assert object_uuid
+        assert object_type
+
+        return super().create(
+            pid_type=cls.pid_type,
+            pid_value=pid_value,
+            object_type=object_type,
+            object_uuid=object_uuid,
+            status=PIDStatus.REGISTERED
+        )
+
+
+class PIDProviderFactory():
+    """Vocabulary PID provider factory."""
+
+    @staticmethod
+    def create(pid_type):
+        """Returns a CustomVocabularyPIDProvider with the given PID type."""
+        provider_class_attributes = {
+            "pid_type": pid_type,
+        }
+
+        return type(
+            "CustomVocabularyPIDProvider",
+            (CustomVocabularyPIDProvider,),
+            provider_class_attributes
         )

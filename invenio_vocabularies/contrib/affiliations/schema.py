@@ -8,12 +8,18 @@
 
 """Affiliations schema."""
 
-from marshmallow import Schema, fields
+from invenio_records_resources.services.records.schema import BaseRecordSchema
+from marshmallow import EXCLUDE, RAISE, Schema, fields, validate
+from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
+from marshmallow_utils.schemas import IdentifierSchema
 
-from ...services.schema import BaseVocabularySchema
+from ...services.schema import i18n_strings
 
 
-class AffiliationSchema(BaseVocabularySchema):
+class AffiliationSchema(BaseRecordSchema):
     """Service schema for affiliations."""
 
-    pass
+    acronym = SanitizedUnicode()
+    identifiers = IdentifierSet(fields.Nested(IdentifierSchema))
+    name = SanitizedUnicode(required=True)
+    title = i18n_strings
