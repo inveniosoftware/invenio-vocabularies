@@ -10,6 +10,7 @@
 """Test the vocabulary service."""
 
 import pytest
+from invenio_cache import current_cache
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError
@@ -138,11 +139,24 @@ def test_missing_or_invalid_type(lang_data2, service, identity):
             ValidationError, service.create, identity, lang_data2)
 
 
-def test_read_all_no_cache(lang_type, lang_data_many, service, identity):
+def test_read_all_no_cache(
+    lang_type, lang_data_many, service, identity, cache
+):
     """ read_all method should return all languages created in this scope. """
-    items = service.read_all(identity, fields=[],
+    items = service.read_all(identity, fields=['id'],
                              type='languages', cache=False)
-    assert set(lang_data_many).issubset(set([i.id for i in items._results]))
+    assert set(lang_data_many).issubset(set([i["id"] for i in items]))
+    cached = current_cache.get("id")
+    assert not cached
+
+
+def test_read_all_cache(lang_type, lang_data_many, service, identity, cache):
+    """ read_all method should return all languages created in this scope. """
+    items = service.read_all(identity, fields=['id'],
+                             type='languages', cache=True)
+    assert set(lang_data_many).issubset(set([i["id"] for i in items]))
+    cached = current_cache.get("id")
+    assert cached is not None
 
 
 def test_read_many(lang_type, lang_data_many, service, identity):

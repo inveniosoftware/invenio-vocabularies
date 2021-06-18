@@ -17,6 +17,7 @@ import pytest
 from flask_principal import Identity, Need, UserNeed
 from invenio_access.permissions import any_user, system_process
 from invenio_app.factory import create_api as _create_api
+from invenio_cache import current_cache
 
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
@@ -155,3 +156,14 @@ def lang_data_many(lang_type, lic_type, lang_data, service, identity):
         service.create(identity, data)
     Vocabulary.index.refresh()  # Refresh the index
     return lang_ids
+
+
+# FIXME: https://github.com/inveniosoftware/pytest-invenio/issues/30
+# Without this, success of test depends on the tests order
+@pytest.fixture()
+def cache():
+    """Empty cache."""
+    try:
+        yield current_cache
+    finally:
+        current_cache.clear()
