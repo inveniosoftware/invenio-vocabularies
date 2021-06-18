@@ -94,23 +94,10 @@ def test_affiliation_indexing(
     assert aff.updated == example_affiliation.updated
 
 
-# def test_record_pids(app, db, lang_type, lic_type):
-#     """Test affiliation pid creation."""
-#     aff = Affiliations.create({
-#         "id": "eng", "title": {"en": "English", "da": "Engelsk"}},
-#         type=lang_type
-#     )
-#     Affiliations.pid.create(aff)
-#     assert aff.type == lang_type
-#     assert aff.pid.pid_value == "eng"
-#     assert aff.pid.pid_type == "lng"
-#     assert Affiliations.pid.resolve(("languages", "eng"))
-
-#     aff = Affiliations.create({
-#         "id": "cc-by", "title": {"en": "CC-BY", "da": "CC-BY"}
-#     }, type=lic_type)
-#     Affiliations.pid.create(aff)
-#     assert aff.type == lic_type
-#     assert aff.pid.pid_value == "cc-by"
-#     assert aff.pid.pid_type == "lic"
-#     assert Affiliations.pid.resolve(("licenses", "cc-by"))
+def test_record_pids(app, db, affiliation_full_data):
+    """Test affiliation pid creation."""
+    aff = Affiliations.create(affiliation_full_data)
+    # Affiliations.pid.create(aff)
+    assert aff.pid.pid_value == "cern"
+    assert aff.pid.pid_type == "affid"
+    assert Affiliations.pid.resolve("cern")
