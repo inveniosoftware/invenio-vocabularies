@@ -94,7 +94,7 @@ def test_affiliation_indexing(
     assert aff.updated == example_affiliation.updated
 
 
-def test_record_pids(app, db, affiliation_full_data):
+def test_affiliation_pid(app, db, affiliation_full_data):
     """Test affiliation pid creation."""
     aff = Affiliations.create(affiliation_full_data)
     # Affiliations.pid.create(aff)

@@ -38,7 +38,7 @@ def affiliation_full_data():
     """Full affiliation data."""
     return {
         "acronym": "TEST",
-        "id": "aff-1",
+        "id": "cern",
         "identifiers": [
             {"identifier": "03yrm5c26", "scheme": "ror"}
         ],
