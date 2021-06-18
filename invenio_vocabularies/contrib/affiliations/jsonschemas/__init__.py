@@ -6,10 +6,4 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Vocabulary affiliations."""
-
-
-from .affiliations import affiliation_record_type
-
-
-Affiliations = affiliation_record_type.record_cls
+"""Affiliations JSONSchemas module."""

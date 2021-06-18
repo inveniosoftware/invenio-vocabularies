@@ -23,20 +23,10 @@
           "type": "keyword"
         },
         "name": {
-          "type": "text",
-          "properties": {
-            "suggest": {
-              "type": "search_as_you_type"
-            }
-          }
+          "type": "text"
         },
         "acronym": {
-          "type": "keyword",
-          "properties": {
-            "suggest": {
-              "type": "search_as_you_type"
-            }
-          }
+          "type": "keyword"
         },
         "identifiers" : {
           "properties": {
