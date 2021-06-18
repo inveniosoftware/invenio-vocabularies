@@ -35,6 +35,7 @@ def extra_entry_points():
 
 @pytest.fixture(scope="function")
 def affiliation_full_data():
+    """Full affiliation data."""
     return {
         "acronym": "TEST",
         "id": "aff-1",

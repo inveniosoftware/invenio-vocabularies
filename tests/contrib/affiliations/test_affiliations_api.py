@@ -8,12 +8,43 @@
 
 """Affiliations API tests."""
 
+from functools import partial
 
 import pytest
+from invenio_indexer.api import RecordIndexer
+from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
 from sqlalchemy import inspect
 
 from invenio_vocabularies.contrib.affiliations.api import Affiliations
+
+
+@pytest.fixture()
+def search_get():
+    """Get a document from an index."""
+    return partial(
+        current_search_client.get, Affiliations.index._name, doc_type="_doc"
+    )
+
+
+@pytest.fixture()
+def indexer():
+    """Indexer instance with correct Record class."""
+    return RecordIndexer(
+        record_cls=Affiliations,
+        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
+    )
+
+
+@pytest.fixture()
+def example_affiliation(db, affiliation_full_data):
+    """Example affiliation."""
+    aff = Affiliations.create(affiliation_full_data)
+    # FIXME: requires using vocab/rec/sysfield/pid
+    # Affiliations.pid.create(aff)
+    aff.commit()
+    db.session.commit()
+    return aff
 
 
 def test_affiliation_schema_validation(app, db, affiliation_full_data):
@@ -44,50 +75,42 @@ def test_affiliation_schema_validation(app, db, affiliation_full_data):
         pytest.raises(SchemaValidationError, Affiliations.create, ex)
 
 
-# def test_affiliation_indexing(app, db, es, example_record, indexer, search_get):
-#     """Test indexing of an affiliation."""
-#     # Index document in ES
-#     assert indexer.index(example_record)["result"] == "created"
+def test_affiliation_indexing(
+    app, db, es, example_affiliation, indexer, search_get
+):
+    """Test indexing of an affiliation."""
+    # Index document in ES
+    assert indexer.index(example_affiliation)["result"] == "created"
 
-#     # Retrieve document from ES
-#     data = search_get(id=example_record.id)
+    # Retrieve document from ES
+    data = search_get(id=example_affiliation.id)
 
-#     # Loads the ES data and compare
-#     record = Vocabulary.loads(data["_source"])
-#     assert record == example_record
-#     assert record.id == example_record.id
-#     assert record.revision_id == example_record.revision_id
-#     assert record.created == example_record.created
-#     assert record.updated == example_record.updated
-
-#     # Check system fields - i.e reading related type object from
-#     assert record == example_record
-#     assert record.type.id == "languages"
-#     assert record.type.pid_type == "lng"
-
-#     # Check that object was recrated without hitting DB
-#     assert inspect(record.type).persistent is False
-#     Vocabulary.type.session_merge(record)
-#     assert inspect(record.type).persistent is True
+    # Loads the ES data and compare
+    aff = Affiliations.loads(data["_source"])
+    assert aff == example_affiliation
+    assert aff.id == example_affiliation.id
+    assert aff.revision_id == example_affiliation.revision_id
+    assert aff.created == example_affiliation.created
+    assert aff.updated == example_affiliation.updated
 
 
 # def test_record_pids(app, db, lang_type, lic_type):
-#     """Test record pid creation."""
-#     record = Vocabulary.create({
+#     """Test affiliation pid creation."""
+#     aff = Affiliations.create({
 #         "id": "eng", "title": {"en": "English", "da": "Engelsk"}},
 #         type=lang_type
 #     )
-#     Vocabulary.pid.create(record)
-#     assert record.type == lang_type
-#     assert record.pid.pid_value == "eng"
-#     assert record.pid.pid_type == "lng"
-#     assert Vocabulary.pid.resolve(("languages", "eng"))
+#     Affiliations.pid.create(aff)
+#     assert aff.type == lang_type
+#     assert aff.pid.pid_value == "eng"
+#     assert aff.pid.pid_type == "lng"
+#     assert Affiliations.pid.resolve(("languages", "eng"))
 
-#     record = Vocabulary.create({
+#     aff = Affiliations.create({
 #         "id": "cc-by", "title": {"en": "CC-BY", "da": "CC-BY"}
 #     }, type=lic_type)
-#     Vocabulary.pid.create(record)
-#     assert record.type == lic_type
-#     assert record.pid.pid_value == "cc-by"
-#     assert record.pid.pid_type == "lic"
-#     assert Vocabulary.pid.resolve(("licenses", "cc-by"))
+#     Affiliations.pid.create(aff)
+#     assert aff.type == lic_type
+#     assert aff.pid.pid_value == "cc-by"
+#     assert aff.pid.pid_type == "lic"
+#     assert Affiliations.pid.resolve(("licenses", "cc-by"))
