@@ -24,15 +24,15 @@ class BaseVocabularySchema(BaseRecordSchema):
     """Base schema for vocabularies."""
 
     title = i18n_strings
-    description = i18n_strings
-    icon = fields.Str(allow_none=False)
 
 
 class VocabularySchema(BaseVocabularySchema):
     """Service schema for vocabulary records.."""
 
-    tags = fields.List(SanitizedUnicode())
-    type = fields.Str(attribute='type.id', required=True)
+    description = i18n_strings
+    icon = fields.Str(allow_none=False)
     props = fields.Dict(
         allow_none=False, keys=fields.Str(), values=fields.Str()
     )
+    tags = fields.List(SanitizedUnicode())
+    type = fields.Str(attribute='type.id', required=True)
