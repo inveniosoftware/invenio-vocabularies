@@ -20,9 +20,10 @@ from invenio_records_resources.services.records.params import FilterParam, \
     SuggestQueryParser
 
 from ..records.api import Vocabulary
-from ..records.models import VocabularyType
+from ..records.models import VocabularySubtype, VocabularyType
 from .components import PIDComponent, VocabularyTypeComponent
 from .permissions import PermissionPolicy
+from .querystr import FilteredSuggestQueryParser
 from .schema import VocabularySchema
 
 
@@ -33,7 +34,8 @@ class VocabularySearchOptions(SearchOptions):
         FilterParam.factory(param='tags', field='tags'),
     ] + SearchOptions.params_interpreters_cls
 
-    suggest_parser_cls = SuggestQueryParser.factory(
+    suggest_parser_cls = FilteredSuggestQueryParser.factory(
+        filter_field='tags',
         fields=[
             'id.text^100',
             'id.text._2gram',
@@ -106,6 +108,15 @@ class VocabulariesService(RecordService):
         type_ = VocabularyType.create(id=id, pid_type=pid_type)
         db.session.commit()
         return type_
+
+    def create_subtype(self, identity, id, parent_id, label="", prefix_url=""):
+        """Create a new vocabulary subtype."""
+        self.require_permission(identity, "manage")
+        subtype = VocabularySubtype.create(
+            id=id, vocabulary_id=parent_id, label=label, prefix_url=prefix_url
+        )
+        db.session.commit()
+        return subtype
 
     def search(self, identity, params=None, es_preference=None, type=None,
                **kwargs):
