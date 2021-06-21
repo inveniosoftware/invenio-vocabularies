@@ -40,17 +40,16 @@ def indexer():
 def example_affiliation(db, affiliation_full_data):
     """Example affiliation."""
     aff = Affiliations.create(affiliation_full_data)
-    # FIXME: requires using vocab/rec/sysfield/pid
-    # Affiliations.pid.create(aff)
+    Affiliations.pid.create(aff)
     aff.commit()
     db.session.commit()
     return aff
 
 
-def test_affiliation_schema_validation(app, db, affiliation_full_data):
+def test_affiliation_schema_validation(app, db, example_affiliation):
     """Affiliation schema validation."""
     # valid data
-    aff = Affiliations.create(affiliation_full_data)
+    aff = example_affiliation
 
     assert aff.schema == "local://affiliations/affiliation-v1.0.0.json"
     assert aff.pid
@@ -94,10 +93,10 @@ def test_affiliation_indexing(
     assert aff.updated == example_affiliation.updated
 
 
-def test_affiliation_pid(app, db, affiliation_full_data):
+def test_affiliation_pid(app, db, example_affiliation):
     """Test affiliation pid creation."""
-    aff = Affiliations.create(affiliation_full_data)
-    # Affiliations.pid.create(aff)
+    aff = example_affiliation
+
     assert aff.pid.pid_value == "cern"
-    assert aff.pid.pid_type == "affid"
+    assert aff.pid.pid_type == "aff"
     assert Affiliations.pid.resolve("cern")

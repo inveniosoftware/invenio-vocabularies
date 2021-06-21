@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2021 CERN.
 # Copyright (C) 2020 Northwestern University.
 #
 # Invenio-Records-Resources is free software; you can redistribute it and/or
@@ -42,12 +42,12 @@ from copy import copy
 
 from invenio_db import db
 from invenio_pidstore.errors import PIDDoesNotExistError
-from invenio_records.systemfields import RelatedModelFieldContext
+from invenio_records_resources.records.systemfields.pid import PIDFieldContext
 
 from invenio_vocabularies.records.models import VocabularyType
 
 
-class VocabularyPIDFieldContext(RelatedModelFieldContext):
+class BaseVocabularyPIDFieldContext(PIDFieldContext):
     """PIDField context for vocabularies.
 
     This class implements the class-level methods available on a PIDField
@@ -61,6 +61,14 @@ class VocabularyPIDFieldContext(RelatedModelFieldContext):
     def delete(self, record):
         """Proxy to the field's delete method."""
         return self.field.delete(record)
+
+
+class VocabularyPIDFieldContext(BaseVocabularyPIDFieldContext):
+    """PIDField context for vocabularies.
+
+    This class implements the class-level methods available on a PIDField
+    for vocabulary records.
+    """
 
     def resolve(self, pid_value):
         """Resolve identifier.
