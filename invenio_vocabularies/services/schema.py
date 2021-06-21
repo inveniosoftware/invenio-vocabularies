@@ -31,8 +31,8 @@ class BaseVocabularySchema(BaseRecordSchema):
 class VocabularySchema(BaseVocabularySchema):
     """Service schema for vocabulary records.."""
 
-    tags = fields.List(SanitizedUnicode())
-    type = fields.Str(attribute='type.id', required=True)
     props = fields.Dict(
         allow_none=False, keys=fields.Str(), values=fields.Str()
     )
+    tags = fields.List(SanitizedUnicode())
+    type = fields.Str(attribute='type.id', required=True)

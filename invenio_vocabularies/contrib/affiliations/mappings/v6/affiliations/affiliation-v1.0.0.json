@@ -55,9 +55,18 @@
             }
           }
         },
+        "title_sort": {
+          "type": "keyword"
+        },
         "title": {
           "type": "object",
-          "dynamic": true
+          "dynamic": true,
+          "properties": {
+            "en": {
+              "type": "text",
+              "copy_to": "title_sort"
+            }
+          }
         }
       }
     }

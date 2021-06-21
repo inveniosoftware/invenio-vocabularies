@@ -11,4 +11,6 @@
 
 from .affiliations import record_type
 
-Affiliations = record_type.record_cls
+AffiliationsServiceConfig = record_type.service_config_cls
+
+AffiliationsService = record_type.service_cls

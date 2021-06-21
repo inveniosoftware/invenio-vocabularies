@@ -64,9 +64,18 @@
           }
         }
       },
+      "title_sort": {
+        "type": "keyword"
+      },
       "title": {
         "type": "object",
-        "dynamic": true
+        "dynamic": true,
+        "properties": {
+          "en": {
+            "type": "search_as_you_type",
+            "copy_to": "title_sort"
+          }
+        }
       }
     }
   }

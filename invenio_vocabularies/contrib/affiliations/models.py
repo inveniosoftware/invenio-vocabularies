@@ -8,6 +8,6 @@
 
 """Vocabulary affiliations."""
 
-from .affiliations import affiliation_record_type
+from .affiliations import record_type
 
-AffiliationsMetadata = affiliation_record_type.model_cls
+AffiliationsMetadata = record_type.model_cls
