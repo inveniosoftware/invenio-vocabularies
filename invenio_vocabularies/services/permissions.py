@@ -15,7 +15,6 @@ from invenio_records_permissions.generators import AnyUser, SystemProcess
 class PermissionPolicy(RecordPermissionPolicy):
     """Permission policy."""
 
-    # TODO: restrict to not allow create/update/delete
     can_search = [SystemProcess(), AnyUser()]
     can_read = [SystemProcess(), AnyUser()]
     can_create = [SystemProcess()]

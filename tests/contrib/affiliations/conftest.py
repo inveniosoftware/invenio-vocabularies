@@ -14,6 +14,9 @@ fixtures are available.
 
 import pytest
 
+from invenio_vocabularies.contrib.affiliations.services import \
+    AffiliationsService, AffiliationsServiceConfig
+
 
 @pytest.fixture(scope="module")
 def extra_entry_points():
@@ -48,3 +51,9 @@ def affiliation_full_data():
             "es": "Afiliacion de test"
         }
     }
+
+
+@pytest.fixture(scope='module')
+def service(app):
+    """Vocabularies service object."""
+    return AffiliationsService(config=AffiliationsServiceConfig)
