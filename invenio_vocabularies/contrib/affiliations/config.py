@@ -21,28 +21,27 @@ class AffiliationsSearchOptions(SearchOptions):
     """Search options."""
 
     suggest_parser_cls = SuggestQueryParser.factory(
-        fields=[  # TODO: Tweak with name and acronym
-            'id.text^100',
-            'id.text._2gram',
-            'id.text._3gram',
-            'title.en^5',
-            'title.en._2gram',
-            'title.en._3gram',
+        fields=[
+            'name^100',
+            'acronym^20',
+            'title.*^5',
+            'title.*._2gram',
+            'title.*._3gram',
         ],
     )
 
     sort_default = 'bestmatch'
 
-    sort_default_no_query = 'title'
+    sort_default_no_query = 'name'
 
     sort_options = {
         "bestmatch": dict(
             title=_('Best match'),
             fields=['_score'],  # ES defaults to desc on `_score` field
         ),
-        "title": dict(
-            title=_('Title'),
-            fields=['title_sort'],
+        "name": dict(
+            title=_('Name'),
+            fields=['name_sort'],
         ),
         "newest": dict(
             title=_('Newest'),

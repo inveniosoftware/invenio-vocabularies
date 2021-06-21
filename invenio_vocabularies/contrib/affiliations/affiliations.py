@@ -27,9 +27,10 @@ record_type = RecordTypeFactory(
     schema_version="1.0.0",
     schema_path="local://affiliations/affiliation-v1.0.0.json",
     # Service layer
-    endpoint_route='/affiliations',
     service_schema=AffiliationSchema,
-    search_options=None,
+    search_options=AffiliationsSearchOptions,
     service_components=service_components,
     permission_policy_cls=PermissionPolicy,
+    # Resource layer
+    endpoint_route='/affiliations',
 )

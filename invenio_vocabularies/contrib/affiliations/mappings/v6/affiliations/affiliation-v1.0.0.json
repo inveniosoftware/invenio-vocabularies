@@ -22,8 +22,12 @@
         "id": {
           "type": "keyword"
         },
+        "name_sort": {
+          "type": "keyword"
+        },
         "name": {
-          "type": "text"
+          "type": "text",
+          "copy_to": "name_sort"
         },
         "acronym": {
           "type": "keyword"
@@ -55,16 +59,12 @@
             }
           }
         },
-        "title_sort": {
-          "type": "keyword"
-        },
         "title": {
           "type": "object",
           "dynamic": true,
           "properties": {
             "en": {
-              "type": "text",
-              "copy_to": "title_sort"
+              "type": "text"
             }
           }
         }

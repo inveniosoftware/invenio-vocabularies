@@ -25,7 +25,7 @@ from invenio_vocabularies.records.models import VocabularyType
 pytest_plugins = ("celery.contrib.pytest", )
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def h():
     """Accept JSON headers."""
     return {"accept": "application/json"}

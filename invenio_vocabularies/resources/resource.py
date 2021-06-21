@@ -13,11 +13,12 @@ from functools import wraps
 import marshmallow as ma
 from flask import g
 from flask_resources import JSONSerializer, MarshmallowJSONSerializer, \
-    ResponseHandler, from_conf, request_body_parser, request_parser, \
-    resource_requestctx, response_handler
+    ResponseHandler, resource_requestctx, response_handler
 from invenio_records_resources.resources import RecordResource, \
     RecordResourceConfig, SearchRequestArgsSchema
 from invenio_records_resources.resources.records.headers import etag_headers
+from invenio_records_resources.resources.records.resource import \
+    request_data, request_headers, request_search_args, request_view_args
 from invenio_records_resources.resources.records.utils import es_preference
 from marshmallow import fields
 
@@ -66,27 +67,6 @@ class VocabulariesResourceConfig(RecordResourceConfig):
             headers=etag_headers,
         ),
     }
-
-
-#
-# Decorators
-#
-request_search_args = request_parser(
-    from_conf("request_args"), location="args"
-)
-
-request_view_args = request_parser(
-    from_conf("request_view_args"), location="view_args"
-)
-
-request_headers = request_parser(
-    {"if_match": ma.fields.Int()}, location='headers'
-)
-
-request_data = request_body_parser(
-    parsers=from_conf('request_body_parsers'),
-    default_content_type=from_conf('default_content_type')
-)
 
 
 #

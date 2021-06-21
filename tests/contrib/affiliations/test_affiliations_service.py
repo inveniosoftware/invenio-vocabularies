@@ -17,7 +17,7 @@ from sqlalchemy.exc import IntegrityError
 from invenio_vocabularies.contrib.affiliations.api import Affiliations
 
 
-def test_simple_flow(db, service, identity, affiliation_full_data):
+def test_simple_flow(app, db, service, identity, affiliation_full_data):
     """Test a simple vocabulary service flow."""
     # Create it
     item = service.create(identity, affiliation_full_data)
@@ -64,14 +64,16 @@ def test_simple_flow(db, service, identity, affiliation_full_data):
     assert res.total == 0
 
 
-def test_pid_already_registered(db, service, identity, affiliation_full_data):
+def test_pid_already_registered(
+    app, db, service, identity, affiliation_full_data
+):
     """Recreating a record with same id should fail."""
     service.create(identity, affiliation_full_data)
     pytest.raises(
         PIDAlreadyExists, service.create, identity, affiliation_full_data)
 
 
-def test_extra_fields(db, service, identity, affiliation_full_data):
+def test_extra_fields(app, db, service, identity, affiliation_full_data):
     """Extra fields in data should fail."""
     affiliation_full_data['invalid'] = 1
     pytest.raises(
