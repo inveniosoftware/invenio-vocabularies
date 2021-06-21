@@ -14,6 +14,8 @@ fixtures are available.
 
 import pytest
 
+from invenio_vocabularies.contrib.affiliations.resources import \
+    AffiliationsResource, AffiliationsResourceConfig
 from invenio_vocabularies.contrib.affiliations.services import \
     AffiliationsService, AffiliationsServiceConfig
 
@@ -54,6 +56,24 @@ def affiliation_full_data():
 
 
 @pytest.fixture(scope='module')
-def service(app):
-    """Vocabularies service object."""
+def service():
+    """Affiliations service object."""
     return AffiliationsService(config=AffiliationsServiceConfig)
+
+
+@pytest.fixture(scope="module")
+def resource(service):
+    """Affiliations resource object."""
+    return AffiliationsResource(AffiliationsResourceConfig, service)
+
+
+@pytest.fixture(scope="module")
+def base_app(base_app, resource, service):
+    """Application factory fixture.
+
+    Registers affiliations' resource and service.
+    """
+    base_app.register_blueprint(resource.as_blueprint())
+    registry = base_app.extensions['invenio-records-resources'].registry
+    registry.register(service, service_id='affiliations-service')
+    yield base_app

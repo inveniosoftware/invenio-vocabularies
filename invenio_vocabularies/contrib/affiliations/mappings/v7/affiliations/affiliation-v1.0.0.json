@@ -21,8 +21,12 @@
       "id": {
         "type": "keyword"
       },
+      "name_sort": {
+        "type": "keyword"
+      },
       "name": {
         "type": "text",
+        "copy_to": "name_sort",
         "fields": {
           "suggest": {
             "type": "search_as_you_type"
@@ -64,16 +68,12 @@
           }
         }
       },
-      "title_sort": {
-        "type": "keyword"
-      },
       "title": {
         "type": "object",
         "dynamic": true,
         "properties": {
           "en": {
-            "type": "search_as_you_type",
-            "copy_to": "title_sort"
+            "type": "search_as_you_type"
           }
         }
       }
