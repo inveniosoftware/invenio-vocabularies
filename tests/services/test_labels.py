@@ -7,7 +7,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Test the vocabulary service facet labels."""
+"""Test the vocabulary service facets."""
 
 import pytest
 
