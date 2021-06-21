@@ -53,3 +53,32 @@ class VocabularyMetadata(db.Model, RecordMetadataBase):
     """Model for vocabulary metadata."""
 
     __tablename__ = "vocabularies_metadata"
+
+
+class VocabularySubtype(db.Model):
+    """Vocabulary subtype type model.
+
+    Current use case is for subject types.
+    """
+
+    __tablename__ = "vocabularies_subtypes"
+
+    id = db.Column(db.String, primary_key=True)
+    # pid_type = db.Column(db.String, unique=True)
+    vocabulary_id = db.Column(
+        db.String,
+        db.ForeignKey(VocabularyType.id, ondelete='CASCADE'),
+        nullable=False,
+    )
+    label = db.Column(db.String)
+    prefix_url = db.Column(db.String)
+
+    """Any extra metadata."""
+
+    @classmethod
+    def create(cls, **data):
+        """Create a new vocabulary subtype."""
+        with db.session.begin_nested():
+            obj = cls(**data)
+            db.session.add(obj)
+        return obj

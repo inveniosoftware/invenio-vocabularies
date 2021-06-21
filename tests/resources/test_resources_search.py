@@ -107,3 +107,78 @@ def test_tags_filter(client, example_records, h, prefix):
     res = client.get(f'{prefix}?tags=recommended', headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
+
+
+@pytest.fixture(scope='module')
+def example_subjects(database, identity, service):
+    """Example subjects for records."""
+    service.create_type(identity, 'subjects', 'sub')
+    service.create_subtype(
+        identity, 'mesh', 'subjects',
+        label="MeSH", prefix_url="http://id.nlm.nih.gov/mesh/"
+    )
+    subjects = [
+        {
+            'id': 'XYZ1234',
+            'title': {'en': 'Abdoctor'},
+            'type': 'subjects',
+            'tags': ['my-custom-subject']
+        },
+        {
+            "id": "D000001",
+            'title': {'en': 'Calcimycin'},
+            'type': 'subjects',
+            'tags': ['mesh']
+        },
+        {
+            'id': 'D000005',
+            'title': {'en': 'Abdomen'},
+            'type': 'subjects',
+            'tags': ['mesh']
+        },
+        {
+            'id': 'D000006',
+            'title': {'en': 'Abdomen, Acute'},
+            'type': 'subjects',
+            'tags': ['mesh']
+        },
+        {
+            'id': 'D000007',
+            'title': {'en': 'Abdominal Injuries'},
+            'type': 'subjects',
+            'tags': ['mesh']
+        },
+        {
+            'id': '954514',
+            'title': {'en': 'Abdominal thrust maneuver'},
+            'type': 'subjects',
+            'tags': ['fast']
+        },
+    ]
+    records = [service.create(identity, s) for s in subjects]
+    Vocabulary.index.refresh()
+    return records
+
+
+def test_query_suggest(client, example_subjects, h):
+    """Test FilteredSuggestParam."""
+    prefix = '/vocabularies/subjects'
+
+    # No prefix
+    res = client.get(f'{prefix}?suggest=abdo', headers=h)
+    assert res.json["hits"]["total"] == 5
+
+    # Single prefix
+    res = client.get(f'{prefix}?suggest=mesh:abdo', headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 3, res.json
+
+    # Multiple prefixes
+    res = client.get(f'{prefix}?suggest=mesh,fast:abdo', headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 4, res.json
+
+    # Ignore non existing prefix
+    res = client.get(f'{prefix}?suggest=mesh,foo:abdo', headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 3, res.json

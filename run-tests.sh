@@ -22,6 +22,6 @@ trap cleanup EXIT
 python -m check_manifest --ignore ".*-requirements.txt"
 # python -m sphinx.cmd.build -qnNW docs docs/_build/html
 eval "$(docker-services-cli up --db ${DB:-postgresql} --search ${ES:-elasticsearch} --mq ${CACHE:-redis} --env)"
-python -m pytest
+python -m pytest $@
 tests_exit_code=$?
 exit "$tests_exit_code"
