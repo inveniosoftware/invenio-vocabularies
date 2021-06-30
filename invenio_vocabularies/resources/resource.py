@@ -52,7 +52,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
         "type": ma.fields.Str(required=True),
     }
 
-    request_args = VocabularySearchRequestArgsSchema
+    request_search_args = VocabularySearchRequestArgsSchema
 
     response_handlers = {
         "application/json": ResponseHandler(
