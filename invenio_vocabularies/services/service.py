@@ -140,7 +140,7 @@ class VocabulariesService(RecordService):
 
     def read_all(self, identity, fields, type, cache=True, **kwargs):
         """Search for records matching the querystring."""
-        cache_key = "-".join(fields)
+        cache_key = type + "_" + "-".join(fields)
         results = current_cache.get(cache_key)
         es_query = Q("match_all")
 

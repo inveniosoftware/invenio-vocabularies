@@ -155,7 +155,7 @@ def test_read_all_cache(lang_type, lang_data_many, service, identity, cache):
     items = service.read_all(identity, fields=['id'],
                              type='languages', cache=True)
     assert set(lang_data_many).issubset(set([i["id"] for i in items]))
-    cached = current_cache.get("id")
+    cached = current_cache.get("languages_id")
     assert cached is not None
 
 
