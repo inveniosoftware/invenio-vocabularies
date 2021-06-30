@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2021 TU Wien.
+# Copyright (C) 2021 Northwestern University.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -37,8 +38,8 @@ def test_alembic(app, database):
     assert 'vocabularies_metadata' in tables
     assert 'vocabularies_types' in tables
     assert 'vocabularies_subtypes' in tables
-    # NOTE: The below was created 5 months ago and context unclear, so
-    #       wasn't touched.
+    # The below was created 5 months ago and will be revisited in different
+    # PR, so left untouched.
     assert 'subject_metadata' in tables
 
     # Check that Alembic agrees that there's no further tables to create.

@@ -64,7 +64,6 @@ class VocabularySubtype(db.Model):
     __tablename__ = "vocabularies_subtypes"
 
     id = db.Column(db.String, primary_key=True)
-    # pid_type = db.Column(db.String, unique=True)
     vocabulary_id = db.Column(
         db.String,
         db.ForeignKey(VocabularyType.id, ondelete='CASCADE'),
@@ -72,12 +71,15 @@ class VocabularySubtype(db.Model):
     )
     label = db.Column(db.String)
     prefix_url = db.Column(db.String)
-
-    """Any extra metadata."""
+    """Any extra metadata is added as columns."""
 
     @classmethod
     def create(cls, **data):
         """Create a new vocabulary subtype."""
+        banned = [",", ":"]
+        for b in banned:
+            assert b not in data["id"], f"No '{b}' allowed in VocabularySubtype.id"  # noqa
+
         with db.session.begin_nested():
             obj = cls(**data)
             db.session.add(obj)
