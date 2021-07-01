@@ -30,7 +30,7 @@
           "copy_to": "name_sort"
         },
         "acronym": {
-          "type": "keyword"
+          "type": "text"
         },
         "identifiers" : {
           "properties": {
