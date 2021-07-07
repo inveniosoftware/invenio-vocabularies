@@ -14,16 +14,15 @@ import pytest
 from invenio_indexer.api import RecordIndexer
 from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
-from sqlalchemy import inspect
 
-from invenio_vocabularies.contrib.affiliations.api import Affiliations
+from invenio_vocabularies.contrib.affiliations.api import Affiliation
 
 
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
     return partial(
-        current_search_client.get, Affiliations.index._name, doc_type="_doc"
+        current_search_client.get, Affiliation.index._name, doc_type="_doc"
     )
 
 
@@ -31,7 +30,7 @@ def search_get():
 def indexer():
     """Indexer instance with correct Record class."""
     return RecordIndexer(
-        record_cls=Affiliations,
+        record_cls=Affiliation,
         record_to_index=lambda r: (r.__class__.index._name, "_doc"),
     )
 
@@ -39,8 +38,8 @@ def indexer():
 @pytest.fixture()
 def example_affiliation(db, affiliation_full_data):
     """Example affiliation."""
-    aff = Affiliations.create(affiliation_full_data)
-    Affiliations.pid.create(aff)
+    aff = Affiliation.create(affiliation_full_data)
+    Affiliation.pid.create(aff)
     aff.commit()
     db.session.commit()
     return aff
@@ -71,7 +70,7 @@ def test_affiliation_schema_validation(app, db, example_affiliation):
     ]
 
     for ex in examples:
-        pytest.raises(SchemaValidationError, Affiliations.create, ex)
+        pytest.raises(SchemaValidationError, Affiliation.create, ex)
 
 
 def test_affiliation_indexing(
@@ -85,7 +84,7 @@ def test_affiliation_indexing(
     data = search_get(id=example_affiliation.id)
 
     # Loads the ES data and compare
-    aff = Affiliations.loads(data["_source"])
+    aff = Affiliation.loads(data["_source"])
     assert aff == example_affiliation
     assert aff.id == example_affiliation.id
     assert aff.revision_id == example_affiliation.revision_id
@@ -99,4 +98,4 @@ def test_affiliation_pid(app, db, example_affiliation):
 
     assert aff.pid.pid_value == "cern"
     assert aff.pid.pid_type == "aff"
-    assert Affiliations.pid.resolve("cern")
+    assert Affiliation.pid.resolve("cern")

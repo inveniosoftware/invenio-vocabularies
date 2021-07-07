@@ -7,8 +7,11 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Subject API."""
+"""Test the affiliation vocabulary resources."""
 
 from .subjects import record_type
 
-Subject = record_type.record_cls
+SubjectsResourceConfig = record_type.resource_config_cls
+SubjectsResourceConfig.routes["item"] = "/<path:pid_value>"
+
+SubjectsResource = record_type.resource_cls

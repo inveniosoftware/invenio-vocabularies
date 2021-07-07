@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 CERN.
+# Copyright (C) 2021 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,6 +9,6 @@
 
 """Vocabulary subjects."""
 
-from .subjects import subject_record_type
+from .subjects import record_type
 
-SubjectsMetadata = subject_record_type.model_cls
+SubjectsMetadata = record_type.model_cls

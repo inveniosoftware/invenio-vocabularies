@@ -11,4 +11,4 @@
 
 from .affiliations import record_type
 
-Affiliations = record_type.record_cls
+Affiliation = record_type.record_cls

@@ -14,7 +14,7 @@ from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError
 
-from invenio_vocabularies.contrib.affiliations.api import Affiliations
+from invenio_vocabularies.contrib.affiliations.api import Affiliation
 
 
 def test_simple_flow(app, db, service, identity, affiliation_full_data):
@@ -33,7 +33,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
     assert item.data == read_item.data
 
     # Refresh index to make changes live.
-    Affiliations.index.refresh()
+    Affiliation.index.refresh()
 
     # Search it
     res = service.search(
@@ -52,7 +52,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
     assert service.delete(id_, identity)
 
     # Refresh to make changes live
-    Affiliations.index.refresh()
+    Affiliation.index.refresh()
 
     # Fail to retrieve it
     # - db

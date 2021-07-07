@@ -1,18 +1,53 @@
 {
   "mappings": {
     "_doc": {
+      "dynamic": "strict",
       "properties": {
-        "term": {
+        "$schema": {
+          "type": "keyword",
+          "index": "false"
+        },
+        "created": {
+          "type": "date"
+        },
+        "updated": {
+          "type": "date"
+        },
+        "uuid": {
           "type": "keyword"
         },
-        "identifier": {
+        "version_id": {
+          "type": "integer"
+        },
+        "id": {
           "type": "keyword"
         },
         "scheme": {
           "type": "keyword"
         },
-        "title": {
-          "type": "text"
+        "subject": {
+          "type": "text",
+          "copy_to": "subject_sort"
+        },
+        "subject_sort": {
+          "type": "keyword"
+        },
+        "pid": {
+          "type": "object",
+          "properties": {
+            "pk": {
+              "type": "integer"
+            },
+            "pid_type": {
+              "type": "keyword"
+            },
+            "obj_type": {
+              "type": "keyword"
+            },
+            "status": {
+              "type": "keyword"
+            }
+          }
         }
       }
     }

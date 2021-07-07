@@ -10,7 +10,7 @@
 
 from invenio_records_resources.factories.factory import RecordTypeFactory
 
-from ...records.pidprovider import PIDProviderFactory, VocabularyIdProvider
+from ...records.pidprovider import PIDProviderFactory
 from ...records.systemfields import BaseVocabularyPIDFieldContext
 from ...services.permissions import PermissionPolicy
 from .config import AffiliationsSearchOptions, service_components
