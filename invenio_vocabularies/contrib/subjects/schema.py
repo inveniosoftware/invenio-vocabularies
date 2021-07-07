@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2021 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,35 +9,18 @@
 
 """Subjects schema."""
 
-from marshmallow import EXCLUDE, INCLUDE, Schema, fields, validate
-from marshmallow_utils.fields import Links
+from marshmallow import fields
+from marshmallow_utils.fields import SanitizedUnicode
+
+from ...services.schema import BaseVocabularySchema
 
 
-class MetadataSchema(Schema):
-    """Basic metadata schema class."""
+class SubjectSchema(BaseVocabularySchema):
+    """Service schema for subjects."""
 
-    class Meta:
-        """Meta class to accept unknown fields."""
-
-        unknown = INCLUDE
-
-    scheme = fields.Str(required=True, validate=validate.Length(min=3))
-    term = fields.Str(required=True, validate=validate.Length(min=3))
-    identifier = fields.Str(required=True, validate=validate.Length(min=3))
-    title = fields.Str(required=True, validate=validate.Length(min=3))
-
-
-class SubjectSchema(Schema):
-    """Schema for records v1 in JSON."""
-
-    class Meta:
-        """Meta class to reject unknown fields."""
-
-        unknown = EXCLUDE
-
-    id = fields.Str()
-    metadata = fields.Nested(MetadataSchema)
-    created = fields.Str()
-    updated = fields.Str()
-    links = Links()
-    revision_id = fields.Integer(dump_only=True)
+    # id in BaseRecordSchema is not required, but I don't see why it shouldn't
+    # be, while scheme and subject are required. So I am making it required
+    # here.
+    id = SanitizedUnicode(required=True)
+    scheme = SanitizedUnicode(required=True)
+    subject = SanitizedUnicode(required=True)

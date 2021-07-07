@@ -14,7 +14,7 @@ from copy import deepcopy
 
 import pytest
 
-from invenio_vocabularies.contrib.affiliations.api import Affiliations
+from invenio_vocabularies.contrib.affiliations.api import Affiliation
 
 
 @pytest.fixture(scope="module")
@@ -29,7 +29,7 @@ def example_affiliation(
 ):
     """Example affiliation."""
     aff = service.create(identity, affiliation_full_data)
-    Affiliations.index.refresh()  # Refresh the index
+    Affiliation.index.refresh()  # Refresh the index
 
     return aff
 
@@ -37,7 +37,7 @@ def example_affiliation(
 def test_affiliations_invalid(client, h, prefix, affiliation_full_data):
     """Test invalid type."""
     # invalid type
-    res = client.get("{prefix}/invalid}", headers=h)
+    res = client.get(f"{prefix}/invalid", headers=h)
     assert res.status_code == 404
 
 
@@ -123,7 +123,7 @@ def _create_affiliations(service, identity):
     for aff in affiliations:
         service.create(identity, aff)
 
-    Affiliations.index.refresh()  # Refresh the index
+    Affiliation.index.refresh()  # Refresh the index
 
 
 def test_affiliations_suggest_sort(

@@ -7,8 +7,11 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Subject API."""
+"""Subjects services."""
+
 
 from .subjects import record_type
 
-Subject = record_type.record_cls
+SubjectsServiceConfig = record_type.service_config_cls
+
+SubjectsService = record_type.service_cls

@@ -18,7 +18,8 @@ from flask_principal import Identity
 from invenio_access import any_user
 from invenio_db import db
 
-from invenio_vocabularies.contrib.subjects.subjects import subject_record_type
+from invenio_vocabularies.contrib.subjects.subjects import \
+    record_type as subject_record_type
 from invenio_vocabularies.records.models import VocabularyType
 from invenio_vocabularies.services.service import VocabulariesService
 

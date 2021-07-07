@@ -8,8 +8,7 @@
 
 """Affiliations schema."""
 
-from invenio_records_resources.services.records.schema import BaseRecordSchema
-from marshmallow import EXCLUDE, RAISE, Schema, fields, validate
+from marshmallow import fields
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 

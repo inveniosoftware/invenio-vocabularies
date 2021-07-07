@@ -1,22 +1,27 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "local://subjects/subject-v1.0.0.json",
   "description": "Subjects from specific vocabularies.",
+  "type": "object",
+  "additionalProperties": false,
   "properties": {
-    "identifier": {
-      "description": "Subjects term identifier.",
-      "type": "string"
+    "$schema": {
+      "$ref": "local://definitions-v1.0.0.json#/$schema"
+    },
+    "id": {
+      "description": "URI or classification code as identifier - globally unique among all subject schemes.",
+      "$ref": "local://definitions-v1.0.0.json#/identifier"
+    },
+    "pid": {
+      "$ref": "local://definitions-v1.0.0.json#/internal-pid"
     },
     "scheme": {
-      "description": "Identifier scheme.",
-      "type": "string"
+      "description": "Identifier of the subject scheme.",
+      "$ref": "local://definitions-v1.0.0.json#/identifier"
     },
-    "term": {
-      "description": "Subject term value.",
-      "type": "string"
-    },
-    "title": {
-      "description": "Subject title.",
+    "subject": {
+      "description": "Human readable label.",
       "type": "string"
     }
-  },
-  "type": "object"
+  }
 }

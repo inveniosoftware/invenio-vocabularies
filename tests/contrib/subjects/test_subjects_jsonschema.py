@@ -1,29 +1,29 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 CERN.
+# Copyright (C) 2021 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Affiliations JSONSchema tests."""
+"""Subject JSONSchema tests."""
 
 import pytest
 from jsonschema.exceptions import ValidationError
 
-from invenio_vocabularies.contrib.affiliations.api import Affiliation
+from invenio_vocabularies.contrib.subjects.api import Subject
 
 
 @pytest.fixture(scope="module")
 def schema():
     """Returns the schema location."""
-    return "local://affiliations/affiliation-v1.0.0.json"
+    return "local://subjects/subject-v1.0.0.json"
 
 
 def validates(data):
-    """Validates affiliation data."""
-    Affiliation(data).validate()
-
+    """Validates subject data."""
+    Subject(data).validate()
     return True
 
 
@@ -36,22 +36,15 @@ def fails(data):
 def test_valid_full(appctx, schema):
     data = {
         "$schema": schema,
-        "acronym": "TEST",
-        "id": "aff-1",
-        "identifiers": [
-            {"identifier": "03yrm5c26", "scheme": "ror"}
-        ],
-        "name": "Test affiliation",
+        "id": "https://id.nlm.nih.gov/mesh/D000001",
         "pid": {
             "pk": 1,
             "status": "R",
-            "pid_type": "affid",
-            "obj_type": "aff"
+            "pid_type": "subid",
+            "obj_type": "sub"
         },
-        "title": {
-            "en": "Test affiliation",
-            "es": "Afiliacion de test"
-        }
+        "scheme": "MeSH",
+        "subject": "Calcimycin",
     }
 
     assert validates(data)
@@ -66,14 +59,10 @@ def test_valid_empty(appctx, schema):
     assert validates(data)
 
 
-# only acronym and name are defined by the affiliation schema
-# the rest are inherited and should be tested elsewhere
-
-
-def test_fails_acronym(appctx, schema):
+def test_fails_scheme(appctx, schema):
     data = {
         "$schema": schema,
-        "acronym": 1
+        "scheme": 1
     }
 
     assert fails(data)
@@ -82,7 +71,7 @@ def test_fails_acronym(appctx, schema):
 def test_fails_name(appctx, schema):
     data = {
         "$schema": schema,
-        "name": 1
+        "subject": 1
     }
 
     assert fails(data)
