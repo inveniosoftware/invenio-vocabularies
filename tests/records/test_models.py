@@ -11,29 +11,23 @@
 
 import pytest
 
-from invenio_vocabularies.records.models import VocabularySubtype, \
-    VocabularyType
+from invenio_vocabularies.records.models import VocabularyScheme
 
 
 #
 # Tests
 #
 def test_well_formed_subtype(database):
-    VocabularyType.create(id='subjects', pid_type='sub')
-
     with pytest.raises(AssertionError):
-        VocabularySubtype.create(
-            id='foo,bar,baz', vocabulary_id='subjects',
-            label="Foo Bar Baz", prefix_url=""
+        VocabularyScheme.create(
+            id='foo,bar,baz', parent_id='subjects', name="Foo Bar Baz", uri=""
         )
 
     with pytest.raises(AssertionError):
-        VocabularySubtype.create(
-            id='foo:bar', vocabulary_id='subjects',
-            label="Foo: Bar", prefix_url=""
+        VocabularyScheme.create(
+            id='foo:bar', parent_id='subjects', name="Foo: Bar", uri=""
         )
 
-    assert VocabularySubtype.create(
-        id='foo', vocabulary_id='subjects',
-        label="Foo", prefix_url=""
+    assert VocabularyScheme.create(
+        id='foo', parent_id='subjects', name="Foo", uri=""
     )

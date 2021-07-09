@@ -55,30 +55,31 @@ class VocabularyMetadata(db.Model, RecordMetadataBase):
     __tablename__ = "vocabularies_metadata"
 
 
-class VocabularySubtype(db.Model):
-    """Vocabulary subtype type model.
+class VocabularyScheme(db.Model):
+    """Vocabulary scheme model.
 
-    Current use case is for subject types.
+    This table stores the metadata for schemes (subtypes) of VocabularyType
+    or separate specific vocabularies.
+
+    It is only used to store metadata for subject schemes for now.
+    But we might store affiliations's schemes or other schemes later.
     """
 
-    __tablename__ = "vocabularies_subtypes"
+    __tablename__ = "vocabularies_schemes"
 
     id = db.Column(db.String, primary_key=True)
-    vocabulary_id = db.Column(
-        db.String,
-        db.ForeignKey(VocabularyType.id, ondelete='CASCADE'),
-        nullable=False,
-    )
-    label = db.Column(db.String)
-    prefix_url = db.Column(db.String)
-    """Any extra metadata is added as columns."""
+    # This is e.g. `subjects`, 'affiliations', ...
+    parent_id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String)
+    uri = db.Column(db.String)
+    # Any extra metadata is added as columns.
 
     @classmethod
     def create(cls, **data):
         """Create a new vocabulary subtype."""
         banned = [",", ":"]
         for b in banned:
-            assert b not in data["id"], f"No '{b}' allowed in VocabularySubtype.id"  # noqa
+            assert b not in data["id"], f"No '{b}' allowed in VocabularyScheme.id"  # noqa
 
         with db.session.begin_nested():
             obj = cls(**data)

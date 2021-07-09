@@ -20,8 +20,6 @@ class InvenioVocabularies(object):
         """Extension initialization."""
         self.resource = None
         self.service = None
-        self.subjects_service = None
-        self.subjects_resource = None
         if app:
             self.init_app(app)
 
@@ -33,6 +31,7 @@ class InvenioVocabularies(object):
 
     def init_resource(self, app):
         """Initialize vocabulary resources."""
+        # Generic Vocabularies
         self.service = VocabulariesService(
             config=app.config["VOCABULARIES_SERVICE_CONFIG"],
         )

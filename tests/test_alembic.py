@@ -37,10 +37,11 @@ def test_alembic(app, database):
     tables = [x.name for x in db.get_tables_for_bind()]
     assert 'vocabularies_metadata' in tables
     assert 'vocabularies_types' in tables
-    assert 'vocabularies_subtypes' in tables
-    # The below was created 5 months ago and will be revisited in different
-    # PR, so left untouched.
+    assert 'vocabularies_schemes' in tables
+
+    # Specific vocabularies models
     assert 'subject_metadata' in tables
+    assert 'affiliation_metadata' in tables
 
     # Check that Alembic agrees that there's no further tables to create.
     assert_alembic(ext.alembic, ['mock_metadata'])
