@@ -13,4 +13,4 @@ This file is imported by ``invenio_vocabularies.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = "0.7.6"
+__version__ = "0.7.7"
