@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020 CERN.
+# Copyright (C) 2021 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -110,6 +111,9 @@ setup(
         ],
         "invenio_search.mappings": [
             "vocabularies = invenio_vocabularies.records.mappings",
+        ],
+        'invenio_i18n.translations': [
+            'invenio_vocabularies = invenio_vocabularies',
         ],
     },
     extras_require=extras_require,
