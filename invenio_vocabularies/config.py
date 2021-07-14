@@ -16,3 +16,11 @@ VOCABULARIES_RESOURCE_CONFIG = VocabulariesResourceConfig
 
 VOCABULARIES_SERVICE_CONFIG = VocabulariesServiceConfig
 """Configure the service."""
+
+VOCABULARIES_AFFILIATION_SCHEMES = [
+    ("grid", lambda x: True),
+    "gnd",
+    "isni",
+    "ror"
+]
+"""Affiliations allowed identifier schemes."""

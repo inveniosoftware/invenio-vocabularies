@@ -14,12 +14,12 @@ from marshmallow import ValidationError
 from invenio_vocabularies.contrib.affiliations.schema import AffiliationSchema
 
 
-def test_valid_full(affiliation_full_data):
+def test_valid_full(app, affiliation_full_data):
     loaded = AffiliationSchema().load(affiliation_full_data)
     assert affiliation_full_data == loaded
 
 
-def test_valid_minimal():
+def test_valid_minimal(app):
     data = {
         "name": "Test affiliation",
     }
@@ -27,7 +27,7 @@ def test_valid_minimal():
     assert data == loaded
 
 
-def test_invalid_no_name():
+def test_invalid_no_name(app):
     invalid = {
         "acronym": "TEST",
         "id": "aff-1",

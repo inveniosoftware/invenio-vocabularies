@@ -8,13 +8,20 @@
 
 """Vocabulary affiliations configuration."""
 
+import idutils
+from flask import current_app
 from flask_babelex import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import \
     SuggestQueryParser
+from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
+
+affiliation_schemes = LocalProxy(
+     lambda: current_app.config["VOCABULARIES_AFFILIATION_SCHEMES"]
+)
 
 
 class AffiliationsSearchOptions(SearchOptions):
