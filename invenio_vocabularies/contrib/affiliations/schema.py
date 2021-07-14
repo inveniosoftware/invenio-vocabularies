@@ -8,16 +8,25 @@
 
 """Affiliations schema."""
 
+from functools import partial
+
 from marshmallow import fields
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import BaseVocabularySchema
+from .config import affiliation_schemes
 
 
 class AffiliationSchema(BaseVocabularySchema):
     """Service schema for affiliations."""
 
     acronym = SanitizedUnicode()
-    identifiers = IdentifierSet(fields.Nested(IdentifierSchema))
+    identifiers = IdentifierSet(fields.Nested(
+        partial(
+            IdentifierSchema,
+            allowed_schemes=affiliation_schemes,
+            identifier_required=False
+        )
+    ))
     name = SanitizedUnicode(required=True)
