@@ -139,9 +139,17 @@ class VocabulariesService(RecordService):
             links_item_tpl=self.links_item_tpl,
         )
 
-    def read_all(self, identity, fields, type, cache=True, **kwargs):
+    def read_all(
+            self,
+            identity,
+            fields,
+            type,
+            cache=True,
+            extra_filter='',
+            **kwargs
+    ):
         """Search for records matching the querystring."""
-        cache_key = type + "_" + "-".join(fields)
+        cache_key = type + "_" + str(extra_filter) + "_" + "-".join(fields)
         results = current_cache.get(cache_key)
         es_query = Q("match_all")
 
@@ -149,7 +157,8 @@ class VocabulariesService(RecordService):
             # If not found, NoResultFound is raised (caught by the resource).
             vocabulary_type = VocabularyType.query.filter_by(id=type).one()
             vocab_id_filter = Q('term', type__id=vocabulary_type.id)
-
+            if extra_filter:
+                vocab_id_filter = vocab_id_filter & extra_filter
             results = self._read_many(
                 identity, es_query, fields,
                 extra_filter=vocab_id_filter, **kwargs)
