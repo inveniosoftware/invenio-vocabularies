@@ -137,29 +137,4 @@ def vocabularies():
 @with_appcontext
 def load(vocabulary_types):
     """Index CSV-based vocabularies in Elasticsearch."""
-    click.echo("creating vocabularies...", color="blue")
-
-    for vocabulary_type in vocabulary_types:
-        vocabulary = get_available_vocabularies()[vocabulary_type]
-        if VocabularyType.query.filter_by(name=vocabulary_type).count() > 0:
-            click.echo(
-                "vocabulary type {} already exists, skipping".format(
-                    vocabulary_type
-                ),
-                color="red",
-            )
-            continue
-
-        click.echo(
-            "creating vocabulary type {}...".format(vocabulary_type),
-            color="blue",
-        )
-
-        fun_create_vocabulary = vocabulary.get("specific", _create_vocabulary)
-        items = fun_create_vocabulary(vocabulary_type, vocabulary["path"])
-
-        click.echo(
-            "created {} vocabulary items successfully".format(len(items)),
-            color="green",
-        )
-    click.echo("vocabularies created", color="green")
+    click.secho("Temporarily disabled", color="red")
