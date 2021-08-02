@@ -9,10 +9,12 @@
 
 """Subjects module."""
 
+from .facets import SubjectsLabels
 from .resources import SubjectsResource, SubjectsResourceConfig
 from .services import SubjectsService, SubjectsServiceConfig
 
 __all__ = [
+    "SubjectsLabels",
     "SubjectsResource",
     "SubjectsResourceConfig",
     "SubjectsService",
