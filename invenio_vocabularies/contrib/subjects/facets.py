@@ -15,8 +15,9 @@ class SubjectsLabels:
     def __call__(self, ids):
         """Return the mapping when evaluated.
 
-        For subjects, the ids received are actually human-readable and coming
-        from subject and scheme. So we use them as-is!
+        In this case, the ids received are actually the vocabulary `scheme`
+        (top-level) and `subject` (nested). And since they are already
+        human-readable, we keep them as-is.
         """
         unique_ids = list(set(ids))
         return {id_: id_ for id_ in unique_ids}
