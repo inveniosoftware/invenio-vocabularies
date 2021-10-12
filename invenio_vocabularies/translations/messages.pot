@@ -7,9 +7,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-vocabularies 0.7.7\n"
+"Project-Id-Version: invenio-vocabularies 0.9.0\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2021-07-13 11:06+0200\n"
+"POT-Creation-Date: 2021-10-12 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,26 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:39
+#: invenio_vocabularies/contrib/affiliations/config.py:46
 #: invenio_vocabularies/contrib/subjects/config.py:38
-#: invenio_vocabularies/services/service.py:55
+#: invenio_vocabularies/services/service.py:54
 msgid "Best match"
 msgstr ""
 
-#: invenio_vocabularies/contrib/affiliations/config.py:43
+#: invenio_vocabularies/contrib/affiliations/config.py:50
 #: invenio_vocabularies/contrib/subjects/config.py:42
 msgid "Name"
 msgstr ""
 
-#: invenio_vocabularies/contrib/affiliations/config.py:47
+#: invenio_vocabularies/contrib/affiliations/config.py:54
 #: invenio_vocabularies/contrib/subjects/config.py:46
-#: invenio_vocabularies/services/service.py:63
+#: invenio_vocabularies/services/service.py:62
 msgid "Newest"
 msgstr ""
 
-#: invenio_vocabularies/contrib/affiliations/config.py:51
+#: invenio_vocabularies/contrib/affiliations/config.py:58
 #: invenio_vocabularies/contrib/subjects/config.py:50
-#: invenio_vocabularies/services/service.py:67
+#: invenio_vocabularies/services/service.py:66
 msgid "Oldest"
 msgstr ""
 
@@ -45,7 +45,7 @@ msgstr ""
 msgid "The vocabulary type does not exists."
 msgstr ""
 
-#: invenio_vocabularies/services/service.py:59
+#: invenio_vocabularies/services/service.py:58
 msgid "Title"
 msgstr ""
 
