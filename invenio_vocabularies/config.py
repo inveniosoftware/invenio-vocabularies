@@ -10,6 +10,7 @@
 """Vocabularies configuration."""
 
 import idutils
+from flask_babelex import lazy_gettext as _
 
 from .resources.resource import VocabulariesResourceConfig
 from .services.service import VocabulariesServiceConfig
@@ -22,20 +23,34 @@ VOCABULARIES_SERVICE_CONFIG = VocabulariesServiceConfig
 
 VOCABULARIES_AFFILIATION_SCHEMES = {
     "grid": {
-        "label": "GRID",
+        "label": _("GRID"),
         "validator": lambda x: True
     },
     "gnd": {
-        "label": "GND",
+        "label": _("GND"),
         "validator": idutils.is_gnd
     },
     "isni": {
-        "label": "ISNI",
+        "label": _("ISNI"),
         "validator": idutils.is_isni
     },
     "ror": {
-        "label": "ROR",
+        "label": _("ROR"),
         "validator": idutils.is_ror
     },
 }
 """Affiliations allowed identifier schemes."""
+
+VOCABULARIES_NAMES_SCHEMES = {
+    "orcid": {
+        "label": _("ORCID"),
+        "validator": idutils.is_orcid,
+        "datacite": "ORCID"
+    },
+    "gnd": {
+        "label": _("GND"),
+        "validator": idutils.is_gnd,
+        "datacite": "GND"
+    }
+}
+"""Names allowed identifier schemes."""
