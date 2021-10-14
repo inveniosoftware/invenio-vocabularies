@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 CERN.
@@ -6,7 +7,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Vocabulary affiliations configuration."""
+"""Vocabulary names configuration."""
 
 from flask import current_app
 from flask_babelex import lazy_gettext as _
@@ -18,21 +19,20 @@ from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
 
-affiliation_schemes = LocalProxy(
-     lambda: current_app.config["VOCABULARIES_AFFILIATION_SCHEMES"]
+names_schemes = LocalProxy(
+     lambda: current_app.config["VOCABULARIES_NAMES_SCHEMES"]
 )
 
 
-class AffiliationsSearchOptions(SearchOptions):
+class NamesSearchOptions(SearchOptions):
     """Search options."""
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
             'name^100',
-            'acronym^20',
-            'title.*^5',
-            'title.*._2gram',
-            'title.*._3gram',
+            'family_name^100',
+            'given_name^100',
+            'identifiers.identifier^20',
         ],
     )
 

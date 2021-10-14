@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "local://names/name-v1.0.0.json",
+  "description": "Names vocabulary.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "$ref": "local://definitions-v1.0.0.json#/$schema"
+    },
+    "id": {
+      "description": "URI or classification code as identifier - globally unique among all names schemes.",
+      "$ref": "local://definitions-v1.0.0.json#/identifier"
+    },
+    "pid": {
+      "$ref": "local://definitions-v1.0.0.json#/internal-pid"
+    },
+    "scheme": {
+      "description": "Identifier of the name scheme.",
+      "$ref": "local://definitions-v1.0.0.json#/identifier"
+    },
+    "name": {"type": "string"},
+    "given_name": {"type": "string"},
+    "family_name": {"type": "string"},
+    "identifiers": {
+      "description": "Identifiers for the person.",
+      "type": "array",
+      "items": {"$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"},
+      "uniqueItems": true
+    },
+    "affiliations": {
+      "description": "Affiliations of the person.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "local://definitions-v1.0.0.json#/identifier"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "uniqueItems": true
+    }
+  }
+}
