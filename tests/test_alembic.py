@@ -42,6 +42,7 @@ def test_alembic(app, database):
     # Specific vocabularies models
     assert 'subject_metadata' in tables
     assert 'affiliation_metadata' in tables
+    assert 'name_metadata' in tables
 
     # Check that Alembic agrees that there's no further tables to create.
     assert_alembic(ext.alembic, ['mock_metadata'])
