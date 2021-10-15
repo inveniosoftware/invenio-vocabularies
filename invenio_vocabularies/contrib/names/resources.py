@@ -7,10 +7,10 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Affiliation vocabulary resources."""
+"""Names vocabulary resources."""
 
-from .affiliations import record_type
+from .names import record_type
 
-AffiliationsResourceConfig = record_type.resource_config_cls
+NamesResourceConfig = record_type.resource_config_cls
 
-AffiliationsResource = record_type.resource_cls
+NamesResource = record_type.resource_cls

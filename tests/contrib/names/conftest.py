@@ -15,6 +15,8 @@ fixtures are available.
 import pytest
 
 from invenio_vocabularies.contrib.affiliations.api import Affiliation
+from invenio_vocabularies.contrib.names.resources import NamesResource, \
+    NamesResourceConfig
 from invenio_vocabularies.contrib.names.services import NamesService, \
     NamesServiceConfig
 
@@ -44,6 +46,12 @@ def extra_entry_points():
 def service():
     """Names service object."""
     return NamesService(config=NamesServiceConfig)
+
+
+@pytest.fixture(scope="module")
+def resource(service):
+    """Names resource object."""
+    return NamesResource(NamesResourceConfig, service)
 
 
 @pytest.fixture()
@@ -78,3 +86,15 @@ def name_full_data():
             }
         ]
     }
+
+
+@pytest.fixture(scope="module")
+def base_app(base_app, resource, service):
+    """Application factory fixture.
+
+    Registers affiliations' resource and service.
+    """
+    base_app.register_blueprint(resource.as_blueprint())
+    registry = base_app.extensions['invenio-records-resources'].registry
+    registry.register(service, service_id='names-service')
+    yield base_app
