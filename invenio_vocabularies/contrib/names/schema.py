@@ -20,7 +20,6 @@ from marshmallow_utils.schemas import IdentifierSchema
 from .config import names_schemes
 
 
-# FIXME: this is a dup from rdm-records, shall we add it in the aff vocab?
 class AffiliationSchema(Schema):
     """Affiliation of a creator/contributor."""
 

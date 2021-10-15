@@ -33,6 +33,7 @@ class NamesSearchOptions(SearchOptions):
             'family_name^100',
             'given_name^100',
             'identifiers.identifier^20',
+            'affiliations.name^10',
         ],
     )
 
