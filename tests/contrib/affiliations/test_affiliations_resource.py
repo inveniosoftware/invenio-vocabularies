@@ -34,7 +34,7 @@ def example_affiliation(
     return aff
 
 
-def test_affiliations_invalid(client, h, prefix, affiliation_full_data):
+def test_affiliations_invalid(client, h, prefix):
     """Test invalid type."""
     # invalid type
     res = client.get(f"{prefix}/invalid", headers=h)
