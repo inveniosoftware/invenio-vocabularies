@@ -16,7 +16,6 @@ from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
 
 from invenio_records.systemfields.relations.errors import InvalidRelationValue
-from invenio_vocabularies.contrib.affiliations.api import Affiliation
 from invenio_vocabularies.contrib.names.api import Name
 
 
@@ -35,16 +34,6 @@ def indexer():
         record_cls=Name,
         record_to_index=lambda r: (r.__class__.index._name, "_doc"),
     )
-
-
-@pytest.fixture()
-def example_affiliation(db):
-    """Example affiliation."""
-    aff = Affiliation.create({"id": "cern"})
-    Affiliation.pid.create(aff)
-    aff.commit()
-    db.session.commit()
-    return aff
 
 
 @pytest.fixture()

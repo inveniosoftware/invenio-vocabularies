@@ -14,6 +14,10 @@ fixtures are available.
 
 import pytest
 
+from invenio_vocabularies.contrib.affiliations.api import Affiliation
+from invenio_vocabularies.contrib.names.services import NamesService, \
+    NamesServiceConfig
+
 
 @pytest.fixture(scope="module")
 def extra_entry_points():
@@ -34,6 +38,22 @@ def extra_entry_points():
                 invenio_vocabularies.contrib.names.mappings",
         ]
     }
+
+
+@pytest.fixture(scope='module')
+def service():
+    """Names service object."""
+    return NamesService(config=NamesServiceConfig)
+
+
+@pytest.fixture()
+def example_affiliation(db):
+    """Example affiliation."""
+    aff = Affiliation.create({"id": "cern"})
+    Affiliation.pid.create(aff)
+    aff.commit()
+    db.session.commit()
+    return aff
 
 
 @pytest.fixture(scope="function")
