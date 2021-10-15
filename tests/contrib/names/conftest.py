@@ -75,6 +75,9 @@ def name_full_data():
             {
                 "identifier": "0000-0001-8135-3489",
                 "scheme": "orcid"
+            }, {
+                "identifier": "gnd:4079154-3",
+                "scheme": "gnd"
             }
         ],
         "affiliations": [
