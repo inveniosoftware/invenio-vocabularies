@@ -48,7 +48,7 @@ def test_get(client, h, prefix, example_subject):
     assert res.status_code == 200
 
 
-def test_get_invalid(client, h, prefix, example_subject):
+def test_get_invalid(client, h, prefix):
     res = client.get(f"{prefix}/invalid", headers=h)
     assert res.status_code == 404
 

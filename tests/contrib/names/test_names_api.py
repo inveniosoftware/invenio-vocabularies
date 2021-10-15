@@ -12,10 +12,10 @@ from functools import partial
 
 import pytest
 from invenio_indexer.api import RecordIndexer
+from invenio_records.systemfields.relations.errors import InvalidRelationValue
 from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
 
-from invenio_records.systemfields.relations.errors import InvalidRelationValue
 from invenio_vocabularies.contrib.names.api import Name
 
 
