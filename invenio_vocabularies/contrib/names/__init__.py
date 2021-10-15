@@ -8,9 +8,12 @@
 
 """Names module."""
 
+from .resources import NamesResource, NamesResourceConfig
 from .services import NamesService, NamesServiceConfig
 
-__all__ = [
+__all__ = (
+    "NamesResource",
+    "NamesResourceConfig"
     "NamesService",
     "NamesServiceConfig",
-]
+)
