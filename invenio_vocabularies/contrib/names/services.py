@@ -6,11 +6,10 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Names module."""
+"""Names services."""
 
-from .services import NamesService, NamesServiceConfig
+from .names import record_type
 
-__all__ = [
-    "NamesService",
-    "NamesServiceConfig",
-]
+NamesServiceConfig = record_type.service_config_cls
+
+NamesService = record_type.service_cls
