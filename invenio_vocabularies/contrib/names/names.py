@@ -35,7 +35,9 @@ record_type = RecordTypeFactory(
     # Data layer
     pid_field_kwargs={
         "create": False,
-        "provider": RecordIdProviderV2,
+        "provider": PIDProviderFactory.create(
+            pid_type='nameid', base_cls=RecordIdProviderV2
+        ),
         "context_cls": BaseVocabularyPIDFieldContext,
     },
     schema_version="1.0.0",

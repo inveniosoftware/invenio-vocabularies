@@ -10,7 +10,7 @@
 """Test the names vocabulary service."""
 
 import pytest
-from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
+from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError
 
@@ -18,7 +18,7 @@ from invenio_vocabularies.contrib.names.api import Name
 
 
 def test_simple_flow(
-    app, db, service, identity, name_full_data, example_affiliation
+    app, service, identity, name_full_data, example_affiliation
 ):
     """Test a simple vocabulary service flow."""
     # Create it
@@ -64,7 +64,41 @@ def test_simple_flow(
     assert res.total == 0
 
 
-def test_extra_fields(app, db, service, identity, name_full_data):
+def test_extra_fields(app, service, identity, name_full_data):
     """Extra fields in data should fail."""
     name_full_data['invalid'] = 1
     pytest.raises(ValidationError, service.create, identity, name_full_data)
+
+
+def test_identifier_resolution(
+    app, service, identity, name_full_data, example_affiliation
+):
+    # Create it
+    item = service.create(identity, name_full_data)
+    id_ = item.id
+
+    Name.index.refresh()
+    resolved = service.resolve(
+        identity,
+        id_="0000-0001-8135-3489",
+        id_type="orcid"
+    )
+    assert resolved.id == id_
+
+    # non-existent orcid
+    pytest.raises(
+        PIDDoesNotExistError,
+        service.resolve,
+        identity,
+        "0000-0002-5082-6404",
+        "orcid"
+    )
+
+    # non-existent scheme
+    pytest.raises(
+        PIDDoesNotExistError,
+        service.resolve,
+        identity,
+        "0000-0001-8135-3489",
+        "invalid"
+    )
