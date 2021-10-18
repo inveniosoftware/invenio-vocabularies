@@ -79,3 +79,12 @@ def test_names_search(client, example_name, h, prefix):
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
     assert res.json["sortBy"] == "name"
+
+
+def test_names_resolve(client, example_name, h, prefix):
+    res = client.get(f"{prefix}/orcid/0000-0001-8135-3489", headers=h)
+    assert res.status_code == 200
+    assert res.json["id"] == example_name.id
+
+    res = client.get(f"{prefix}/orcid/0000-0002-5082-6404", headers=h)
+    assert res.status_code == 404

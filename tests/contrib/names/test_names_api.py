@@ -102,5 +102,4 @@ def test_name_pid(app, db, example_name):
     name = example_name
 
     assert name.pid.pid_value
-    assert name.pid.pid_type == "recid"
-    # FIXME: add resolution test when the pid_type is fixed
+    assert name.pid.pid_type == "nameid"

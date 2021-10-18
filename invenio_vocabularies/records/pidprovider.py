@@ -106,7 +106,7 @@ class PIDProviderFactory():
     """Vocabulary PID provider factory."""
 
     @staticmethod
-    def create(pid_type):
+    def create(pid_type, base_cls=CustomVocabularyPIDProvider):
         """Returns a CustomVocabularyPIDProvider with the given PID type."""
         provider_class_attributes = {
             "pid_type": pid_type,
@@ -114,6 +114,6 @@ class PIDProviderFactory():
 
         return type(
             "CustomVocabularyPIDProvider",
-            (CustomVocabularyPIDProvider,),
+            (base_cls,),
             provider_class_attributes
         )
