@@ -18,6 +18,7 @@ from flask_principal import Identity
 from invenio_access import any_user
 from invenio_db import db
 
+from invenio_vocabularies.contrib.names.datasources import OrcidTarDataSource
 from invenio_vocabularies.contrib.subjects.subjects import \
     record_type as subject_record_type
 from invenio_vocabularies.records.models import VocabularyType
@@ -127,6 +128,16 @@ def vocabularies():
     """Vocabularies command."""
     pass
 
+
+@vocabularies.command(name="test")
+@click.argument(
+    "src",
+    type=click.STRING,
+)
+def test(src):
+    datasource = OrcidTarDataSource(src)
+    for item in datasource.iter_entries():
+        print(item)
 
 @vocabularies.command(name="import")
 @click.argument(
