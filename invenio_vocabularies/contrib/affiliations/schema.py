@@ -10,7 +10,8 @@
 
 from functools import partial
 
-from marshmallow import fields
+from flask_babelex import lazy_gettext as _
+from marshmallow import Schema, ValidationError, fields, validates_schema
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -30,3 +31,26 @@ class AffiliationSchema(BaseVocabularySchema):
         )
     ))
     name = SanitizedUnicode(required=True)
+
+
+class AffiliationRelationSchema(Schema):
+    """Schema to define an optional affialiation relation in another schema."""
+
+    id = SanitizedUnicode()
+    name = SanitizedUnicode()
+
+    @validates_schema
+    def validate_affiliation(self, data, **kwargs):
+        """Validates that either id either name are present."""
+        id_ = data.get("id")
+        name = data.get("name")
+        if id_:
+            data = {"id": id_}
+        elif name:
+            data = {"name": name}
+
+        if not id_ and not name:
+            raise ValidationError(
+                _("An existing id or a free text name must be present"),
+                "affiliations"
+            )
