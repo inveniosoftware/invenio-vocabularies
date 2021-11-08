@@ -13,12 +13,13 @@ import csv
 from os.path import dirname, join
 
 import click
+import ipdb
 from flask.cli import with_appcontext
 from flask_principal import Identity
 from invenio_access import any_user
 from invenio_db import db
 
-from invenio_vocabularies.contrib.names.datasources import OrcidTarDataSource
+from invenio_vocabularies.contrib.names.datastreams import OrcidDataSource
 from invenio_vocabularies.contrib.subjects.subjects import \
     record_type as subject_record_type
 from invenio_vocabularies.records.models import VocabularyType
@@ -129,15 +130,15 @@ def vocabularies():
     pass
 
 
-@vocabularies.command(name="test")
-@click.argument(
-    "src",
-    type=click.STRING,
-)
-def test(src):
-    datasource = OrcidTarDataSource(src)
+@vocabularies.command(name="import_names")
+@click.option('--src', type=click.STRING)
+def import_names(src):
+    print(src)
+    datasource = OrcidDataSource(src)
+    ipdb.set_trace()
     for item in datasource.iter_entries():
         print(item)
+
 
 @vocabularies.command(name="import")
 @click.argument(
