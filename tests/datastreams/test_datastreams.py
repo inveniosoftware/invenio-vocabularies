@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from invenio_vocabularies.fixtures.factories import DataStreamFactory
+from invenio_vocabularies.datastreams.factories import DataStreamFactory
 
 
 @pytest.fixture(scope="module")
