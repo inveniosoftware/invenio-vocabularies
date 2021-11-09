@@ -9,9 +9,8 @@
 """Fixtures module."""
 
 import yaml
-from flask import current_app
 
-from .factories import DataStreamFactory, WriterFactory
+from .datastreams.factories import DataStreamFactory, WriterFactory
 
 
 class BaseFixture:
