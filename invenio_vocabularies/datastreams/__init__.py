@@ -6,10 +6,4 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Fixtures module."""
-
-from .fixtures import BaseFixture
-
-__all__ = (
-    "BaseFixture",
-)
+"""Datastreams module."""
