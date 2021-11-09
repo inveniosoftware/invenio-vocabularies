@@ -14,10 +14,10 @@ fixtures are available.
 
 import pytest
 
-from invenio_vocabularies.fixtures.errors import TransformerError, WriterError
-from invenio_vocabularies.fixtures.readers import BaseReader
-from invenio_vocabularies.fixtures.transformers import BaseTransformer
-from invenio_vocabularies.fixtures.writers import BaseWriter
+from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
+from invenio_vocabularies.datastreams.readers import BaseReader
+from invenio_vocabularies.datastreams.transformers import BaseTransformer
+from invenio_vocabularies.datastreams.writers import BaseWriter
 
 
 class TestReader(BaseReader):

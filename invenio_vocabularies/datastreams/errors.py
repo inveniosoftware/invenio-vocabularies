@@ -6,7 +6,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Fixture errors."""
+"""Datastream errors."""
 
 
 class TransformerError(Exception):
