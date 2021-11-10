@@ -7,3 +7,11 @@
 # details.
 
 """Datastreams module."""
+
+from .datastreams import BaseDataStream
+from .factories import DataStreamFactory
+
+__all__ = (
+    "BaseDataStream",
+    "DataStreamFactory",
+)

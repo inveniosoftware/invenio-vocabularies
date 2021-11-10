@@ -8,6 +8,10 @@
 
 """Writers module."""
 
+from invenio_records_resources.proxies import current_service_registry
+from marshmallow import ValidationError
+
+from .datastreams import StreamResult
 from .errors import WriterError
 
 
@@ -29,31 +33,31 @@ class BaseWriter:
 class ServiceWriter(BaseWriter):
     """Writes the entries to an RDM instance using a Service object."""
 
-    def __init__(self, service, identity, *args, **kwargs):
-        """Constructor."""
-        self._service = service
+    def __init__(self, service_or_name, identity, *args, **kwargs):
+        """Constructor.
+
+        :param service_or_name: a service instance or a key of the
+                                service registry.
+        :param identity: access identity.
+        """
+        if isinstance(service_or_name, str):
+            service_or_name = current_service_registry.get(service_or_name)
+
+        self._service = service_or_name
         self._identity = identity
+
+        super().__init__(*args, **kwargs)
 
     def write(self, entry, *args, **kwargs):
         """Writes the input entry using a given service."""
-        result = self._service.create(entry, identity=self._identity)
+        try:
+            result = self._service.create(self._identity, entry)
+        except ValidationError as err:
+            result = StreamResult(
+                entry=entry,
+                errors=[{"ValidationError": err.messages}]
+            )
         if result.errors:
             raise WriterError(result.errors)
 
-
-class FileWriter(BaseWriter):
-    """File writer."""
-
-    def __init__(self, filepath, *args, **kwargs):
-        """Constructor."""
-        self._filepath = filepath
-
-    def write(self, entry, *args, **kwargs):
-        """Writes (appends) the input entry to a given file."""
-        # FIXME: opening the file per entry is not optimal. Use writelines?
-        with open(self._filepath, 'a') as f:
-            f.write(f"{str(entry)}\n")
-
-
-class NullWriter(BaseWriter):
-    """Null writer."""
+        return result

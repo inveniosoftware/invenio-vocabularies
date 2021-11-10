@@ -9,7 +9,7 @@ testone:
   writers:
     - type: test
 testtwo:
-  pid-type: testid
+  pid-type: testit
   transformers:
     - type: test
   reader:
