@@ -62,6 +62,8 @@ setup_requires = [
 install_requires = [
     "invenio-records-resources>=0.18.2,<0.19.0",
     "invenio-i18n>=1.3.1",
+    "lxml>=4.1.1",
+    "PyYAML>=5.4.1",
 ]
 
 packages = find_packages()

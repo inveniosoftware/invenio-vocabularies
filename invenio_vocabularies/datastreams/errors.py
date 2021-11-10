@@ -9,6 +9,10 @@
 """Datastream errors."""
 
 
+class ReaderError(Exception):
+    """Transformer application exception."""
+
+
 class TransformerError(Exception):
     """Transformer application exception."""
 
