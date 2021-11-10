@@ -8,6 +8,7 @@
 
 """Readers module."""
 
+import re
 import tarfile
 
 import yaml
@@ -39,14 +40,17 @@ class YamlReader(BaseReader):
 class TarReader(BaseReader):
     """Tar reader."""
 
+    def __init__(self, *args, mode="r|gz", regex=None, **kwargs):
+        """Constructor."""
+        self._regex = re.compile(regex) if regex else None
+        self._mode = mode
+        super().__init__(*args, **kwargs)
+
     def read(self):
         """Opens a tar and iterates through the files in the archive."""
-        # See https://docs.python.org/3/library/tarfile.html
-        with tarfile.open(self._origin, 'r|gz') as archive:
-            for fileinfo in archive:
-                yield fileinfo
-
-
-class PrioritizedReader(BaseReader):
-    """Prioritized Reader."""
-    # should model the current PrioritizedVocabularyFixture
+        with tarfile.open(self._origin, self._mode) as archive:
+            for member in archive:
+                match = not self._regex or self._regex.search(member.name)
+                if member.isfile() and match:
+                    content = archive.extractfile(member).read()
+                    yield content

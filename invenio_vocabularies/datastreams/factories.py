@@ -46,21 +46,21 @@ class WriterFactory(BaseFactory, OptionsConfigMixin):
     """Writer factory."""
 
     FACTORY_NAME = "Writer"
-    CONFIG_VAR = "VOCABULARIES_DATASOURCE_WRITERS"
+    CONFIG_VAR = "VOCABULARIES_DATASTREAM_WRITERS"
 
 
 class ReaderFactory(BaseFactory, OptionsConfigMixin):
     """Reader factory."""
 
     FACTORY_NAME = "Reader"
-    CONFIG_VAR = "VOCABULARIES_DATASOURCE_READERS"
+    CONFIG_VAR = "VOCABULARIES_DATASTREAM_READERS"
 
 
 class TransformerFactory(BaseFactory, OptionsConfigMixin):
     """Transformer factory."""
 
     FACTORY_NAME = "Transformer"
-    CONFIG_VAR = "VOCABULARIES_DATASOURCE_TRANSFORMERS"
+    CONFIG_VAR = "VOCABULARIES_DATASTREAM_TRANSFORMERS"
 
 
 class DataStreamFactory:

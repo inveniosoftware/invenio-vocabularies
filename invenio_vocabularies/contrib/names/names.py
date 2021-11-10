@@ -11,8 +11,7 @@
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
-from invenio_records_resources.records.systemfields import PIDListRelation, \
-    PIDRelation
+from invenio_records_resources.records.systemfields import PIDListRelation
 
 from ...records.pidprovider import PIDProviderFactory
 from ...records.systemfields import BaseVocabularyPIDFieldContext
