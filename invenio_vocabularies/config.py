@@ -12,6 +12,9 @@
 import idutils
 from flask_babelex import lazy_gettext as _
 
+from .datastreams.readers import TarReader, YamlReader
+from .datastreams.transformers import XMLTransformer
+from .datastreams.writers import ServiceWriter
 from .resources.resource import VocabulariesResourceConfig
 from .services.service import VocabulariesServiceConfig
 
@@ -54,3 +57,19 @@ VOCABULARIES_NAMES_SCHEMES = {
     }
 }
 """Names allowed identifier schemes."""
+
+VOCABULARIES_DATASTREAM_READERS = {
+    "tar": TarReader,
+    "yaml": YamlReader,
+}
+"""Data Streams readers."""
+
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {
+    "xml": XMLTransformer,
+}
+"""Data Streams transformers."""
+
+VOCABULARIES_DATASTREAM_WRITERS = {
+    "service": ServiceWriter
+}
+"""Data Streams writers."""

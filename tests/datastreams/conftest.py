@@ -14,7 +14,8 @@ fixtures are available.
 
 import pytest
 
-from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
+from invenio_vocabularies.datastreams.errors import TransformerError, \
+    WriterError
 from invenio_vocabularies.datastreams.readers import BaseReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
 from invenio_vocabularies.datastreams.writers import BaseWriter
@@ -61,13 +62,13 @@ class FailingTestWriter(BaseWriter):
 @pytest.fixture(scope='module')
 def app_config(app_config):
     """Mimic an instance's configuration."""
-    app_config["VOCABULARIES_DATASOURCE_READERS"] = {
+    app_config["VOCABULARIES_DATASTREAM_READERS"] = {
         "test": TestReader
     }
-    app_config["VOCABULARIES_DATASOURCE_TRANSFORMERS"] = {
+    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
         "test": TestTransformer
     }
-    app_config["VOCABULARIES_DATASOURCE_WRITERS"] = {
+    app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
         "test": TestWriter,
         "fail": FailingTestWriter,
     }

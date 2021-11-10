@@ -9,8 +9,10 @@
 """Fixtures module."""
 
 import yaml
+from invenio_access.permissions import system_identity
 
-from .datastreams.factories import DataStreamFactory, WriterFactory
+from .datastreams.factories import DataStreamFactory
+from .proxies import current_service
 
 
 class BaseFixture:
@@ -20,11 +22,8 @@ class BaseFixture:
         """Constructor."""
         self._filepath = filepath
 
-    # potential `ignore` and `force` arguments to support updating entries
-    # TODO: bulk writting
     def _load_vocabulary(self, config, delay=True, **kwargs):
         """Given an entry from the vocabularies.yaml file, load its content."""
-        # TODO: write with delay (tasks encapsulation needed)
         datastream = DataStreamFactory.create(
             reader_config=config["reader"],
             transformers_config=config.get("transformers"),
@@ -38,12 +37,10 @@ class BaseFixture:
 
         return errors
 
-    # TODO: support vocabularies with schemes (subvocabs)
     def _create_vocabulary(self, id_, pid_type, *args, **kwargs):
         """Creates a vocabulary."""
-        pass
+        return current_service.create_type(system_identity, id_, pid_type)
 
-    # TODO: support bulk import (e.g. db commit per item + bulk indexing)
     def load(self, *args, **kwargs):
         """Return content of vocabularies file."""
         with open(self._filepath) as f:
