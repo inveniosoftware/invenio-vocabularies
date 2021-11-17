@@ -19,6 +19,7 @@ from invenio_records_resources.services import Link, LinksTemplate, \
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import FilterParam, \
     SuggestQueryParser
+from invenio_records_resources.services.uow import unit_of_work
 
 from ..records.api import Vocabulary
 from ..records.models import VocabularyType
@@ -101,11 +102,11 @@ class VocabulariesServiceConfig(RecordServiceConfig):
 class VocabulariesService(RecordService):
     """Vocabulary service."""
 
-    def create_type(self, identity, id, pid_type):
+    @unit_of_work()
+    def create_type(self, identity, id, pid_type, uow=None):
         """Create a new vocabulary type."""
         self.require_permission(identity, "manage")
         type_ = VocabularyType.create(id=id, pid_type=pid_type)
-        db.session.commit()
         return type_
 
     def search(self, identity, params=None, es_preference=None, type=None,
