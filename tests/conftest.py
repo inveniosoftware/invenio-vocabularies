@@ -94,7 +94,9 @@ def service(app):
 @pytest.fixture()
 def lang_type(db):
     """Get a language vocabulary type."""
-    return VocabularyType.create(id='languages', pid_type='lng')
+    v = VocabularyType.create(id='languages', pid_type='lng')
+    db.session.commit()
+    return v
 
 
 @pytest.fixture(scope='function')
