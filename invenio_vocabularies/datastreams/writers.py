@@ -8,6 +8,9 @@
 
 """Writers module."""
 
+from pathlib import Path
+
+import yaml
 from invenio_records_resources.proxies import current_service_registry
 from marshmallow import ValidationError
 
@@ -59,5 +62,28 @@ class ServiceWriter(BaseWriter):
             )
         if result.errors:
             raise WriterError(result.errors)
+
+        return result
+
+
+class YamlWriter(BaseWriter):
+    """Writes the entries to a YAML file."""
+
+    def __init__(self, filepath, *args, **kwargs):
+        """Constructor.
+
+        :param filepath: path of the output file.
+        """
+        self._filepath = Path(filepath)
+
+        super().__init__(*args, **kwargs)
+
+    def write(self, entry, *args, **kwargs):
+        """Writes the input entry using a given service."""
+        with open(self._filepath, 'a') as file:
+            # made into array for safer append
+            # will always read array (good for reader)
+            yaml.safe_dump([entry], file)
+            result = StreamResult(entry=entry)
 
         return result
