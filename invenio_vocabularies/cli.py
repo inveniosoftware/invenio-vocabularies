@@ -14,6 +14,9 @@ from copy import deepcopy
 import click
 import yaml
 from flask.cli import with_appcontext
+from invenio_access.permissions import system_identity
+from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
+from invenio_records_resources.proxies import current_service_registry
 
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
 from .datastreams import DataStreamFactory
@@ -29,6 +32,12 @@ def get_config_for_ds(vocabulary, filepath=None, origin=None):
             config["reader"]["args"]["origin"] = origin
 
         return config
+
+
+def get_service_for_vocabulary(vocabulary):
+    """Calculates the configuration for a Data Stream."""
+    if vocabulary == "names":  # FIXME: turn into a proper factory
+        return current_service_registry.get("rdm-names")
 
 
 @click.group()
@@ -120,3 +129,40 @@ def convert(
 
     success, errored = _process_vocab(config, num_samples)
     _output_process(vocabulary, "converted", success, errored)
+
+
+@vocabularies.command()
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option(
+    "-i",
+    "--identifier",
+    type=click.STRING,
+    help="Identifier of the vocabulary item to delete."
+)
+@click.option(
+    "--all",
+    is_flag=True,
+    default=False,
+    help="Not supported yet."
+)
+@with_appcontext
+def delete(vocabulary, identifier, all):
+    """Delete all items or a specific one of the vocabulary."""
+    if not id and not all:
+        click.secho(
+            "An identifier or the --all flag must be present.",
+            fg="red"
+        )
+        exit(1)
+
+    breakpoint()
+    service = get_service_for_vocabulary(vocabulary)
+    if identifier:
+        try:
+            if service.delete(identifier, system_identity):
+                click.secho(
+                    f"{identifier} deleted from {vocabulary}.",
+                    fg="green"
+                )
+        except (PIDDeletedError, PIDDoesNotExistError):
+            click.secho(f"PID {identifier} not found.")

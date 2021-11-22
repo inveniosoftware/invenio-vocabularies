@@ -102,4 +102,4 @@ def test_name_pid(app, db, example_name):
     name = example_name
 
     assert name.pid.pid_value
-    assert name.pid.pid_type == "nameid"
+    assert name.pid.pid_type == "names"
