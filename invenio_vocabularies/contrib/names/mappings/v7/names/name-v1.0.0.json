@@ -64,7 +64,12 @@
             "type": "keyword"
           },
           "name": {
-            "type": "keyword"
+            "type": "keyword",
+            "fields": {
+              "suggest": {
+                "type": "search_as_you_type"
+              }
+            }
           }
         }
       },
