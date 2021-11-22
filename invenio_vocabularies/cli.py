@@ -37,9 +37,8 @@ def vocabularies():
     pass
 
 
-def _import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
+def _process_vocab(config, num_samples=None):
     """Import a vocabulary."""
-    config = get_config_for_ds(vocabulary, filepath, origin)
     ds = DataStreamFactory.create(
         reader_config=config["reader"],
         transformers_config=config.get("transformers"),
@@ -50,17 +49,31 @@ def _import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
     left = num_samples or -1
     for result in ds.process():
         left = left - 1
-        if left == 0:
-            click.secho(f"Number of samples reached {num_samples}", fg="green")
-            break
         if result.errors:
             for err in result.errors:
                 click.secho(err, fg="red")
             errored += 1
         else:
             success += 1
-
+        if left == 0:
+            click.secho(f"Number of samples reached {num_samples}", fg="green")
+            break
     return success, errored
+
+
+def _output_process(vocabulary, op, success, errored):
+    """Outputs the result of an operation."""
+    total = success + errored
+
+    color = "green"
+    if errored:
+        color = "yellow" if success else "red"
+
+    click.secho(
+        f"Vocabulary {vocabulary} {op}. Total items {total}. \n"
+        f"{success} items succeeded, {errored} contained errors.",
+        fg=color
+    )
 
 
 @vocabularies.command(name="import")
@@ -75,15 +88,35 @@ def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
         click.secho("One of --filepath or --origin must be present", fg="red")
         exit(1)
 
-    success, errored = _import_vocab(vocabulary, filepath, origin, num_samples)
-    total = success + errored
+    config = get_config_for_ds(vocabulary, filepath, origin)
+    success, errored = _process_vocab(config, num_samples)
 
-    color = "green"
-    if errored:
-        color = "yellow" if success else "red"
+    _output_process(vocabulary, "loaded", success, errored)
 
-    click.secho(
-        f"Vocabulary {vocabulary} loaded. Total items {total}. \n"
-        f"{success} items succeeded, {errored} contained errors.",
-        fg=color
-    )
+
+@vocabularies.command()
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option("-f", "--filepath", type=click.STRING)
+@click.option("-o", "--origin", type=click.STRING)
+@click.option("-t", "--target", type=click.STRING)
+@click.option("-n", "--num-samples", type=click.INT)
+@with_appcontext
+def convert(
+    vocabulary, filepath=None, origin=None, target=None, num_samples=None
+):
+    """Convert a vocabulary to a new format."""
+    if not filepath and (not origin or not target):
+        click.secho(
+            "One of --filepath or --origin and --target must be present",
+            fg="red"
+        )
+        exit(1)
+
+    config = get_config_for_ds(vocabulary, filepath, origin)
+    if not filepath:
+        config["writers"] = [
+            {"type": "yaml", "args": {"filepath": target}}
+        ]
+
+    success, errored = _process_vocab(config, num_samples)
+    _output_process(vocabulary, "converted", success, errored)

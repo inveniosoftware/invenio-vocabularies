@@ -14,7 +14,7 @@ from flask_babelex import lazy_gettext as _
 
 from .datastreams.readers import TarReader, YamlReader
 from .datastreams.transformers import XMLTransformer
-from .datastreams.writers import ServiceWriter
+from .datastreams.writers import ServiceWriter, YamlWriter
 from .resources.resource import VocabulariesResourceConfig
 from .services.service import VocabulariesServiceConfig
 
@@ -70,6 +70,7 @@ VOCABULARIES_DATASTREAM_TRANSFORMERS = {
 """Data Streams transformers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
-    "service": ServiceWriter
+    "service": ServiceWriter,
+    "yaml": YamlWriter,
 }
 """Data Streams writers."""
