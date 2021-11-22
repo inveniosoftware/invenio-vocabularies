@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 from invenio_access.permissions import system_identity
 
-from invenio_vocabularies.cli import _import_vocab
+from invenio_vocabularies.cli import _process_vocab, get_config_for_ds
 from invenio_vocabularies.contrib.names.api import Name
 from invenio_vocabularies.contrib.names.datastreams import OrcidXMLTransformer
 from invenio_vocabularies.contrib.names.services import NamesService, \
@@ -114,8 +114,11 @@ def names_tar_file(expected_name_xml):
     filename.unlink()  # delete created file
 
 
-def test_import(app, names_tar_file, names_service):
-    _import_vocab(vocabulary="names", origin=names_tar_file.absolute())
+def test_process(app, names_tar_file, names_service):
+    config = get_config_for_ds(
+        vocabulary="names", origin=names_tar_file.absolute()
+    )
+    _process_vocab(config)
     Name.index.refresh()
 
     orcid = "0000-0001-8135-3489"
