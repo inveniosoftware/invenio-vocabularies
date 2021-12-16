@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2021 CERN.
 # Copyright (C) 2021 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-records-resources>=0.17.3,<0.18.0",
+    "invenio-records-resources>=0.18.1,<0.19.0",
     "invenio-i18n>=1.3.1",
 ]
 
