@@ -11,6 +11,7 @@
 from pathlib import Path
 
 import yaml
+from invenio_access.permissions import system_identity
 from invenio_records_resources.proxies import current_service_registry
 from marshmallow import ValidationError
 
@@ -47,7 +48,7 @@ class ServiceWriter(BaseWriter):
             service_or_name = current_service_registry.get(service_or_name)
 
         self._service = service_or_name
-        self._identity = identity
+        self._identity = system_identity
 
         super().__init__(*args, **kwargs)
 
