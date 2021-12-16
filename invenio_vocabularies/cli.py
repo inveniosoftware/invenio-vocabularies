@@ -27,7 +27,8 @@ def get_config_for_ds(vocabulary, filepath=None, origin=None):
     if vocabulary == "names":  # FIXME: turn into a proper factory
         config = deepcopy(names_ds_config)
         if filepath:
-            config = yaml.load(filepath).get(vocabulary)
+            with open(filepath) as f:
+                config = yaml.safe_load(f).get(vocabulary)
         if origin:
             config["reader"]["args"]["origin"] = origin
 
