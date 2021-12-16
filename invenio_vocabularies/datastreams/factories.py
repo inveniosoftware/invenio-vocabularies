@@ -77,8 +77,9 @@ class DataStreamFactory:
             writers.append(WriterFactory.create(w_conf))
 
         transformers = []
-        for t_conf in transformers_config:
-            transformers.append(TransformerFactory.create(t_conf))
+        if transformers_config:
+            for t_conf in transformers_config:
+                transformers.append(TransformerFactory.create(t_conf))
 
         return BaseDataStream(
             reader=reader, writers=writers, transformers=transformers
