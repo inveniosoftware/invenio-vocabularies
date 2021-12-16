@@ -41,7 +41,7 @@ def test_simple_flow(lang_type, lic_type, lang_data, service, identity):
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read(('languages', 'eng'), identity)
+    read_item = service.read(identity, ('languages', 'eng'))
     assert item.id == read_item.id
     assert item.data == read_item.data
     assert read_item.data['type'] == 'languages'
@@ -63,20 +63,19 @@ def test_simple_flow(lang_type, lic_type, lang_data, service, identity):
     # Update it
     data = read_item.data
     data['title']['en'] = 'New title'
-    update_item = service.update(('languages', id_), identity, data)
+    update_item = service.update(identity, ('languages', id_), data)
     assert item.id == update_item.id
     assert update_item['title']['en'] == 'New title'
 
     # Delete it
-    assert service.delete(('languages', id_), identity)
+    assert service.delete(identity, ('languages', id_))
 
     # Refresh to make changes live
     Vocabulary.index.refresh()
 
     # Fail to retrieve it
     # - db
-    pytest.raises(
-        PIDDeletedError, service.read, ('languages', id_), identity)
+    pytest.raises(PIDDeletedError, service.read, identity, ('languages', id_))
     # - search
     res = service.search(
         identity, type='languages', q=f"id:{id_}", size=25, page=1)
@@ -104,13 +103,11 @@ def test_missing_or_invalid_type(lang_data2, service, identity):
     # Invalid value data types
     for val in [1, {'id': 'languages'}, ]:
         lang_data2['type'] = val
-        pytest.raises(
-            ValidationError, service.create, identity, lang_data2)
+        pytest.raises(ValidationError, service.create, identity, lang_data2)
 
     # Non-existing type
     lang_data2['type'] = 'invalid'
-    pytest.raises(
-            ValidationError, service.create, identity, lang_data2)
+    pytest.raises(ValidationError, service.create, identity, lang_data2)
 
 
 def test_update(lang_type, lang_data2, service, identity):
@@ -124,7 +121,7 @@ def test_update(lang_type, lang_data2, service, identity):
     del data['title']['en']
     # Unset a top-level key
     del data['icon']
-    update_item = service.update(('languages', id_), identity, data)
+    update_item = service.update(identity, ('languages', id_), data)
     # Ensure they really got cleared.
     assert 'en' not in update_item.data['title']
     assert 'icon' not in update_item.data

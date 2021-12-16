@@ -43,8 +43,8 @@ def test_permissions_readonly(anyuser_idty, lang_type, lang_data, service):
     id_ = item.id
 
     # Read - both allowed
-    item = service.read(('languages', id_), anyuser_idty)
-    item = service.read(('languages', id_), system_identity)
+    item = service.read(anyuser_idty, ('languages', id_))
+    item = service.read(system_identity, ('languages', id_))
 
     # Refresh index to make changes live.
     Vocabulary.index.refresh()
@@ -60,12 +60,11 @@ def test_permissions_readonly(anyuser_idty, lang_type, lang_data, service):
     # Update - only system allowed
     data = item.data
     data['title']['en'] = 'New title'
-    pytest.raises(
-        PermissionDenied, service.update, ('languages', id_), anyuser_idty,
-        data)
-    service.update(('languages', id_), system_identity, data)
+    with pytest.raises(PermissionDenied):
+        service.update(anyuser_idty, ('languages', id_), data)
+    service.update(system_identity, ('languages', id_), data)
 
     # Delete - only system allowed
-    pytest.raises(
-        PermissionDenied, service.delete, ('languages', id_), anyuser_idty)
-    service.delete(('languages', id_), system_identity)
+    with pytest.raises(PermissionDenied):
+        service.delete(anyuser_idty, ('languages', id_))
+    service.delete(system_identity, ('languages', id_))
