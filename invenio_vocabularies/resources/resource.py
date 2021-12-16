@@ -107,7 +107,7 @@ class VocabulariesResource(RecordResource):
             resource_requestctx.view_args["type"],
             resource_requestctx.view_args["pid_value"]
         )
-        item = self.service.read(pid_value, g.identity)
+        item = self.service.read(g.identity, pid_value)
         return item.to_dict(), 200
 
     @request_headers
@@ -121,8 +121,8 @@ class VocabulariesResource(RecordResource):
             resource_requestctx.view_args["pid_value"]
         )
         item = self.service.update(
-            pid_value,
             g.identity,
+            pid_value,
             resource_requestctx.data,
             revision_id=resource_requestctx.headers.get("if_match"),
         )
@@ -137,8 +137,8 @@ class VocabulariesResource(RecordResource):
             resource_requestctx.view_args["pid_value"]
         )
         self.service.delete(
-            pid_value,
             g.identity,
+            pid_value,
             revision_id=resource_requestctx.headers.get("if_match"),
         )
         return "", 204

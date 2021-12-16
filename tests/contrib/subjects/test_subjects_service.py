@@ -27,7 +27,7 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
         assert data[k] == v, data
 
     # Read it
-    read_item = service.read('https://id.nlm.nih.gov/mesh/D000001', identity)
+    read_item = service.read(identity, 'https://id.nlm.nih.gov/mesh/D000001')
     assert item.id == read_item.id
     assert item.data == read_item.data
 
@@ -44,19 +44,19 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
     # Update it
     data = read_item.data
     data['subject'] = 'Antibiotics'
-    update_item = service.update(id_, identity, data)
+    update_item = service.update(identity, id_, data)
     assert item.id == update_item.id
     assert update_item['subject'] == 'Antibiotics'
 
     # Delete it
-    assert service.delete(id_, identity)
+    assert service.delete(identity, id_)
 
     # Refresh to make changes live
     Subject.index.refresh()
 
     # Fail to retrieve it
     # - db
-    pytest.raises(PIDDeletedError, service.read, id_, identity)
+    pytest.raises(PIDDeletedError, service.read, identity, id_)
     # - search
     res = service.search(identity, q=f'id:"{id_}"', size=25, page=1)
     assert res.total == 0

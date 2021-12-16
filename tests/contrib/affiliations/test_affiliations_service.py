@@ -28,7 +28,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read('cern', identity)
+    read_item = service.read(identity, 'cern')
     assert item.id == read_item.id
     assert item.data == read_item.data
 
@@ -44,20 +44,19 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
     # Update it
     data = read_item.data
     data['title']['en'] = 'New title'
-    update_item = service.update(id_, identity, data)
+    update_item = service.update(identity, id_, data)
     assert item.id == update_item.id
     assert update_item['title']['en'] == 'New title'
 
     # Delete it
-    assert service.delete(id_, identity)
+    assert service.delete(identity, id_)
 
     # Refresh to make changes live
     Affiliation.index.refresh()
 
     # Fail to retrieve it
     # - db
-    pytest.raises(
-        PIDDeletedError, service.read, id_, identity)
+    pytest.raises(PIDDeletedError, service.read, identity, id_)
     # - search
     res = service.search(
         identity, q=f"id:{id_}", size=25, page=1)
