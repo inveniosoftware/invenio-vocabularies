@@ -18,7 +18,7 @@ from invenio_vocabularies.datastreams.writers import ServiceWriter, YamlWriter
 def test_service_writer(lang_type, lang_data, service, identity):
     writer = ServiceWriter(service, identity)
     lang = writer.write(entry=lang_data)
-    record = service.read(("languages", lang.id), identity)
+    record = service.read(identity, ("languages", lang.id))
     record = record.to_dict()
 
     assert dict(record, **lang_data) == record
