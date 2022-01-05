@@ -42,12 +42,21 @@ class OrcidXMLTransformer(XMLTransformer):
         }
 
         try:
-            affiliation = dict_lookup(
-                record,
-                "activities-summary.employments.affiliation-group"
-                ".employment-summary.organization.name",
+            employments = dict_lookup(
+                record, "activities-summary.employments.affiliation-group"
             )
-            entry["affiliations"].append({"name": affiliation})
+            if isinstance(employments, dict):
+                employments = [employments]
+            history = set()
+            for employment in employments:
+                terminated = employment["employment-summary"].get("end-date")
+                affiliation = dict_lookup(
+                    employment,
+                    "employment-summary.organization.name",
+                )
+                if affiliation not in history and not terminated:
+                    history.add(affiliation)
+                    entry["affiliations"].append({"name": affiliation})
         except Exception:
             pass
 
