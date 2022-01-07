@@ -11,6 +11,7 @@
 import re
 import tarfile
 
+import requests
 import yaml
 
 from .datastreams import StreamEntry
@@ -59,3 +60,29 @@ class TarReader(BaseReader):
                 if member.isfile() and match:
                     content = archive.extractfile(member).read()
                     yield StreamEntry(entry=content)
+
+
+class SimpleHTTPReader(BaseReader):
+    """Simple HTTP Reader."""
+
+    def __init__(
+        self, origin, id=None, ids=None, content_type=None, *args, **kwargs
+    ):
+        """Constructor."""
+        assert id or ids
+        self._ids = ids if ids else [id]
+        self.content_type = content_type
+        super().__init__(origin, *args, **kwargs)
+
+    def read(self):
+        """Reads a yaml file and returns a dictionary per element."""
+        headers = {"Accept": self.content_type}
+
+        for id_ in self._ids:
+            url = self._origin.format(id=id_)
+            resp = requests.get(url, headers=headers)
+            if resp.status_code != 200:
+                # todo add logging/fail
+                pass
+
+            yield StreamEntry(resp.content)
