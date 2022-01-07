@@ -8,31 +8,14 @@
 
 """Names data streams tests."""
 
+from unittest.mock import patch
 
 import pytest
 
-from invenio_vocabularies.contrib.names.datastreams import OrcidXMLTransformer
+from invenio_vocabularies.contrib.names.datastreams import OrcidHTTPReader, \
+    OrcidXMLTransformer
 
-
-@pytest.fixture(scope='module')
-def expected_from_xml():
-    return {
-        'given_name': 'Lars Holm',
-        'family_name': 'Nielsen',
-        'identifiers': [
-            {
-                'scheme': 'orcid',
-                'identifier': 'https://orcid.org/0000-0001-8135-3489'
-            }
-        ],
-        'affiliations': [{'name': 'CERN'}]
-    }
-
-
-@pytest.fixture(scope='module')
-def xml_entry():
-    # simplified version of an XML file of the ORCiD dump
-    return bytes(
+XML_ENTRY_DATA = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
         '<record:record path="/0000-0001-8135-3489">\n'
         '    <common:orcid-identifier>\n'
@@ -58,11 +41,47 @@ def xml_entry():
         '           </employments:affiliation-group>\n'
         '       </activities:employments>\n'
         '    </activities:activities-summary>\n'
-        '</record:record>\n',
-        encoding="raw_unicode_escape"
+        '</record:record>\n'
     )
 
 
-def test_orcid_xml_transformer(xml_entry, expected_from_xml):
+@pytest.fixture(scope='module')
+def bytes_xml_entry():
+    # simplified version of an XML file of the ORCiD dump
+    return bytes(XML_ENTRY_DATA, encoding="raw_unicode_escape")
+
+
+@pytest.fixture(scope='module')
+def expected_from_xml():
+    return {
+        'given_name': 'Lars Holm',
+        'family_name': 'Nielsen',
+        'identifiers': [
+            {
+                'scheme': 'orcid',
+                'identifier': 'https://orcid.org/0000-0001-8135-3489'
+            }
+        ],
+        'affiliations': [{'name': 'CERN'}]
+    }
+
+
+def test_orcid_xml_transformer(bytes_xml_entry, expected_from_xml):
     transformer = OrcidXMLTransformer()
-    assert expected_from_xml == transformer.apply(xml_entry)
+    assert expected_from_xml == transformer.apply(bytes_xml_entry)
+
+
+class MockResponse():
+    content = bytes(XML_ENTRY_DATA, encoding="raw_unicode_escape")
+    status_code = 200
+
+
+@patch('requests.get', side_effect=lambda url, headers: MockResponse())
+def test_orcid_http_reader(_, bytes_xml_entry):
+    reader = OrcidHTTPReader(id="0000-0001-8135-3489")
+    results = []
+    for entry in reader.read():
+        results.append(entry)
+
+    assert len(results) == 1
+    assert bytes_xml_entry == results[0]
