@@ -8,12 +8,27 @@
 
 """Names datastreams, transformers, writers and readers."""
 
+import requests
 from invenio_access.permissions import system_identity
 from invenio_records.dictutils import dict_lookup
 
 from ...datastreams import StreamEntry
 from ...datastreams.errors import TransformerError
+from ...datastreams.readers import SimpleHTTPReader
 from ...datastreams.transformers import XMLTransformer
+
+
+class OrcidHTTPReader(SimpleHTTPReader):
+    """ORCiD HTTP Reader."""
+
+    def __init__(self, *args, test_mode=True, **kwargs):
+        """Constructor."""
+        if test_mode:
+            origin = "https://sandbox.orcid.org/{id}"
+        else:
+            origin = "https://orcid.org/{id}"
+
+        super().__init__(origin, *args, **kwargs)
 
 
 class OrcidXMLTransformer(XMLTransformer):
@@ -62,6 +77,11 @@ class OrcidXMLTransformer(XMLTransformer):
             pass
 
         return StreamEntry(entry)
+
+
+VOCABULARIES_DATASTREAM_READERS = {
+    "orcid-http": OrcidHTTPReader,
+}
 
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
