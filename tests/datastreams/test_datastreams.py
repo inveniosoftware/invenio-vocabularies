@@ -19,7 +19,6 @@ from invenio_vocabularies.datastreams.factories import DataStreamFactory
 def vocabulary_config():
     """Parsed vocabulary configuration."""
     return {
-        "pid-type": "testid",
         "transformers": [
             {"type": "test"}
         ],
