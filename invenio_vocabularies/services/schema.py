@@ -29,10 +29,33 @@ class BaseVocabularySchema(BaseRecordSchema):
 
 
 class VocabularySchema(BaseVocabularySchema):
-    """Service schema for vocabulary records.."""
+    """Service schema for vocabulary records."""
 
     props = fields.Dict(
         allow_none=False, keys=fields.Str(), values=fields.Str()
     )
     tags = fields.List(SanitizedUnicode())
     type = fields.Str(attribute='type.id', required=True)
+
+
+class DatastreamObject(Schema):
+    """Datastream object (reader, transformer, writer)."""
+
+    type = fields.Str(required=True)
+    args = fields.Dict(keys=fields.Str(), values=fields.Field)
+
+
+class TaskSchema(Schema):
+    """Service schema for vocabulary tasks."""
+
+    reader = fields.Nested(DatastreamObject, required=True)
+    transformers = fields.List(
+        fields.Nested(DatastreamObject),
+        validate=validate.Length(min=1),
+        required=False,
+    )
+    writers = fields.List(
+        fields.Nested(DatastreamObject),
+        validate=validate.Length(min=1),
+        required=True,
+    )
