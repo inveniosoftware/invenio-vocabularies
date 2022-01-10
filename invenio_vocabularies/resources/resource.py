@@ -18,7 +18,8 @@ from invenio_records_resources.resources import RecordResource, \
     RecordResourceConfig, SearchRequestArgsSchema
 from invenio_records_resources.resources.records.headers import etag_headers
 from invenio_records_resources.resources.records.resource import \
-    request_data, request_headers, request_search_args, request_view_args
+    request_data, request_headers, request_search_args, request_view_args, \
+    route
 from invenio_records_resources.resources.records.utils import es_preference
 from marshmallow import fields
 
@@ -45,6 +46,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
     routes = {
         "list": "/<type>",
         "item": "/<type>/<pid_value>",
+        "tasks": "/tasks"
     }
 
     request_view_args = {
@@ -74,6 +76,15 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 #
 class VocabulariesResource(RecordResource):
     """Resource for generic vocabularies."""
+
+    def create_url_rules(self):
+        """Create the URL rules for the record resource."""
+        routes = self.config.routes
+        rules = super().create_url_rules()
+        rules.append(
+            route("POST", routes["tasks"], self.launch),
+        )
+        return rules
 
     @request_search_args
     @request_view_args
@@ -142,3 +153,9 @@ class VocabulariesResource(RecordResource):
             revision_id=resource_requestctx.headers.get("if_match"),
         )
         return "", 204
+
+    @request_data
+    def launch(self):
+        """Create a task."""
+        self.service.launch(g.identity, resource_requestctx.data or {})
+        return "", 202
