@@ -11,6 +11,7 @@
 from invenio_access.permissions import system_identity
 from invenio_records.dictutils import dict_lookup
 
+from ...datastreams import StreamEntry
 from ...datastreams.errors import TransformerError
 from ...datastreams.transformers import XMLTransformer
 
@@ -18,9 +19,9 @@ from ...datastreams.transformers import XMLTransformer
 class OrcidXMLTransformer(XMLTransformer):
     """ORCiD XML Transfomer."""
 
-    def apply(self, entry, **kwargs):
-        """Applies the transformation to the entry."""
-        xml_tree = self._xml_to_etree(entry)
+    def apply(self, stream_entry, **kwargs):
+        """Applies the transformation to the stream entry."""
+        xml_tree = self._xml_to_etree(stream_entry.entry)
         researcher = self._etree_to_dict(xml_tree)
         record = researcher["html"]["body"].get("record")
 
@@ -60,7 +61,7 @@ class OrcidXMLTransformer(XMLTransformer):
         except Exception:
             pass
 
-        return entry
+        return StreamEntry(entry)
 
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {

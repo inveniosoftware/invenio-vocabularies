@@ -14,6 +14,7 @@ fixtures are available.
 
 import pytest
 
+from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import TransformerError, \
     WriterError
 from invenio_vocabularies.datastreams.readers import BaseReader
@@ -27,18 +28,18 @@ class TestReader(BaseReader):
     def read(self, *args, **kwargs):
         """Yields the values in the origin."""
         for value in self._origin:
-            yield value
+            yield StreamEntry(value)
 
 
 class TestTransformer(BaseTransformer):
     """Test transformer."""
 
-    def apply(self, entry, *args, **kwargs):
+    def apply(self, stream_entry, *args, **kwargs):
         """Sums up one to the value."""
-        if entry < 0:
+        if stream_entry.entry < 0:
             raise TransformerError("Value cannot be negative")
 
-        return entry + 1
+        return StreamEntry(stream_entry.entry + 1)
 
 
 class TestWriter(BaseWriter):
@@ -53,9 +54,9 @@ class FailingTestWriter(BaseWriter):
         super().__init__()
         self.fail_on = fail_on
 
-    def write(self, entry):
+    def write(self, stream_entry):
         """Return the entry."""
-        if entry == self.fail_on:
+        if stream_entry.entry == self.fail_on:
             raise WriterError(f"{self.fail_on} value found.")
 
 

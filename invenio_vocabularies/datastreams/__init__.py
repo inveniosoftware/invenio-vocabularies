@@ -8,10 +8,11 @@
 
 """Datastreams module."""
 
-from .datastreams import BaseDataStream
+from .datastreams import BaseDataStream, StreamEntry
 from .factories import DataStreamFactory
 
 __all__ = (
     "BaseDataStream",
     "DataStreamFactory",
+    "StreamEntry",
 )

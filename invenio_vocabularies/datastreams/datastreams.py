@@ -11,8 +11,8 @@
 from .errors import TransformerError, WriterError
 
 
-class StreamResult:
-    """Result object for streams processing."""
+class StreamEntry:
+    """Object to encapsulate streams processing."""
 
     def __init__(self, entry, errors=None):
         """Constructor."""
@@ -34,47 +34,51 @@ class BaseDataStream:
         self._transformers = transformers
         self._writers = writers
 
-    def filter(self, entry, *args, **kwargs):
-        """Checks if an entry should be filtered out (skipped)."""
+    def filter(self, stream_entry, *args, **kwargs):
+        """Checks if an stream_entry should be filtered out (skipped)."""
         return False
 
     def process(self, *args, **kwargs):
         """Iterates over the entries.
 
         Uses the reader to get the raw entries and transforms them.
+        It will iterate over the `StreamEntry` objects returned by
+        the reader, apply the transformations and yield the result of
+        writing it.
         """
-        for entry in self._reader.read():
-            result = self.transform(entry)
-            if result.errors:
-                yield StreamResult(entry=entry, errors=result.errors)
-            elif not self.filter(result.entry):
-                yield self.write(result.entry)
+        for stream_entry in self._reader.read():
+            transformed_entry = self.transform(stream_entry)
+            if transformed_entry.errors:
+                yield transformed_entry
+            elif not self.filter(transformed_entry):
+                yield self.write(transformed_entry)
 
-    def transform(self, entry, *args, **kwargs):
-        """Apply the transformations to an entry."""
+    def transform(self, stream_entry, *args, **kwargs):
+        """Apply the transformations to an stream_entry."""
         for transformer in self._transformers:
             try:
-                entry = transformer.apply(entry)
+                stream_entry = transformer.apply(stream_entry)
             except TransformerError as err:
-                return StreamResult(
-                    entry,
+                return StreamEntry(
+                    stream_entry.entry,
                     # FIXME: __ is ugly, add name cls attr?
                     [f"{transformer.__class__.__name__}: {str(err)}"]
                 )
 
-        return StreamResult(entry)
+        return stream_entry
 
-    def write(self, entry, *args, **kwargs):
-        """Apply the transformations to an entry."""
-        errors = []
+    def write(self, stream_entry, *args, **kwargs):
+        """Apply the transformations to an stream_entry."""
         for writer in self._writers:
             try:
-                writer.write(entry)
+                writer.write(stream_entry)
             except WriterError as err:
                 # FIXME: __ is ugly, add name cls attr?
-                errors.append(f"{writer.__class__.__name__}: {str(err)}")
+                stream_entry.errors.append(
+                    f"{writer.__class__.__name__}: {str(err)}"
+                )
 
-        return StreamResult(entry, errors)
+        return stream_entry
 
     def total(self, *args, **kwargs):
         """The total of entries obtained from the origin."""
