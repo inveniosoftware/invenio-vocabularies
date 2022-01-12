@@ -13,6 +13,8 @@ import tarfile
 
 import yaml
 
+from .datastreams import StreamEntry
+
 
 class BaseReader:
     """Base reader."""
@@ -22,7 +24,10 @@ class BaseReader:
         self._origin = origin
 
     def read(self, *args, **kwargs):
-        """Reads the content from the origin."""
+        """Reads the content from the origin.
+
+        Yields `StreamEntry` objects.
+        """
         pass
 
 
@@ -34,7 +39,7 @@ class YamlReader(BaseReader):
         with open(self._origin) as f:
             data = yaml.safe_load(f) or []
             for entry in data:
-                yield entry
+                yield StreamEntry(entry)
 
 
 class TarReader(BaseReader):
@@ -53,4 +58,4 @@ class TarReader(BaseReader):
                 match = not self._regex or self._regex.search(member.name)
                 if member.isfile() and match:
                     content = archive.extractfile(member).read()
-                    yield content
+                    yield StreamEntry(entry=content)

@@ -15,7 +15,6 @@ from invenio_access.permissions import system_identity
 from invenio_records_resources.proxies import current_service_registry
 from marshmallow import ValidationError
 
-from .datastreams import StreamResult
 from .errors import WriterError
 
 
@@ -26,10 +25,12 @@ class BaseWriter:
         """Constructor."""
         pass
 
-    def write(self, entry, *args, **kwargs):
-        """Writes the input entry to the target output.
+    def write(self, stream_entry, *args, **kwargs):
+        """Writes the input stream entry to the target output.
 
-        Raises WriterException in case of errors.
+        :returns: A StreamEntry. The result of writing the entry.
+                  Raises WriterException in case of errors.
+
         """
         pass
 
@@ -52,17 +53,12 @@ class ServiceWriter(BaseWriter):
 
         super().__init__(*args, **kwargs)
 
-    def write(self, entry, *args, **kwargs):
+    def write(self, stream_entry, *args, **kwargs):
         """Writes the input entry using a given service."""
         try:
-            result = self._service.create(self._identity, entry)
+            result = self._service.create(self._identity, stream_entry.entry)
         except ValidationError as err:
-            result = StreamResult(
-                entry=entry,
-                errors=[{"ValidationError": err.messages}]
-            )
-        if result.errors:
-            raise WriterError(result.errors)
+            raise WriterError([{"ValidationError": err.messages}])
 
         return result
 
@@ -79,12 +75,11 @@ class YamlWriter(BaseWriter):
 
         super().__init__(*args, **kwargs)
 
-    def write(self, entry, *args, **kwargs):
-        """Writes the input entry using a given service."""
+    def write(self, stream_entry, *args, **kwargs):
+        """Writes the input stream entry using a given service."""
         with open(self._filepath, 'a') as file:
             # made into array for safer append
             # will always read array (good for reader)
-            yaml.safe_dump([entry], file)
-            result = StreamResult(entry=entry)
+            yaml.safe_dump([stream_entry.entry], file)
 
-        return result
+        return stream_entry

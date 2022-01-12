@@ -20,11 +20,11 @@ class BaseTransformer:
         """Constructor."""
         pass
 
-    def apply(self, entry, *args, **kwargs):
+    def apply(self, stream_entry, *args, **kwargs):
         """Applies the transformation to the entry.
 
-        :returns: The transformed entry, this allow them to be chained
-                  raises TransformerError in case of errors.
+        :returns: A StreamEntry. The transformed entry.
+                  Raises TransformerError in case of errors.
         """
         pass
 

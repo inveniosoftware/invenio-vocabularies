@@ -12,6 +12,7 @@
 import pytest
 
 from invenio_vocabularies.contrib.names.datastreams import OrcidXMLTransformer
+from invenio_vocabularies.datastreams import StreamEntry
 
 
 @pytest.fixture(scope='module')
@@ -32,7 +33,7 @@ def expected_from_xml():
 @pytest.fixture(scope='module')
 def xml_entry():
     # simplified version of an XML file of the ORCiD dump
-    return bytes(
+    return StreamEntry(bytes(
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
         '<record:record path="/0000-0001-8135-3489">\n'
         '    <common:orcid-identifier>\n'
@@ -60,9 +61,9 @@ def xml_entry():
         '    </activities:activities-summary>\n'
         '</record:record>\n',
         encoding="raw_unicode_escape"
-    )
+    ))
 
 
 def test_orcid_xml_transformer(xml_entry, expected_from_xml):
     transformer = OrcidXMLTransformer()
-    assert expected_from_xml == transformer.apply(xml_entry)
+    assert expected_from_xml == transformer.apply(xml_entry).entry

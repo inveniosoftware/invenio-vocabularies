@@ -46,8 +46,8 @@ def yaml_file(expected_from_yaml):
 def test_yaml_reader(yaml_file, expected_from_yaml):
     reader = YamlReader(yaml_file)
 
-    for idx, entry in enumerate(reader.read()):
-        assert entry == expected_from_yaml[idx]
+    for idx, stream_entry in enumerate(reader.read()):
+        assert stream_entry.entry == expected_from_yaml[idx]
 
 
 @pytest.fixture(scope='module')
@@ -85,8 +85,8 @@ def test_tar_reader(tar_file, expected_from_tar):
     reader = TarReader(tar_file, regex=".yaml$")
 
     total = 0
-    for entry in reader.read():
-        assert yaml.safe_load(entry) == expected_from_tar
+    for stream_entry in reader.read():
+        assert yaml.safe_load(stream_entry.entry) == expected_from_tar
         total += 1
 
     assert total == 2  # ignored the `.other` file

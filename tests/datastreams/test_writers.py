@@ -12,12 +12,13 @@ from pathlib import Path
 
 import yaml
 
+from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.writers import ServiceWriter, YamlWriter
 
 
 def test_service_writer(lang_type, lang_data, service, identity):
     writer = ServiceWriter(service, identity)
-    lang = writer.write(entry=lang_data)
+    lang = writer.write(stream_entry=StreamEntry(lang_data))
     record = service.read(identity, ("languages", lang.id))
     record = record.to_dict()
 
@@ -33,7 +34,7 @@ def test_yaml_writer():
 
     writer = YamlWriter(filepath=filepath)
     for output in test_output:
-        assert not writer.write(entry=output).errors
+        assert not writer.write(stream_entry=StreamEntry(output)).errors
 
     with open(filepath) as file:
         assert yaml.safe_load(file) == test_output
