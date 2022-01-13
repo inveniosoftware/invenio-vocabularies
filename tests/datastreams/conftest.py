@@ -39,7 +39,8 @@ class TestTransformer(BaseTransformer):
         if stream_entry.entry < 0:
             raise TransformerError("Value cannot be negative")
 
-        return StreamEntry(stream_entry.entry + 1)
+        stream_entry.entry += 1
+        return stream_entry
 
 
 class TestWriter(BaseWriter):
@@ -54,7 +55,7 @@ class FailingTestWriter(BaseWriter):
         super().__init__()
         self.fail_on = fail_on
 
-    def write(self, stream_entry):
+    def write(self, stream_entry, *args, **kwargs):
         """Return the entry."""
         if stream_entry.entry == self.fail_on:
             raise WriterError(f"{self.fail_on} value found.")

@@ -74,4 +74,5 @@ class XMLTransformer(BaseTransformer):
         if not record:
             raise TransformerError(f"Record not found in XML entry.")
 
-        return StreamEntry(record)
+        stream_entry.entry = record
+        return stream_entry

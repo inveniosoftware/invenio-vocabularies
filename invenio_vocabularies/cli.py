@@ -44,7 +44,6 @@ def get_service_for_vocabulary(vocabulary):
 @click.group()
 def vocabularies():
     """Vocabularies command."""
-    pass
 
 
 def _process_vocab(config, num_samples=None):
@@ -101,7 +100,28 @@ def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
     config = get_config_for_ds(vocabulary, filepath, origin)
     success, errored = _process_vocab(config, num_samples)
 
-    _output_process(vocabulary, "loaded", success, errored)
+    _output_process(vocabulary, "imported", success, errored)
+
+
+@vocabularies.command()
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option("-f", "--filepath", type=click.STRING)
+@click.option("-o", "--origin", type=click.STRING)
+@with_appcontext
+def update(vocabulary, filepath=None, origin=None):
+    """Import a vocabulary."""
+    if not filepath and not origin:
+        click.secho("One of --filepath or --origin must be present", fg="red")
+        exit(1)
+
+    config = get_config_for_ds(vocabulary, filepath, origin)
+
+    for w_conf in config["writers"]:
+        w_conf["args"]["update"] = True
+
+    success, errored = _process_vocab(config)
+
+    _output_process(vocabulary, "updated", success, errored)
 
 
 @vocabularies.command()
@@ -156,7 +176,6 @@ def delete(vocabulary, identifier, all):
         )
         exit(1)
 
-    breakpoint()
     service = get_service_for_vocabulary(vocabulary)
     if identifier:
         try:
