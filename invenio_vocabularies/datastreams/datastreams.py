@@ -59,11 +59,11 @@ class BaseDataStream:
             try:
                 stream_entry = transformer.apply(stream_entry)
             except TransformerError as err:
-                return StreamEntry(
-                    stream_entry.entry,
-                    # FIXME: __ is ugly, add name cls attr?
-                    [f"{transformer.__class__.__name__}: {str(err)}"]
+                # FIXME: __ is ugly, add name cls attr?
+                stream_entry.errors.append(
+                    f"{transformer.__class__.__name__}: {str(err)}"
                 )
+                return stream_entry  # break loop
 
         return stream_entry
 
