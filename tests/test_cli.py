@@ -10,13 +10,18 @@
 
 import tarfile
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
+from click.testing import CliRunner
+from flask.cli import ScriptInfo
 from invenio_access.permissions import system_identity
 
-from invenio_vocabularies.cli import _process_vocab, get_config_for_ds
+from invenio_vocabularies.cli import _process_vocab, get_config_for_ds, \
+    vocabularies
 from invenio_vocabularies.contrib.names.api import Name
-from invenio_vocabularies.contrib.names.datastreams import OrcidXMLTransformer
+from invenio_vocabularies.contrib.names.datastreams import \
+    NamesServiceWriter, OrcidXMLTransformer
 from invenio_vocabularies.contrib.names.services import NamesService, \
     NamesServiceConfig
 
@@ -58,12 +63,15 @@ def app_config(app_config):
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
         "orcid-xml": OrcidXMLTransformer
     }
+    app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
+        "names-service": NamesServiceWriter
+    }
 
     return app_config
 
 
 @pytest.fixture(scope='module')
-def expected_name_xml():
+def name_xml():
     return (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
         '<record:record path="/0000-0001-8135-3489">\n'
@@ -95,7 +103,7 @@ def expected_name_xml():
 
 
 @pytest.fixture(scope='function')
-def names_tar_file(expected_name_xml):
+def names_tar_file(name_xml):
     """Creates a Tar file with three files (two yaml) inside.
 
     Each iteration should return the content of one yaml file,
@@ -105,7 +113,7 @@ def names_tar_file(expected_name_xml):
     with tarfile.open(filename, "w:gz") as tar:
         inner_filename = Path("lnielsen_name.xml")
         with open(inner_filename, 'w') as file:
-            file.write(expected_name_xml)
+            file.write(name_xml)
         tar.add(inner_filename)
         inner_filename.unlink()
 
@@ -129,3 +137,15 @@ def test_process(app, names_tar_file, names_service):
 
     assert results.total == 1
     assert list(results.hits)[0]["identifiers"][0]["identifier"] == orcid
+
+
+def test_update_cmd(app, names_tar_file):
+    # cli update
+    runner = CliRunner()
+    obj = ScriptInfo(create_app=lambda x: app)
+    result = runner.invoke(
+        vocabularies,
+        ['update', '-v', 'names', '--origin', names_tar_file.absolute()],
+        obj=obj
+    )
+    assert result.exit_code == 0

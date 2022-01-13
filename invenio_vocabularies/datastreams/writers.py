@@ -12,9 +12,11 @@ from pathlib import Path
 
 import yaml
 from invenio_access.permissions import system_identity
+from invenio_pidstore.errors import PIDAlreadyExists
 from invenio_records_resources.proxies import current_service_registry
 from marshmallow import ValidationError
 
+from .datastreams import StreamEntry
 from .errors import WriterError
 
 
@@ -38,29 +40,54 @@ class BaseWriter:
 class ServiceWriter(BaseWriter):
     """Writes the entries to an RDM instance using a Service object."""
 
-    def __init__(self, service_or_name, identity, *args, **kwargs):
+    def __init__(
+        self, service_or_name, identity, *args, update=False, **kwargs
+    ):
         """Constructor.
 
         :param service_or_name: a service instance or a key of the
                                 service registry.
         :param identity: access identity.
+        :param update: if True it will update records if they exist.
         """
         if isinstance(service_or_name, str):
             service_or_name = current_service_registry.get(service_or_name)
 
         self._service = service_or_name
         self._identity = system_identity
+        self._update = update
 
         super().__init__(*args, **kwargs)
 
+    def _entry_id(self, entry):
+        """Get the id from an entry."""
+        return (entry["type"], entry["id"])
+
+    def _resolve(self, id_):
+        return self._service.read(self._identity, id_)
+
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input entry using a given service."""
+        entry = stream_entry.entry
         try:
-            result = self._service.create(self._identity, stream_entry.entry)
+            try:
+                return StreamEntry(
+                    self._service.create(self._identity, entry)
+                )
+            except PIDAlreadyExists:
+                if not self._update:
+                    raise WriterError(
+                        [f"Vocabulary entry already exists: {entry}"]
+                    )
+                vocab_id = self._entry_id(entry)
+                current = self._resolve(vocab_id)
+                updated = dict(current.to_dict(), **entry)
+                return StreamEntry(
+                    self._service.update(self._identity, vocab_id, updated)
+                )
+
         except ValidationError as err:
             raise WriterError([{"ValidationError": err.messages}])
-
-        return result
 
 
 class YamlWriter(BaseWriter):

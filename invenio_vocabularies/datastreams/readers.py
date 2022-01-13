@@ -59,7 +59,7 @@ class TarReader(BaseReader):
                 match = not self._regex or self._regex.search(member.name)
                 if member.isfile() and match:
                     content = archive.extractfile(member).read()
-                    yield StreamEntry(entry=content)
+                    yield StreamEntry(content)
 
 
 class SimpleHTTPReader(BaseReader):
