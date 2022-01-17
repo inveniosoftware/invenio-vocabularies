@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,6 +11,9 @@
 from collections import defaultdict
 
 from lxml import etree
+
+from .datastreams import StreamEntry
+from .errors import TransformerError
 
 
 class BaseTransformer:
@@ -59,3 +62,16 @@ class XMLTransformer(BaseTransformer):
             else:
                 d[tree.tag] = text
         return d
+
+    def apply(self, stream_entry, **kwargs):
+        """Applies the transformation to the stream entry.
+
+        Requires the root element to be named "record".
+        """
+        xml_tree = self._xml_to_etree(stream_entry.entry)
+        record = self._etree_to_dict(xml_tree)["html"]["body"].get("record")
+
+        if not record:
+            raise TransformerError(f"Record not found in XML entry.")
+
+        return StreamEntry(record)
