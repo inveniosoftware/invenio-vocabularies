@@ -59,7 +59,6 @@ class BaseDataStream:
             try:
                 stream_entry = transformer.apply(stream_entry)
             except TransformerError as err:
-                # FIXME: __ is ugly, add name cls attr?
                 stream_entry.errors.append(
                     f"{transformer.__class__.__name__}: {str(err)}"
                 )
@@ -73,7 +72,6 @@ class BaseDataStream:
             try:
                 writer.write(stream_entry)
             except WriterError as err:
-                # FIXME: __ is ugly, add name cls attr?
                 stream_entry.errors.append(
                     f"{writer.__class__.__name__}: {str(err)}"
                 )

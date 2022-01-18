@@ -15,7 +15,7 @@ from ..datastreams.factories import DataStreamFactory
 
 @shared_task(ignore_result=True)
 def process_datastream(config):
-    """Lift expired embargos."""
+    """Process a datastream from config."""
     ds = DataStreamFactory.create(
         reader_config=config["reader"],
         transformers_config=config.get("transformers"),
