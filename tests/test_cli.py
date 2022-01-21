@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -19,9 +19,13 @@ from invenio_access.permissions import system_identity
 
 from invenio_vocabularies.cli import _process_vocab, get_config_for_ds, \
     vocabularies
+from invenio_vocabularies.config import VOCABULARIES_DATASTREAM_TRANSFORMERS, \
+    VOCABULARIES_DATASTREAM_WRITERS
 from invenio_vocabularies.contrib.names.api import Name
 from invenio_vocabularies.contrib.names.datastreams import \
-    NamesServiceWriter, OrcidXMLTransformer
+    VOCABULARIES_DATASTREAM_TRANSFORMERS as NAMES_TRANSFORMERS
+from invenio_vocabularies.contrib.names.datastreams import \
+    VOCABULARIES_DATASTREAM_WRITERS as NAMES_WRITERS
 from invenio_vocabularies.contrib.names.services import NamesService, \
     NamesServiceConfig
 
@@ -61,10 +65,12 @@ def base_app(base_app, names_service):
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
-        "orcid-xml": OrcidXMLTransformer
+        **VOCABULARIES_DATASTREAM_TRANSFORMERS,
+        **NAMES_TRANSFORMERS,
     }
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
-        "names-service": NamesServiceWriter
+        **VOCABULARIES_DATASTREAM_WRITERS,
+        **NAMES_WRITERS,
     }
 
     return app_config

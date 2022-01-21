@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,7 +8,6 @@
 
 """Names datastreams, transformers, writers and readers."""
 
-import requests
 from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDDoesNotExistError
 from invenio_records.dictutils import dict_lookup
@@ -17,7 +16,7 @@ from marshmallow import ValidationError
 from ...datastreams import StreamEntry
 from ...datastreams.errors import TransformerError, WriterError
 from ...datastreams.readers import SimpleHTTPReader
-from ...datastreams.transformers import XMLTransformer
+from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 
 
@@ -34,18 +33,12 @@ class OrcidHTTPReader(SimpleHTTPReader):
         super().__init__(origin, *args, **kwargs)
 
 
-class OrcidXMLTransformer(XMLTransformer):
-    """ORCiD XML Transfomer."""
+class OrcidTransformer(BaseTransformer):
+    """Transforms an ORCiD record into a names record."""
 
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
-        xml_tree = self._xml_to_etree(stream_entry.entry)
-        researcher = self._etree_to_dict(xml_tree)
-        record = researcher["html"]["body"].get("record")
-
-        if not record:
-            raise TransformerError(f"Record not found in ORCiD entry.")
-
+        record = stream_entry.entry
         person = record["person"]
         orcid_id = record["orcid-identifier"]["uri"]
 
@@ -132,7 +125,7 @@ VOCABULARIES_DATASTREAM_READERS = {
 
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
-    "orcid-xml": OrcidXMLTransformer,
+    "orcid": OrcidTransformer,
 }
 """ORCiD Data Streams transformers."""
 
@@ -151,7 +144,8 @@ DATASTREAM_CONFIG = {
         }
     },
     "transformers": [
-        {"type": "orcid-xml"}
+        {"type": "xml"},
+        {"type": "orcid"}
     ],
     "writers": [{
         "type": "names-service",

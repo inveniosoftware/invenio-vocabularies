@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -16,7 +16,7 @@ from invenio_access.permissions import system_identity
 
 from invenio_vocabularies.contrib.names.api import Name
 from invenio_vocabularies.contrib.names.datastreams import \
-    NamesServiceWriter, OrcidHTTPReader, OrcidXMLTransformer
+    NamesServiceWriter, OrcidHTTPReader, OrcidTransformer
 from invenio_vocabularies.contrib.names.services import NamesService, \
     NamesServiceConfig
 from invenio_vocabularies.datastreams import StreamEntry
@@ -122,9 +122,44 @@ def bytes_xml_entry():
     return StreamEntry(XML_ENTRY_DATA)
 
 
-def test_orcid_xml_transformer(bytes_xml_entry, expected_from_xml):
-    transformer = OrcidXMLTransformer()
-    assert expected_from_xml == transformer.apply(bytes_xml_entry).entry
+@pytest.fixture(scope="module")
+def dict_xml_entry():
+    return StreamEntry({
+        'orcid-identifier': {
+            'uri': 'https://orcid.org/0000-0001-8135-3489',
+            'path': '0000-0001-8135-3489',
+            'host': 'orcid.org'
+        },
+        'person': {
+            'name': {
+                'given-names': 'Lars Holm',
+                'family-name': 'Nielsen',
+                '@visibility': 'public',
+                '@path': '0000-0001-8135-3489'
+            },
+            'external-identifiers': {
+                '@path': '/0000-0001-8135-3489/external-identifiers'
+            },
+            '@path': '/0000-0001-8135-3489/person'
+        },
+        'activities-summary': {
+            'employments': {
+                'affiliation-group': {
+                    'employment-summary': {
+                        'organization': {'name': 'CERN'}
+                    }
+                },
+                '@path': '/0000-0001-8135-3489/employments'
+            },
+            '@path': '/0000-0001-8135-3489/activities'
+        },
+        '@path': '/0000-0001-8135-3489'
+    })
+
+
+def test_orcid_transformer(dict_xml_entry, expected_from_xml):
+    transformer = OrcidTransformer()
+    assert expected_from_xml == transformer.apply(dict_xml_entry).entry
 
 
 class MockResponse():
