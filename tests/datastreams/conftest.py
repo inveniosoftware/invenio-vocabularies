@@ -18,6 +18,8 @@ from pathlib import Path
 
 import pytest
 
+from invenio_vocabularies.config import VOCABULARIES_DATASTREAM_READERS, \
+    VOCABULARIES_DATASTREAM_TRANSFORMERS, VOCABULARIES_DATASTREAM_WRITERS
 from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
 from invenio_vocabularies.datastreams.readers import BaseReader, JsonReader, ZipReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
@@ -75,12 +77,15 @@ class FailingTestWriter(BaseWriter):
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["VOCABULARIES_DATASTREAM_READERS"] = {
-        "json": JsonReader,
+        **VOCABULARIES_DATASTREAM_READERS,
         "test": TestReader,
-        "zip": ZipReader,
     }
-    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {"test": TestTransformer}
+    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
+        **VOCABULARIES_DATASTREAM_TRANSFORMERS,
+        "test": TestTransformer
+    }
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
+        **VOCABULARIES_DATASTREAM_WRITERS,
         "test": TestWriter,
         "fail": FailingTestWriter,
     }
