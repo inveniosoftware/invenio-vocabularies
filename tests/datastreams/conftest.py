@@ -85,7 +85,7 @@ def app_config(app_config):
     }
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
         **VOCABULARIES_DATASTREAM_TRANSFORMERS,
-        "test": TestTransformer,
+        "test": TestTransformer
     }
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
         **VOCABULARIES_DATASTREAM_WRITERS,
