@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -18,6 +18,7 @@ from marshmallow import ValidationError
 
 from .datastreams import StreamEntry
 from .errors import WriterError
+from .tasks import write_entry
 
 
 class BaseWriter:
@@ -108,5 +109,23 @@ class YamlWriter(BaseWriter):
             # made into array for safer append
             # will always read array (good for reader)
             yaml.safe_dump([stream_entry.entry], file)
+
+        return stream_entry
+
+
+class AsyncWriter(BaseWriter):
+    """Writes the entries asynchronously (celery task)."""
+
+    def __init__(self, writer, *args, **kwargs):
+        """Constructor.
+
+        :param writer: writer to use.
+        """
+        self._writer = writer
+        super().__init__(*args, **kwargs)
+
+    def write(self, stream_entry, *args, **kwargs):
+        """Launches a celery task to write an entry."""
+        write_entry.delay(self._writer, stream_entry.entry)
 
         return stream_entry

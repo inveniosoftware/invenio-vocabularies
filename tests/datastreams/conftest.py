@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -14,6 +14,8 @@ fixtures are available.
 
 import pytest
 
+from invenio_vocabularies.config import VOCABULARIES_DATASTREAM_READERS, \
+    VOCABULARIES_DATASTREAM_TRANSFORMERS, VOCABULARIES_DATASTREAM_WRITERS
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import TransformerError, \
     WriterError
@@ -65,12 +67,15 @@ class FailingTestWriter(BaseWriter):
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["VOCABULARIES_DATASTREAM_READERS"] = {
+        **VOCABULARIES_DATASTREAM_READERS,
         "test": TestReader
     }
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
+        **VOCABULARIES_DATASTREAM_TRANSFORMERS,
         "test": TestTransformer
     }
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
+        **VOCABULARIES_DATASTREAM_WRITERS,
         "test": TestWriter,
         "fail": FailingTestWriter,
     }
