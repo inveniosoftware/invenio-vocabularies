@@ -1,15 +1,15 @@
 # Translations template for invenio-vocabularies.
-# Copyright (C) 2021 CERN
-# Copyright (C) 2021 Graz University of Technology.
+# Copyright (C) 2022 CERN
 # This file is distributed under the same license as the
 # invenio-vocabularies project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-vocabularies 0.9.0\n"
+"Project-Id-Version: invenio-vocabularies 0.10.3\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2021-10-12 12:22+0200\n"
+"POT-Creation-Date: 2022-02-08 09:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,34 +18,83 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:46
+#: invenio_vocabularies/config.py:29
+msgid "GRID"
+msgstr ""
+
+#: invenio_vocabularies/config.py:33 invenio_vocabularies/config.py:54
+msgid "GND"
+msgstr ""
+
+#: invenio_vocabularies/config.py:37
+msgid "ISNI"
+msgstr ""
+
+#: invenio_vocabularies/config.py:41
+msgid "ROR"
+msgstr ""
+
+#: invenio_vocabularies/config.py:49
+msgid "ORCID"
+msgstr ""
+
+#: invenio_vocabularies/contrib/affiliations/config.py:45
+#: invenio_vocabularies/contrib/names/config.py:45
 #: invenio_vocabularies/contrib/subjects/config.py:38
-#: invenio_vocabularies/services/service.py:54
+#: invenio_vocabularies/services/service.py:58
 msgid "Best match"
 msgstr ""
 
-#: invenio_vocabularies/contrib/affiliations/config.py:50
+#: invenio_vocabularies/contrib/affiliations/config.py:49
+#: invenio_vocabularies/contrib/names/config.py:49
 #: invenio_vocabularies/contrib/subjects/config.py:42
 msgid "Name"
 msgstr ""
 
-#: invenio_vocabularies/contrib/affiliations/config.py:54
+#: invenio_vocabularies/contrib/affiliations/config.py:53
+#: invenio_vocabularies/contrib/names/config.py:53
 #: invenio_vocabularies/contrib/subjects/config.py:46
-#: invenio_vocabularies/services/service.py:62
+#: invenio_vocabularies/services/service.py:66
 msgid "Newest"
 msgstr ""
 
-#: invenio_vocabularies/contrib/affiliations/config.py:58
+#: invenio_vocabularies/contrib/affiliations/config.py:57
+#: invenio_vocabularies/contrib/names/config.py:57
 #: invenio_vocabularies/contrib/subjects/config.py:50
-#: invenio_vocabularies/services/service.py:66
+#: invenio_vocabularies/services/service.py:70
 msgid "Oldest"
+msgstr ""
+
+#: invenio_vocabularies/contrib/affiliations/schema.py:54
+#: invenio_vocabularies/contrib/names/schema.py:41
+msgid "An existing id or a free text name must be present"
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:24
+msgid "Title cannot be blank."
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:28
+msgid "Number cannot be blank."
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:47
+msgid "At least award or funder should be present."
+msgstr ""
+
+#: invenio_vocabularies/contrib/funders/schema.py:21
+msgid "Name cannot be blank."
+msgstr ""
+
+#: invenio_vocabularies/contrib/names/schema.py:74
+msgid "name or family_name and given_name must be present."
 msgstr ""
 
 #: invenio_vocabularies/services/components.py:31
 msgid "The vocabulary type does not exists."
 msgstr ""
 
-#: invenio_vocabularies/services/service.py:58
+#: invenio_vocabularies/services/service.py:62
 msgid "Title"
 msgstr ""
 
