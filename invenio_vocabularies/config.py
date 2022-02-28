@@ -50,6 +50,11 @@ VOCABULARIES_NAMES_SCHEMES = {
         "validator": idutils.is_orcid,
         "datacite": "ORCID"
     },
+    "isni": {
+        "label": _("ISNI"),
+        "validator": idutils.is_isni,
+        "datacite": "ISNI"
+    },
     "gnd": {
         "label": _("GND"),
         "validator": idutils.is_gnd,
