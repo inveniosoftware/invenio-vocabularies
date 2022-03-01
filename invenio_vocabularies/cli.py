@@ -54,10 +54,12 @@ def _process_vocab(config, num_samples=None):
         writers_config=config["writers"],
     )
 
-    success, errored = 0, 0
+    success, errored, filtered = 0, 0, 0
     left = num_samples or -1
     for result in ds.process():
         left = left - 1
+        if result.filtered:
+            filtered += 1
         if result.errors:
             for err in result.errors:
                 click.secho(err, fg="red")
@@ -67,10 +69,10 @@ def _process_vocab(config, num_samples=None):
         if left == 0:
             click.secho(f"Number of samples reached {num_samples}", fg="green")
             break
-    return success, errored
+    return success, errored, filtered
 
 
-def _output_process(vocabulary, op, success, errored):
+def _output_process(vocabulary, op, success, errored, filtered):
     """Outputs the result of an operation."""
     total = success + errored
 
@@ -80,7 +82,9 @@ def _output_process(vocabulary, op, success, errored):
 
     click.secho(
         f"Vocabulary {vocabulary} {op}. Total items {total}. \n"
-        f"{success} items succeeded, {errored} contained errors.",
+        f"{success} items succeeded\n"
+        f"{errored} contained errors\n"
+        f"{filtered} were filtered.",
         fg=color
     )
 
@@ -98,9 +102,9 @@ def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
         exit(1)
 
     config = get_config_for_ds(vocabulary, filepath, origin)
-    success, errored = _process_vocab(config, num_samples)
+    success, errored, filtered = _process_vocab(config, num_samples)
 
-    _output_process(vocabulary, "imported", success, errored)
+    _output_process(vocabulary, "imported", success, errored, filtered)
 
 
 @vocabularies.command()
@@ -119,9 +123,9 @@ def update(vocabulary, filepath=None, origin=None):
     for w_conf in config["writers"]:
         w_conf["args"]["update"] = True
 
-    success, errored = _process_vocab(config)
+    success, errored, filtered = _process_vocab(config)
 
-    _output_process(vocabulary, "updated", success, errored)
+    _output_process(vocabulary, "updated", success, errored, filtered)
 
 
 @vocabularies.command()
@@ -148,8 +152,8 @@ def convert(
             {"type": "yaml", "args": {"filepath": target}}
         ]
 
-    success, errored = _process_vocab(config, num_samples)
-    _output_process(vocabulary, "converted", success, errored)
+    success, errored, filtered = _process_vocab(config, num_samples)
+    _output_process(vocabulary, "converted", success, errored, filtered)
 
 
 @vocabularies.command()

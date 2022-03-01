@@ -17,6 +17,7 @@ class StreamEntry:
     def __init__(self, entry, errors=None):
         """Constructor."""
         self.entry = entry
+        self.filtered = False
         self.errors = errors or []
 
 
@@ -50,7 +51,10 @@ class BaseDataStream:
             transformed_entry = self.transform(stream_entry)
             if transformed_entry.errors:
                 yield transformed_entry
-            elif not self.filter(transformed_entry):
+            elif self.filter(transformed_entry):
+                transformed_entry.filtered = True
+                yield transformed_entry
+            else:
                 yield self.write(transformed_entry)
 
     def transform(self, stream_entry, *args, **kwargs):
