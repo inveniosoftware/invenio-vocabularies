@@ -17,13 +17,13 @@ readme = open("README.rst").read()
 history = open("CHANGES.rst").read()
 
 tests_require = [
-    "invenio-app>=1.3.1",
-    "pytest-invenio>=1.4.2",
+    "invenio-app>=1.3.3",
+    "pytest-invenio>=1.4.3",
 ]
 
 # Should follow inveniosoftware/invenio versions
-invenio_search_version = ">=1.4.1,<2.0.0"
-invenio_db_version = ">=1.0.9,<2.0.0"
+invenio_search_version = ">=1.4.2,<2.0.0"
+invenio_db_version = ">=1.0.13,<2.0.0"
 
 extras_require = {
     "docs": [
@@ -60,7 +60,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-records-resources>=0.18.2,<0.19.0",
+    "invenio-records-resources>=0.18.5,<0.19.0",
     "invenio-i18n>=1.3.1",
     "lxml>=4.5.0",
     "PyYAML>=5.4.1",
