@@ -9,7 +9,8 @@
 
 """Subjects schema."""
 
-from marshmallow import fields
+from flask_babelex import lazy_gettext as _
+from marshmallow import Schema, ValidationError, validates_schema
 from marshmallow_utils.fields import SanitizedUnicode
 
 from ...services.schema import BaseVocabularySchema
@@ -24,3 +25,26 @@ class SubjectSchema(BaseVocabularySchema):
     id = SanitizedUnicode(required=True)
     scheme = SanitizedUnicode(required=True)
     subject = SanitizedUnicode(required=True)
+
+
+class SubjectRelationSchema(Schema):
+    """Schema to define an optional subject relation in another schema."""
+
+    id = SanitizedUnicode()
+    subject = SanitizedUnicode()
+
+    @validates_schema
+    def validate_subject(self, data, **kwargs):
+        """Validates that either id either name are present."""
+        id_ = data.get("id")
+        subject = data.get("subject")
+        if id_:
+            data = {"id": id_}
+        elif subject:
+            data = {"subject": subject}
+
+        if not id_ and not subject:
+            raise ValidationError(
+                _("An existing id or a free text subject must be present"),
+                "subjects"
+            )
