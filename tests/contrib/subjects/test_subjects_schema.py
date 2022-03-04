@@ -13,7 +13,8 @@ from copy import copy
 import pytest
 from marshmallow import ValidationError
 
-from invenio_vocabularies.contrib.subjects.schema import SubjectSchema
+from invenio_vocabularies.contrib.subjects.schema import \
+    SubjectRelationSchema, SubjectSchema
 
 
 def test_valid_full(subject_full_data):
@@ -39,3 +40,26 @@ def test_invalid_missing_field(subject_full_data):
     del invalid["subject"]
     with pytest.raises(ValidationError):
         SubjectSchema().load(invalid)
+
+
+#
+# SubjectRelationSchema
+#
+def test_valid_id():
+    valid_id = {
+        "id": "test",
+    }
+    assert valid_id == SubjectRelationSchema().load(valid_id)
+
+
+def test_valid_subject():
+    valid_subject = {
+        "subject": "Entity One"
+    }
+    assert valid_subject == SubjectRelationSchema().load(valid_subject)
+
+
+def test_invalid_empty():
+    invalid_empty = {}
+    with pytest.raises(ValidationError):
+        data = SubjectRelationSchema().load(invalid_empty)
