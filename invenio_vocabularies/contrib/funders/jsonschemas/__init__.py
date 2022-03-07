@@ -6,8 +6,4 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Pytest configuration.
-
-See https://pytest-invenio.readthedocs.io/ for documentation on which test
-fixtures are available.
-"""
+"""Funders JSONSchemas module."""

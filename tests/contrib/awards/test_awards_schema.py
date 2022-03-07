@@ -68,8 +68,6 @@ AWARD = {
 
 FUNDER = {
     "name": "Someone",
-    "identifier": "10.5281/zenodo.9999999",
-    "scheme": "doi"
 }
 
 

@@ -6,8 +6,11 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Pytest configuration.
+"""Vocabulary affiliations."""
 
-See https://pytest-invenio.readthedocs.io/ for documentation on which test
-fixtures are available.
-"""
+
+from .funders import record_type
+
+FundersServiceConfig = record_type.service_config_cls
+
+FundersService = record_type.service_cls

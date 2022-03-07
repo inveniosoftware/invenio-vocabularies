@@ -6,8 +6,8 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Pytest configuration.
+"""Vocabulary funders."""
 
-See https://pytest-invenio.readthedocs.io/ for documentation on which test
-fixtures are available.
-"""
+from .funders import record_type
+
+FundersMetadata = record_type.model_cls

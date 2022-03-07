@@ -24,7 +24,7 @@ VOCABULARIES_RESOURCE_CONFIG = VocabulariesResourceConfig
 VOCABULARIES_SERVICE_CONFIG = VocabulariesServiceConfig
 """Configure the service."""
 
-VOCABULARIES_AFFILIATION_SCHEMES = {
+VOCABULARIES_IDENTIFIER_SCHEMES = {
     "grid": {
         "label": _("GRID"),
         "validator": lambda x: True
@@ -42,7 +42,17 @@ VOCABULARIES_AFFILIATION_SCHEMES = {
         "validator": idutils.is_ror
     },
 }
+""""Generic identifier schemes, usable by other vocabularies."""
+
+VOCABULARIES_AFFILIATION_SCHEMES = {
+    **VOCABULARIES_IDENTIFIER_SCHEMES,
+}
 """Affiliations allowed identifier schemes."""
+
+VOCABULARIES_FUNDER_SCHEMES = {
+    **VOCABULARIES_IDENTIFIER_SCHEMES,
+}
+"""Funders allowed identifier schemes."""
 
 VOCABULARIES_NAMES_SCHEMES = {
     "orcid": {

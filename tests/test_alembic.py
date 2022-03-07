@@ -13,6 +13,19 @@ import pytest
 from invenio_db.utils import drop_alembic_version_table
 
 
+@pytest.fixture(scope="module")
+def extra_entry_points():
+    """Extra entry points to load the contrib specific features."""
+    return {
+        "invenio_db.models": [
+            "affiliations = invenio_vocabularies.contrib.affiliations.models",
+            "funders = invenio_vocabularies.contrib.funders.models",
+            "names = invenio_vocabularies.contrib.names.models",
+            "subjects = invenio_vocabularies.contrib.subjects.models",
+        ],
+    }
+
+
 def assert_alembic(alembic, table_excludes):
     """Assert that metadata of alembic and db matches.
 
@@ -43,6 +56,7 @@ def test_alembic(app, database):
     assert 'subject_metadata' in tables
     assert 'affiliation_metadata' in tables
     assert 'name_metadata' in tables
+    assert 'funder_metadata' in tables
 
     # Check that Alembic agrees that there's no further tables to create.
     assert_alembic(ext.alembic, ['mock_metadata'])
