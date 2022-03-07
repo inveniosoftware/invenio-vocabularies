@@ -15,7 +15,12 @@ fixtures are available.
 
 import pytest
 from flask_principal import Identity, Need, UserNeed
-from invenio_access.permissions import any_user, system_process
+from flask_security import login_user
+from flask_security.utils import hash_password
+from invenio_access.permissions import ActionUsers, any_user, system_process
+from invenio_access.proxies import current_access
+from invenio_accounts.proxies import current_datastore
+from invenio_accounts.testutils import login_user_via_session
 from invenio_app.factory import create_api as _create_api
 from invenio_cache import current_cache
 
@@ -158,6 +163,44 @@ def lang_data_many(lang_type, lic_type, lang_data, service, identity):
         service.create(identity, data)
     Vocabulary.index.refresh()  # Refresh the index
     return lang_ids
+
+
+@pytest.fixture()
+def user(app, db):
+    """Create example user."""
+    with db.session.begin_nested():
+        datastore = app.extensions["security"].datastore
+        _user = datastore.create_user(
+            email="info@inveniosoftware.org",
+            password=hash_password("password"),
+            active=True
+        )
+    db.session.commit()
+    return _user
+
+
+@pytest.fixture()
+def role(app, db):
+    """Create some roles."""
+    with db.session.begin_nested():
+        datastore = app.extensions["security"].datastore
+        role = datastore.create_role(name="admin", description="admin role")
+
+    db.session.commit()
+    return role
+
+
+@pytest.fixture()
+def client_with_credentials(db, client, user, role):
+    """Log in a user to the client."""
+    current_datastore.add_role_to_user(user, role)
+    action = current_access.actions["superuser-access"]
+    db.session.add(ActionUsers.allow(action, user_id=user.id))
+
+    login_user(user, remember=True)
+    login_user_via_session(client, email=user.email)
+
+    return client
 
 
 # FIXME: https://github.com/inveniosoftware/pytest-invenio/issues/30

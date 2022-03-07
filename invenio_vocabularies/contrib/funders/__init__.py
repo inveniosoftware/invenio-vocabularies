@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
 """Funders vocabulary."""
+
+from .resources import FundersResource, FundersResourceConfig
+from .services import FundersService, FundersServiceConfig
+
+__all__ = [
+    "FundersResource",
+    "FundersResourceConfig",
+    "FundersService",
+    "FundersServiceConfig",
+]
