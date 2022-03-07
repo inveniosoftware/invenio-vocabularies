@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -15,8 +15,8 @@ from .datastreams.factories import DataStreamFactory
 from .proxies import current_service
 
 
-class BaseFixture:
-    """Base vocabulary fixture."""
+class VocabularyFixture:
+    """Vocabulary fixture."""
 
     def __init__(self, filepath, delay=True):
         """Constructor."""

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -21,8 +21,8 @@ class StreamEntry:
         self.errors = errors or []
 
 
-class BaseDataStream:
-    """Base data stream."""
+class DataStream:
+    """Data stream."""
 
     def __init__(self, reader, writers, transformers=None, *args, **kwargs):
         """Constructor.
@@ -84,4 +84,4 @@ class BaseDataStream:
 
     def total(self, *args, **kwargs):
         """The total of entries obtained from the origin."""
-        pass
+        raise NotImplementedError()

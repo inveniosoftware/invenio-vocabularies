@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -10,6 +10,7 @@
 
 import re
 import tarfile
+from abc import ABC, abstractmethod
 
 import requests
 import yaml
@@ -17,13 +18,14 @@ import yaml
 from .datastreams import StreamEntry
 
 
-class BaseReader:
+class BaseReader(ABC):
     """Base reader."""
 
     def __init__(self, origin, *args, **kwargs):
         """Constructor."""
         self._origin = origin
 
+    @abstractmethod
     def read(self, *args, **kwargs):
         """Reads the content from the origin.
 

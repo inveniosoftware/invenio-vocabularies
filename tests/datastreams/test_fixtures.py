@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from invenio_vocabularies.fixtures import BaseFixture
+from invenio_vocabularies.fixtures import VocabularyFixture
 
 
 def test_base_fixture(app):
@@ -24,7 +24,7 @@ def test_base_fixture(app):
     are returned.
     """
     filepath = Path(__file__).parent / "vocabularies.yaml"
-    fixture = BaseFixture(filepath=filepath)
+    fixture = VocabularyFixture(filepath=filepath)
     results = fixture.load()
 
     invalid_tr = next(results)

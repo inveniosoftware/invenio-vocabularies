@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -10,7 +10,7 @@
 
 from flask import current_app
 
-from .datastreams import BaseDataStream
+from .datastreams import DataStream
 from .errors import FactoryError
 
 
@@ -25,14 +25,14 @@ class OptionsConfigMixin:
         return current_app.config.get(cls.CONFIG_VAR, {})
 
 
-class BaseFactory:
-    """Base factory."""
+class Factory:
+    """Factory."""
 
     FACTORY_NAME = None
 
     @classmethod
     def create(cls, config):
-        """Creates a transformer from config."""
+        """Creats a factory from config."""
         try:
             type_ = config["type"]
             args = config.get("args", {})
@@ -42,21 +42,21 @@ class BaseFactory:
             raise FactoryError(name=cls.FACTORY_NAME, key=type_)
 
 
-class WriterFactory(BaseFactory, OptionsConfigMixin):
+class WriterFactory(Factory, OptionsConfigMixin):
     """Writer factory."""
 
     FACTORY_NAME = "Writer"
     CONFIG_VAR = "VOCABULARIES_DATASTREAM_WRITERS"
 
 
-class ReaderFactory(BaseFactory, OptionsConfigMixin):
+class ReaderFactory(Factory, OptionsConfigMixin):
     """Reader factory."""
 
     FACTORY_NAME = "Reader"
     CONFIG_VAR = "VOCABULARIES_DATASTREAM_READERS"
 
 
-class TransformerFactory(BaseFactory, OptionsConfigMixin):
+class TransformerFactory(Factory, OptionsConfigMixin):
     """Transformer factory."""
 
     FACTORY_NAME = "Transformer"
@@ -81,6 +81,6 @@ class DataStreamFactory:
             for t_conf in transformers_config:
                 transformers.append(TransformerFactory.create(t_conf))
 
-        return BaseDataStream(
+        return DataStream(
             reader=reader, writers=writers, transformers=transformers
         )
