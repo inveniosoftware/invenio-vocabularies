@@ -19,49 +19,50 @@ from invenio_vocabularies.datastreams.transformers import BaseTransformer
 from invenio_vocabularies.datastreams.writers import BaseWriter
 
 
+class TestReader(BaseReader):
+    """Test reader."""
+
+    # no need for self since it is patched
+    def read(*args, **kwargs):
+        """Yields empty dict."""
+        yield StreamEntry(1)
+
+
+class TestTransformer(BaseTransformer):
+    """Test transformer."""
+
+    # no need for self since it is patched
+    def apply(stream_entry, *args, **kwargs):
+        """Forwards entry."""
+        return stream_entry
+
+
+class TestWriter(BaseWriter):
+    """Test writer."""
+
+    # no need for self since it is patched
+    def write(stream_entry, *args, **kwargs):
+        """NOP write."""
+        pass
+
+
 @pytest.fixture(scope='module')
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["VOCABULARIES_DATASTREAM_READERS"] = {
-        "test": BaseReader
+        "test": TestReader
     }
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
-        "test": BaseTransformer
+        "test": TestTransformer
     }
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
-        "test": BaseWriter
+        "test": TestWriter
     }
 
     return app_config
 
 
-def test_read(*args, **kwargs):
-    yield StreamEntry({})
-
-
-def test_apply(*args, **kwargs):
-    return StreamEntry({})
-
-
-def test_write(*args, **kwargs):
-    return StreamEntry(entry={}, errors=[])
-
-
-@patch(
-    'invenio_vocabularies.datastreams.readers.BaseReader.read',
-    side_effect=test_read
-)
-@patch(
-    'invenio_vocabularies.datastreams.transformers.BaseTransformer.apply',
-    side_effect=test_apply
-)
-@patch(
-    'invenio_vocabularies.datastreams.writers.BaseWriter.write',
-    side_effect=test_write
-)
-def test_task_creation(
-    p_read, p_apply, p_write, app, client_with_credentials, h
-):
+def test_task_creation(app, client_with_credentials, h):
     client = client_with_credentials
     task_config = {
         "reader": {
@@ -74,10 +75,21 @@ def test_task_creation(
         "writers": [{"type": "test"}]
     }
 
-    resp = client.post(
-        "/vocabularies/tasks", headers=h, data=json.dumps(task_config)
-    )
-    assert resp.status_code == 202
-    p_read.assert_called()
-    p_apply.assert_called()
-    p_write.assert_called()
+    with patch.object(
+        TestReader, 'read', side_effect=TestReader.read
+    ) as p_read, \
+        patch.object(
+            TestTransformer, 'apply', side_effect=TestTransformer.apply
+    ) as p_apply, \
+        patch.object(
+            TestWriter, 'write', side_effect=TestWriter.write
+    ) as p_write:
+        resp = client.post(
+            "/vocabularies/tasks",
+            headers=h,
+            data=json.dumps(task_config)
+        )
+        assert resp.status_code == 202
+        p_read.assert_called()
+        p_apply.assert_called()
+        p_write.assert_called()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,6 +8,7 @@
 
 """Writers module."""
 
+from abc import ABC, abstractmethod
 from pathlib import Path
 
 import yaml
@@ -20,13 +21,10 @@ from .datastreams import StreamEntry
 from .errors import WriterError
 
 
-class BaseWriter:
+class BaseWriter(ABC):
     """Base writer."""
 
-    def __init__(self, *args, **kwargs):
-        """Constructor."""
-        pass
-
+    @abstractmethod
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input stream entry to the target output.
 

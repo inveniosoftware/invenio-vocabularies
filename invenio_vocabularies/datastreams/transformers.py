@@ -8,21 +8,18 @@
 
 """Transformers module."""
 
+from abc import ABC, abstractmethod
 from collections import defaultdict
 
 from lxml import etree
 
-from .datastreams import StreamEntry
 from .errors import TransformerError
 
 
-class BaseTransformer:
+class BaseTransformer(ABC):
     """Base transformer."""
 
-    def __init__(self, *args, **kwargs):
-        """Constructor."""
-        pass
-
+    @abstractmethod
     def apply(self, stream_entry, *args, **kwargs):
         """Applies the transformation to the entry.
 
