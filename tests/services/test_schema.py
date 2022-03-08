@@ -16,9 +16,9 @@ from invenio_vocabularies.services.schema import TaskSchema
 
 def test_valid_minimal():
     valid_minimal = {
-        "reader": {
+        "readers": [{
             "type": "test"
-        },
+        }],
         "writers": [{"type": "test"}]
     }
     assert valid_minimal == TaskSchema().load(valid_minimal)
@@ -26,13 +26,13 @@ def test_valid_minimal():
 
 def test_valid_full():
     valid_full = {
-        "reader": {
+        "readers": [{
             "type": "test",
             "args": {
                 "one": 1,
                 "two": "two"
             }
-        },
+        }],
         "transformers": [{
             "type": "test",
             "args": {
@@ -66,23 +66,23 @@ def test_valid_full():
 @pytest.mark.parametrize("invalid", [
     {},
     {
-        "reader": [{"type": "test"}, {"type": "testtoo"}],
-        "writers": [{"type": "test"}]
+        "readers": {"type": "test"},  # non-list readers
+        "writers": [{"type": "test"}],
     },
     {
-        "reader": {"type": "testtoo"},
-        "writers": {"type": "test"}
+        "readers": [{"type": "testtoo"}],
+        "writers": {"type": "test"},  # non-list writers
     },
     {
-        "reader": {"type": "testtoo"},
-        "transformers": {"type": "test"},
-        "writers": [{"type": "test"}]
+        "readers": [{"type": "testtoo"}],
+        "transformers": {"type": "test"},   # non-list transformers
+        "writers": [{"type": "test"}],
     },
     {
-        "reader": {"type": "testtoo"},
+        "readers": [{"type": "testtoo"}],  # no writers
     },
     {
-        "writers": [{"type": "test"}]
+        "writers": [{"type": "test"}],  # no readers
     },
 ])
 def test_invalid_empty(invalid):

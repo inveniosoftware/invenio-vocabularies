@@ -86,7 +86,7 @@ def example_funders(service, identity, indexer):
             }
         },
         {
-            "pid": "aaaaaa11",
+            "pid": "0aaaaaa11",
             "name": "OTHER",
             "country": "CH",
             "title": {
@@ -94,7 +94,7 @@ def example_funders(service, identity, indexer):
             }
         },
         {
-            "pid": "aaaaaa22",
+            "pid": "0aaaaaa22",
             "name": "CERT",
             "country": "CH",
             "title": {

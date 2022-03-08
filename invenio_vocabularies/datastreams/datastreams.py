@@ -8,7 +8,7 @@
 
 """Base data stream."""
 
-from .errors import TransformerError, WriterError
+from .errors import ReaderError, TransformerError, WriterError
 
 
 class StreamEntry:
@@ -24,14 +24,14 @@ class StreamEntry:
 class DataStream:
     """Data stream."""
 
-    def __init__(self, reader, writers, transformers=None, *args, **kwargs):
+    def __init__(self, readers, writers, transformers=None, *args, **kwargs):
         """Constructor.
 
-        :param reader: the reader object.
+        :param readers: an ordered list of readers.
         :param writers: an ordered list of writers.
         :param transformers: an ordered list of transformers to apply.
         """
-        self._reader = reader  # a single entry point
+        self._readers = readers  # a single entry point
         self._transformers = transformers
         self._writers = writers
 
@@ -47,7 +47,7 @@ class DataStream:
         the reader, apply the transformations and yield the result of
         writing it.
         """
-        for stream_entry in self._reader.read():
+        for stream_entry in self.read():
             transformed_entry = self.transform(stream_entry)
             if transformed_entry.errors:
                 yield transformed_entry
@@ -56,6 +56,30 @@ class DataStream:
                 yield transformed_entry
             else:
                 yield self.write(transformed_entry)
+
+    def read(self):
+        """Recursively read the entries."""
+        def pipe_gen(gen_funcs, piped_item=None):
+            _gen_funcs = list(gen_funcs)  # copy to avoid modifying ref list
+            # use and remove the current generator
+            current_gen_func = _gen_funcs.pop(0)
+            for item in current_gen_func(piped_item):
+                try:
+                    # exhaust iterations of subsequent generators
+                    if _gen_funcs:
+                        yield from pipe_gen(_gen_funcs, piped_item=item)
+                    # there is no subsequent generator, return the current item
+                    else:
+                        yield StreamEntry(item)
+                except ReaderError as err:
+                    yield StreamEntry(
+                        entry=item,
+                        errors=[
+                            f"{current_gen_func.__qualname__}: {str(err)}"
+                        ]
+                    )
+        read_gens = [r.read for r in self._readers]
+        yield from pipe_gen(read_gens)
 
     def transform(self, stream_entry, *args, **kwargs):
         """Apply the transformations to an stream_entry."""

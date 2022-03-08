@@ -18,6 +18,7 @@ from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
 from invenio_records_resources.proxies import current_service_registry
 
+from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
 from .datastreams import DataStreamFactory
 
@@ -30,7 +31,17 @@ def get_config_for_ds(vocabulary, filepath=None, origin=None):
             with open(filepath) as f:
                 config = yaml.safe_load(f).get(vocabulary)
         if origin:
-            config["reader"]["args"]["origin"] = origin
+            config["readers"][0]["args"]["origin"] = origin
+
+        return config
+
+    if vocabulary == "funders":
+        config = deepcopy(funders_ds_config)
+        if filepath:
+            with open(filepath) as f:
+                config = yaml.safe_load(f).get(vocabulary)
+        if origin:
+            config["readers"][0]["args"]["origin"] = origin
 
         return config
 
@@ -49,7 +60,7 @@ def vocabularies():
 def _process_vocab(config, num_samples=None):
     """Import a vocabulary."""
     ds = DataStreamFactory.create(
-        reader_config=config["reader"],
+        readers_config=config["readers"],
         transformers_config=config.get("transformers"),
         writers_config=config["writers"],
     )

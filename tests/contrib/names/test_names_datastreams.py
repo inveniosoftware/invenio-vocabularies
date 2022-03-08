@@ -117,9 +117,9 @@ XML_ENTRY_DATA = bytes(
 
 
 @pytest.fixture(scope='function')
-def bytes_xml_entry():
+def bytes_xml_data():
     # simplified version of an XML file of the ORCiD dump
-    return StreamEntry(XML_ENTRY_DATA)
+    return XML_ENTRY_DATA
 
 
 @pytest.fixture(scope="module")
@@ -168,15 +168,14 @@ class MockResponse():
 
 
 @patch('requests.get', side_effect=lambda url, headers: MockResponse())
-def test_orcid_http_reader(_, bytes_xml_entry):
+def test_orcid_http_reader(_, bytes_xml_data):
     reader = OrcidHTTPReader(id="0000-0001-8135-3489")
     results = []
     for entry in reader.read():
         results.append(entry)
 
     assert len(results) == 1
-    assert bytes_xml_entry.entry == results[0].entry
-    assert not results[0].errors
+    assert bytes_xml_data == results[0]
 
 
 def test_names_service_writer_create(app, es_clear, name_full_data):
