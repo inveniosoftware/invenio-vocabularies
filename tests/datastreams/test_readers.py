@@ -7,14 +7,15 @@
 # details.
 
 """Data Streams readers tests."""
-
+import json
 import tarfile
 from pathlib import Path
 
 import pytest
 import yaml
 
-from invenio_vocabularies.datastreams.readers import TarReader, YamlReader
+from invenio_vocabularies.datastreams.readers import JsonReader, TarReader, \
+    YamlReader, ZipReader
 
 
 @pytest.fixture(scope='module')
@@ -46,8 +47,8 @@ def yaml_file(expected_from_yaml):
 def test_yaml_reader(yaml_file, expected_from_yaml):
     reader = YamlReader(yaml_file)
 
-    for idx, stream_entry in enumerate(reader.read()):
-        assert stream_entry.entry == expected_from_yaml[idx]
+    for idx, data in enumerate(reader.read()):
+        assert data == expected_from_yaml[idx]
 
 
 @pytest.fixture(scope='module')
@@ -85,8 +86,41 @@ def test_tar_reader(tar_file, expected_from_tar):
     reader = TarReader(tar_file, regex=".yaml$")
 
     total = 0
-    for stream_entry in reader.read():
-        assert yaml.safe_load(stream_entry.entry) == expected_from_tar
+    for data in reader.read():
+        assert yaml.safe_load(data) == expected_from_tar
         total += 1
 
     assert total == 2  # ignored the `.other` file
+
+
+def test_zip_reader(zip_file, expected_from_zip):
+    reader = ZipReader(zip_file, regex=".json$")
+    total = 0
+    for data in reader.read():
+        assert json.load(data) == expected_from_zip
+        total += 1
+
+    assert total == 2  # ignored the `.other` file
+
+
+@pytest.fixture(scope='function')
+def json_file(expected_from_json):
+    """Creates a Json file.
+
+    """
+    filename = Path("reader_test.json")
+    with open(filename, mode='w') as file:
+        json.dump(expected_from_json, file)
+
+    yield filename
+
+    filename.unlink()  # delete created file
+
+
+def test_json_reader(json_file, expected_from_json):
+    reader = JsonReader(json_file, regex=".json$")
+
+    for data in reader.read():
+        assert data == expected_from_json[0]
+
+# FIXME: add test for csv reader

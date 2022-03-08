@@ -12,7 +12,8 @@
 import idutils
 from flask_babelex import lazy_gettext as _
 
-from .datastreams.readers import TarReader, YamlReader
+from .datastreams.readers import CSVReader, JsonReader, TarReader, \
+    YamlReader, ZipReader
 from .datastreams.transformers import XMLTransformer
 from .datastreams.writers import ServiceWriter, YamlWriter
 from .resources.resource import VocabulariesResourceConfig
@@ -51,8 +52,16 @@ VOCABULARIES_AFFILIATION_SCHEMES = {
 
 VOCABULARIES_FUNDER_SCHEMES = {
     **VOCABULARIES_IDENTIFIER_SCHEMES,
+    "doi": {
+        "label": _("DOI"),
+        "validator": idutils.is_doi
+    },
 }
 """Funders allowed identifier schemes."""
+
+VOCABULARIES_FUNDER_DOI_PREFIX = "10.13039"
+"""DOI prefix for the identifier formed with the FundRef id."""
+
 
 VOCABULARIES_NAMES_SCHEMES = {
     "orcid": {
@@ -74,8 +83,11 @@ VOCABULARIES_NAMES_SCHEMES = {
 """Names allowed identifier schemes."""
 
 VOCABULARIES_DATASTREAM_READERS = {
+    "csv": CSVReader,
+    "json": JsonReader,
     "tar": TarReader,
     "yaml": YamlReader,
+    "zip": ZipReader,
 }
 """Data Streams readers."""
 

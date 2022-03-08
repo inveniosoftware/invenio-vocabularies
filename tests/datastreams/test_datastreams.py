@@ -22,12 +22,14 @@ def vocabulary_config():
         "transformers": [
             {"type": "test"}
         ],
-        "reader": {
-            "type": "test",
-            "args": {
-                "origin": [1, -1],
+        "readers": [
+            {
+                "type": "test",
+                "args": {
+                    "origin": [1, -1],
+                }
             }
-        },
+        ],
         "writers": [
             {"type": "test"}
         ]
@@ -36,7 +38,7 @@ def vocabulary_config():
 
 def test_base_datastream(app, vocabulary_config):
     datastream = DataStreamFactory.create(
-        reader_config=vocabulary_config["reader"],
+        readers_config=vocabulary_config["readers"],
         transformers_config=vocabulary_config.get("transformers"),
         writers_config=vocabulary_config["writers"],
     )
@@ -59,7 +61,7 @@ def test_base_datastream_fail_on_write(app, vocabulary_config):
     })
 
     datastream = DataStreamFactory.create(
-        reader_config=vocabulary_config["reader"],
+        readers_config=vocabulary_config["readers"],
         transformers_config=vocabulary_config.get("transformers"),
         writers_config=vocabulary_config["writers"],
     )
@@ -73,3 +75,33 @@ def test_base_datastream_fail_on_write(app, vocabulary_config):
     invalid_tr = next(stream_iter)
     assert invalid_tr.entry == -1
     assert "TestTransformer: Value cannot be negative" in invalid_tr.errors
+
+
+def test_piping_readers(app, zip_file, expected_from_json):
+    ds_config = {
+        "readers": [
+            {
+                "type": "zip",
+                "args": {
+                    "origin": "reader_test.zip",
+                    "regex": ".json$",
+                }
+            },
+            {"type": "json"}
+        ],
+        "writers": [
+            {"type": "test"}
+        ]
+    }
+
+    datastream = DataStreamFactory.create(
+        readers_config=ds_config["readers"],
+        writers_config=ds_config["writers"],
+    )
+
+    total = 0
+    for entry in datastream.process():
+        assert expected_from_json[0] == entry.entry
+        total += 1
+
+    assert total == 4

@@ -17,7 +17,7 @@ from ..datastreams.factories import DataStreamFactory
 def process_datastream(config):
     """Process a datastream from config."""
     ds = DataStreamFactory.create(
-        reader_config=config["reader"],
+        readers_config=config["readers"],
         transformers_config=config.get("transformers"),
         writers_config=config["writers"],
     )

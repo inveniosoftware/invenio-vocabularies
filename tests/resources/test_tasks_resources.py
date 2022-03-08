@@ -25,7 +25,7 @@ class TestReader(BaseReader):
     # no need for self since it is patched
     def read(*args, **kwargs):
         """Yields empty dict."""
-        yield StreamEntry(1)
+        yield 1
 
 
 class TestTransformer(BaseTransformer):
@@ -65,12 +65,12 @@ def app_config(app_config):
 def test_task_creation(app, client_with_credentials, h):
     client = client_with_credentials
     task_config = {
-        "reader": {
+        "readers": [{
             "type": "test",
             "args": {
                 "origin": "somewhere"
             }
-        },
+        }],
         "transformers": [{"type": "test"}],
         "writers": [{"type": "test"}]
     }

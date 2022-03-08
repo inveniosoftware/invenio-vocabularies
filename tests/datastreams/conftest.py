@@ -12,12 +12,16 @@ See https://pytest-invenio.readthedocs.io/ for documentation on which test
 fixtures are available.
 """
 
+import json
+import zipfile
+from pathlib import Path
+
 import pytest
 
-from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import TransformerError, \
     WriterError
-from invenio_vocabularies.datastreams.readers import BaseReader
+from invenio_vocabularies.datastreams.readers import BaseReader, JsonReader, \
+    ZipReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
 from invenio_vocabularies.datastreams.writers import BaseWriter
 
@@ -28,7 +32,7 @@ class TestReader(BaseReader):
     def read(self, *args, **kwargs):
         """Yields the values in the origin."""
         for value in self._origin:
-            yield StreamEntry(value)
+            yield value
 
 
 class TestTransformer(BaseTransformer):
@@ -69,7 +73,9 @@ class FailingTestWriter(BaseWriter):
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["VOCABULARIES_DATASTREAM_READERS"] = {
-        "test": TestReader
+        "json": JsonReader,
+        "test": TestReader,
+        "zip": ZipReader,
     }
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
         "test": TestTransformer
@@ -80,3 +86,52 @@ def app_config(app_config):
     }
 
     return app_config
+
+
+@pytest.fixture(scope='module')
+def expected_from_zip():
+    """Creates a zip file."""
+    return [
+        {
+            "test": {
+                "inner": "value"
+            }
+        },
+        {
+            "test": {
+                "inner": "value"
+            }
+        }
+    ]
+
+
+@pytest.fixture(scope='function')
+def zip_file(expected_from_zip):
+    """Creates a Zip file with three files (two json) inside.
+
+    Each iteration should return the content of one json file,
+    it should ignore the .other file.
+    """
+    files = ["file_one.json", "file_two.json", "file_three.other"]
+    filename = Path("reader_test.zip")
+    with zipfile.ZipFile(file=filename, mode="w") as archive:
+        for file_ in files:
+            inner_filename = Path(file_)
+            with open(inner_filename, 'w') as file:
+                json.dump(expected_from_zip, file)
+            archive.write(inner_filename)
+            inner_filename.unlink()
+
+    yield filename
+
+    filename.unlink()  # delete created file
+
+
+@pytest.fixture(scope='module')
+def expected_from_json():
+    """Expected json string."""
+    return [{
+        "test": {
+            "inner": "value"
+        }
+    }]

@@ -137,12 +137,14 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 
 
 DATASTREAM_CONFIG = {
-    "reader": {
-        "type": "tar",
-        "args": {
-            "regex": ".xml$",
+    "readers": [
+        {
+            "type": "tar",
+            "args": {
+                "regex": ".xml$",
+            }
         }
-    },
+    ],
     "transformers": [
         {"type": "xml"},
         {"type": "orcid"}

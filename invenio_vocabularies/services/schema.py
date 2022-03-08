@@ -48,7 +48,11 @@ class DatastreamObject(Schema):
 class TaskSchema(Schema):
     """Service schema for vocabulary tasks."""
 
-    reader = fields.Nested(DatastreamObject, required=True)
+    readers = fields.List(
+        fields.Nested(DatastreamObject),
+        validate=validate.Length(min=1),
+        required=True,
+    )
     transformers = fields.List(
         fields.Nested(DatastreamObject),
         validate=validate.Length(min=1),

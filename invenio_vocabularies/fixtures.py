@@ -25,7 +25,7 @@ class VocabularyFixture:
     def _load_vocabulary(self, config, delay=True, **kwargs):
         """Given an entry from the vocabularies.yaml file, load its content."""
         datastream = DataStreamFactory.create(
-            reader_config=config["reader"],
+            readers_config=config["readers"],
             transformers_config=config.get("transformers"),
             writers_config=config["writers"],
         )

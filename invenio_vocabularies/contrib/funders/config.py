@@ -22,6 +22,10 @@ funder_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_FUNDER_SCHEMES"]
 )
 
+funder_fundref_doi_prefix = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_FUNDER_DOI_PREFIX"]
+)
+
 
 class FundersSearchOptions(SearchOptions):
     """Search options."""

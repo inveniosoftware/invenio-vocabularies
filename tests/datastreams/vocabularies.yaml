@@ -2,20 +2,20 @@ testone:
   pid-type: testid
   transformers:
     - type: test
-  reader:
-    type: test
-    args:
-      origin: [-1, 2, 3]
+  readers:
+    - type: test
+      args:
+        origin: [-1, 2, 3]
   writers:
     - type: test
 testtwo:
   pid-type: testit
   transformers:
     - type: test
-  reader:
-    type: test
-    args:
-      origin: [1, 2, 3]
+  readers:
+    - type: test
+      args:
+        origin: [1, 2, 3]
   writers:
     - type: fail
       args:
