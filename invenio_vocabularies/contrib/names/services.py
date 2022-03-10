@@ -20,6 +20,8 @@ NamesServiceConfig = record_type.service_config_cls
 class NamesService(record_type.service_cls):
     """Name service."""
 
+    # TODO: this method should be extracted to a common Mixin
+    #       funders/grants/affiliations/etc. would need it too.
     def resolve(self, identity, id_, id_type):
         """Get the record with a given identifier.
 

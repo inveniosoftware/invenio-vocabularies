@@ -40,7 +40,6 @@ def indexer():
 def example_name(db, name_full_data, example_affiliation):
     """Example name."""
     name = Name.create(name_full_data)
-    Name.pid.create(name)
     name.commit()
     db.session.commit()
     return name
@@ -101,5 +100,5 @@ def test_name_pid(app, db, example_name):
     """Test name pid creation."""
     name = example_name
 
-    assert name.pid.pid_value
-    assert name.pid.pid_type == "names"
+    assert name.pid == "0000-0001-8135-3489"
+    assert Name.pid.resolve(name.pid) == example_name

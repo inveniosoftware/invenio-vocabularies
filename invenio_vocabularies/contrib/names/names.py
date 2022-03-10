@@ -8,10 +8,13 @@
 
 """Vocabulary names."""
 
+from invenio_db import db
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import PIDListRelation
+
+from invenio_vocabularies.records.systemfields.pid import ModelPIDField
 
 from ...records.pidprovider import PIDProviderFactory
 from ...records.systemfields import BaseVocabularyPIDFieldContext
@@ -32,16 +35,16 @@ name_relations = RelationsField(
 record_type = RecordTypeFactory(
     "Name",
     # Data layer
+    pid_field_cls=ModelPIDField,
     pid_field_kwargs={
-        "create": False,
-        "provider": PIDProviderFactory.create(
-            pid_type='names', base_cls=RecordIdProviderV2
-        ),
-        "context_cls": BaseVocabularyPIDFieldContext,
+        "model_field_name": "pid"
     },
     schema_version="1.0.0",
     schema_path="local://names/name-v1.0.0.json",
     record_relations=name_relations,
+    model_cls_attrs={
+        "pid": db.Column(db.String, nullable=False),
+    },
     # Service layer
     service_schema=NameSchema,
     search_options=NamesSearchOptions,

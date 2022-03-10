@@ -42,9 +42,12 @@ from copy import copy
 
 from invenio_db import db
 from invenio_pidstore.errors import PIDDoesNotExistError
+from invenio_records.systemfields import ModelField
 from invenio_records_resources.records.systemfields.pid import PIDFieldContext
 
-from invenio_vocabularies.records.models import VocabularyType
+from ..models import VocabularyType
+from ..pidprovider import FromFieldProvider
+from ..resolvers import ModelResolver
 
 
 class BaseVocabularyPIDFieldContext(PIDFieldContext):
@@ -123,3 +126,80 @@ class VocabularyPIDFieldContext(BaseVocabularyPIDFieldContext):
         ctx = copy(self)
         ctx._type_id = type_id
         return ctx
+
+
+class ModelPIDFieldContext(PIDFieldContext):
+    """Context for ModelPIDField.
+
+    This class implements the class-level methods available on a PIDField. I.e.
+    when you access the field through the class, for instance:
+
+    .. code-block:: python
+
+        Record.pid.resolve('...')
+        Record.pid.session_merge(record)
+    """
+
+    def resolve(self, pid_value, registered_only=True):
+        """Resolve identifier."""
+        resolver = self.field._resolver_cls(
+            self._record_cls, self.field.model_field_name
+        )
+        pid, record = resolver.resolve(pid_value)
+        self.field._set_cache(record, pid)
+
+        return record
+
+    def session_merge(self, record):
+        """Inactivate session merge since it all belongs to the same db obj."""
+        pass
+
+
+class ModelPIDField(ModelField):
+    """PID field in a db column on the record model. """
+
+    def __init__(
+        self,
+        model_field_name="pid",
+        provider=FromFieldProvider,
+        resolver_cls=ModelResolver,
+        context_cls=ModelPIDFieldContext,
+    ):
+        """Initialise the dict field.
+        :param key: Name of key to store the pid value in.
+        """
+        self._provider = provider
+        self._resolver_cls = resolver_cls
+        self._context_cls = context_cls
+        super().__init__(model_field_name=model_field_name)
+
+    def create(self, record):
+        """Method to create a new persistent identifier for the record."""
+        # This uses the fields __get__() data descriptor method below
+        pid = getattr(record, self.attr_name)
+        if pid is None:
+            # Set using the __set__() method
+            pid_value = self._provider.create(record)
+            setattr(record, self.attr_name, pid_value)
+        return pid
+
+    #
+    # Data descriptor
+    #
+    def __get__(self, record, owner=None):
+        """Accessing the attribute."""
+        # Class access
+        if record is None:
+            return self._context_cls(self, owner)
+        # Instance access
+        try:
+            return getattr(record.model, self.model_field_name)
+        except AttributeError:
+            return None
+    #
+    # Life-cycle hooks
+    #
+
+    def pre_create(self, record):
+        """Called after a record is created."""
+        self.create(record)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,6 +8,11 @@
 
 """Vocabulary names."""
 
+from ...records.systemfields import ModelPIDField
 from .names import record_type
 
-Name = record_type.record_cls
+
+class Name(record_type.record_cls):
+    """Name API class."""
+
+    pid = ModelPIDField()

@@ -41,16 +41,16 @@
       },
       "identifiers": {
         "properties": {
-          "identifier" : {
-            "type" : "keyword",
+          "identifier": {
+            "type": "keyword",
             "fields": {
               "suggest": {
                 "type": "search_as_you_type"
               }
             }
           },
-          "scheme" : {
-            "type" : "keyword"
+          "scheme": {
+            "type": "keyword"
           }
         }
       },
@@ -74,21 +74,7 @@
         }
       },
       "pid": {
-        "type": "object",
-        "properties": {
-          "pk": {
-            "type": "integer"
-          },
-          "pid_type": {
-            "type": "keyword"
-          },
-          "obj_type": {
-            "type": "keyword"
-          },
-          "status": {
-            "type": "keyword"
-          }
-        }
+        "type": "keyword"
       }
     }
   }

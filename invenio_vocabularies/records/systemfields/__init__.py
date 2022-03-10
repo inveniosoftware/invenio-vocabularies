@@ -8,9 +8,11 @@
 
 """System fields module."""
 
-from .pid import BaseVocabularyPIDFieldContext, VocabularyPIDFieldContext
+from .pid import BaseVocabularyPIDFieldContext, ModelPIDField, \
+    VocabularyPIDFieldContext
 
 __all__ = (
     'BaseVocabularyPIDFieldContext',
+    'ModelPIDField',
     'VocabularyPIDFieldContext',
 )

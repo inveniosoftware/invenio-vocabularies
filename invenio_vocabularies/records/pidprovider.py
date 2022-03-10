@@ -62,7 +62,7 @@ class VocabularyIdProvider(BaseProvider):
 
 
 class CustomVocabularyPIDProvider(BaseProvider):
-    """Affiliations PID provider."""
+    """Custom Vocabulary PID provider."""
 
     pid_type = None
     """Type of persistent identifier."""
@@ -100,6 +100,27 @@ class CustomVocabularyPIDProvider(BaseProvider):
             object_uuid=object_uuid,
             status=PIDStatus.REGISTERED
         )
+
+
+class FromFieldProvider:
+    """PID from a metadata field provider.
+
+    This provider extracts the PID value from a field inside the
+    record metadata.
+    """
+
+    # FIXME: Provider.create usually is a class methods
+    #        but scheme is more suitable for an instance attr
+    field = "identifiers"
+    scheme = "orcid"
+
+    @classmethod
+    def create(cls, record):
+        """Extract the PID value."""
+        for id_ in record.get(cls.field):  # TODO: implement recursion?
+            if id_["scheme"] == cls.scheme:
+                return id_["identifier"]
+        return None
 
 
 class PIDProviderFactory():
