@@ -5,7 +5,7 @@
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
-"""Create funders vocabulary table."""
+"""Create awards table."""
 
 import sqlalchemy as sa
 import sqlalchemy_utils
@@ -13,16 +13,16 @@ from alembic import op
 from sqlalchemy.dialects import mysql, postgresql
 
 # revision identifiers, used by Alembic.
-revision = '676dd587542d'
-down_revision = '17c703ce1eb7'
+revision = 'e1146238edd3'
+down_revision = '676dd587542d'
 branch_labels = ()
 depends_on = None
 
 
 def upgrade():
-    """Upgrade database."""
+    """Downgrade database."""
     op.create_table(
-        'funder_metadata',
+        'award_metadata',
         sa.Column(
             'created',
             sa.DateTime().with_variant(mysql.DATETIME(fsp=6), 'mysql'),
@@ -50,13 +50,11 @@ def upgrade():
         ),
         sa.Column('version_id', sa.Integer(), nullable=False),
         sa.Column('pid', sa.String(), nullable=True),
-        sa.PrimaryKeyConstraint('id', name=op.f('pk_funder_metadata')),
-        sa.UniqueConstraint('pid', name=op.f('uq_funder_metadata_pid'))
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_award_metadata')),
+        sa.UniqueConstraint('pid', name=op.f('uq_award_metadata_pid'))
     )
-    # ### end Alembic commands ###
 
 
 def downgrade():
-    """Downgrade database."""
-    op.drop_table('funder_metadata')
-    # ### end Alembic commands ###
+    """Upgrade database."""
+    op.drop_table('award_metadata')
