@@ -62,6 +62,17 @@ VOCABULARIES_FUNDER_SCHEMES = {
 VOCABULARIES_FUNDER_DOI_PREFIX = "10.13039"
 """DOI prefix for the identifier formed with the FundRef id."""
 
+VOCABULARIES_AWARD_SCHEMES = {
+    "url": {
+        "label": _("URL"),
+        "validator": idutils.is_url
+    },
+    "doi": {
+        "label": _("DOI"),
+        "validator": idutils.is_doi
+    },
+}
+"""Awards allowed identifier schemes."""
 
 VOCABULARIES_NAMES_SCHEMES = {
     "orcid": {
@@ -70,10 +81,10 @@ VOCABULARIES_NAMES_SCHEMES = {
         "datacite": "ORCID"
     },
     "isni": {
-         "label": _("ISNI"),
-         "validator": idutils.is_isni,
-         "datacite": "ISNI"
-     },
+        "label": _("ISNI"),
+        "validator": idutils.is_isni,
+        "datacite": "ISNI"
+    },
     "gnd": {
         "label": _("GND"),
         "validator": idutils.is_gnd,

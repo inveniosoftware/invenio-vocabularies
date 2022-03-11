@@ -19,6 +19,7 @@ def extra_entry_points():
     return {
         "invenio_db.models": [
             "affiliations = invenio_vocabularies.contrib.affiliations.models",
+            "awards = invenio_vocabularies.contrib.awards.models",
             "funders = invenio_vocabularies.contrib.funders.models",
             "names = invenio_vocabularies.contrib.names.models",
             "subjects = invenio_vocabularies.contrib.subjects.models",
@@ -57,6 +58,7 @@ def test_alembic(app, database):
     assert 'affiliation_metadata' in tables
     assert 'name_metadata' in tables
     assert 'funder_metadata' in tables
+    assert 'award_metadata' in tables
 
     # Check that Alembic agrees that there's no further tables to create.
     assert_alembic(ext.alembic, ['mock_metadata'])
