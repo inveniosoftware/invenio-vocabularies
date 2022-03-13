@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -16,7 +16,12 @@ import yaml
 
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
-from invenio_vocabularies.datastreams.writers import ServiceWriter, YamlWriter
+from invenio_vocabularies.datastreams.writers import AsyncWriter, \
+    ServiceWriter, YamlWriter
+
+##
+# Service Writer
+##
 
 
 def test_service_writer_non_existing(lang_type, lang_data, service, identity):
@@ -71,6 +76,10 @@ def test_service_writer_update_non_existing(
 
     assert dict(record, **updated_lang) == record
 
+##
+# YAML Writer
+##
+
 
 def test_yaml_writer():
     filepath = Path('writer_test.yaml')
@@ -83,6 +92,34 @@ def test_yaml_writer():
     for output in test_output:
         writer.write(stream_entry=StreamEntry(output))
 
+    with open(filepath) as file:
+        assert yaml.safe_load(file) == test_output
+
+    filepath.unlink()
+
+##
+# Async Writer
+##
+
+
+def test_async_writer(app):
+    filepath = 'writer_test.yaml'
+    yaml_writer_config = {
+        "type": "yaml",
+        "args": {
+            "filepath": filepath
+        }
+    }
+    async_writer = AsyncWriter(yaml_writer_config)
+
+    test_output = [
+        {"key_one": [{"inner_one": 1}]},
+        {"key_two": [{"inner_two": "two"}]}
+    ]
+    for output in test_output:
+        async_writer.write(stream_entry=StreamEntry(output))
+
+    filepath = Path(filepath)
     with open(filepath) as file:
         assert yaml.safe_load(file) == test_output
 
