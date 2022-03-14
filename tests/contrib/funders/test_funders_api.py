@@ -8,10 +8,10 @@
 
 """Funders API tests."""
 
+from copy import deepcopy
 from functools import partial
 
 import pytest
-from invenio_indexer.api import RecordIndexer
 from invenio_search import current_search_client
 from jsonschema import ValidationError
 
@@ -27,19 +27,11 @@ def search_get():
 
 
 @pytest.fixture()
-def indexer():
-    """Indexer instance with correct Record class."""
-    return RecordIndexer(
-        record_cls=Funder,
-        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
-    )
-
-
-@pytest.fixture()
 def example_funder(db, funder_full_data):
     """Example funder."""
-    fun = Funder.create(funder_full_data)
-    Funder.pid.create(fun)
+    api_funder = deepcopy(funder_full_data)
+    pid = api_funder.pop("pid")  # at API level it's passed as an arg
+    fun = Funder.create(api_funder, pid=pid)
     fun.commit()
     db.session.commit()
     return fun
@@ -57,9 +49,9 @@ def test_funder_schema_validation(app, db, example_funder):
     # invalid data
     examples = [
         # name must be a string
-        {"id": "cern", "name": 123},
+        {"name": 123},
         # country must be a string
-        {"id": "cern", "name": "cern", "country": 123}
+        {"name": "cern", "country": 123}
     ]
 
     for ex in examples:
@@ -80,6 +72,8 @@ def test_funder_indexing(
     fun = Funder.loads(data["_source"])
     assert fun == example_funder
     assert fun.id == example_funder.id
+    assert fun.pid.pid_value == example_funder.pid.pid_value
+    assert fun.pid.status == example_funder.pid.status
     assert fun.revision_id == example_funder.revision_id
     assert fun.created == example_funder.created
     assert fun.updated == example_funder.updated
@@ -87,8 +81,6 @@ def test_funder_indexing(
 
 def test_funder_pid(app, db, example_funder):
     """Test funder pid creation."""
-    fun = example_funder
 
-    assert fun.pid.pid_value == "fund"
-    assert fun.pid.pid_type == "fun"
-    assert Funder.pid.resolve("fund")
+    assert example_funder.pid.pid_value == "01ggx4157"
+    assert Funder.pid.resolve("01ggx4157") == example_funder

@@ -47,21 +47,10 @@
         "type": "text"
       },
       "pid": {
-        "type": "object",
-        "properties": {
-          "pk": {
-            "type": "integer"
-          },
-          "pid_type": {
-            "type": "keyword"
-          },
-          "obj_type": {
-            "type": "keyword"
-          },
-          "status": {
-            "type": "keyword"
-          }
-        }
+        "type": "keyword"
+      },
+      "pid_status": {
+        "type": "keyword"
       },
       "title": {
         "type": "object",

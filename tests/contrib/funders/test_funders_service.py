@@ -10,25 +10,25 @@
 """Test the funder vocabulary service."""
 
 import pytest
-from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
+from invenio_pidstore.errors import PIDDeletedError
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError
 
 from invenio_vocabularies.contrib.funders.api import Funder
 
 
-def test_simple_flow(app, db, service, identity, funder_full_data):
+def test_simple_flow(app, service, identity, funder_full_data):
     """Test a simple vocabulary service flow."""
     # Create it
     item = service.create(identity, funder_full_data)
     id_ = item.id
 
-    assert item.id == funder_full_data['id']
+    assert item.id == funder_full_data['pid']
     for k, v in funder_full_data.items():
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read(identity, 'fund')
+    read_item = service.read(identity, '01ggx4157')
 
     assert item.id == read_item.id
     assert item.data == read_item.data
@@ -38,7 +38,7 @@ def test_simple_flow(app, db, service, identity, funder_full_data):
 
     # Search it
     res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+        identity, q=f"pid:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0] == read_item.data
 
@@ -53,6 +53,8 @@ def test_simple_flow(app, db, service, identity, funder_full_data):
     data = read_item.data
     data['title']['en'] = 'New title'
     update_item = service.update(identity, id_, data)
+    # the pid is not save to the json metadata
+    assert not update_item._record.get("pid")
     assert item.id == update_item.id
     assert update_item['title']['en'] == 'New title'
 
@@ -67,17 +69,22 @@ def test_simple_flow(app, db, service, identity, funder_full_data):
     pytest.raises(PIDDeletedError, service.read, identity, id_)
     # - search
     res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+        identity, q=f"pid:{id_}", size=25, page=1)
     assert res.total == 0
+
+    # not-ideal cleanup
+    item._record.delete(force=True)
 
 
 def test_pid_already_registered(
-    app, db, service, identity, funder_full_data
+    app, service, identity, funder_full_data, example_funder
 ):
     """Recreating a record with same id should fail."""
-    service.create(identity, funder_full_data)
+    # example_funder does the first creation
+    # FIXME: It is not a "PIDAlreadyExists" should we catch and re-raise
+    # for consistency
     pytest.raises(
-        PIDAlreadyExists, service.create, identity, funder_full_data)
+        IntegrityError, service.create, identity, funder_full_data)
 
 
 def test_extra_fields(app, db, service, identity, funder_full_data):

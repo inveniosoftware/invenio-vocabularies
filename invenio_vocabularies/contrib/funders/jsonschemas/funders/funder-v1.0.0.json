@@ -27,9 +27,6 @@
       "type": "string",
       "description": "Funders name."
     },
-    "pid": {
-      "$ref": "local://definitions-v1.0.0.json#/internal-pid"
-    },
     "title": {
       "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
     }

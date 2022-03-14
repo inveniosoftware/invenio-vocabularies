@@ -8,7 +8,6 @@
 
 """Vocabulary affiliations."""
 
-
 from .funders import record_type
 
 FundersServiceConfig = record_type.service_config_cls
