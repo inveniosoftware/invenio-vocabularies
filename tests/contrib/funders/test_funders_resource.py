@@ -13,6 +13,7 @@ import json
 from copy import deepcopy
 
 import pytest
+from invenio_db import db
 
 from invenio_vocabularies.contrib.funders.api import Funder
 
@@ -21,17 +22,6 @@ from invenio_vocabularies.contrib.funders.api import Funder
 def prefix():
     """API prefix."""
     return "funders"
-
-
-@pytest.fixture()
-def example_funder(
-    app, db, es_clear, identity, service, funder_full_data
-):
-    """Example funder."""
-    fun = service.create(identity, funder_full_data)
-    Funder.index.refresh()  # Refresh the index
-
-    return fun
 
 
 def test_funders_invalid(client, h, prefix):
@@ -47,29 +37,29 @@ def test_funders_forbidden(
     """Test invalid type."""
     # invalid type
     funder_full_data_too = deepcopy(funder_full_data)
-    funder_full_data_too["id"] = "other"
+    funder_full_data_too["pid"] = "other"
     res = client.post(
         f"{prefix}", headers=h, data=json.dumps(funder_full_data_too))
     assert res.status_code == 403
 
     res = client.put(
-        f"{prefix}/fund", headers=h, data=json.dumps(funder_full_data))
+        f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data))
     assert res.status_code == 403
 
-    res = client.delete(f"{prefix}/fund")
+    res = client.delete(f"{prefix}/01ggx4157")
     assert res.status_code == 403
 
 
 def test_funders_get(client, example_funder, h, prefix):
     """Test the endpoint to retrieve a single item."""
-    id_ = example_funder.id
+    id_ = example_funder.id  # result_items wraps pid into id
 
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
-    assert res.json["id"] == id_
+    assert res.json["pid"] == id_
     # Test links
     assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/funders/fund"
+        "self": "https://127.0.0.1:5000/api/funders/01ggx4157"
     }
 
 
@@ -82,11 +72,12 @@ def test_funders_search(client, example_funder, h, prefix):
     assert res.json["sortBy"] == "name"
 
 
-def _create_funders(service, identity):
+@pytest.fixture(scope="function")
+def example_funders(service, identity, indexer):
     """Create dummy funders with similar names/titles."""
-    funders = [
+    funders_data = [
         {
-            "id": "cern",
+            "pid": "01ggx4157",
             "name": "CERN",
             "country": "CH",
             "title": {
@@ -95,7 +86,7 @@ def _create_funders(service, identity):
             }
         },
         {
-            "id": "other",
+            "pid": "aaaaaa11",
             "name": "OTHER",
             "country": "CH",
             "title": {
@@ -103,7 +94,7 @@ def _create_funders(service, identity):
             }
         },
         {
-            "id": "cert",
+            "pid": "aaaaaa22",
             "name": "CERT",
             "country": "CH",
             "title": {
@@ -112,7 +103,7 @@ def _create_funders(service, identity):
             }
         },
         {
-            "id": "nu",
+            "pid": "000e0be47",
             "name": "Northwestern University",
             "country": "US",
             "title": {
@@ -120,22 +111,28 @@ def _create_funders(service, identity):
             }
         }
     ]
-    for fun in funders:
-        service.create(identity, fun)
-
+    funders = []
+    for data in funders_data:
+        funders.append(service.create(identity, data))
     Funder.index.refresh()  # Refresh the index
 
+    yield
 
-def test_funders_suggest_sort(client, h, identity, prefix, service):
+    for funder in funders:
+        funder._record.delete(force=True)
+        indexer.delete(funder._record, refresh=True)
+        db.session.commit()
+
+
+def test_funders_suggest_sort(client, h, prefix, example_funders):
     """Test a successful search."""
-    _create_funders(service, identity)
 
     # Should show 3 results, but id=cern as first due to name
     res = client.get(f"{prefix}?suggest=CERN", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
-    assert res.json["hits"]["hits"][0]["id"] == "cern"
-    assert res.json["hits"]["hits"][1]["id"] == "other"
+    assert res.json["hits"]["hits"][0]["name"] == "CERN"
+    assert res.json["hits"]["hits"][1]["name"] == "OTHER"
 
     # Should show 0 results since scheme is not searchable
     res = client.get(f"{prefix}?suggest=nucléaire", headers=h)
@@ -143,14 +140,20 @@ def test_funders_suggest_sort(client, h, identity, prefix, service):
     assert res.json["hits"]["total"] == 1
 
 
-def test_funders_delete(client_with_credentials, example_funder, h, prefix):
+def test_funders_delete(
+    client_with_credentials, h, prefix, identity, service, funder_full_data
+):
     """Test a successful delete."""
-    id_ = example_funder.id
+    funder = service.create(identity, funder_full_data)
+    id_ = funder.id
     res = client_with_credentials.delete(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 204
 
     res = client_with_credentials.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 410
+
+    # not-ideal cleanup
+    funder._record.delete(force=True)
 
 
 def test_funders_update(
@@ -161,18 +164,15 @@ def test_funders_update(
     new_name = "updated"
     funder_full_data["name"] = new_name
     res = client_with_credentials.put(
-        f"{prefix}/fund", headers=h, data=json.dumps(funder_full_data))
+        f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data))
     assert res.status_code == 200
-    assert res.json["id"] == id_
+    assert res.json["pid"] == id_  # result_items wraps pid into id
     assert res.json["name"] == new_name
 
 
 def test_funders_create(client_with_credentials, funder_full_data, h, prefix):
     """Tests a successful creation."""
-    new_funder = {**funder_full_data}
-    new_id = "new id"
-    new_funder["id"] = new_id
     res = client_with_credentials.post(
-        f"{prefix}", headers=h, data=json.dumps(new_funder))
+        f"{prefix}", headers=h, data=json.dumps(funder_full_data))
     assert res.status_code == 201
-    assert res.json["id"] == new_id
+    assert res.json["pid"] == funder_full_data["pid"]

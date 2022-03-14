@@ -21,6 +21,7 @@ def test_valid_full(app, funder_full_data):
 
 def test_valid_minimal(app):
     data = {
+        "pid": "01ggx4157",
         "name": "Test funder",
     }
     loaded = FunderSchema().load(data)
@@ -29,8 +30,7 @@ def test_valid_minimal(app):
 
 def test_invalid_no_name():
     invalid_no_name = {
-        "id": "fund",
-        #     pid="01ggx4157",
+        "pid": "01ggx4157",
         "identifiers": [
             {
                 "identifier": "000000012156142X",
@@ -59,6 +59,7 @@ def test_invalid_empty_funder():
 
 def test_invalid_country():
     invalid_country = {
+        "pid": "01ggx4157",
         "name": "Test funder",
         "country": 1
     }

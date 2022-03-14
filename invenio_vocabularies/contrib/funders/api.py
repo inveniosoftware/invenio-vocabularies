@@ -8,7 +8,6 @@
 
 """Vocabulary funders."""
 
-
 from .funders import record_type
 
 Funder = record_type.record_cls

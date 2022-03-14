@@ -13,11 +13,16 @@ fixtures are available.
 """
 
 import pytest
+from invenio_db import db
+from invenio_indexer.api import RecordIndexer
 
+from invenio_vocabularies.contrib.funders.api import Funder
 from invenio_vocabularies.contrib.funders.resources import FundersResource, \
     FundersResourceConfig
 from invenio_vocabularies.contrib.funders.services import FundersService, \
     FundersServiceConfig
+
+# FIXME: check db/es fixture appearance and remove if unneeded
 
 
 @pytest.fixture(scope="module")
@@ -42,8 +47,7 @@ def extra_entry_points():
 def funder_full_data():
     """Full funder data."""
     return {
-        "id": "fund",
-        #     pid="01ggx4157",
+        "pid": "01ggx4157",
         "identifiers": [
             {
                 "identifier": "000000012156142X",
@@ -85,3 +89,23 @@ def base_app(base_app, resource, service):
     registry = base_app.extensions['invenio-records-resources'].registry
     registry.register(service, service_id='funders-service')
     yield base_app
+
+
+@pytest.fixture()
+def indexer():
+    """Indexer instance with correct Record class."""
+    return RecordIndexer(
+        record_cls=Funder,
+        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
+    )
+
+
+@pytest.fixture(scope="function")
+def example_funder(identity, service, funder_full_data, indexer):
+    """Creates and hard deletes a funder."""
+    funder = service.create(identity, funder_full_data)
+    Funder.index.refresh()  # Refresh the index
+    yield funder
+    funder._record.delete(force=True)
+    indexer.delete(funder._record, refresh=True)
+    db.session.commit()
