@@ -10,9 +10,8 @@
 """Test the funder vocabulary service."""
 
 import pytest
-from invenio_pidstore.errors import PIDDeletedError
+from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
-from sqlalchemy.exc import IntegrityError
 
 from invenio_vocabularies.contrib.funders.api import Funder
 
@@ -81,10 +80,8 @@ def test_pid_already_registered(
 ):
     """Recreating a record with same id should fail."""
     # example_funder does the first creation
-    # FIXME: It is not a "PIDAlreadyExists" should we catch and re-raise
-    # for consistency
     pytest.raises(
-        IntegrityError, service.create, identity, funder_full_data)
+        PIDAlreadyExists, service.create, identity, funder_full_data)
 
 
 def test_extra_fields(app, service, identity, funder_full_data):
