@@ -37,7 +37,7 @@ def example_funder(db, funder_full_data):
     return fun
 
 
-def test_funder_schema_validation(app, db, example_funder):
+def test_funder_schema_validation(app, example_funder):
     """Funder schema validation."""
     # valid data
     fun = example_funder
@@ -59,7 +59,7 @@ def test_funder_schema_validation(app, db, example_funder):
 
 
 def test_funder_indexing(
-    app, db, es, example_funder, indexer, search_get
+    app, example_funder, indexer, search_get
 ):
     """Test indexing of a funder."""
     # Index document in ES
@@ -79,7 +79,7 @@ def test_funder_indexing(
     assert fun.updated == example_funder.updated
 
 
-def test_funder_pid(app, db, example_funder):
+def test_funder_pid(app, example_funder):
     """Test funder pid creation."""
 
     assert example_funder.pid.pid_value == "01ggx4157"
