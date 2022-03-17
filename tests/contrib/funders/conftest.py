@@ -22,8 +22,6 @@ from invenio_vocabularies.contrib.funders.resources import FundersResource, \
 from invenio_vocabularies.contrib.funders.services import FundersService, \
     FundersServiceConfig
 
-# FIXME: check db/es fixture appearance and remove if unneeded
-
 
 @pytest.fixture(scope="module")
 def extra_entry_points():

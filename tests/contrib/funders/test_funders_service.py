@@ -87,7 +87,7 @@ def test_pid_already_registered(
         IntegrityError, service.create, identity, funder_full_data)
 
 
-def test_extra_fields(app, db, service, identity, funder_full_data):
+def test_extra_fields(app, service, identity, funder_full_data):
     """Extra fields in data should fail."""
     funder_full_data['invalid'] = 1
     pytest.raises(
