@@ -89,7 +89,8 @@ class FunderSchema(BaseVocabularySchema):
         Since the field is only popped on_create by PIDComponent.
         """
         if self.context.get("pid"):
-            data.pop("pid")
+            data.pop("pid", None)
+            data.pop("id", None)
 
         return data
 

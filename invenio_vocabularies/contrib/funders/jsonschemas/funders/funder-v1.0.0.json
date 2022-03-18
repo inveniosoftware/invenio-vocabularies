@@ -11,10 +11,6 @@
       "type": "string",
       "description": "Represents a funder's origin country."
     },
-    "id": {
-      "$ref": "local://definitions-v1.0.0.json#/identifier",
-      "description": "Represents the funder's id."
-    },
     "identifiers": {
       "description": "Alternate identifiers for the record.",
       "type": "array",

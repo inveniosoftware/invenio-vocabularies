@@ -19,9 +19,6 @@
         "version_id": {
           "type": "integer"
         },
-        "id": {
-          "type": "keyword"
-        },
         "identifiers": {
           "properties": {
             "identifier": {
