@@ -48,7 +48,10 @@ class FunderRelationSchema(Schema):
 class FunderSchema(BaseVocabularySchema):
     """Service schema for funders."""
 
-    pid = SanitizedUnicode(required=True)
+    pid = SanitizedUnicode(
+        required=True,
+        validate=validate.Length(min=1, error=_('PID cannot be blank.'))
+    )
     name = SanitizedUnicode(
         required=True,
         validate=validate.Length(min=1, error=_('Name cannot be blank.'))

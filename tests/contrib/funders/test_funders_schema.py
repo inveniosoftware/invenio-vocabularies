@@ -51,6 +51,22 @@ def test_invalid_no_name():
         data = FunderSchema().load(invalid_no_name)
 
 
+def test_invalid_empty(app):
+    data = {
+        "pid": "01ggx4157",
+        "name": "",
+    }
+    with pytest.raises(ValidationError):
+        data = FunderSchema().load(data)
+
+    data = {
+        "pid": "",
+        "name": "Test funder",
+    }
+    with pytest.raises(ValidationError):
+        data = FunderSchema().load(data)
+
+
 def test_invalid_empty_funder():
     invalid_empty = {}
     with pytest.raises(ValidationError):
