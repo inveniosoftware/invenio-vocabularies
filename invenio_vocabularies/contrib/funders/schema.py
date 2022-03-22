@@ -62,27 +62,9 @@ class FunderSchema(BaseVocabularySchema):
         )
     ))
 
-    # TODO: the 3 hooks below could be extracted to a PIDField
-    @pre_load(pass_many=False)
-    def load_pid(self, data, **kwargs):
-        """Loads the pid.
-
-        If it does not exist, it tries to extract it from the identifiers.
-        """
-        if data.get("pid"):
-            return data
-
-        identifiers = data.get("identifiers", [])
-        for identifier in identifiers:
-            # FIXME: make scheme configurable
-            if identifier["scheme"] == "ror":
-                data["pid"] = identifier["identifier"]
-                break
-
-        return data
-
+    # TODO: the 2 hooks below could be extracted to a PIDField
     @post_load
-    def kepp_pid_on_create(self, data, **kwargs):
+    def keep_pid_on_create(self, data, **kwargs):
         """Remove the PID if already registered.
 
         If the pid is not removed it would be injected into the DB JSON column.
