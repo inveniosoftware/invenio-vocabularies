@@ -16,7 +16,7 @@ from invenio_records_resources.services.records.params import \
     SuggestQueryParser
 from werkzeug.local import LocalProxy
 
-from ...services.components import PIDComponent
+from ...services.components import ModelPIDComponent
 
 funder_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_FUNDER_SCHEMES"]
@@ -62,5 +62,5 @@ class FundersSearchOptions(SearchOptions):
 service_components = [
     # Order of components are important!
     DataComponent,
-    PIDComponent,
+    ModelPIDComponent,
 ]
