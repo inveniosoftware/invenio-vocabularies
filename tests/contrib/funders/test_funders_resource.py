@@ -149,9 +149,11 @@ def test_funders_delete(
     res = client_with_credentials.delete(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 204
 
+    # only the metadata is removed from the record, it is still resolvable
     res = client_with_credentials.get(f"{prefix}/{id_}", headers=h)
-    assert res.status_code == 410
-
+    assert res.status_code == 200
+    base_keys = {"created", "updated", "id", "links", "revision_id", "pid"}
+    assert set(res.json.keys()) == base_keys
     # not-ideal cleanup
     funder._record.delete(force=True)
 

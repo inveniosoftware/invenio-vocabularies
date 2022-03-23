@@ -65,7 +65,10 @@ def test_simple_flow(app, service, identity, funder_full_data):
 
     # Fail to retrieve it
     # - db
-    pytest.raises(PIDDeletedError, service.read, identity, id_)
+    # only the metadata is removed from the record, it is still resolvable
+    base_keys = {"created", "updated", "id", "links", "revision_id", "pid"}
+    deleted_rec = service.read(identity, id_).to_dict()
+    assert set(deleted_rec.keys()) == base_keys
     # - search
     res = service.search(
         identity, q=f"pid:{id_}", size=25, page=1)
