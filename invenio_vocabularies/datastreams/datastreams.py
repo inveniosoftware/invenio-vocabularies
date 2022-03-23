@@ -31,7 +31,7 @@ class DataStream:
         :param writers: an ordered list of writers.
         :param transformers: an ordered list of transformers to apply.
         """
-        self._readers = readers  # a single entry point
+        self._readers = readers
         self._transformers = transformers
         self._writers = writers
 
@@ -48,14 +48,17 @@ class DataStream:
         writing it.
         """
         for stream_entry in self.read():
-            transformed_entry = self.transform(stream_entry)
-            if transformed_entry.errors:
-                yield transformed_entry
-            elif self.filter(transformed_entry):
-                transformed_entry.filtered = True
-                yield transformed_entry
+            if stream_entry.errors:
+                yield stream_entry  # reading errors
             else:
-                yield self.write(transformed_entry)
+                transformed_entry = self.transform(stream_entry)
+                if transformed_entry.errors:
+                    yield transformed_entry
+                elif self.filter(transformed_entry):
+                    transformed_entry.filtered = True
+                    yield transformed_entry
+                else:
+                    yield self.write(transformed_entry)
 
     def read(self):
         """Recursively read the entries."""

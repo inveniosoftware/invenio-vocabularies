@@ -8,6 +8,8 @@
 
 """DataStreams tests."""
 
+import json
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -77,6 +79,40 @@ def test_base_datastream_fail_on_write(app, vocabulary_config):
     assert "TestTransformer: Value cannot be negative" in invalid_tr.errors
 
 
+@pytest.fixture(scope='function')
+def zip_file(expected_from_zip):
+    """Creates a Zip file with three files inside.
+
+    The first file should return two json elements.
+    The second file should fail.
+    The third file should return two json elements.
+    """
+
+    def _correct_file(archive, idx):
+        correct_file = Path(f"correct_{idx}.json")
+        with open(correct_file, 'w') as file:
+            json.dump(expected_from_zip, file)
+        archive.write(correct_file)
+        correct_file.unlink()
+
+    filename = Path("reader_test.zip")
+    with zipfile.ZipFile(file=filename, mode="w") as archive:
+        _correct_file(archive, 1)
+        errored_file = Path("errored.json")
+        with open(errored_file, 'w') as file:
+            file.write(  # to dump incorrect json format
+                # missing comma and closing bracket
+                '[{"test": {"inner": "value"}{"test": {"inner": "value"}}]'
+            )
+        archive.write(errored_file)
+        _correct_file(archive, 2)
+        errored_file.unlink()
+
+    yield filename
+
+    filename.unlink()  # delete created file
+
+
 def test_piping_readers(app, zip_file, expected_from_json):
     ds_config = {
         "readers": [
@@ -98,10 +134,17 @@ def test_piping_readers(app, zip_file, expected_from_json):
         readers_config=ds_config["readers"],
         writers_config=ds_config["writers"],
     )
+    expected_errors = [
+        "ZipReader.read: Cannot decode JSON file errored.json: Expecting ',' delimiter: line 1 column 29 (char 28)"  # noqa
+    ]
 
-    total = 0
-    for entry in datastream.process():
-        assert expected_from_json[0] == entry.entry
-        total += 1
+    iter = datastream.process()
+    for count, entry in enumerate(iter, start=1):
+        if count != 3:
+            assert entry.entry == expected_from_json[0]
+        else:
+            # assert the second file fails
+            assert entry.entry.name == "errored.json"
+            assert entry.errors == expected_errors
 
-    assert total == 4
+    assert count == 5  # 2 good + 1 bad + 2 good
