@@ -65,20 +65,6 @@ class FunderSchema(BaseVocabularySchema):
         )
     ))
 
-    # TODO: the 2 hooks below could be extracted to a PIDField
-    @post_load
-    def keep_pid_on_create(self, data, **kwargs):
-        """Remove the PID if already registered.
-
-        If the pid is not removed it would be injected into the DB JSON column.
-        Since the field is only popped on_create by PIDComponent.
-        """
-        if self.context.get("pid"):
-            data.pop("pid", None)
-            data.pop("id", None)
-
-        return data
-
     @pre_dump(pass_many=False)
     def extract_pid_value(self, data, **kwargs):
         """Extracts the PID value."""

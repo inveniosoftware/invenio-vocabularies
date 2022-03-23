@@ -49,3 +49,12 @@ class PIDComponent(ServiceComponent):
         # We create the PID after all the data has been initialized. so that
         # we can rely on having the 'id' and type set.
         self.service.record_cls.pid.create(record)
+
+
+class ModelPIDComponent(PIDComponent):
+    """Model PID registration component."""
+
+    def update(self, identity, data=None, record=None, **kwargs):
+        """Update an existing record."""
+        record.pop("pid", None)
+        record.pop("id", None)
