@@ -22,9 +22,12 @@ from invenio_vocabularies.datastreams.writers import BaseWriter
 class TestReader(BaseReader):
     """Test reader."""
 
-    # no need for self since it is patched
-    def read(*args, **kwargs):
-        """Yields empty dict."""
+    # needs implementation due to abstract decorator in the base class
+    def _iter(self, fp, *args, **kwargs):
+        pass
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads from item or opens the file descriptor from origin."""
         yield 1
 
 

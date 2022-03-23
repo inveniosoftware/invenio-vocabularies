@@ -25,35 +25,37 @@ from .errors import ReaderError
 class BaseReader(ABC):
     """Base reader."""
 
-    def __init__(self, origin=None, *args, **kwargs):
+    def __init__(self, origin=None, mode='r', *args, **kwargs):
         """Constructor.
 
         :param origin: Data source (e.g. filepath).
                        Can be none in case of piped readers.
         """
         self._origin = origin
+        self._mode = mode
 
     @abstractmethod
-    def read(self, item=None, *args, **kwargs):
-        """Reads the content from the origin.
-
-        Yields data objects.
-        """
+    def _iter(self, fp, *args, **kwargs):
+        """Yields data objects file pointer."""
         pass
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads from item or opens the file descriptor from origin."""
+        if item:
+            yield from self._iter(fp=item, *args, **kwargs)
+        else:
+            with open(self._origin, self._mode) as file:
+                yield from self._iter(fp=file, *args, **kwargs)
 
 
 class YamlReader(BaseReader):
     """Yaml reader."""
 
-    def read(self, item=None):
+    def _iter(self, fp, *args, **kwargs):
         """Reads a yaml file and returns a dictionary per element."""
-        file = item if item else open(self._origin, mode='r')
-
-        data = yaml.safe_load(file) or []
+        data = yaml.safe_load(fp) or []
         for entry in data:
             yield entry
-
-        file.close()
 
 
 class TarReader(BaseReader):
@@ -62,18 +64,23 @@ class TarReader(BaseReader):
     def __init__(self, *args, mode="r|gz", regex=None, **kwargs):
         """Constructor."""
         self._regex = re.compile(regex) if regex else None
-        self._mode = mode
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, mode=mode, **kwargs)
 
-    def read(self, item=None):
-        """Opens a tar and iterates through the files in the archive."""
-        filepath = item or self._origin
-        with tarfile.open(filepath, self._mode) as archive:
-            for member in archive:
-                match = not self._regex or self._regex.search(member.name)
-                if member.isfile() and match:
-                    content = archive.extractfile(member).read()
-                    yield content
+    def _iter(self, fp, *args, **kwargs):
+        """Iterates through the files in the archive."""
+        for member in fp:
+            match = not self._regex or self._regex.search(member.name)
+            if member.isfile() and match:
+                content = fp.extractfile(member).read()
+                yield content
+
+    def read(self, item=None, *args, **kwargs):
+        """Opens a tar archive or uses the given file pointer."""
+        if item:
+            yield from self._iter(fp=item, *args, **kwargs)
+        else:
+            with tarfile.open(self._origin, self._mode) as archive:
+                yield from self._iter(fp=archive, *args, **kwargs)
 
 
 class SimpleHTTPReader(BaseReader):
@@ -88,18 +95,24 @@ class SimpleHTTPReader(BaseReader):
         self.content_type = content_type
         super().__init__(origin, *args, **kwargs)
 
-    def read(self):
-        """Reads a yaml file and returns a dictionary per element."""
+    def _iter(self, url, *args, **kwargs):
+        """Queries an URL."""
+        base_url = url
         headers = {"Accept": self.content_type}
 
         for id_ in self._ids:
-            url = self._origin.format(id=id_)
+            url = base_url.format(id=id_)
             resp = requests.get(url, headers=headers)
             if resp.status_code != 200:
                 # todo add logging/fail
                 pass
 
             yield resp.content
+
+    def read(self, item=None, *args, **kwargs):
+        """Chooses between item and origin as url."""
+        url = item if item else self._origin
+        yield from self._iter(url=url, *args, **kwargs)
 
 
 class ZipReader(BaseReader):
@@ -111,61 +124,58 @@ class ZipReader(BaseReader):
         self._regex = re.compile(regex) if regex else None
         super().__init__(*args, **kwargs)
 
-    def read(self, item=None):
-        """Opens a ZIP and iterates through the files in the archive."""
+    def _iter(self, fp, *args, **kwargs):
+        """Iterates through the files in the archive."""
+        for member in fp.infolist():
+            match = not self._regex or self._regex.search(member.filename)
+            if not member.is_dir() and match:
+                yield fp.open(member)
+
+    def read(self, item=None, *args, **kwargs):
+        """Opens a Zip archive or uses the given file pointer."""
         # https://docs.python.org/3/library/zipfile.html
-        filepath = item or self._origin
-        with zipfile.ZipFile(filepath, **self._options) as archive:
-            for member in archive.infolist():
-                match = not self._regex or self._regex.search(member.filename)
-                if not member.is_dir() and match:
-                    yield archive.open(member)
+        if item:
+            yield from self._iter(fp=item, *args, **kwargs)
+        else:
+            with zipfile.ZipFile(self._origin, **self._options) as archive:
+                yield from self._iter(fp=archive, *args, **kwargs)
 
 
 class JsonReader(BaseReader):
     """JSON object reader."""
 
-    def read(self, item=None, **kwargs):
+    def _iter(self, fp, *args, **kwargs):
         """Reads (loads) a json object and yields its items."""
-        def _read(file):
-            try:
-                entries = json.load(file)
-                if isinstance(entries, list):
-                    for entry in entries:
-                        yield entry
-                else:
-                    yield entries  # just one entry
-            except JSONDecodeError as err:
-                raise ReaderError(
-                    f"Cannot decode JSON file {file.name}: {str(err)}"
-                )
-
-        if item:
-            yield from _read(item)
-        else:
-            with open(self._origin) as file:
-                yield from _read(file)
+        try:
+            entries = json.load(fp)
+            if isinstance(entries, list):
+                for entry in entries:
+                    yield entry
+            else:
+                yield entries  # just one entry
+        except JSONDecodeError as err:
+            raise ReaderError(
+                f"Cannot decode JSON file {fp.name}: {str(err)}"
+            )
 
 
 class CSVReader(BaseReader):
     """Reads a CSV file and returns a dictionary per element."""
 
     def __init__(
-        self, *args, mode='r', csv_options=None, as_dict=True, **kwargs
+        self, *args, csv_options=None, as_dict=True, **kwargs
     ):
         """Constructor."""
         self.csv_options = csv_options or {}
         self.as_dict = as_dict
-        self.mode = mode
         super().__init__(*args, **kwargs)
 
-    def read(self, item=None):
+    def _iter(self, fp, *args, **kwargs):
         """Reads a csv file and returns a dictionary per element."""
-        filepath = item or self._origin
-        with open(filepath, mode=self.mode) as csvfile:
-            if self.as_dict:
-                reader = csv.DictReader(csvfile, **self.csv_options)
-            else:
-                reader = csv.reader(csvfile, **self.csv_options)
-            for row in reader:
-                yield row
+        csvfile = fp
+        if self.as_dict:
+            reader = csv.DictReader(csvfile, **self.csv_options)
+        else:
+            reader = csv.reader(csvfile, **self.csv_options)
+        for row in reader:
+            yield row

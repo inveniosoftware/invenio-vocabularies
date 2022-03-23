@@ -29,10 +29,14 @@ from invenio_vocabularies.datastreams.writers import BaseWriter
 class TestReader(BaseReader):
     """Test reader."""
 
-    def read(self, *args, **kwargs):
+    def _iter(self, fp, *args, **kwargs):
         """Yields the values in the origin."""
         for value in self._origin:
             yield value
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads from item or opens the file descriptor from origin."""
+        yield from self._iter(fp=self._origin, *args, **kwargs)
 
 
 class TestTransformer(BaseTransformer):
