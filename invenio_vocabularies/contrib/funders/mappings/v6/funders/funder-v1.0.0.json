@@ -42,9 +42,6 @@
         "pid": {
           "type": "keyword"
         },
-        "pid_status": {
-          "type": "keyword"
-        },
         "title": {
           "type": "object",
           "dynamic": true,

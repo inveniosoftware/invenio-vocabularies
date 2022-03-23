@@ -73,7 +73,6 @@ def test_funder_indexing(
     assert fun == example_funder
     assert fun.id == example_funder.id
     assert fun.pid.pid_value == example_funder.pid.pid_value
-    assert fun.pid.status == example_funder.pid.status
     assert fun.revision_id == example_funder.revision_id
     assert fun.created == example_funder.created
     assert fun.updated == example_funder.updated

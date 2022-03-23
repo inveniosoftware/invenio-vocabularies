@@ -9,12 +9,9 @@
 """Vocabulary funders."""
 
 from invenio_db import db
-from invenio_pidstore.models import PIDStatus
 from invenio_records.dumpers import ElasticsearchDumper
-from invenio_records.systemfields import ModelField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import ModelPIDField
-from sqlalchemy_utils.types import ChoiceType
 
 from ...services.permissions import PermissionPolicy
 from .config import FundersSearchOptions, service_components
@@ -31,12 +28,6 @@ record_type = RecordTypeFactory(
         # cannot set to nullable=False because it would fail at
         # service level when create({}), see records-resources.
         "pid": db.Column(db.String, unique=True),
-        "pid_status": db.Column(
-            ChoiceType(PIDStatus, impl=db.CHAR(1))
-        )
-    },
-    record_cls_attrs={
-        "pid_status": ModelField(dump_type=str)
     },
     record_dumper=ElasticsearchDumper(
         model_fields={'pid': ('pid', str)}

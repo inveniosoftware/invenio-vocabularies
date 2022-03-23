@@ -51,13 +51,6 @@ def upgrade():
         ),
         sa.Column('version_id', sa.Integer(), nullable=False),
         sa.Column('pid', sa.String(), nullable=True),
-        sa.Column(
-            'pid_status',
-            sqlalchemy_utils.types.choice.ChoiceType(
-                PIDStatus, impl=sa.CHAR(1)
-            ),
-            nullable=True
-        ),
         sa.PrimaryKeyConstraint('id', name=op.f('pk_funder_metadata')),
         sa.UniqueConstraint('pid', name=op.f('uq_funder_metadata_pid'))
     )
