@@ -89,8 +89,8 @@ def app_config(app_config):
 
 
 @pytest.fixture(scope='module')
-def expected_from_zip():
-    """Creates a zip file."""
+def json_list():
+    """Expected json list."""
     return [
         {
             "test": {
@@ -105,8 +105,18 @@ def expected_from_zip():
     ]
 
 
+@pytest.fixture(scope='module')
+def json_element():
+    """Expected json element."""
+    return {
+        "test": {
+            "inner": "value"
+        }
+    }
+
+
 @pytest.fixture(scope='function')
-def zip_file(expected_from_zip):
+def zip_file(json_list):
     """Creates a Zip file with three files (two json) inside.
 
     Each iteration should return the content of one json file,
@@ -118,20 +128,10 @@ def zip_file(expected_from_zip):
         for file_ in files:
             inner_filename = Path(file_)
             with open(inner_filename, 'w') as file:
-                json.dump(expected_from_zip, file)
+                json.dump(json_list, file)
             archive.write(inner_filename)
             inner_filename.unlink()
 
     yield filename
 
     filename.unlink()  # delete created file
-
-
-@pytest.fixture(scope='module')
-def expected_from_json():
-    """Expected json string."""
-    return [{
-        "test": {
-            "inner": "value"
-        }
-    }]

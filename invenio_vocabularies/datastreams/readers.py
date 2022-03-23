@@ -130,8 +130,11 @@ class JsonReader(BaseReader):
         def _read(file):
             try:
                 entries = json.load(file)
-                for entry in entries:
-                    yield entry
+                if isinstance(entries, list):
+                    for entry in entries:
+                        yield entry
+                else:
+                    yield entries  # just one entry
             except JSONDecodeError as err:
                 raise ReaderError(
                     f"Cannot decode JSON file {file.name}: {str(err)}"
