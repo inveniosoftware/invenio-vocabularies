@@ -80,7 +80,7 @@ def test_base_datastream_fail_on_write(app, vocabulary_config):
 
 
 @pytest.fixture(scope='function')
-def zip_file(expected_from_zip):
+def zip_file(json_list):
     """Creates a Zip file with three files inside.
 
     The first file should return two json elements.
@@ -91,7 +91,7 @@ def zip_file(expected_from_zip):
     def _correct_file(archive, idx):
         correct_file = Path(f"correct_{idx}.json")
         with open(correct_file, 'w') as file:
-            json.dump(expected_from_zip, file)
+            json.dump(json_list, file)
         archive.write(correct_file)
         correct_file.unlink()
 
@@ -113,7 +113,7 @@ def zip_file(expected_from_zip):
     filename.unlink()  # delete created file
 
 
-def test_piping_readers(app, zip_file, expected_from_json):
+def test_piping_readers(app, zip_file, json_element):
     ds_config = {
         "readers": [
             {
@@ -141,7 +141,7 @@ def test_piping_readers(app, zip_file, expected_from_json):
     iter = datastream.process()
     for count, entry in enumerate(iter, start=1):
         if count != 3:
-            assert entry.entry == expected_from_json[0]
+            assert entry.entry == json_element
         else:
             # assert the second file fails
             assert entry.entry.name == "errored.json"
