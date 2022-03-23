@@ -75,13 +75,13 @@ class RORTransformer(BaseTransformer):
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "ror-funder": RORTransformer,
 }
-"""ORCiD Data Streams transformers."""
+"""ROR Data Streams transformers."""
 
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "funders-service": FundersServiceWriter,
 }
-"""ORCiD Data Streams transformers."""
+"""Funders Data Streams transformers."""
 
 
 DATASTREAM_CONFIG = {

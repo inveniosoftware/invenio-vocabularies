@@ -14,9 +14,12 @@ import re
 import tarfile
 import zipfile
 from abc import ABC, abstractmethod
+from json.decoder import JSONDecodeError
 
 import requests
 import yaml
+
+from .errors import ReaderError
 
 
 class BaseReader(ABC):
@@ -124,12 +127,21 @@ class JsonReader(BaseReader):
 
     def read(self, item=None, **kwargs):
         """Reads (loads) a json object and yields its items."""
-        file = item if item else open(self._origin, mode='r')
-        entries = json.load(file)
-        for entry in entries:
-            yield entry
+        def _read(file):
+            try:
+                entries = json.load(file)
+                for entry in entries:
+                    yield entry
+            except JSONDecodeError as err:
+                raise ReaderError(
+                    f"Cannot decode JSON file {file.name}: {str(err)}"
+                )
 
-        file.close()
+        if item:
+            yield from _read(item)
+        else:
+            with open(self._origin) as file:
+                yield from _read(file)
 
 
 class CSVReader(BaseReader):
