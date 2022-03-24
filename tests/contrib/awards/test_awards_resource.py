@@ -158,7 +158,13 @@ def test_awards_suggest_sort(
 
 
 def test_awards_delete(
-        client_with_credentials, h, prefix, identity, service, award_full_data
+    client_with_credentials,
+    h,
+    prefix,
+    identity,
+    service,
+    award_full_data,
+    example_funder
 ):
     """Test a successful delete."""
     award = service.create(identity, award_full_data)
@@ -189,7 +195,9 @@ def test_awards_update(
     assert res.json["title"]["en"] == new_title
 
 
-def test_awards_create(client_with_credentials, award_full_data, h, prefix):
+def test_awards_create(
+    client_with_credentials, award_full_data, h, prefix, example_funder
+):
     """Tests a successful creation."""
     res = client_with_credentials.post(
         f"{prefix}", headers=h, data=json.dumps(award_full_data))

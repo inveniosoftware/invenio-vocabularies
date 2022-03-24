@@ -58,12 +58,17 @@ def award_full_data():
         "title": {
             "en": "Personalised Treatment For Cystic Fibrosis Patients With \
                 Ultra-rare CFTR Mutations (and beyond)",
+        },
+        "funder": {
+            "id": "01ggx4157"
         }
     }
 
 
 @pytest.fixture(scope="function")
-def example_award(db, award_full_data, identity, indexer, service):
+def example_award(
+    db, example_funder, award_full_data, identity, indexer, service
+):
     """Creates and hard deletes an award."""
     award = service.create(identity, award_full_data)
     Award.index.refresh()  # Refresh the index
@@ -88,7 +93,9 @@ def example_funder(db):
     fun = Funder.create(api_funder, pid="01ggx4157")
     fun.commit()
     db.session.commit()
-    return fun
+    yield fun
+    fun.delete(force=True)
+    db.session.commit()
 
 
 @pytest.fixture()

@@ -13,7 +13,7 @@ from invenio_records.dumpers import ElasticsearchDumper
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import ModelPIDField, \
-    PIDListRelation
+    PIDRelation
 
 from ...services.permissions import PermissionPolicy
 from ..funders.api import Funder
@@ -21,11 +21,11 @@ from .config import AwardsSearchOptions, service_components
 from .schema import AwardSchema
 
 award_relations = RelationsField(
-    funders=PIDListRelation(
-        'funders',
+    funders=PIDRelation(
+        'funder',
         attrs=['id', 'name'],
         pid_field=Funder.pid,
-        cache_key='funders',
+        cache_key='funder',
     )
 )
 
