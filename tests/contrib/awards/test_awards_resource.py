@@ -88,34 +88,18 @@ def example_awards(service, identity, indexer):
             },
             "pid": "847507",
             "number": "847507",
-            "identifiers": [
-                {
-                    "identifier": "https://cordis.europa.eu/project/id/847507",
-                    "scheme": "url"
-                },
-                {
-                    "identifier": "10.3030/847507",
-                    "scheme": "doi"
-                }
-            ]
-        },
-        {
+        }, {
             "title": {
                 "en": "Palliative care in Parkinson disease",
             },
             "pid": "825785",
             "number": "825785",
-            "identifiers": [
-                {
-                    "identifier": "https://cordis.europa.eu/project/id/825785",
-                    "scheme": "url"
-                },
-                {
-                    "identifier": "10.3030/825785",
-                    "scheme": "doi"
-                }
-            ]
-
+        }, {
+            "title": {
+                "en": "Palliative Show",
+            },
+            "pid": "000001",
+            "number": "000001",
         }
     ]
     awards = []
@@ -150,10 +134,10 @@ def test_awards_suggest_sort(
     assert res.json["hits"]["hits"][0]["pid"] == "825785"
 
     # Should show 2 results, but pid=847507 as first due to created date
-    res = client.get(f"{prefix}?suggest=8", headers=h)
+    res = client.get(f"{prefix}?suggest=Palliative+Show", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
-    assert res.json["hits"]["hits"][0]["pid"] == "847507"
+    assert res.json["hits"]["hits"][0]["pid"] == "000001"
     assert res.json["hits"]["hits"][1]["pid"] == "825785"
 
 
