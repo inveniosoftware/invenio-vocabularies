@@ -62,6 +62,29 @@ def test_invalid_empty_pid(app):
     with pytest.raises(ValidationError):
         AwardSchema().load(invalid_empty_pid)
 
+
+def test_award_funder_name(app):
+    with_funder_name = {
+        "pid": "755021",
+        "number": "755021",
+        "funder": {
+            "name": "custom funder",
+        }
+    }
+    assert with_funder_name == AwardSchema().load(with_funder_name)
+
+
+def test_award_funder_id(app):
+    with_funder_id = {
+        "pid": "755021",
+        "number": "755021",
+        "funder": {
+            "id": "01ggx4157",
+        }
+    }
+    assert with_funder_id == AwardSchema().load(with_funder_id)
+
+
 #
 # AwardRelationSchema
 #

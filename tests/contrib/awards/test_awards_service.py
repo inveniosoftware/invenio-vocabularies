@@ -9,8 +9,11 @@
 
 """Test the award vocabulary service."""
 
+from copy import deepcopy
+
 import pytest
-from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
+from invenio_pidstore.errors import PIDAlreadyExists
+from invenio_records.systemfields.relations.errors import InvalidRelationValue
 from marshmallow.exceptions import ValidationError
 
 from invenio_vocabularies.contrib.awards.api import Award
@@ -72,8 +75,21 @@ def test_simple_flow(
     item._record.delete(force=True)
 
 
+def test_create_invalid_funder(
+    app, service, identity, award_full_data, example_funder
+):
+    award_with_invalid_funder = deepcopy(award_full_data)
+    award_with_invalid_funder["funder"]["id"] = "invalid"
+    pytest.raises(
+        InvalidRelationValue,
+        service.create,
+        identity,
+        award_with_invalid_funder
+    )
+
+
 def test_pid_already_registered(
-    app, db, service, identity, award_full_data
+    app, db, service, identity, award_full_data, example_funder
 ):
     """Recreating a record with same id should fail."""
     service.create(identity, award_full_data)
@@ -81,7 +97,9 @@ def test_pid_already_registered(
         PIDAlreadyExists, service.create, identity, award_full_data)
 
 
-def test_extra_fields(app, service, identity, award_full_data):
+def test_extra_fields(
+    app, service, identity, award_full_data, example_funder
+):
     """Extra fields in data should fail."""
     award_full_data['invalid'] = 1
     pytest.raises(
