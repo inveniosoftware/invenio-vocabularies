@@ -40,6 +40,7 @@ class AwardSchema(BaseVocabularySchema):
         required=True,
         validate=validate.Length(min=1, error=_('Pid cannot be blank.'))
     )
+    acronym = SanitizedUnicode()
 
     @pre_dump(pass_many=False)
     def extract_pid_value(self, data, **kwargs):

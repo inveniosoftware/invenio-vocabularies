@@ -43,6 +43,9 @@
       "number": {
         "type": "keyword"
       },
+      "acronym": {
+        "type": "keyword"
+      },
       "funder": {
         "type": "object",
         "properties": {
