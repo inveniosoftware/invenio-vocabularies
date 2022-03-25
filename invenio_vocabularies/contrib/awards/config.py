@@ -28,6 +28,7 @@ class AwardsSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
+            'acronym^100',
             'title.*^50',
             'title.*._2gram',
             'title.*._3gram',

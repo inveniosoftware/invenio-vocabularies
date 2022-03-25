@@ -61,7 +61,9 @@ def award_full_data():
         },
         "funder": {
             "id": "01ggx4157"
-        }
+        },
+        "acronym": "HIT-CF",
+
     }
 
 

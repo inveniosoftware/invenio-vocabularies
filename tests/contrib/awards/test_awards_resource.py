@@ -98,10 +98,12 @@ def example_awards(service, identity, indexer):
             "title": {
                 "en": "Palliative Show",
             },
+            "acronym": "Palliative",
             "pid": "000001",
             "number": "000001",
         }
     ]
+
     awards = []
     for data in awards_data:
         awards.append(service.create(identity, data))
@@ -134,7 +136,7 @@ def test_awards_suggest_sort(
     assert res.json["hits"]["hits"][0]["pid"] == "825785"
 
     # Should show 2 results, but pid=847507 as first due to created date
-    res = client.get(f"{prefix}?suggest=Palliative+Show", headers=h)
+    res = client.get(f"{prefix}?suggest=Palliative", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
     assert res.json["hits"]["hits"][0]["pid"] == "000001"
