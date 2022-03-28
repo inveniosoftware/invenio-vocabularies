@@ -70,6 +70,13 @@ def test_awards_search(client, example_award, h, prefix):
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
     assert res.json["sortBy"] == "newest"
+    assert res.json["aggregations"]["funders"]
+
+    funders_agg = res.json["aggregations"]["funders"]["buckets"][0]
+    assert funders_agg["key"] == "01ggx4157"
+    assert funders_agg["doc_count"] == 1
+    assert funders_agg["label"] == \
+        "European Organization for Nuclear Research (CH)"
 
     res = client.get(f"{prefix}?q=755021", headers=h)
 
@@ -79,7 +86,7 @@ def test_awards_search(client, example_award, h, prefix):
 
 
 @pytest.fixture(scope="function")
-def example_awards(service, identity, indexer):
+def example_awards(service, identity, indexer, example_funder):
     """Create dummy awards with similar ids/numbers/titles."""
     awards_data = [
         {
@@ -94,6 +101,9 @@ def example_awards(service, identity, indexer):
             },
             "pid": "825785",
             "number": "825785",
+            "funder": {
+                "id": "01ggx4157"
+            },
         }, {
             "title": {
                 "en": "Palliative Show",
@@ -101,6 +111,9 @@ def example_awards(service, identity, indexer):
             "acronym": "Palliative",
             "pid": "000001",
             "number": "000001",
+            "funder": {
+                "name": "Another Funder"
+            },
         }
     ]
 
@@ -118,11 +131,8 @@ def example_awards(service, identity, indexer):
         db.session.commit()
 
 
-def test_awards_suggest_sort(
-    client, h, prefix, example_awards
-):
+def test_awards_suggest_sort(client, h, prefix, example_awards):
     """Test a successful search."""
-
     # Should show 1 result
     res = client.get(f"{prefix}?suggest=847507", headers=h)
     assert res.status_code == 200
@@ -141,6 +151,17 @@ def test_awards_suggest_sort(
     assert res.json["hits"]["total"] == 2
     assert res.json["hits"]["hits"][0]["pid"] == "000001"
     assert res.json["hits"]["hits"][1]["pid"] == "825785"
+
+
+def test_awards_faceted_suggest(client, h, prefix, example_awards):
+    """Test a successful suggest with filtering."""
+    # Should show 1 results because of the funder filtering
+    res = client.get(
+        f"{prefix}?funders=01ggx4157&suggest=Palliative", headers=h
+    )
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["pid"] == "825785"
 
 
 def test_awards_delete(

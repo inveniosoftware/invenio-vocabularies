@@ -9,7 +9,6 @@
 """Vocabulary awards configuration."""
 
 from flask import current_app
-from flask_babelex import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import \
