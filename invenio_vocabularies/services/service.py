@@ -21,14 +21,15 @@ from invenio_records_resources.services.records.params import FilterParam, \
     SuggestQueryParser
 from invenio_records_resources.services.records.schema import \
     ServiceSchemaWrapper
-from invenio_records_resources.services.uow import unit_of_work
+from invenio_records_resources.services.uow import RecordCommitOp, TaskOp, \
+    unit_of_work
 
 from ..records.api import Vocabulary
 from ..records.models import VocabularyType
 from .components import PIDComponent, VocabularyTypeComponent
 from .permissions import PermissionPolicy
 from .schema import TaskSchema, VocabularySchema
-from .tasks import process_datastream
+from .tasks import process_datastream, update_dereferenced_vocabularies
 
 
 class VocabularySearchOptions(SearchOptions):
@@ -204,6 +205,46 @@ class VocabulariesService(RecordService):
             identity, es_query, fields,
             extra_filter=filter, **kwargs)
 
+        return self.result_list(self, identity, results)
+
+    @unit_of_work()
+    def update_many(self, identity, data, uow=None):
+        """Update many vocabulary records."""
+        # FIXME: this would not be available in contrib
+        # move implementation to records-resources
+        # bulk permissions not per record
+        self.require_permission(identity, "update_many")
+
+        results = []
+        updated_ids = set()
+        for rec_data in data:
+            recid = rec_data["id"]
+            record = self.record_cls.pid.resolve(recid)
+            self.check_revision_id(record, rec_data.get("revision_id"))
+            data, _ = self.schema.load(
+                data,
+                context=dict(
+                    identity=identity,
+                    pid=record.pid,
+                    record=record
+                )
+            )
+
+            # Run components
+            self.run_components(
+                'update', identity, data=data, record=record, uow=uow)
+
+            uow.register(RecordCommitOp(record, self.indexer))
+            results.append(record)
+            # FIXME: check if the content was updated
+            content_updated = False
+            if content_updated:
+                updated_ids.add(recid)
+
+        self.uow.register(
+            TaskOp(update_dereferenced_vocabularies, updated_ids)
+        )
+        # FIXME: results is not serializable as result_list
         return self.result_list(self, identity, results)
 
     def launch(self, identity, data):
