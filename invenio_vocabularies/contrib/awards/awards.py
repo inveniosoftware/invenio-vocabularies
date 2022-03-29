@@ -43,7 +43,7 @@ record_type = RecordTypeFactory(
         "pid": db.Column(db.String, unique=True),
     },
     record_dumper=ElasticsearchDumper(
-        model_fields={'pid': ('pid', str)},
+        model_fields={'pid': ('id', str)},
         extensions=[
             RelationDumperExt('relations'),
         ]

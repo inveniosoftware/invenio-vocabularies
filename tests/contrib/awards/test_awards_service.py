@@ -45,7 +45,7 @@ def test_simple_flow(
 
     # Search it
     res = service.search(
-        identity, q=f"pid:{id_}", size=25, page=1)
+        identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0] == read_item.data
 
@@ -72,7 +72,7 @@ def test_simple_flow(
     assert set(deleted_rec.keys()) == base_keys
     # - search
     res = service.search(
-        identity, q=f"pid:{id_}", size=25, page=1)
+        identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 0
 
     # not-ideal cleanup
