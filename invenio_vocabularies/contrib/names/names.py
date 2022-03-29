@@ -9,6 +9,8 @@
 """Vocabulary names."""
 
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
+from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import PIDListRelation
@@ -23,7 +25,7 @@ from .schema import NameSchema
 name_relations = RelationsField(
     affiliations=PIDListRelation(
         'affiliations',
-        attrs=['id', 'name'],
+        attrs=['name'],
         pid_field=Affiliation.pid,
         cache_key='affiliations',
     )
@@ -42,6 +44,11 @@ record_type = RecordTypeFactory(
     schema_version="1.0.0",
     schema_path="local://names/name-v1.0.0.json",
     record_relations=name_relations,
+    record_dumper=ElasticsearchDumper(
+        extensions=[
+            RelationDumperExt('relations'),
+        ]
+    ),
     # Service layer
     service_schema=NameSchema,
     search_options=NamesSearchOptions,

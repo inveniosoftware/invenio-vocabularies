@@ -16,10 +16,10 @@ from invenio_records_resources.services.records.params import \
     SuggestQueryParser
 from werkzeug.local import LocalProxy
 
-from ...services.components import PIDComponent
+from ...services.components import PIDComponent, RelationsComponent
 
 names_schemes = LocalProxy(
-     lambda: current_app.config["VOCABULARIES_NAMES_SCHEMES"]
+    lambda: current_app.config["VOCABULARIES_NAMES_SCHEMES"]
 )
 
 
@@ -64,4 +64,5 @@ service_components = [
     # Order of components are important!
     DataComponent,
     PIDComponent,
+    RelationsComponent,
 ]
