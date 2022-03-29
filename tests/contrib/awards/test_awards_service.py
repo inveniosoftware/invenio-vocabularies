@@ -122,7 +122,7 @@ def test_award_dereferenced(
     item = service.create(identity, award_full_data)
     Award.index.refresh()
     id_ = item.id
-    # assert item["funder"] == expected_funder
+    assert item["funder"] == expected_funder
 
     # Read it
     read_item = service.read(identity, id_)

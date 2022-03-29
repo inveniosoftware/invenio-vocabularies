@@ -43,6 +43,16 @@
           }
         }
       },
+      "_access": {
+        "properties": {
+          "metadata_restricted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "owners": {
+        "type": "keyword"
+      },
       "pid": {
         "type": "object",
         "properties": {
@@ -60,7 +70,6 @@
           }
         }
       }
-
     }
   }
 }

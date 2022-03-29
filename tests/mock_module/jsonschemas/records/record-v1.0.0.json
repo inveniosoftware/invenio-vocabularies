@@ -13,26 +13,7 @@
       "description": "Persistent record identifier (alphanumeric).",
       "type": "string"
     },
-    "pid": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["pk", "status"],
-      "properties": {
-        "pk": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "N",
-            "K",
-            "R",
-            "M",
-            "D"
-          ]
-        }
-      }
-    },
+    "pid": { "$ref": "local://definitions-v1.0.0.json#/internal-pid" },
     "metadata": {
       "type": "object",
       "additionalProperties": false,
@@ -50,6 +31,23 @@
               }
             }
           }
+        }
+      }
+    },
+    "owners": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "_access": {
+      "type": "object",
+      "description": "Record access control and ownership.",
+      "additionalProperties": false,
+      "properties": {
+        "metadata_restricted": {
+          "description": "Record visibility (public or restricted)",
+          "type": "boolean"
         }
       }
     }

@@ -16,7 +16,7 @@ from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import ConstantField, RelationsField
 from invenio_records_resources.records.api import Record as RecordBase
 from invenio_records_resources.records.systemfields import IndexField, \
-    PIDField, PIDListRelation
+    PIDField, PIDRelation, PIDListRelation
 
 from invenio_vocabularies.records.api import Vocabulary
 
