@@ -28,7 +28,7 @@
           }
         }
       },
-      "pid": {
+      "id": {
         "type": "keyword"
       },
       "title": {
