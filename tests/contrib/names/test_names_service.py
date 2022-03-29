@@ -9,6 +9,8 @@
 
 """Test the names vocabulary service."""
 
+from copy import deepcopy
+
 import pytest
 from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
 from marshmallow.exceptions import ValidationError
@@ -25,7 +27,12 @@ def test_simple_flow(
     item = service.create(identity, name_full_data)
     id_ = item.id
 
-    for k, v in name_full_data.items():
+    # add dereferenced values
+    expected_data = deepcopy(name_full_data)
+    expected_data["affiliations"][0]["name"] = \
+        "European Organization for Nuclear Research"
+
+    for k, v in expected_data.items():
         assert item.data[k] == v
 
     # Read it
@@ -102,3 +109,36 @@ def test_identifier_resolution(
         "0000-0001-8135-3489",
         "invalid"
     )
+
+
+def test_names_dereferenced(
+    app, service, identity, example_affiliation
+):
+    """Extra fields in data should fail."""
+    expected_aff = {
+        "id": "cern",
+        "name": "European Organization for Nuclear Research"
+    }
+
+    name_data = {
+        "name": "Doe, John",
+        "affiliations": [{"id": "cern"}]
+    }
+
+    # data is not dereferenced
+    assert not name_data["affiliations"][0].get("name")
+    # create it
+    item = service.create(identity, name_data)
+    Name.index.refresh()
+    id_ = item.id
+    assert item["affiliations"][0] == expected_aff
+
+    # read it
+    read_item = service.read(identity, id_)
+    assert read_item["affiliations"][0] == expected_aff
+
+    # search it
+    res = service.search(
+        identity, q=f"id:{id_}", size=25, page=1)
+    assert res.total == 1
+    assert list(res.hits)[0]["affiliations"][0] == expected_aff

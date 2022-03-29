@@ -57,7 +57,10 @@ def resource(service):
 @pytest.fixture()
 def example_affiliation(db):
     """Example affiliation."""
-    aff = Affiliation.create({"id": "cern"})
+    aff = Affiliation.create({
+        "id": "cern",
+        "name": "European Organization for Nuclear Research"
+    })
     Affiliation.pid.create(aff)
     aff.commit()
     db.session.commit()
