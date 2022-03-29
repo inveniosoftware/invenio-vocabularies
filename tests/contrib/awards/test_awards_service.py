@@ -130,6 +130,6 @@ def test_award_dereferenced(
 
     # Search it
     res = service.search(
-        identity, q=f"pid:{id_}", size=25, page=1)
+        identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0]["funder"] == expected_funder

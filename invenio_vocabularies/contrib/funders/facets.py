@@ -19,7 +19,7 @@ class FundersLabels(VocabularyLabels):
         super().__init__(
             vocabulary, cache, service_name="funders-service", id_field="pid"
         )
-        self.fields = ["pid", "title", "country"]  # not configurable
+        self.fields = ["id", "title", "country"]  # not configurable
 
     def _vocab_to_label(self, vocab):
         """Returns the label string for a vocabulary entry."""
