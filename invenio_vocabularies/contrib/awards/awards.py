@@ -10,6 +10,7 @@
 
 from invenio_db import db
 from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import ModelPIDField, \
@@ -23,7 +24,7 @@ from .schema import AwardSchema
 award_relations = RelationsField(
     funders=PIDRelation(
         'funder',
-        attrs=['id', 'name'],
+        attrs=['name'],
         pid_field=Funder.pid,
         cache_key='funder',
     )
@@ -42,7 +43,10 @@ record_type = RecordTypeFactory(
         "pid": db.Column(db.String, unique=True),
     },
     record_dumper=ElasticsearchDumper(
-        model_fields={'pid': ('pid', str)}
+        model_fields={'pid': ('pid', str)},
+        extensions=[
+            RelationDumperExt('relations'),
+        ]
     ),
     schema_version="1.0.0",
     schema_path="local://awards/award-v1.0.0.json",
