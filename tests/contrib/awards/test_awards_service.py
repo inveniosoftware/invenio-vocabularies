@@ -27,8 +27,12 @@ def test_simple_flow(
     item = service.create(identity, award_full_data)
     id_ = item.id
 
+    # add dereferenced data
+    expected_data = deepcopy(award_full_data)
+    expected_data["funder"]["name"] = "CERN"
+
     assert id_ == award_full_data['pid']
-    for k, v in award_full_data.items():
+    for k, v in expected_data.items():
         assert item.data[k] == v
 
     # Read it
@@ -89,10 +93,9 @@ def test_create_invalid_funder(
 
 
 def test_pid_already_registered(
-    app, db, service, identity, award_full_data, example_funder
+    app, db, service, identity, award_full_data, example_award
 ):
-    """Recreating a record with same id should fail."""
-    service.create(identity, award_full_data)
+    # example_funder does the first creation
     pytest.raises(
         PIDAlreadyExists, service.create, identity, award_full_data)
 
@@ -104,3 +107,29 @@ def test_extra_fields(
     award_full_data['invalid'] = 1
     pytest.raises(
         ValidationError, service.create, identity, award_full_data)
+
+
+def test_award_dereferenced(
+    app, service, identity, award_full_data, example_funder
+):
+    """Extra fields in data should fail."""
+    expected_funder = {
+        "id": "01ggx4157",
+        "name": "CERN",
+    }
+    assert not award_full_data["funder"].get("name")
+    # Create it
+    item = service.create(identity, award_full_data)
+    Award.index.refresh()
+    id_ = item.id
+    # assert item["funder"] == expected_funder
+
+    # Read it
+    read_item = service.read(identity, id_)
+    assert read_item["funder"] == expected_funder
+
+    # Search it
+    res = service.search(
+        identity, q=f"pid:{id_}", size=25, page=1)
+    assert res.total == 1
+    assert list(res.hits)[0]["funder"] == expected_funder
