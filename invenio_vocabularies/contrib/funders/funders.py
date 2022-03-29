@@ -30,7 +30,7 @@ record_type = RecordTypeFactory(
         "pid": db.Column(db.String, unique=True),
     },
     record_dumper=ElasticsearchDumper(
-        model_fields={'pid': ('pid', str)}
+        model_fields={'pid': ('id', str)}
     ),
     schema_version="1.0.0",
     schema_path="local://funders/funder-v1.0.0.json",

@@ -39,7 +39,7 @@
         "country": {
           "type": "text"
         },
-        "pid": {
+        "id": {
           "type": "keyword"
         },
         "title": {
