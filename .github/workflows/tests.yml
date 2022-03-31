@@ -7,52 +7,47 @@ on:
     branches: master
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 3 * * 6'
+    - cron: "0 3 * * 6"
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Reason'
+        description: "Reason"
         required: false
-        default: 'Manual trigger'
+        default: "Manual trigger"
 
 jobs:
   Tests:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-          python-version: [3.6, 3.7, 3.8]
-          # You can add more combinations e.g. dev requirements or MySQL by adding
-          # a new item to this list. Add its corresponding definition below.
-          # EXTRAS and REQUIREMENTS_LEVEL are always needed.
-          services: [release, lowest, devel]
-          include:
-          - services: release
-            SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://invenio:invenio@localhost:5432/invenio"
-            POSTGRESQL_VERSION: POSTGRESQL_12_LATEST
-            ES_VERSION: "ES_7_LATEST"
-            ES: "elasticsearch7"
-            EXTRAS: "all,postgresql,elasticsearch7"
-            REQUIREMENTS_LEVEL: "pypi"
-          - services: lowest
-            SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://invenio:invenio@localhost:5432/invenio"
-            POSTGRESQL_VERSION: POSTGRESQL_9_LATEST
-            ES_VERSION: "ES_6_LATEST"
-            ES: "elasticsearch6"
-            EXTRAS: "all,postgresql,elasticsearch6"
-            REQUIREMENTS_LEVEL: "min"
-          - services: devel
-            SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://invenio:invenio@localhost:5432/invenio"
-            POSTGRESQL_VERSION: POSTGRESQL_12_LATEST
-            ES_VERSION: "ES_7_LATEST"
-            ES: "elasticsearch7"
-            EXTRAS: "all,postgresql,elasticsearch7"
-            REQUIREMENTS_LEVEL: "dev"
+        python-version: [3.7, 3.8, 3.9]
+        requirements-level: [min, pypi]
+        db-service: [postgresql10, postgresql13]
+        search-service: [elasticsearch7]
+        exclude:
+          - python-version: 3.8
+            requirements-level: min
+
+          - python-version: 3.9
+            requirements-level: min
+
+          - python-version: 3.7
+            db-service: postgresql13
+
+        include:
+          - db-service: postgresql10
+            DB_EXTRAS: "postgresql"
+
+          - db-service: postgresql13
+            DB_EXTRAS: "postgresql"
+
+          - search-service: elasticsearch7
+            SEARCH_EXTRAS: "elasticsearch7"
 
     env:
-      SQLALCHEMY_DATABASE_URI: ${{matrix.SQLALCHEMY_DATABASE_URI}}
-      POSTGRESQL_VERSION: ${{matrix.POSTGRESQL_VERSION}}
-      ES_VERSION: ${{matrix.ES_VERSION}}
-      ES: ${{matrix.ES}}
+      DB: ${{ matrix.db-service }}
+      SEARCH: ${{ matrix.search-service }}
+      EXTRAS: all,${{ matrix.SEARCH_EXTRAS }},${{ matrix.DB_EXTRAS }}
 
     steps:
       - name: Checkout
@@ -64,31 +59,20 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Generate dependencies
-        if: ${{ matrix.REQUIREMENTS_LEVEL != 'dev' }}
         run: |
-          pip --version
-          pip install wheel requirements-builder
-          requirements-builder -e ${{ matrix.EXTRAS }} --level=${{ matrix.REQUIREMENTS_LEVEL }} setup.py > .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-          cat .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-
-      - name: Generate dependencies devel
-        if: ${{ matrix.REQUIREMENTS_LEVEL == 'dev' }}
-        run: |
-          pip --version
-          pip install wheel requirements-builder
-          requirements-builder -e ${{ matrix.EXTRAS }} --level=${{ matrix.REQUIREMENTS_LEVEL }} --req requirements-devel.txt setup.py > .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-          cat .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
+          python -m pip install --upgrade pip "setuptools<58.0" py wheel requirements-builder
+          requirements-builder -e "$EXTRAS" --level=${{ matrix.requirements-level }} setup.py > .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
 
       - name: Cache pip
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('.${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('.${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt') }}
 
       - name: Install dependencies
         run: |
-          pip install -r .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-          pip install -e ".[${{ matrix.EXTRAS }}]"
+          pip install -r .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
+          pip install ".[$EXTRAS]"
           pip freeze
           docker --version
           docker-compose --version
