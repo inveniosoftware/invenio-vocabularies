@@ -23,7 +23,7 @@ tests_require = [
 
 # Should follow inveniosoftware/invenio versions
 invenio_search_version = ">=1.4.2,<2.0.0"
-invenio_db_version = ">=1.0.13,<2.0.0"
+invenio_db_version = ">=1.0.14,<2.0.0"
 
 extras_require = {
     "docs": [
@@ -60,8 +60,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-records-resources>=0.19.4,<0.20.0",
-    "invenio-i18n>=1.3.1",
+    "invenio-records-resources>=0.19.5,<0.20.0",
     "lxml>=4.5.0",
     "PyYAML>=5.4.1",
 ]
