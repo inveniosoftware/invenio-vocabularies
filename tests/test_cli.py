@@ -13,8 +13,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from click.testing import CliRunner
-from flask.cli import ScriptInfo
 from invenio_access.permissions import system_identity
 
 from invenio_vocabularies.cli import _process_vocab, get_config_for_ds, \
@@ -147,11 +145,9 @@ def test_process(app, names_tar_file, names_service):
 
 def test_update_cmd(app, names_tar_file):
     # cli update
-    runner = CliRunner()
-    obj = ScriptInfo(create_app=lambda x: app)
+    runner = app.test_cli_runner()
     result = runner.invoke(
         vocabularies,
         ['update', '-v', 'names', '--origin', names_tar_file.absolute()],
-        obj=obj
     )
     assert result.exit_code == 0
