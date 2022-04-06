@@ -21,15 +21,6 @@ from invenio_vocabularies.datastreams.errors import WriterError
 
 
 @pytest.fixture(scope="module")
-def base_app(base_app, service):
-    """Application factory fixture."""
-    registry = base_app.extensions["invenio-records-resources"].registry
-    registry.register(service, service_id="rdm-funders")
-
-    yield base_app
-
-
-@pytest.fixture(scope="module")
 def dict_ror_entry():
     return StreamEntry({
         "id": "https://ror.org/0aaaaaa11",
@@ -112,7 +103,7 @@ def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
 
 
 def test_funders_service_writer_create(app, es_clear, funder_full_data):
-    writer = FundersServiceWriter("rdm-funders", system_identity)
+    writer = FundersServiceWriter("funders", system_identity)
     funder_rec = writer.write(StreamEntry(funder_full_data))
     funder_dict = funder_rec.entry.to_dict()
     assert dict(funder_dict, **funder_full_data) == funder_dict
@@ -122,7 +113,7 @@ def test_funders_service_writer_create(app, es_clear, funder_full_data):
 
 
 def test_funders_service_writer_duplicate(app, es_clear, funder_full_data):
-    writer = FundersServiceWriter("rdm-funders", system_identity)
+    writer = FundersServiceWriter("funders", system_identity)
     funder_rec = writer.write(stream_entry=StreamEntry(funder_full_data))
     Funder.index.refresh()  # refresh index to make changes live
     with pytest.raises(WriterError) as err:
@@ -139,7 +130,7 @@ def test_funders_service_writer_update_existing(
     app, es_clear, funder_full_data, service
 ):
     # create vocabulary
-    writer = FundersServiceWriter("rdm-funders", system_identity, update=True)
+    writer = FundersServiceWriter("funders", system_identity, update=True)
     orig_funder_rec = writer.write(stream_entry=StreamEntry(funder_full_data))
     Funder.index.refresh()  # refresh index to make changes live
     # update vocabulary
@@ -165,7 +156,7 @@ def test_funders_service_writer_update_non_existing(
     updated_funder = deepcopy(funder_full_data)
     updated_funder["name"] = "New name"
     # check changes vocabulary
-    writer = FundersServiceWriter("rdm-funders", system_identity, update=True)
+    writer = FundersServiceWriter("funders", system_identity, update=True)
     funder_rec = writer.write(stream_entry=StreamEntry(updated_funder))
     funder_rec = service.read(system_identity, funder_rec.entry.id)
     funder_dict = funder_rec.to_dict()

@@ -152,7 +152,7 @@ DATASTREAM_CONFIG = {
     "writers": [{
         "type": "names-service",
         "args": {
-            "service_or_name": "rdm-names",
+            "service_or_name": "names",
             "identity": system_identity,
         }
     }],

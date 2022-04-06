@@ -45,15 +45,6 @@ def extra_entry_points():
     }
 
 
-@pytest.fixture(scope="module")
-def base_app(base_app, names_service):
-    """Application factory fixture."""
-    registry = base_app.extensions['invenio-records-resources'].registry
-    registry.register(names_service, service_id='rdm-names')
-
-    yield base_app
-
-
 @pytest.fixture(scope="function")
 def name_full_data():
     """Full name data."""
@@ -179,7 +170,7 @@ def test_orcid_http_reader(_, bytes_xml_data):
 
 
 def test_names_service_writer_create(app, es_clear, name_full_data):
-    writer = NamesServiceWriter("rdm-names", system_identity)
+    writer = NamesServiceWriter("names", system_identity)
     record = writer.write(StreamEntry(name_full_data))
     record = record.entry.to_dict()
 
@@ -187,7 +178,7 @@ def test_names_service_writer_create(app, es_clear, name_full_data):
 
 
 def test_names_service_writer_duplicate(app, es_clear, name_full_data):
-    writer = NamesServiceWriter("rdm-names", system_identity)
+    writer = NamesServiceWriter("names", system_identity)
     _ = writer.write(stream_entry=StreamEntry(name_full_data))
     Name.index.refresh()  # refresh index to make changes live
     with pytest.raises(WriterError) as err:
@@ -201,7 +192,7 @@ def test_names_service_writer_update_existing(
     app, es_clear, name_full_data, names_service
 ):
     # create vocabulary
-    writer = NamesServiceWriter("rdm-names", system_identity, update=True)
+    writer = NamesServiceWriter("names", system_identity, update=True)
     name = writer.write(stream_entry=StreamEntry(name_full_data))
     Name.index.refresh()  # refresh index to make changes live
     # update vocabulary
@@ -226,7 +217,7 @@ def test_names_service_writer_update_non_existing(
     updated_name["given_name"] = "Pablo"
     updated_name["family_name"] = "Panero"
     # check changes vocabulary
-    writer = NamesServiceWriter("rdm-names", system_identity, update=True)
+    writer = NamesServiceWriter("names", system_identity, update=True)
     name = writer.write(stream_entry=StreamEntry(updated_name))
     record = names_service.read(system_identity, name.entry.id)
     record = record.to_dict()
