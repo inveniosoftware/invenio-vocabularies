@@ -85,7 +85,7 @@ def base_app(base_app, resource, service):
     """
     base_app.register_blueprint(resource.as_blueprint())
     registry = base_app.extensions['invenio-records-resources'].registry
-    registry.register(service, service_id='funders-service')
+    registry.register(service, service_id='funders')
     yield base_app
 
 

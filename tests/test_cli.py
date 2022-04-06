@@ -54,7 +54,7 @@ def extra_entry_points():
 def base_app(base_app, names_service):
     """Application factory fixture."""
     registry = base_app.extensions['invenio-records-resources'].registry
-    registry.register(names_service, service_id='rdm-names')
+    registry.register(names_service, service_id='names')
 
     yield base_app
 

@@ -49,7 +49,7 @@ def get_config_for_ds(vocabulary, filepath=None, origin=None):
 def get_service_for_vocabulary(vocabulary):
     """Calculates the configuration for a Data Stream."""
     if vocabulary == "names":  # FIXME: turn into a proper factory
-        return current_service_registry.get("rdm-names")
+        return current_service_registry.get("names")
 
 
 @click.group()

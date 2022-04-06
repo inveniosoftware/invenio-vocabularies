@@ -100,7 +100,7 @@ DATASTREAM_CONFIG = {
     "writers": [{
         "type": "funders-service",
         "args": {
-            "service_or_name": "rdm-funders",
+            "service_or_name": "funders",
             "identity": system_identity,
         }
     }],
