@@ -8,6 +8,8 @@
 
 """Vocabulary affiliations."""
 
+from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records_resources.factories.factory import RecordTypeFactory
 
 from ...records.pidprovider import PIDProviderFactory
@@ -26,6 +28,11 @@ record_type = RecordTypeFactory(
     },
     schema_version="1.0.0",
     schema_path="local://affiliations/affiliation-v1.0.0.json",
+    record_dumper=ElasticsearchDumper(
+        extensions=[
+            IndexedAtDumperExt(),
+        ]
+    ),
     # Service layer
     service_schema=AffiliationSchema,
     search_options=AffiliationsSearchOptions,
