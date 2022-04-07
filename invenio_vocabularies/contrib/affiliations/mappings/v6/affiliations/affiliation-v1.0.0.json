@@ -10,6 +10,9 @@
         "created": {
           "type": "date"
         },
+        "indexed_at": {
+          "type": "date"
+        },
         "updated": {
           "type": "date"
         },
@@ -32,13 +35,13 @@
         "acronym": {
           "type": "text"
         },
-        "identifiers" : {
+        "identifiers": {
           "properties": {
-            "identifier" : {
-              "type" : "keyword"
+            "identifier": {
+              "type": "keyword"
             },
-            "scheme" : {
-              "type" : "keyword"
+            "scheme": {
+              "type": "keyword"
             }
           }
         },

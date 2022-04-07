@@ -9,10 +9,10 @@
 
 """Test the affiliation vocabulary service."""
 
+import arrow
 import pytest
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
-from sqlalchemy.exc import IntegrityError
 
 from invenio_vocabularies.contrib.affiliations.api import Affiliation
 
@@ -64,7 +64,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
 
 
 def test_pid_already_registered(
-    app, db, service, identity, affiliation_full_data
+    app, db, es_clear, service, identity, affiliation_full_data
 ):
     """Recreating a record with same id should fail."""
     service.create(identity, affiliation_full_data)
@@ -77,3 +77,24 @@ def test_extra_fields(app, db, service, identity, affiliation_full_data):
     affiliation_full_data['invalid'] = 1
     pytest.raises(
         ValidationError, service.create, identity, affiliation_full_data)
+
+
+def test_indexed_at_query(
+    app, db, service, identity, affiliation_full_data
+):
+    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    _ = service.create(identity, affiliation_full_data)
+    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    Affiliation.index.refresh()
+
+    # there is previous to before
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
+    )
+    assert res.total == 0
+
+    # there is previous to now
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
+    )
+    assert res.total == 1
