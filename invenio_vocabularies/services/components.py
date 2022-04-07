@@ -58,12 +58,3 @@ class ModelPIDComponent(PIDComponent):
         """Update an existing record."""
         record.pop("pid", None)
         record.pop("id", None)
-
-
-# FIXME: remove, use the one coming from invenio-records-resources
-class RelationsComponent(ServiceComponent):
-    """Base service component."""
-
-    def read(self, identity, record=None):
-        """Read record handler."""
-        record.relations.dereference()
