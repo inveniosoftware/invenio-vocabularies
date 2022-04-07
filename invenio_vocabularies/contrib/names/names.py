@@ -10,6 +10,7 @@
 
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
 from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
@@ -47,6 +48,7 @@ record_type = RecordTypeFactory(
     record_dumper=ElasticsearchDumper(
         extensions=[
             RelationDumperExt('relations'),
+            IndexedAtDumperExt(),
         ]
     ),
     # Service layer

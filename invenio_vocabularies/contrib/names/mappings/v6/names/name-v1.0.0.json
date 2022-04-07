@@ -13,6 +13,9 @@
         "updated": {
           "type": "date"
         },
+        "indexed_at": {
+          "type": "date"
+        },
         "uuid": {
           "type": "keyword"
         },
@@ -37,11 +40,11 @@
         },
         "identifiers": {
           "properties": {
-            "identifier" : {
-              "type" : "keyword"
+            "identifier": {
+              "type": "keyword"
             },
-            "scheme" : {
-              "type" : "keyword"
+            "scheme": {
+              "type": "keyword"
             }
           }
         },
