@@ -10,6 +10,7 @@
 
 from invenio_db import db
 from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import ModelPIDField
 
@@ -30,7 +31,10 @@ record_type = RecordTypeFactory(
         "pid": db.Column(db.String, unique=True),
     },
     record_dumper=ElasticsearchDumper(
-        model_fields={'pid': ('id', str)}
+        model_fields={'pid': ('id', str)},
+        extensions=[
+            IndexedAtDumperExt(),
+        ]
     ),
     schema_version="1.0.0",
     schema_path="local://funders/funder-v1.0.0.json",
