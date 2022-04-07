@@ -13,6 +13,9 @@
         "updated": {
           "type": "date"
         },
+        "indexed_at": {
+          "type": "date"
+        },
         "uuid": {
           "type": "keyword"
         },
