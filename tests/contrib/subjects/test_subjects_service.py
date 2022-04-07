@@ -9,6 +9,7 @@
 
 """Test the subject vocabulary service."""
 
+import arrow
 import pytest
 from invenio_pidstore.errors import PIDDeletedError
 
@@ -60,3 +61,22 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
     # - search
     res = service.search(identity, q=f'id:"{id_}"', size=25, page=1)
     assert res.total == 0
+
+
+def test_indexed_at_query(app, db, service, identity, subject_full_data):
+    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    _ = service.create(identity, subject_full_data)
+    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    Subject.index.refresh()
+
+    # there is previous to before
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
+    )
+    assert res.total == 0
+
+    # there is previous to now
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
+    )
+    assert res.total == 1
