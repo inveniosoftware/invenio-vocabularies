@@ -11,12 +11,13 @@
 from flask import current_app
 from flask_babelex import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
-from invenio_records_resources.services.records.components import DataComponent
+from invenio_records_resources.services.records.components import \
+    DataComponent, RelationsComponent
 from invenio_records_resources.services.records.params import \
     SuggestQueryParser
 from werkzeug.local import LocalProxy
 
-from ...services.components import PIDComponent, RelationsComponent
+from ...services.components import PIDComponent
 
 names_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_NAMES_SCHEMES"]

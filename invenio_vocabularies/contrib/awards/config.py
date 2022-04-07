@@ -10,12 +10,13 @@
 
 from flask import current_app
 from invenio_records_resources.services import SearchOptions
-from invenio_records_resources.services.records.components import DataComponent
+from invenio_records_resources.services.records.components import \
+    DataComponent, RelationsComponent
 from invenio_records_resources.services.records.params import \
     SuggestQueryParser
 from werkzeug.local import LocalProxy
 
-from ...services.components import ModelPIDComponent, RelationsComponent
+from ...services.components import ModelPIDComponent
 
 award_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_AWARD_SCHEMES"]
