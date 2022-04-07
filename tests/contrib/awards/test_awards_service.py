@@ -11,6 +11,7 @@
 
 from copy import deepcopy
 
+import arrow
 import pytest
 from invenio_pidstore.errors import PIDAlreadyExists
 from invenio_records.systemfields.relations.errors import InvalidRelationValue
@@ -110,7 +111,7 @@ def test_extra_fields(
 
 
 def test_award_dereferenced(
-    app, service, identity, award_full_data, example_funder_ec
+    app, es_clear, service, identity, award_full_data, example_funder
 ):
     """Extra fields in data should fail."""
     expected_funder = {
@@ -133,3 +134,24 @@ def test_award_dereferenced(
         identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0]["funder"] == expected_funder
+
+
+def test_indexed_at_query(
+    app, db, service, identity, award_full_data, example_funder
+):
+    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    _ = service.create(identity, award_full_data)
+    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    Award.index.refresh()
+
+    # there is previous to before
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
+    )
+    assert res.total == 0
+
+    # there is previous to now
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
+    )
+    assert res.total == 1

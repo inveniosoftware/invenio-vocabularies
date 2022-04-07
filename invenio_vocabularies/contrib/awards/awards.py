@@ -10,6 +10,7 @@
 
 from invenio_db import db
 from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
@@ -46,6 +47,7 @@ record_type = RecordTypeFactory(
         model_fields={'pid': ('id', str)},
         extensions=[
             RelationDumperExt('relations'),
+            IndexedAtDumperExt(),
         ]
     ),
     schema_version="1.0.0",
