@@ -12,6 +12,9 @@
       "updated": {
         "type": "date"
       },
+      "indexed_at": {
+        "type": "date"
+      },
       "uuid": {
         "type": "keyword"
       },
@@ -41,16 +44,16 @@
       },
       "identifiers": {
         "properties": {
-          "identifier" : {
-            "type" : "keyword",
+          "identifier": {
+            "type": "keyword",
             "fields": {
               "suggest": {
                 "type": "search_as_you_type"
               }
             }
           },
-          "scheme" : {
-            "type" : "keyword"
+          "scheme": {
+            "type": "keyword"
           }
         }
       },

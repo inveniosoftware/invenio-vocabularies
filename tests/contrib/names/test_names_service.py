@@ -11,6 +11,7 @@
 
 from copy import deepcopy
 
+import arrow
 import pytest
 from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
 from marshmallow.exceptions import ValidationError
@@ -112,7 +113,7 @@ def test_identifier_resolution(
 
 
 def test_names_dereferenced(
-    app, service, identity, example_affiliation
+    app, es_clear, service, identity, example_affiliation
 ):
     """Extra fields in data should fail."""
     expected_aff = {
@@ -142,3 +143,24 @@ def test_names_dereferenced(
         identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0]["affiliations"][0] == expected_aff
+
+
+def test_indexed_at_query(
+    app, db, service, identity, name_full_data, example_affiliation
+):
+    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    _ = service.create(identity, name_full_data)
+    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    Name.index.refresh()
+
+    # there is previous to before
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
+    )
+    assert res.total == 0
+
+    # there is previous to now
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
+    )
+    assert res.total == 1
