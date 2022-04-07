@@ -111,7 +111,7 @@ def test_extra_fields(
 
 
 def test_award_dereferenced(
-    app, es_clear, service, identity, award_full_data, example_funder
+    app, es_clear, service, identity, award_full_data, example_funder_ec
 ):
     """Extra fields in data should fail."""
     expected_funder = {
@@ -137,7 +137,7 @@ def test_award_dereferenced(
 
 
 def test_indexed_at_query(
-    app, db, service, identity, award_full_data, example_funder
+    app, db, service, identity, award_full_data, example_funder_ec
 ):
     before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
     _ = service.create(identity, award_full_data)

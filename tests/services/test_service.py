@@ -9,6 +9,7 @@
 
 """Test the vocabulary service."""
 
+import arrow
 import pytest
 from invenio_cache import current_cache
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
@@ -156,9 +157,28 @@ def test_read_all_cache(lang_type, lang_data_many, service, identity, cache):
     assert cached is not None
 
 
-def test_read_many(lang_type, lang_data_many, service, identity):
+def test_read_many(lang_type, lang_data_many, service, identity, es_clear):
     """ read_many method should return all requested languages. """
     ids_ = ['fr', 'tr', 'es']
     items = service.read_many(identity, type='languages', ids=ids_, fields=[])
     item_ids = [i.id for i in items._results]
     assert {'fr', 'tr', 'es'} == set(item_ids)
+
+
+def test_indexed_at_query(app, db, service, identity, lang_type, lang_data):
+    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    _ = service.create(identity, lang_data)
+    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    Vocabulary.index.refresh()
+
+    # there is previous to before
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {before}]", type="languages",
+    )
+    assert res.total == 0
+
+    # there is previous to now
+    res = service.search(
+        identity, q=f"indexed_at:[* TO {now}]", type="languages",
+    )
+    assert res.total == 1

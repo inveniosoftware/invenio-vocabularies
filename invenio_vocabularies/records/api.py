@@ -8,6 +8,8 @@
 
 """Vocabulary data API."""
 
+from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.systemfields import ConstantField, RelatedModelField
 from invenio_records_resources.records.api import Record
 from invenio_records_resources.records.systemfields import IndexField, PIDField
@@ -44,4 +46,10 @@ class Vocabulary(Record):
         provider=VocabularyIdProvider,
         context_cls=VocabularyPIDFieldContext,
         create=False,
+    )
+
+    dumper = ElasticsearchDumper(
+        extensions=[
+            IndexedAtDumperExt(),
+        ]
     )
