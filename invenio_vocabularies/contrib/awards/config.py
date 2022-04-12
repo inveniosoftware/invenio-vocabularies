@@ -21,6 +21,14 @@ award_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_AWARD_SCHEMES"]
 )
 
+awards_openaire_funders_mapping = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_AWARDS_OPENAIRE_FUNDERS"]
+)
+
+awards_ec_ror_id = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_AWARDS_EC_ROR_ID"]
+)
+
 
 class AwardsSearchOptions(SearchOptions):
     """Search options."""

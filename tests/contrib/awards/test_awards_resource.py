@@ -73,10 +73,9 @@ def test_awards_search(client, example_award, h, prefix):
     assert res.json["aggregations"]["funders"]
 
     funders_agg = res.json["aggregations"]["funders"]["buckets"][0]
-    assert funders_agg["key"] == "01ggx4157"
+    assert funders_agg["key"] == "00k4n6c32"
     assert funders_agg["doc_count"] == 1
-    assert funders_agg["label"] == \
-        "European Organization for Nuclear Research (CH)"
+    assert funders_agg["label"] == "European Commission (BE)"
 
     res = client.get(f"{prefix}?q=755021", headers=h)
 
@@ -86,7 +85,7 @@ def test_awards_search(client, example_award, h, prefix):
 
 
 @pytest.fixture(scope="function")
-def example_awards(service, identity, indexer, example_funder):
+def example_awards(service, identity, indexer, example_funder_ec):
     """Create dummy awards with similar ids/numbers/titles."""
     awards_data = [
         {
@@ -102,7 +101,7 @@ def example_awards(service, identity, indexer, example_funder):
             "pid": "825785",
             "number": "825785",
             "funder": {
-                "id": "01ggx4157"
+                "id": example_funder_ec.id
             },
         }, {
             "title": {
@@ -153,11 +152,14 @@ def test_awards_suggest_sort(client, h, prefix, example_awards):
     assert res.json["hits"]["hits"][1]["pid"] == "825785"
 
 
-def test_awards_faceted_suggest(client, h, prefix, example_awards):
+def test_awards_faceted_suggest(
+    client, h, prefix, example_funder_ec, example_awards
+):
     """Test a successful suggest with filtering."""
     # Should show 1 results because of the funder filtering
     res = client.get(
-        f"{prefix}?funders=01ggx4157&suggest=Palliative", headers=h
+        f"{prefix}?funders={example_funder_ec.id}&suggest=Palliative",
+        headers=h,
     )
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
@@ -171,7 +173,7 @@ def test_awards_delete(
     identity,
     service,
     award_full_data,
-    example_funder
+    example_funder_ec
 ):
     """Test a successful delete."""
     award = service.create(identity, award_full_data)
@@ -203,7 +205,7 @@ def test_awards_update(
 
 
 def test_awards_create(
-    client_with_credentials, award_full_data, h, prefix, example_funder
+    client_with_credentials, award_full_data, h, prefix, example_funder_ec
 ):
     """Tests a successful creation."""
     res = client_with_credentials.post(

@@ -20,7 +20,7 @@ from invenio_vocabularies.contrib.awards.api import Award
 
 
 def test_simple_flow(
-    app, service, identity, award_full_data, example_funder
+    app, service, identity, award_full_data, example_funder_ec
 ):
     """Test a simple vocabulary service flow."""
     # Create it
@@ -29,7 +29,7 @@ def test_simple_flow(
 
     # add dereferenced data
     expected_data = deepcopy(award_full_data)
-    expected_data["funder"]["name"] = "CERN"
+    expected_data["funder"]["name"] = "EC"
 
     assert id_ == award_full_data['pid']
     for k, v in expected_data.items():
@@ -110,12 +110,12 @@ def test_extra_fields(
 
 
 def test_award_dereferenced(
-    app, service, identity, award_full_data, example_funder
+    app, service, identity, award_full_data, example_funder_ec
 ):
     """Extra fields in data should fail."""
     expected_funder = {
-        "id": "01ggx4157",
-        "name": "CERN",
+        "id": "00k4n6c32",
+        "name": "EC",
     }
     assert not award_full_data["funder"].get("name")
     # Create it

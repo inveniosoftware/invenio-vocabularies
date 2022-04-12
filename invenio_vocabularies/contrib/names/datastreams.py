@@ -143,10 +143,10 @@ DATASTREAM_CONFIG = {
             "args": {
                 "regex": ".xml$",
             }
-        }
+        },
+        {"type": "xml"},
     ],
     "transformers": [
-        {"type": "xml"},
         {"type": "orcid"}
     ],
     "writers": [{

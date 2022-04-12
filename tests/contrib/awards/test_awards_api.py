@@ -28,7 +28,7 @@ def search_get():
 
 
 @pytest.fixture()
-def example_award(db, award_full_data, example_funder):
+def example_award(db, award_full_data, example_funder_ec):
     """Example award."""
     api_award = deepcopy(award_full_data)
     pid = api_award.pop("pid")  # at API level it's passed as an arg

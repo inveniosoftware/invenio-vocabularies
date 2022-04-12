@@ -14,6 +14,7 @@ from pathlib import Path
 import yaml
 from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDAlreadyExists
+from invenio_records.systemfields.relations.errors import InvalidRelationValue
 from invenio_records_resources.proxies import current_service_registry
 from marshmallow import ValidationError
 
@@ -86,6 +87,9 @@ class ServiceWriter(BaseWriter):
 
         except ValidationError as err:
             raise WriterError([{"ValidationError": err.messages}])
+        except InvalidRelationValue as err:
+            # TODO: Check if we can get the error message easier
+            raise WriterError([{"InvalidRelationValue": err.args[0]}])
 
 
 class YamlWriter(BaseWriter):
