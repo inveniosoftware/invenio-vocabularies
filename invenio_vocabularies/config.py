@@ -12,8 +12,8 @@
 import idutils
 from flask_babelex import lazy_gettext as _
 
-from .datastreams.readers import CSVReader, JsonReader, TarReader, \
-    YamlReader, ZipReader
+from .datastreams.readers import CSVReader, GzipReader, JsonLinesReader, \
+    JsonReader, TarReader, XMLReader, YamlReader, ZipReader
 from .datastreams.transformers import XMLTransformer
 from .datastreams.writers import ServiceWriter, YamlWriter
 from .resources.resource import VocabulariesResourceConfig
@@ -74,6 +74,36 @@ VOCABULARIES_AWARD_SCHEMES = {
 }
 """Awards allowed identifier schemes."""
 
+VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
+    'anr_________': '00rbzpz17',
+    'aka_________': '05k73zm37',
+    'arc_________': '05mmh0f86',
+    'cihr________': '01gavpb45',
+    'corda_______': '00k4n6c32',
+    'corda__h2020': '00k4n6c32',
+    'euenvagency_': '02k4b9v70',
+    'fct_________': '00snfqn58',
+    'fwf_________': '013tf3c58',
+    'irb_hr______': '03n51vw80',
+    'mestd_______': '01znas443',
+    'nhmrc_______': '011kf5r70',
+    'nih_________': '01cwqze88',
+    'nserc_______': '01h531d29',
+    'nsf_________': '021nxhr62',
+    'nwo_________': '04jsz6e67',
+    'rcuk________': '10.13039/501100000690',
+    'ukri________': '001aqnf71',
+    'sfi_________': '0271asj38',
+    'snsf________': '00yjd3n13',
+    'sshrc_______': '006cvnv84',
+    'tubitakf____': '04w9kkr77',
+    'wt__________': '029chgv08',
+}
+"""Mapping of OpenAIRE and ROR funder codes."""
+
+VOCABULARIES_AWARDS_EC_ROR_ID = "00k4n6c32"
+"""ROR ID for EC funder."""
+
 VOCABULARIES_NAMES_SCHEMES = {
     "orcid": {
         "label": _("ORCID"),
@@ -96,9 +126,12 @@ VOCABULARIES_NAMES_SCHEMES = {
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
     "json": JsonReader,
+    "jsonl": JsonLinesReader,
+    "gzip": GzipReader,
     "tar": TarReader,
     "yaml": YamlReader,
     "zip": ZipReader,
+    "xml": XMLReader,
 }
 """Data Streams readers."""
 

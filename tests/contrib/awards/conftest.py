@@ -65,11 +65,31 @@ def example_funder(db, identity, funders_service, funder_indexer):
         },
         "country": "CH"
     }
-    fun = funders_service.create(identity, funder_data)
+    funder = funders_service.create(identity, funder_data)
     Funder.index.refresh()  # Refresh the index
-    yield fun
-    fun._record.delete(force=True)
-    funder_indexer.delete(fun._record, refresh=True)
+    yield funder
+    funder._record.delete(force=True)
+    funder_indexer.delete(funder._record, refresh=True)
+    db.session.commit()
+
+
+@pytest.fixture(scope="function")
+def example_funder_ec(db, identity, funders_service, funder_indexer):
+    """Example European Commission funder."""
+    funder_data = {
+        "pid": "00k4n6c32",
+        "name": "EC",
+        "title": {
+            "en": "European Commission",
+            "fr": "Commission Européenne"
+        },
+        "country": "BE"
+    }
+    funder = funders_service.create(identity, funder_data)
+    Funder.index.refresh()  # Refresh the index
+    yield funder
+    funder._record.delete(force=True)
+    funder_indexer.delete(funder._record, refresh=True)
     db.session.commit()
 
 
@@ -114,7 +134,30 @@ def award_full_data():
                 Ultra-rare CFTR Mutations (and beyond)",
         },
         "funder": {
-            "id": "01ggx4157"
+            "id": "00k4n6c32"
+        },
+        "acronym": "HIT-CF",
+    }
+
+
+@pytest.fixture(scope="function")
+def award_full_data_invalid_id():
+    """Full award data."""
+    return {
+        "pid": "755021",
+        "identifiers": [
+            {
+                "identifier": "https://cordis.europa.eu/project/id/755021",
+                "scheme": "url"
+            }
+        ],
+        "number": "755021",
+        "title": {
+            "en": "Personalised Treatment For Cystic Fibrosis Patients With \
+                Ultra-rare CFTR Mutations (and beyond)",
+        },
+        "funder": {
+            "id": "010101010"
         },
         "acronym": "HIT-CF",
 
@@ -123,7 +166,7 @@ def award_full_data():
 
 @pytest.fixture(scope="function")
 def example_award(
-    db, example_funder, award_full_data, identity, indexer, service
+    db, example_funder_ec, award_full_data, identity, indexer, service
 ):
     """Creates and hard deletes an award."""
     award = service.create(identity, award_full_data)
