@@ -47,7 +47,7 @@ class RORTransformer(BaseTransformer):
         if country_code:
             funder["country"] = country_code
 
-        funder["title"] = {}
+        funder["title"] = {"en": funder["name"]}
         for label in record.get("labels", []):
             funder["title"][label["iso639"]] = label["label"]
 
