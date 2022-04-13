@@ -37,6 +37,7 @@ class AwardSchema(BaseVocabularySchema):
     )
     funder = fields.Nested(FunderRelationSchema)
     pid = SanitizedUnicode(
+        load_only=True,
         required=True,
         validate=validate.Length(min=1, error=_('Pid cannot be blank.'))
     )
@@ -46,7 +47,7 @@ class AwardSchema(BaseVocabularySchema):
     def extract_pid_value(self, data, **kwargs):
         """Extracts the PID value."""
         if not data.get('pid'):
-            data['pid'] = data.pid.pid_value
+            data['id'] = data.pid.pid_value
 
         return data
 
@@ -57,6 +58,13 @@ class AwardRelationSchema(Schema):
     id = SanitizedUnicode()
     number = SanitizedUnicode()
     title = i18n_strings
+    identifiers = IdentifierSet(fields.Nested(
+        partial(
+            IdentifierSchema,
+            allowed_schemes=award_schemes,
+            identifier_required=False
+        )
+    ))
 
     @validates_schema
     def validate_data(self, data, **kwargs):
@@ -67,7 +75,7 @@ class AwardRelationSchema(Schema):
         if not id_ and not (number and title):
             raise ValidationError(
                 _("An existing id or number/title must be present."),
-                "awards"
+                "award"
             )
 
 

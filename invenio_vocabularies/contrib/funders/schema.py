@@ -41,7 +41,7 @@ class FunderRelationSchema(Schema):
         if not id_ and not name:
             raise ValidationError(
                 _("An existing id or a free text name must be present"),
-                "affiliations"
+                "funder"
             )
 
 
@@ -49,6 +49,7 @@ class FunderSchema(BaseVocabularySchema):
     """Service schema for funders."""
 
     pid = SanitizedUnicode(
+        load_only=True,
         required=True,
         validate=validate.Length(min=1, error=_('PID cannot be blank.'))
     )
@@ -69,6 +70,6 @@ class FunderSchema(BaseVocabularySchema):
     def extract_pid_value(self, data, **kwargs):
         """Extracts the PID value."""
         if not data.get('pid'):
-            data['pid'] = data.pid.pid_value
+            data['id'] = data.pid.pid_value
 
         return data
