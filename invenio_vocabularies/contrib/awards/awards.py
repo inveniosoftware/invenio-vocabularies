@@ -24,7 +24,7 @@ from .schema import AwardSchema
 award_relations = RelationsField(
     funders=PIDRelation(
         'funder',
-        attrs=['name'],
+        keys=['name'],
         pid_field=Funder.pid,
         cache_key='funder',
     )

@@ -37,7 +37,7 @@ class Record(RecordBase):
     relations = RelationsField(
         languages=PIDListRelation(
             'metadata.languages',
-            attrs=['id', 'title'],
+            keys=['id', 'title'],
             pid_field=Vocabulary.pid.with_type_ctx('languages')
         ),
     )
