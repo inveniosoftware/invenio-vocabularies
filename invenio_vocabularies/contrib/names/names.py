@@ -25,7 +25,7 @@ from .schema import NameSchema
 name_relations = RelationsField(
     affiliations=PIDListRelation(
         'affiliations',
-        attrs=['name'],
+        keys=['name'],
         pid_field=Affiliation.pid,
         cache_key='affiliations',
     )

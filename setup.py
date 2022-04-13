@@ -60,7 +60,7 @@ setup_requires = [
 ]
 
 install_requires = [
-    "invenio-records-resources>=0.19.6,<0.20.0",
+    "invenio-records-resources>=0.19.9,<0.20.0",
     "lxml>=4.5.0",
     "PyYAML>=5.4.1",
 ]
