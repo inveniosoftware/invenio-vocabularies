@@ -9,6 +9,7 @@
 """Invenio module for managing vocabularies."""
 
 from .ext import InvenioVocabularies
-from .version import __version__
+
+__version__ = "0.11.1"
 
 __all__ = ("__version__", "InvenioVocabularies")

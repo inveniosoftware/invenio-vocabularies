@@ -35,19 +35,13 @@ jobs:
             db-service: postgresql13
 
         include:
-          - db-service: postgresql10
-            DB_EXTRAS: "postgresql"
-
-          - db-service: postgresql13
-            DB_EXTRAS: "postgresql"
-
           - search-service: elasticsearch7
             SEARCH_EXTRAS: "elasticsearch7"
 
     env:
       DB: ${{ matrix.db-service }}
       SEARCH: ${{ matrix.search-service }}
-      EXTRAS: all,${{ matrix.SEARCH_EXTRAS }},${{ matrix.DB_EXTRAS }}
+      EXTRAS: tests,${{ matrix.SEARCH_EXTRAS }}
 
     steps:
       - name: Checkout
