@@ -78,7 +78,7 @@ def dict_ror_entry():
 @pytest.fixture(scope="module")
 def expected_from_ror_json():
     return {
-        "pid": "0aaaaaa11",
+        "id": "0aaaaaa11",
         "name": "Funder",
         "title": {"en": "Funder", "de": "Geldgeber"},
         "country": "GR",

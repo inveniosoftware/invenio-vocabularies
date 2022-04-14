@@ -45,7 +45,7 @@ def extra_entry_points():
 def funder_full_data():
     """Full funder data."""
     return {
-        "pid": "01ggx4157",
+        "id": "01ggx4157",
         "identifiers": [
             {
                 "identifier": "000000012156142X",

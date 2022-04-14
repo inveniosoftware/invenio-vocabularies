@@ -10,9 +10,10 @@
 
 from functools import partial
 
+from attr import attr
 from flask_babelex import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields, post_load, pre_dump, \
-    pre_load, validate, validates_schema
+    validate, validates_schema
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -36,19 +37,33 @@ class AwardSchema(BaseVocabularySchema):
         validate=validate.Length(min=1, error=_('Number cannot be blank.'))
     )
     funder = fields.Nested(FunderRelationSchema)
-    pid = SanitizedUnicode(
-        load_only=True,
-        required=True,
+
+    acronym = SanitizedUnicode()
+
+    id = SanitizedUnicode(
         validate=validate.Length(min=1, error=_('Pid cannot be blank.'))
     )
-    acronym = SanitizedUnicode()
+
+    @validates_schema
+    def validate_id(self, data, **kwargs):
+        """Validates ID."""
+        is_create = "record" not in self.context
+        if is_create and "id" not in data:
+            raise ValidationError(_("Missing PID."), "id")
+        if not is_create:
+            data.pop("id", None)
+
+    @post_load(pass_many=False)
+    def move_id(self, data, **kwargs):
+        """Moves id to pid."""
+        if "id" in data:
+            data["pid"] = data.pop("id")
+        return data
 
     @pre_dump(pass_many=False)
     def extract_pid_value(self, data, **kwargs):
         """Extracts the PID value."""
-        if not data.get('pid'):
-            data['id'] = data.pid.pid_value
-
+        data['id'] = data.pid.pid_value
         return data
 
 

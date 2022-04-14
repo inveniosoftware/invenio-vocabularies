@@ -22,7 +22,7 @@ class AwardsServiceWriter(ServiceWriter):
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
-        return entry["pid"]
+        return entry["id"]
 
 
 class OpenAIREProjectTransformer(BaseTransformer):
@@ -40,7 +40,7 @@ class OpenAIREProjectTransformer(BaseTransformer):
             raise TransformerError(
                 _(f"Unknown OpenAIRE funder prefix {openaire_funder_prefix}"))
 
-        award["pid"] = f"{funder_id}::{code}"
+        award["id"] = f"{funder_id}::{code}"
 
         identifiers = []
         if funder_id == awards_ec_ror_id:

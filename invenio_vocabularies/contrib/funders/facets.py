@@ -17,7 +17,7 @@ class FundersLabels(VocabularyLabels):
     def __init__(self, vocabulary, cache=False, service_name=None):
         """Initialize the labels."""
         super().__init__(
-            vocabulary, cache, service_name="funders", id_field="id"
+            vocabulary, cache, service_name="funders",
         )
         self.fields = ["id", "title", "country"]  # not configurable
 

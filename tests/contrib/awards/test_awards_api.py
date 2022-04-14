@@ -31,7 +31,7 @@ def search_get():
 def example_award(db, award_full_data, example_funder_ec):
     """Example award."""
     api_award = deepcopy(award_full_data)
-    pid = api_award.pop("pid")  # at API level it's passed as an arg
+    pid = api_award.pop("id")  # at API level it's passed as an arg
     awa = Award.create(api_award, pid=pid)
     awa.commit()
     db.session.commit()

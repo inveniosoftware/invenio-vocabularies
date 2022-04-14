@@ -56,7 +56,7 @@ def test_funders_get(client, example_funder, h, prefix):
 
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
-    assert res.json["pid"] == id_
+    assert res.json["id"] == id_
     # Test links
     assert res.json["links"] == {
         "self": "https://127.0.0.1:5000/api/funders/01ggx4157"
@@ -77,7 +77,7 @@ def example_funders(service, identity, indexer):
     """Create dummy funders with similar names/titles."""
     funders_data = [
         {
-            "pid": "01ggx4157",
+            "id": "01ggx4157",
             "name": "CERN",
             "country": "CH",
             "title": {
@@ -86,7 +86,7 @@ def example_funders(service, identity, indexer):
             }
         },
         {
-            "pid": "0aaaaaa11",
+            "id": "0aaaaaa11",
             "name": "OTHER",
             "country": "CH",
             "title": {
@@ -94,7 +94,7 @@ def example_funders(service, identity, indexer):
             }
         },
         {
-            "pid": "0aaaaaa22",
+            "id": "0aaaaaa22",
             "name": "CERT",
             "country": "CH",
             "title": {
@@ -103,7 +103,7 @@ def example_funders(service, identity, indexer):
             }
         },
         {
-            "pid": "000e0be47",
+            "id": "000e0be47",
             "name": "Northwestern University",
             "country": "US",
             "title": {
@@ -152,7 +152,7 @@ def test_funders_delete(
     # only the metadata is removed from the record, it is still resolvable
     res = client_with_credentials.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
-    base_keys = {"created", "updated", "id", "links", "revision_id", "pid"}
+    base_keys = {"created", "updated", "id", "links", "revision_id"}
     assert set(res.json.keys()) == base_keys
     # not-ideal cleanup
     funder._record.delete(force=True)
@@ -168,7 +168,7 @@ def test_funders_update(
     res = client_with_credentials.put(
         f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data))
     assert res.status_code == 200
-    assert res.json["pid"] == id_  # result_items wraps pid into id
+    assert res.json["id"] == id_  # result_items wraps pid into id
     assert res.json["name"] == new_name
 
 
@@ -177,4 +177,4 @@ def test_funders_create(client_with_credentials, funder_full_data, h, prefix):
     res = client_with_credentials.post(
         f"{prefix}", headers=h, data=json.dumps(funder_full_data))
     assert res.status_code == 201
-    assert res.json["pid"] == funder_full_data["pid"]
+    assert res.json["id"] == funder_full_data["id"]
