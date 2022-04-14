@@ -31,7 +31,7 @@ def test_simple_flow(
     expected_data = deepcopy(award_full_data)
     expected_data["funder"]["name"] = "EC"
 
-    assert id_ == award_full_data['pid']
+    assert id_ == award_full_data['id']
     for k, v in expected_data.items():
         assert item.data[k] == v
 
@@ -67,7 +67,7 @@ def test_simple_flow(
     # Fail to retrieve it
     # - db
     # only the metadata is removed from the record, it is still resolvable
-    base_keys = {"created", "updated", "id", "links", "revision_id", "pid"}
+    base_keys = {"created", "updated", "id", "links", "revision_id"}
     deleted_rec = service.read(identity, id_).to_dict()
     assert set(deleted_rec.keys()) == base_keys
     # - search
@@ -122,7 +122,7 @@ def test_award_dereferenced(
     item = service.create(identity, award_full_data)
     Award.index.refresh()
     id_ = item.id
-    # assert item["funder"] == expected_funder
+    assert item["funder"] == expected_funder
 
     # Read it
     read_item = service.read(identity, id_)

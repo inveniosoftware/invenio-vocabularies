@@ -22,7 +22,7 @@ def test_simple_flow(app, service, identity, funder_full_data):
     item = service.create(identity, funder_full_data)
     id_ = item.id
 
-    assert item.id == funder_full_data['pid']
+    assert item.id == funder_full_data['id']
     for k, v in funder_full_data.items():
         assert item.data[k] == v
 
@@ -66,7 +66,7 @@ def test_simple_flow(app, service, identity, funder_full_data):
     # Fail to retrieve it
     # - db
     # only the metadata is removed from the record, it is still resolvable
-    base_keys = {"created", "updated", "id", "links", "revision_id", "pid"}
+    base_keys = {"created", "updated", "id", "links", "revision_id"}
     deleted_rec = service.read(identity, id_).to_dict()
     assert set(deleted_rec.keys()) == base_keys
     # - search

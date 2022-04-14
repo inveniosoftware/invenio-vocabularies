@@ -16,21 +16,24 @@ from invenio_vocabularies.contrib.funders.schema import FunderRelationSchema, \
 
 def test_valid_full(app, funder_full_data):
     loaded = FunderSchema().load(funder_full_data)
+    funder_full_data["pid"] = funder_full_data.pop("id")
     assert funder_full_data == loaded
 
 
 def test_valid_minimal(app):
     data = {
-        "pid": "01ggx4157",
+        "id": "01ggx4157",
         "name": "Test funder",
     }
-    loaded = FunderSchema().load(data)
-    assert data == loaded
+    assert {
+        "pid": "01ggx4157",
+        "name": "Test funder",
+    } == FunderSchema().load(data)
 
 
 def test_invalid_no_name():
     invalid_no_name = {
-        "pid": "01ggx4157",
+        "id": "01ggx4157",
         "identifiers": [
             {
                 "identifier": "000000012156142X",
@@ -53,14 +56,14 @@ def test_invalid_no_name():
 
 def test_invalid_empty(app):
     data = {
-        "pid": "01ggx4157",
+        "id": "01ggx4157",
         "name": "",
     }
     with pytest.raises(ValidationError):
         data = FunderSchema().load(data)
 
     data = {
-        "pid": "",
+        "id": "",
         "name": "Test funder",
     }
     with pytest.raises(ValidationError):
@@ -75,7 +78,7 @@ def test_invalid_empty_funder():
 
 def test_invalid_country():
     invalid_country = {
-        "pid": "01ggx4157",
+        "id": "01ggx4157",
         "name": "Test funder",
         "country": 1
     }

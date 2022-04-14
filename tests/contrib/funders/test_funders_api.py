@@ -30,7 +30,7 @@ def search_get():
 def example_funder(db, funder_full_data):
     """Example funder."""
     api_funder = deepcopy(funder_full_data)
-    pid = api_funder.pop("pid")  # at API level it's passed as an arg
+    pid = api_funder.pop("id")  # at API level it's passed as an arg
     fun = Funder.create(api_funder, pid=pid)
     fun.commit()
     db.session.commit()

@@ -56,7 +56,7 @@ def test_awards_get(client, example_award, h, prefix):
 
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
-    assert res.json["pid"] == id_
+    assert res.json["id"] == id_
     # Test links
     assert res.json["links"] == {
         "self": "https://127.0.0.1:5000/api/awards/755021"
@@ -92,13 +92,13 @@ def example_awards(service, identity, indexer, example_funder_ec):
             "title": {
                 "en": "Host directed medicine in invasive fungal infection",
             },
-            "pid": "847507",
+            "id": "847507",
             "number": "847507",
         }, {
             "title": {
                 "en": "Palliative care in Parkinson disease",
             },
-            "pid": "825785",
+            "id": "825785",
             "number": "825785",
             "funder": {
                 "id": example_funder_ec.id
@@ -108,7 +108,7 @@ def example_awards(service, identity, indexer, example_funder_ec):
                 "en": "Palliative Show",
             },
             "acronym": "Palliative",
-            "pid": "000001",
+            "id": "000001",
             "number": "000001",
             "funder": {
                 "name": "Another Funder"
@@ -136,20 +136,20 @@ def test_awards_suggest_sort(client, h, prefix, example_awards):
     res = client.get(f"{prefix}?suggest=847507", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["pid"] == "847507"
+    assert res.json["hits"]["hits"][0]["id"] == "847507"
 
     # Should show 1 result
     res = client.get(f"{prefix}?suggest=Parkin", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["pid"] == "825785"
+    assert res.json["hits"]["hits"][0]["id"] == "825785"
 
     # Should show 2 results, but pid=847507 as first due to created date
     res = client.get(f"{prefix}?suggest=Palliative", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
-    assert res.json["hits"]["hits"][0]["pid"] == "000001"
-    assert res.json["hits"]["hits"][1]["pid"] == "825785"
+    assert res.json["hits"]["hits"][0]["id"] == "000001"
+    assert res.json["hits"]["hits"][1]["id"] == "825785"
 
 
 def test_awards_faceted_suggest(
@@ -163,7 +163,7 @@ def test_awards_faceted_suggest(
     )
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["pid"] == "825785"
+    assert res.json["hits"]["hits"][0]["id"] == "825785"
 
 
 def test_awards_delete(
@@ -184,7 +184,7 @@ def test_awards_delete(
     # only the metadata is removed from the record, it is still resolvable
     res = client_with_credentials.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
-    base_keys = {"created", "updated", "id", "links", "revision_id", "pid"}
+    base_keys = {"created", "updated", "id", "links", "revision_id"}
     assert set(res.json.keys()) == base_keys
     # not-ideal cleanup
     award._record.delete(force=True)
@@ -200,7 +200,7 @@ def test_awards_update(
     res = client_with_credentials.put(
         f"{prefix}/755021", headers=h, data=json.dumps(award_full_data))
     assert res.status_code == 200
-    assert res.json["pid"] == id_  # result_items wraps pid into id
+    assert res.json["id"] == id_  # result_items wraps pid into id
     assert res.json["title"]["en"] == new_title
 
 
@@ -211,4 +211,4 @@ def test_awards_create(
     res = client_with_credentials.post(
         f"{prefix}", headers=h, data=json.dumps(award_full_data))
     assert res.status_code == 201
-    assert res.json["pid"] == award_full_data["pid"]
+    assert res.json["id"] == award_full_data["id"]

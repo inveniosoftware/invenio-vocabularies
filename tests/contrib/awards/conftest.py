@@ -57,7 +57,7 @@ def extra_entry_points():
 def example_funder(db, identity, funders_service, funder_indexer):
     """Example funder."""
     funder_data = {
-        "pid": "01ggx4157",
+        "id": "01ggx4157",
         "name": "CERN",
         "title": {
             "en": "European Organization for Nuclear Research",
@@ -77,7 +77,7 @@ def example_funder(db, identity, funders_service, funder_indexer):
 def example_funder_ec(db, identity, funders_service, funder_indexer):
     """Example European Commission funder."""
     funder_data = {
-        "pid": "00k4n6c32",
+        "id": "00k4n6c32",
         "name": "EC",
         "title": {
             "en": "European Commission",
@@ -121,7 +121,7 @@ def funders_resource(service):
 def award_full_data():
     """Full award data."""
     return {
-        "pid": "755021",
+        "id": "755021",
         "identifiers": [
             {
                 "identifier": "https://cordis.europa.eu/project/id/755021",
@@ -144,7 +144,7 @@ def award_full_data():
 def award_full_data_invalid_id():
     """Full award data."""
     return {
-        "pid": "755021",
+        "id": "755021",
         "identifiers": [
             {
                 "identifier": "https://cordis.europa.eu/project/id/755021",

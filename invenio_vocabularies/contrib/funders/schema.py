@@ -12,7 +12,7 @@ from functools import partial
 
 from flask_babelex import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields, post_load, pre_dump, \
-    pre_load, validate, validates_schema
+    validate, validates_schema
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -48,11 +48,6 @@ class FunderRelationSchema(Schema):
 class FunderSchema(BaseVocabularySchema):
     """Service schema for funders."""
 
-    pid = SanitizedUnicode(
-        load_only=True,
-        required=True,
-        validate=validate.Length(min=1, error=_('PID cannot be blank.'))
-    )
     name = SanitizedUnicode(
         required=True,
         validate=validate.Length(min=1, error=_('Name cannot be blank.'))
@@ -66,10 +61,28 @@ class FunderSchema(BaseVocabularySchema):
         )
     ))
 
+    id = SanitizedUnicode(
+        validate=validate.Length(min=1, error=_('Pid cannot be blank.'))
+    )
+
+    @validates_schema
+    def validate_id(self, data, **kwargs):
+        """Validates ID."""
+        is_create = "record" not in self.context
+        if is_create and "id" not in data:
+            raise ValidationError(_("Missing PID."), "id")
+        if not is_create:
+            data.pop("id", None)
+
+    @post_load(pass_many=False)
+    def move_id(self, data, **kwargs):
+        """Moves id to pid."""
+        if "id" in data:
+            data["pid"] = data.pop("id")
+        return data
+
     @pre_dump(pass_many=False)
     def extract_pid_value(self, data, **kwargs):
         """Extracts the PID value."""
-        if not data.get('pid'):
-            data['id'] = data.pid.pid_value
-
+        data['id'] = data.pid.pid_value
         return data

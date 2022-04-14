@@ -85,7 +85,7 @@ def dict_award_entry_ec():
 @pytest.fixture(scope="function")
 def expected_from_award_json():
     return {
-        "pid": "021nxhr62::0751743",
+        "id": "021nxhr62::0751743",
         "identifiers": [{"identifier": "https://test.com", "scheme": "url"}],
         "number": "0751743",
         "title": {"en": "Test title"},
@@ -97,7 +97,7 @@ def expected_from_award_json():
 @pytest.fixture(scope="function")
 def expected_from_award_json_ec():
     return {
-        "pid": "00k4n6c32::129123",
+        "id": "00k4n6c32::129123",
         "identifiers": [{
             "identifier": "https://cordis.europa.eu/projects/129123",
             "scheme": "url"

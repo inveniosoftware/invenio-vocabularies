@@ -23,7 +23,7 @@ class FundersServiceWriter(ServiceWriter):
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
-        return entry["pid"]
+        return entry["id"]
 
 
 class RORTransformer(BaseTransformer):
@@ -34,8 +34,8 @@ class RORTransformer(BaseTransformer):
         record = stream_entry.entry
         funder = {}
 
-        funder["pid"] = normalize_ror(record.get("id"))
-        if not funder["pid"]:
+        funder["id"] = normalize_ror(record.get("id"))
+        if not funder["id"]:
             raise TransformerError(
                 _(f"Id not found in ROR entry."))
 

@@ -19,15 +19,19 @@ from invenio_vocabularies.contrib.awards.schema import AwardRelationSchema, \
 #
 def test_valid_full(app, award_full_data):
     loaded = AwardSchema().load(award_full_data)
+    award_full_data["pid"] = award_full_data.pop("id")
     assert award_full_data == loaded
 
 
 def test_valid_minimal():
     valid_minimal = {
-        "pid": "755021",
+        "id": "755021",
         "number": "755021"
     }
-    assert valid_minimal == AwardSchema().load(valid_minimal)
+    assert {
+        "pid": "755021",
+        "number": "755021",
+    } == AwardSchema().load(valid_minimal)
 
 
 def test_invalid_no_number(app):
@@ -45,7 +49,7 @@ def test_invalid_no_number(app):
 
 def test_invalid_empty_number(app):
     invalid_empty_number = {
-        "pid": "755021",
+        "id": "755021",
         "number": ""
     }
 
@@ -55,7 +59,7 @@ def test_invalid_empty_number(app):
 
 def test_invalid_empty_pid(app):
     invalid_empty_pid = {
-        "pid": "",
+        "id": "",
         "number": "755021"
     }
 
@@ -65,24 +69,36 @@ def test_invalid_empty_pid(app):
 
 def test_award_funder_name(app):
     with_funder_name = {
-        "pid": "755021",
+        "id": "755021",
         "number": "755021",
         "funder": {
             "name": "custom funder",
         }
     }
-    assert with_funder_name == AwardSchema().load(with_funder_name)
+    assert {
+        "pid": "755021",
+        "number": "755021",
+        "funder": {
+            "name": "custom funder",
+        }
+    } == AwardSchema().load(with_funder_name)
 
 
 def test_award_funder_id(app):
     with_funder_id = {
-        "pid": "755021",
+        "id": "755021",
         "number": "755021",
         "funder": {
             "id": "01ggx4157",
         }
     }
-    assert with_funder_id == AwardSchema().load(with_funder_id)
+    assert {
+        "pid": "755021",
+        "number": "755021",
+        "funder": {
+            "id": "01ggx4157",
+        }
+    } == AwardSchema().load(with_funder_id)
 
 
 #
