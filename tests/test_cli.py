@@ -10,10 +10,10 @@
 
 import tarfile
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 from invenio_access.permissions import system_identity
+from invenio_records_resources.proxies import current_service_registry
 
 from invenio_vocabularies.cli import _process_vocab, get_config_for_ds, \
     vocabularies
@@ -24,39 +24,6 @@ from invenio_vocabularies.contrib.names.datastreams import \
     VOCABULARIES_DATASTREAM_TRANSFORMERS as NAMES_TRANSFORMERS
 from invenio_vocabularies.contrib.names.datastreams import \
     VOCABULARIES_DATASTREAM_WRITERS as NAMES_WRITERS
-from invenio_vocabularies.contrib.names.services import NamesService, \
-    NamesServiceConfig
-
-
-@pytest.fixture(scope='module')
-def names_service():
-    """Names service object."""
-    return NamesService(config=NamesServiceConfig)
-
-
-@pytest.fixture(scope="module")
-def extra_entry_points():
-    """Extra entry points to load the mock_module features."""
-    return {
-        'invenio_db.model': [
-            'names = invenio_vocabularies.contrib.names.models',
-        ],
-        'invenio_jsonschemas.schemas': [
-            'names = invenio_vocabularies.contrib.names.jsonschemas',
-        ],
-        'invenio_search.mappings': [
-            'names = invenio_vocabularies.contrib.names.mappings',
-        ]
-    }
-
-
-@pytest.fixture(scope="module")
-def base_app(base_app, names_service):
-    """Application factory fixture."""
-    registry = base_app.extensions['invenio-records-resources'].registry
-    registry.register(names_service, service_id='names')
-
-    yield base_app
 
 
 @pytest.fixture(scope='module')
@@ -126,7 +93,8 @@ def names_tar_file(name_xml):
     filename.unlink()  # delete created file
 
 
-def test_process(app, names_tar_file, names_service):
+def test_process(app, names_tar_file):
+    service = current_service_registry.get("names")
     config = get_config_for_ds(
         vocabulary="names", origin=names_tar_file.absolute()
     )
@@ -134,7 +102,7 @@ def test_process(app, names_tar_file, names_service):
     Name.index.refresh()
 
     orcid = "0000-0001-8135-3489"
-    results = names_service.search(
+    results = service.search(
         system_identity,
         q=f"identifiers.identifier:{orcid}"
     )

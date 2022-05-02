@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -13,29 +13,7 @@ fixtures are available.
 """
 
 import pytest
-
-from invenio_vocabularies.contrib.affiliations.resources import \
-    AffiliationsResource, AffiliationsResourceConfig
-from invenio_vocabularies.contrib.affiliations.services import \
-    AffiliationsService, AffiliationsServiceConfig
-
-
-@pytest.fixture(scope="module")
-def extra_entry_points():
-    """Extra entry points to load the mock_module features."""
-    return {
-        "invenio_db.models": [
-            "affiliations = invenio_vocabularies.contrib.affiliations.models",
-        ],
-        "invenio_jsonschemas.schemas": [
-            "affiliations = \
-                invenio_vocabularies.contrib.affiliations.jsonschemas",
-        ],
-        "invenio_search.mappings": [
-            "affiliations = \
-                invenio_vocabularies.contrib.affiliations.mappings",
-        ]
-    }
+from invenio_records_resources.proxies import current_service_registry
 
 
 @pytest.fixture(scope="function")
@@ -58,22 +36,4 @@ def affiliation_full_data():
 @pytest.fixture(scope='module')
 def service():
     """Affiliations service object."""
-    return AffiliationsService(config=AffiliationsServiceConfig)
-
-
-@pytest.fixture(scope="module")
-def resource(service):
-    """Affiliations resource object."""
-    return AffiliationsResource(AffiliationsResourceConfig, service)
-
-
-@pytest.fixture(scope="module")
-def base_app(base_app, resource, service):
-    """Application factory fixture.
-
-    Registers affiliations' resource and service.
-    """
-    base_app.register_blueprint(resource.as_blueprint())
-    registry = base_app.extensions['invenio-records-resources'].registry
-    registry.register(service, service_id='affiliations')
-    yield base_app
+    return current_service_registry.get("affiliations")

@@ -14,40 +14,11 @@ fixtures are available.
 
 import pytest
 from flask_babelex import lazy_gettext as _
-from invenio_indexer.api import RecordIndexer
-from invenio_records_resources.services.records.facets import TermsFacet
+from invenio_indexer.proxies import current_indexer_registry
+from invenio_records_resources.proxies import current_service_registry
 
 from invenio_vocabularies.contrib.awards.api import Award
-from invenio_vocabularies.contrib.awards.config import AwardsSearchOptions
-from invenio_vocabularies.contrib.awards.resources import AwardsResource, \
-    AwardsResourceConfig
-from invenio_vocabularies.contrib.awards.services import AwardsService, \
-    AwardsServiceConfig
 from invenio_vocabularies.contrib.funders.api import Funder
-from invenio_vocabularies.contrib.funders.facets import FundersLabels
-from invenio_vocabularies.contrib.funders.resources import FundersResource, \
-    FundersResourceConfig
-from invenio_vocabularies.contrib.funders.services import FundersService, \
-    FundersServiceConfig
-
-
-@pytest.fixture(scope="module")
-def extra_entry_points():
-    """Extra entry points to load the mock_module features."""
-    return {
-        "invenio_db.models": [
-            "awards = invenio_vocabularies.contrib.awards.models",
-            "funders = invenio_vocabularies.contrib.funders.models",
-        ],
-        "invenio_jsonschemas.schemas": [
-            "awards = invenio_vocabularies.contrib.awards.jsonschemas",
-            "funders = invenio_vocabularies.contrib.funders.jsonschemas"
-        ],
-        "invenio_search.mappings": [
-            "awards = invenio_vocabularies.contrib.awards.mappings",
-            "funders = invenio_vocabularies.contrib.funders.mappings",
-        ]
-    }
 
 
 #
@@ -93,25 +64,16 @@ def example_funder_ec(db, identity, funders_service, funder_indexer):
     db.session.commit()
 
 
-@pytest.fixture()
-def funder_indexer():
-    """Indexer instance with correct Record class."""
-    return RecordIndexer(
-        record_cls=Funder,
-        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
-    )
-
-
 @pytest.fixture(scope='module')
 def funders_service():
     """Funders service object."""
-    return FundersService(config=FundersServiceConfig)
+    return current_service_registry.get("funders")
 
 
-@pytest.fixture(scope="module")
-def funders_resource(service):
-    """Funders resource object."""
-    return FundersResource(FundersResourceConfig, service)
+@pytest.fixture()
+def funder_indexer():
+    """Indexer instance with correct Record class."""
+    return current_indexer_registry.get("funders")
 
 
 #
@@ -177,52 +139,13 @@ def example_award(
     db.session.commit()
 
 
-@pytest.fixture()
-def indexer():
-    """Indexer instance with correct Record class."""
-    return RecordIndexer(
-        record_cls=Award,
-        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
-    )
-
-
 @pytest.fixture(scope='module')
 def service():
     """Awards service object."""
-    class MockAwardsSearchOptions(AwardsSearchOptions):
-        """Mock search options to add funders facet."""
-
-        facets = {
-            'funders': TermsFacet(
-                field='funder.id',
-                label=_('Funders'),
-                value_labels=FundersLabels('funders')
-            )
-        }
-
-    class MockAwardsServiceConfig(AwardsServiceConfig):
-        """Mock resource config to add funders facet."""
-
-        search = MockAwardsSearchOptions
-
-    return AwardsService(config=MockAwardsServiceConfig)
+    return current_service_registry.get("awards")
 
 
-@pytest.fixture(scope="module")
-def resource(service):
-    """Awards resource object."""
-    return AwardsResource(AwardsResourceConfig, service)
-
-
-@pytest.fixture(scope="module")
-def base_app(base_app, resource, service, funders_resource, funders_service):
-    """Application factory fixture.
-
-    Registers awards' resource and service.
-    """
-    base_app.register_blueprint(funders_resource.as_blueprint())
-    base_app.register_blueprint(resource.as_blueprint())
-    registry = base_app.extensions['invenio-records-resources'].registry
-    registry.register(funders_service, service_id='funders')
-    registry.register(service, service_id='awards')
-    yield base_app
+@pytest.fixture()
+def indexer():
+    """Indexer instance with correct Record class."""
+    return current_indexer_registry.get("awards")

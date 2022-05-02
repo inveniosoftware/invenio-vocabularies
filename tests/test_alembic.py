@@ -13,20 +13,6 @@ import pytest
 from invenio_db.utils import drop_alembic_version_table
 
 
-@pytest.fixture(scope="module")
-def extra_entry_points():
-    """Extra entry points to load the contrib specific features."""
-    return {
-        "invenio_db.models": [
-            "affiliations = invenio_vocabularies.contrib.affiliations.models",
-            "awards = invenio_vocabularies.contrib.awards.models",
-            "funders = invenio_vocabularies.contrib.funders.models",
-            "names = invenio_vocabularies.contrib.names.models",
-            "subjects = invenio_vocabularies.contrib.subjects.models",
-        ],
-    }
-
-
 def assert_alembic(alembic, table_excludes):
     """Assert that metadata of alembic and db matches.
 

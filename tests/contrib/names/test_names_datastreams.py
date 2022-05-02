@@ -13,36 +13,13 @@ from unittest.mock import patch
 
 import pytest
 from invenio_access.permissions import system_identity
+from invenio_records_resources.proxies import current_service_registry
 
 from invenio_vocabularies.contrib.names.api import Name
 from invenio_vocabularies.contrib.names.datastreams import \
     NamesServiceWriter, OrcidHTTPReader, OrcidTransformer
-from invenio_vocabularies.contrib.names.services import NamesService, \
-    NamesServiceConfig
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
-
-
-@pytest.fixture(scope='module')
-def names_service():
-    """Names service object."""
-    return NamesService(config=NamesServiceConfig)
-
-
-@pytest.fixture(scope="module")
-def extra_entry_points():
-    """Extra entry points to load the mock_module features."""
-    return {
-        'invenio_db.model': [
-            'names = invenio_vocabularies.contrib.names.models',
-        ],
-        'invenio_jsonschemas.schemas': [
-            'names = invenio_vocabularies.contrib.names.jsonschemas',
-        ],
-        'invenio_search.mappings': [
-            'names = invenio_vocabularies.contrib.names.mappings',
-        ]
-    }
 
 
 @pytest.fixture(scope="function")
@@ -188,9 +165,7 @@ def test_names_service_writer_duplicate(app, es_clear, name_full_data):
     assert expected_error in err.value.args
 
 
-def test_names_service_writer_update_existing(
-    app, es_clear, name_full_data, names_service
-):
+def test_names_service_writer_update_existing(app, es_clear, name_full_data):
     # create vocabulary
     writer = NamesServiceWriter("names", system_identity, update=True)
     name = writer.write(stream_entry=StreamEntry(name_full_data))
@@ -201,7 +176,8 @@ def test_names_service_writer_update_existing(
     updated_name["family_name"] = "Panero"
     # check changes vocabulary
     _ = writer.write(stream_entry=StreamEntry(updated_name))
-    record = names_service.read(system_identity, name.entry.id)
+    service = current_service_registry.get("names")
+    record = service.read(system_identity, name.entry.id)
     record = record.to_dict()
 
     # needed while the writer resolves from ES
@@ -210,7 +186,7 @@ def test_names_service_writer_update_existing(
 
 
 def test_names_service_writer_update_non_existing(
-    app, es_clear, name_full_data, names_service
+    app, es_clear, name_full_data
 ):
     # vocabulary item not created, call update directly
     updated_name = deepcopy(name_full_data)
@@ -219,7 +195,8 @@ def test_names_service_writer_update_non_existing(
     # check changes vocabulary
     writer = NamesServiceWriter("names", system_identity, update=True)
     name = writer.write(stream_entry=StreamEntry(updated_name))
-    record = names_service.read(system_identity, name.entry.id)
+    service = current_service_registry.get("names")
+    record = service.read(system_identity, name.entry.id)
     record = record.to_dict()
 
     assert dict(record, **updated_name) == record
