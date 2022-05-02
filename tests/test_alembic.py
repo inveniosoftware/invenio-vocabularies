@@ -7,7 +7,7 @@
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
-"""Test alembic recipes for Invenio-RDM-Records."""
+"""Test alembic recipes for Invenio-Vocabularies."""
 
 import pytest
 from invenio_db.utils import drop_alembic_version_table
