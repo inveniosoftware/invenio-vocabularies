@@ -76,6 +76,7 @@ class VocabularySearchOptions(SearchOptions):
 class VocabulariesServiceConfig(RecordServiceConfig):
     """Vocabulary service configuration."""
 
+    service_id = "vocabularies"
     permission_policy_cls = PermissionPolicy
     record_cls = Vocabulary
     schema = VocabularySchema
