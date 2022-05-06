@@ -24,6 +24,10 @@ def test_simple_flow(
     app, service, identity, name_full_data, example_affiliation
 ):
     """Test a simple vocabulary service flow."""
+    # Service
+    assert service.id == "names"
+    assert service.config.indexer_queue_name == "names"
+
     # Create it
     item = service.create(identity, name_full_data)
     id_ = item.id

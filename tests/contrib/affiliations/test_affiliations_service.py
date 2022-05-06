@@ -19,6 +19,10 @@ from invenio_vocabularies.contrib.affiliations.api import Affiliation
 
 def test_simple_flow(app, db, service, identity, affiliation_full_data):
     """Test a simple vocabulary service flow."""
+    # Service
+    assert service.id == "affiliations"
+    assert service.config.indexer_queue_name == "affiliations"
+
     # Create it
     item = service.create(identity, affiliation_full_data)
     id_ = item.id

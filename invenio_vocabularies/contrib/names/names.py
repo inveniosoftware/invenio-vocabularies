@@ -52,6 +52,7 @@ record_type = RecordTypeFactory(
         ]
     ),
     # Service layer
+    service_id="names",
     service_schema=NameSchema,
     search_options=NamesSearchOptions,
     service_components=service_components,

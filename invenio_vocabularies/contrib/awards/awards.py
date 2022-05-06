@@ -54,6 +54,7 @@ record_type = RecordTypeFactory(
     schema_path="local://awards/award-v1.0.0.json",
     record_relations=award_relations,
     # Service layer
+    service_id="awards",
     service_schema=AwardSchema,
     search_options=AwardsSearchOptions,
     service_components=service_components,

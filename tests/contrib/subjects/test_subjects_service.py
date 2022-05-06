@@ -18,6 +18,10 @@ from invenio_vocabularies.contrib.subjects.api import Subject
 
 def test_subject_simple_flow(app, db, service, identity, subject_full_data):
     """Test a simple vocabulary service flow."""
+    # Service
+    assert service.id == "subjects"
+    assert service.config.indexer_queue_name == "subjects"
+
     # Create a controlled subject
     item = service.create(identity, subject_full_data)
     id_ = item.id
