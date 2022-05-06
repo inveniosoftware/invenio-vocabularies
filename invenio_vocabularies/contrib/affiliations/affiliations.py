@@ -34,6 +34,7 @@ record_type = RecordTypeFactory(
         ]
     ),
     # Service layer
+    service_id="affiliations",
     service_schema=AffiliationSchema,
     search_options=AffiliationsSearchOptions,
     service_components=service_components,

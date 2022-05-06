@@ -19,6 +19,10 @@ from invenio_vocabularies.contrib.funders.api import Funder
 
 def test_simple_flow(app, service, identity, funder_full_data):
     """Test a simple vocabulary service flow."""
+    # Service
+    assert service.id == "funders"
+    assert service.config.indexer_queue_name == "funders"
+
     # Create it
     item = service.create(identity, funder_full_data)
     id_ = item.id

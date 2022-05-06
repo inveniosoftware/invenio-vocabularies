@@ -24,6 +24,10 @@ def test_simple_flow(
     app, service, identity, award_full_data, example_funder_ec
 ):
     """Test a simple vocabulary service flow."""
+    # Service
+    assert service.id == "awards"
+    assert service.config.indexer_queue_name == "awards"
+
     # Create it
     item = service.create(identity, award_full_data)
     id_ = item.id

@@ -39,6 +39,7 @@ record_type = RecordTypeFactory(
     schema_version="1.0.0",
     schema_path="local://funders/funder-v1.0.0.json",
     # Service layer
+    service_id="funders",
     service_schema=FunderSchema,
     search_options=FundersSearchOptions,
     service_components=service_components,
