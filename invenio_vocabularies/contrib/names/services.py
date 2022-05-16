@@ -10,7 +10,6 @@
 
 from elasticsearch_dsl.query import Q
 from invenio_pidstore.errors import PIDDoesNotExistError
-from invenio_records_resources.config import lt_es7
 
 from .names import record_type
 
@@ -39,7 +38,7 @@ class NamesService(record_type.service_cls):
         # the loading process needs to make sure of that
         results = self._read_many(identity, es_query, max_records=1)
         # cant use the results_item because it returns dicts intead of records
-        total = results.hits.total if lt_es7 else results.hits.total["value"]
+        total = results.hits.total["value"]
         if total == 0:
             # Not a PID but trated as such
             raise PIDDoesNotExistError(pid_type=id_type, pid_value=id_)
