@@ -39,7 +39,7 @@ class OpenAIREProjectTransformer(BaseTransformer):
         if funder_id is None:
             raise TransformerError(
                 _("Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
-                .format(openaire_funder_prefix=openaire_funder_prefix)))
+                  .format(openaire_funder_prefix=openaire_funder_prefix)))
 
         award["id"] = f"{funder_id}::{code}"
 
