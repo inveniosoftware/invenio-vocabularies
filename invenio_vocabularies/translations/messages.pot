@@ -7,87 +7,130 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-vocabularies 0.10.3\n"
+"Project-Id-Version: invenio-vocabularies 0.11.5\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2022-02-08 09:32+0100\n"
+"POT-Creation-Date: 2022-05-27 08:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
-#: invenio_vocabularies/config.py:29
+#: invenio_vocabularies/config.py:30
 msgid "GRID"
 msgstr ""
 
-#: invenio_vocabularies/config.py:33 invenio_vocabularies/config.py:54
+#: invenio_vocabularies/config.py:34 invenio_vocabularies/config.py:119
 msgid "GND"
 msgstr ""
 
-#: invenio_vocabularies/config.py:37
+#: invenio_vocabularies/config.py:38 invenio_vocabularies/config.py:114
 msgid "ISNI"
 msgstr ""
 
-#: invenio_vocabularies/config.py:41
+#: invenio_vocabularies/config.py:42
 msgid "ROR"
 msgstr ""
 
-#: invenio_vocabularies/config.py:49
+#: invenio_vocabularies/config.py:56 invenio_vocabularies/config.py:71
+msgid "DOI"
+msgstr ""
+
+#: invenio_vocabularies/config.py:67
+msgid "URL"
+msgstr ""
+
+#: invenio_vocabularies/config.py:109
 msgid "ORCID"
 msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/config.py:45
-#: invenio_vocabularies/contrib/names/config.py:45
+#: invenio_vocabularies/contrib/funders/config.py:48
+#: invenio_vocabularies/contrib/names/config.py:46
 #: invenio_vocabularies/contrib/subjects/config.py:38
 #: invenio_vocabularies/services/service.py:58
 msgid "Best match"
 msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/config.py:49
-#: invenio_vocabularies/contrib/names/config.py:49
+#: invenio_vocabularies/contrib/funders/config.py:52
+#: invenio_vocabularies/contrib/names/config.py:50
 #: invenio_vocabularies/contrib/subjects/config.py:42
 msgid "Name"
 msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/config.py:53
-#: invenio_vocabularies/contrib/names/config.py:53
+#: invenio_vocabularies/contrib/funders/config.py:56
+#: invenio_vocabularies/contrib/names/config.py:54
 #: invenio_vocabularies/contrib/subjects/config.py:46
 #: invenio_vocabularies/services/service.py:66
 msgid "Newest"
 msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/config.py:57
-#: invenio_vocabularies/contrib/names/config.py:57
+#: invenio_vocabularies/contrib/funders/config.py:60
+#: invenio_vocabularies/contrib/names/config.py:58
 #: invenio_vocabularies/contrib/subjects/config.py:50
 #: invenio_vocabularies/services/service.py:70
 msgid "Oldest"
 msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/schema.py:54
-#: invenio_vocabularies/contrib/names/schema.py:41
+#: invenio_vocabularies/contrib/funders/schema.py:43
 msgid "An existing id or a free text name must be present"
 msgstr ""
 
-#: invenio_vocabularies/contrib/awards/schema.py:24
-msgid "Title cannot be blank."
+#: invenio_vocabularies/contrib/awards/config.py:53
+msgid "Funders"
 msgstr ""
 
-#: invenio_vocabularies/contrib/awards/schema.py:28
+#: invenio_vocabularies/contrib/awards/datastreams.py:42
+msgid "Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:37
 msgid "Number cannot be blank."
 msgstr ""
 
-#: invenio_vocabularies/contrib/awards/schema.py:47
+#: invenio_vocabularies/contrib/awards/schema.py:44
+#: invenio_vocabularies/contrib/funders/schema.py:65
+msgid "Pid cannot be blank."
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:52
+#: invenio_vocabularies/contrib/funders/schema.py:73
+msgid "Missing PID."
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:92
+msgid "An existing id or number/title must be present."
+msgstr ""
+
+#: invenio_vocabularies/contrib/awards/schema.py:110
 msgid "At least award or funder should be present."
 msgstr ""
 
-#: invenio_vocabularies/contrib/funders/schema.py:21
+#: invenio_vocabularies/contrib/funders/datastreams.py:40
+msgid "Id not found in ROR entry."
+msgstr ""
+
+#: invenio_vocabularies/contrib/funders/datastreams.py:44
+msgid "Name not found in ROR entry."
+msgstr ""
+
+#: invenio_vocabularies/contrib/funders/schema.py:27
+#: invenio_vocabularies/contrib/funders/schema.py:53
 msgid "Name cannot be blank."
 msgstr ""
 
-#: invenio_vocabularies/contrib/names/schema.py:74
+#: invenio_vocabularies/contrib/names/schema.py:51
 msgid "name or family_name and given_name must be present."
+msgstr ""
+
+#: invenio_vocabularies/contrib/subjects/schema.py:48
+msgid "An existing id or a free text subject must be present"
 msgstr ""
 
 #: invenio_vocabularies/services/components.py:31
