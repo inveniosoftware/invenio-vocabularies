@@ -120,7 +120,7 @@ def _output_process(vocabulary, op, success, errored, filtered):
 def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
     """Import a vocabulary."""
     if not filepath and not origin:
-        click.secho("One of --filepath or --origin must be present", fg="red")
+        click.secho("One of --filepath or --origin must be present.", fg="red")
         exit(1)
 
     config = get_config_for_ds(vocabulary, filepath, origin)
@@ -137,7 +137,7 @@ def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
 def update(vocabulary, filepath=None, origin=None):
     """Import a vocabulary."""
     if not filepath and not origin:
-        click.secho("One of --filepath or --origin must be present", fg="red")
+        click.secho("One of --filepath or --origin must be present.", fg="red")
         exit(1)
 
     config = get_config_for_ds(vocabulary, filepath, origin)
@@ -163,7 +163,7 @@ def convert(
     """Convert a vocabulary to a new format."""
     if not filepath and (not origin or not target):
         click.secho(
-            "One of --filepath or --origin and --target must be present",
+            "One of --filepath or --origin and --target must be present.",
             fg="red"
         )
         exit(1)
