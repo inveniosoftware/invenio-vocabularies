@@ -40,7 +40,7 @@ class FunderRelationSchema(Schema):
 
         if not id_ and not name:
             raise ValidationError(
-                _("An existing id or a free text name must be present"),
+                _("An existing id or a free text name must be present."),
                 "funder"
             )
 
