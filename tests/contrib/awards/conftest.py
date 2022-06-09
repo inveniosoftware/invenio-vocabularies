@@ -32,9 +32,9 @@ def example_funder(db, identity, funders_service, funder_indexer):
         "name": "CERN",
         "title": {
             "en": "European Organization for Nuclear Research",
-            "fr": "Organisation européenne pour la recherche nucléaire"
+            "fr": "Organisation européenne pour la recherche nucléaire",
         },
-        "country": "CH"
+        "country": "CH",
     }
     funder = funders_service.create(identity, funder_data)
     Funder.index.refresh()  # Refresh the index
@@ -50,11 +50,8 @@ def example_funder_ec(db, identity, funders_service, funder_indexer):
     funder_data = {
         "id": "00k4n6c32",
         "name": "EC",
-        "title": {
-            "en": "European Commission",
-            "fr": "Commission Européenne"
-        },
-        "country": "BE"
+        "title": {"en": "European Commission", "fr": "Commission Européenne"},
+        "country": "BE",
     }
     funder = funders_service.create(identity, funder_data)
     Funder.index.refresh()  # Refresh the index
@@ -64,7 +61,7 @@ def example_funder_ec(db, identity, funders_service, funder_indexer):
     db.session.commit()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def funders_service():
     """Funders service object."""
     return current_service_registry.get("funders")
@@ -87,7 +84,7 @@ def award_full_data():
         "identifiers": [
             {
                 "identifier": "https://cordis.europa.eu/project/id/755021",
-                "scheme": "url"
+                "scheme": "url",
             }
         ],
         "number": "755021",
@@ -95,9 +92,7 @@ def award_full_data():
             "en": "Personalised Treatment For Cystic Fibrosis Patients With \
                 Ultra-rare CFTR Mutations (and beyond)",
         },
-        "funder": {
-            "id": "00k4n6c32"
-        },
+        "funder": {"id": "00k4n6c32"},
         "acronym": "HIT-CF",
     }
 
@@ -110,7 +105,7 @@ def award_full_data_invalid_id():
         "identifiers": [
             {
                 "identifier": "https://cordis.europa.eu/project/id/755021",
-                "scheme": "url"
+                "scheme": "url",
             }
         ],
         "number": "755021",
@@ -118,18 +113,13 @@ def award_full_data_invalid_id():
             "en": "Personalised Treatment For Cystic Fibrosis Patients With \
                 Ultra-rare CFTR Mutations (and beyond)",
         },
-        "funder": {
-            "id": "010101010"
-        },
+        "funder": {"id": "010101010"},
         "acronym": "HIT-CF",
-
     }
 
 
 @pytest.fixture(scope="function")
-def example_award(
-    db, example_funder_ec, award_full_data, identity, indexer, service
-):
+def example_award(db, example_funder_ec, award_full_data, identity, indexer, service):
     """Creates and hard deletes an award."""
     award = service.create(identity, award_full_data)
     Award.index.refresh()  # Refresh the index
@@ -139,7 +129,7 @@ def example_award(
     db.session.commit()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def service():
     """Awards service object."""
     return current_service_registry.get("awards")

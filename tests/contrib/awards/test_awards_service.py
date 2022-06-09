@@ -20,9 +20,7 @@ from marshmallow.exceptions import ValidationError
 from invenio_vocabularies.contrib.awards.api import Award
 
 
-def test_simple_flow(
-    app, service, identity, award_full_data, example_funder_ec
-):
+def test_simple_flow(app, service, identity, award_full_data, example_funder_ec):
     """Test a simple vocabulary service flow."""
     # Service
     assert service.id == "awards"
@@ -36,12 +34,12 @@ def test_simple_flow(
     expected_data = deepcopy(award_full_data)
     expected_data["funder"]["name"] = "EC"
 
-    assert id_ == award_full_data['id']
+    assert id_ == award_full_data["id"]
     for k, v in expected_data.items():
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read(identity, '755021')
+    read_item = service.read(identity, "755021")
     assert item.id == read_item.id
     assert item.data == read_item.data
 
@@ -49,19 +47,18 @@ def test_simple_flow(
     Award.index.refresh()
 
     # Search it
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0] == read_item.data
 
     # Update it
     data = read_item.data
-    data['title']['en'] = 'New title'
+    data["title"]["en"] = "New title"
     update_item = service.update(identity, id_, data)
     # the pid is not save to the json metadata
     assert not update_item._record.get("pid")
     assert item.id == update_item.id
-    assert update_item['title']['en'] == 'New title'
+    assert update_item["title"]["en"] == "New title"
 
     # Delete it
     assert service.delete(identity, id_)
@@ -76,24 +73,18 @@ def test_simple_flow(
     deleted_rec = service.read(identity, id_).to_dict()
     assert set(deleted_rec.keys()) == base_keys
     # - search
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 0
 
     # not-ideal cleanup
     item._record.delete(force=True)
 
 
-def test_create_invalid_funder(
-    app, service, identity, award_full_data, example_funder
-):
+def test_create_invalid_funder(app, service, identity, award_full_data, example_funder):
     award_with_invalid_funder = deepcopy(award_full_data)
     award_with_invalid_funder["funder"]["id"] = "invalid"
     pytest.raises(
-        InvalidRelationValue,
-        service.create,
-        identity,
-        award_with_invalid_funder
+        InvalidRelationValue, service.create, identity, award_with_invalid_funder
     )
 
 
@@ -101,17 +92,13 @@ def test_pid_already_registered(
     app, db, service, identity, award_full_data, example_award
 ):
     # example_funder does the first creation
-    pytest.raises(
-        PIDAlreadyExists, service.create, identity, award_full_data)
+    pytest.raises(PIDAlreadyExists, service.create, identity, award_full_data)
 
 
-def test_extra_fields(
-    app, service, identity, award_full_data, example_funder
-):
+def test_extra_fields(app, service, identity, award_full_data, example_funder):
     """Extra fields in data should fail."""
-    award_full_data['invalid'] = 1
-    pytest.raises(
-        ValidationError, service.create, identity, award_full_data)
+    award_full_data["invalid"] = 1
+    pytest.raises(ValidationError, service.create, identity, award_full_data)
 
 
 def test_award_dereferenced(
@@ -134,8 +121,7 @@ def test_award_dereferenced(
     assert read_item["funder"] == expected_funder
 
     # Search it
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0]["funder"] == expected_funder
 
@@ -149,13 +135,9 @@ def test_indexed_at_query(
     Award.index.refresh()
 
     # there is previous to before
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {before}]", size=25, page=1)
     assert res.total == 0
 
     # there is previous to now
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {now}]", size=25, page=1)
     assert res.total == 1

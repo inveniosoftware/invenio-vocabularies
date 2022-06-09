@@ -31,10 +31,10 @@ record_type = RecordTypeFactory(
         "pid": db.Column(db.String, unique=True),
     },
     record_dumper=ElasticsearchDumper(
-        model_fields={'pid': ('id', str)},
+        model_fields={"pid": ("id", str)},
         extensions=[
             IndexedAtDumperExt(),
-        ]
+        ],
     ),
     schema_version="1.0.0",
     schema_path="local://funders/funder-v1.0.0.json",
@@ -45,5 +45,5 @@ record_type = RecordTypeFactory(
     service_components=service_components,
     permission_policy_cls=PermissionPolicy,
     # Resource layer
-    endpoint_route='/funders',
+    endpoint_route="/funders",
 )

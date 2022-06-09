@@ -13,7 +13,6 @@ from .services import NamesService, NamesServiceConfig
 
 __all__ = (
     "NamesResource",
-    "NamesResourceConfig"
-    "NamesService",
+    "NamesResourceConfig" "NamesService",
     "NamesServiceConfig",
 )

@@ -92,9 +92,7 @@ class NamesServiceWriter(ServiceWriter):
 
     def _resolve(self, id_):
         """Resolve an entry given an id."""
-        return self._service.resolve(
-            self._identity, id_=id_, id_type=self._scheme_id
-        )
+        return self._service.resolve(self._identity, id_=id_, id_type=self._scheme_id)
 
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input entry using a given service."""
@@ -105,9 +103,7 @@ class NamesServiceWriter(ServiceWriter):
             # the pid is recidv2 not e.g. the orcid
             current = self._resolve(vocab_id)
             if not self._update:
-                raise WriterError(
-                    [f"Vocabulary entry already exists: {entry}"]
-                )
+                raise WriterError([f"Vocabulary entry already exists: {entry}"])
             updated = dict(current.to_dict(), **entry)
             return StreamEntry(
                 self._service.update(self._identity, current.id, updated)
@@ -142,20 +138,20 @@ DATASTREAM_CONFIG = {
             "type": "tar",
             "args": {
                 "regex": ".xml$",
-            }
+            },
         },
         {"type": "xml"},
     ],
-    "transformers": [
-        {"type": "orcid"}
-    ],
-    "writers": [{
-        "type": "names-service",
-        "args": {
-            "service_or_name": "names",
-            "identity": system_identity,
+    "transformers": [{"type": "orcid"}],
+    "writers": [
+        {
+            "type": "names-service",
+            "args": {
+                "service_or_name": "names",
+                "identity": system_identity,
+            },
         }
-    }],
+    ],
 }
 """ORCiD Data Stream configuration.
 

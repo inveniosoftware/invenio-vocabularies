@@ -10,8 +10,10 @@
 import pytest
 from marshmallow import ValidationError
 
-from invenio_vocabularies.contrib.funders.schema import FunderRelationSchema, \
-    FunderSchema
+from invenio_vocabularies.contrib.funders.schema import (
+    FunderRelationSchema,
+    FunderSchema,
+)
 
 
 def test_valid_full(app, funder_full_data):
@@ -42,13 +44,13 @@ def test_invalid_no_name():
             {
                 "identifier": "grid.9132.9",
                 "scheme": "grid",
-            }
+            },
         ],
         "title": {
             "en": "European Organization for Nuclear Research",
-            "fr": "Organisation européenne pour la recherche nucléaire"
+            "fr": "Organisation européenne pour la recherche nucléaire",
         },
-        "country": "CH"
+        "country": "CH",
     }
     with pytest.raises(ValidationError):
         data = FunderSchema().load(invalid_no_name)
@@ -77,13 +79,10 @@ def test_invalid_empty_funder():
 
 
 def test_invalid_country():
-    invalid_country = {
-        "id": "01ggx4157",
-        "name": "Test funder",
-        "country": 1
-    }
+    invalid_country = {"id": "01ggx4157", "name": "Test funder", "country": 1}
     with pytest.raises(ValidationError):
         data = FunderSchema().load(invalid_country)
+
 
 #
 # FunderRelationSchema
@@ -98,17 +97,12 @@ def test_valid_id():
 
 
 def test_valid_name():
-    valid_name = {
-        "name": "Funder One"
-    }
+    valid_name = {"name": "Funder One"}
     assert valid_name == FunderRelationSchema().load(valid_name)
 
 
 def test_valid_both_id_name():
-    valid_id_name = {
-        "id": "test",
-        "name": "Funder One"
-    }
+    valid_id_name = {"id": "test", "name": "Funder One"}
     assert valid_id_name == FunderRelationSchema().load(valid_id_name)
 
 

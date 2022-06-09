@@ -39,29 +39,15 @@ def test_valid_full(appctx, schema):
         "name": "Doe, John",
         "given_name": "John",
         "family_name": "Doe",
-        "identifiers": [
-            {
-                "identifier": "0000-0001-8135-3489",
-                "scheme": "orcid"
-            }
-        ],
-        "affiliations": [
-            {
-                "id": "cern"
-            },
-            {
-                "name": "CustomORG"
-            }
-        ]
+        "identifiers": [{"identifier": "0000-0001-8135-3489", "scheme": "orcid"}],
+        "affiliations": [{"id": "cern"}, {"name": "CustomORG"}],
     }
     assert validates(data)
 
 
 def test_valid_empty(appctx, schema):
     # check there are no requirements at JSONSchema level
-    data = {
-        "$schema": schema
-    }
+    data = {"$schema": schema}
 
     assert validates(data)
 
@@ -69,22 +55,17 @@ def test_valid_empty(appctx, schema):
 # only acronym and name are defined by the affiliation schema
 # the rest are inherited and should be tested elsewhere
 
+
 def test_fails_name_identifiers(appctx, schema):
     # string
-    data = {
-        "$schema": schema,
-        "identifiers": "0000-0001-8135-3489"
-    }
+    data = {"$schema": schema, "identifiers": "0000-0001-8135-3489"}
 
     assert fails(data)
 
     # dict
     data = {
         "$schema": schema,
-        "identifiers": {
-            "identifier": "0000-0001-8135-3489",
-            "scheme": "orcid"
-        }
+        "identifiers": {"identifier": "0000-0001-8135-3489", "scheme": "orcid"},
     }
 
     assert fails(data)
@@ -92,20 +73,11 @@ def test_fails_name_identifiers(appctx, schema):
 
 def test_fails_name_affiliations(appctx, schema):
     # string, comma separated list
-    data = {
-        "$schema": schema,
-        "affiliations": "cern, CustomORG"
-    }
+    data = {"$schema": schema, "affiliations": "cern, CustomORG"}
 
     assert fails(data)
 
     # dict
-    data = {
-        "$schema": schema,
-        "affiliations": {
-            "id": "cern",
-            "name": "CustomORG"
-        }
-    }
+    data = {"$schema": schema, "affiliations": {"id": "cern", "name": "CustomORG"}}
 
     assert fails(data)

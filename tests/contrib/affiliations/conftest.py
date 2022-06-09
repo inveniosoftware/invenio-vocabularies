@@ -22,18 +22,13 @@ def affiliation_full_data():
     return {
         "acronym": "TEST",
         "id": "cern",
-        "identifiers": [
-            {"identifier": "03yrm5c26", "scheme": "ror"}
-        ],
+        "identifiers": [{"identifier": "03yrm5c26", "scheme": "ror"}],
         "name": "Test affiliation",
-        "title": {
-            "en": "Test affiliation",
-            "es": "Afiliacion de test"
-        }
+        "title": {"en": "Test affiliation", "es": "Afiliacion de test"},
     }
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def service():
     """Affiliations service object."""
     return current_service_registry.get("affiliations")

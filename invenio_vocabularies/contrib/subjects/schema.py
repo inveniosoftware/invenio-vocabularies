@@ -45,6 +45,5 @@ class SubjectRelationSchema(Schema):
 
         if not id_ and not subject:
             raise ValidationError(
-                _("An existing id or a free text subject must be present."),
-                "subjects"
+                _("An existing id or a free text subject must be present."), "subjects"
             )

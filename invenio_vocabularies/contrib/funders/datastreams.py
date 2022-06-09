@@ -36,8 +36,7 @@ class RORTransformer(BaseTransformer):
 
         funder["id"] = normalize_ror(record.get("id"))
         if not funder["id"]:
-            raise TransformerError(
-                _(f"Id not found in ROR entry."))
+            raise TransformerError(_(f"Id not found in ROR entry."))
 
         funder["name"] = record.get("name")
         if not funder["name"]:
@@ -63,10 +62,12 @@ class RORTransformer(BaseTransformer):
                     value = f"{funder_fundref_doi_prefix}/{value}"
                     scheme = "doi"
 
-                funder["identifiers"].append({
-                    "identifier": value,
-                    "scheme": scheme,
-                })
+                funder["identifiers"].append(
+                    {
+                        "identifier": value,
+                        "scheme": scheme,
+                    }
+                )
 
         stream_entry.entry = funder
         return stream_entry
@@ -90,20 +91,22 @@ DATASTREAM_CONFIG = {
             "type": "zip",
             "args": {
                 "regex": ".json$",
-            }
+            },
         },
-        {"type": "json"}
+        {"type": "json"},
     ],
     "transformers": [
         {"type": "ror-funder"},
     ],
-    "writers": [{
-        "type": "funders-service",
-        "args": {
-            "service_or_name": "funders",
-            "identity": system_identity,
+    "writers": [
+        {
+            "type": "funders-service",
+            "args": {
+                "service_or_name": "funders",
+                "identity": system_identity,
+            },
         }
-    }],
+    ],
 }
 """Data Stream configuration.
 

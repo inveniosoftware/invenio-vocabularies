@@ -14,8 +14,7 @@ from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
-from invenio_records_resources.records.systemfields import ModelPIDField, \
-    PIDRelation
+from invenio_records_resources.records.systemfields import ModelPIDField, PIDRelation
 
 from ...services.permissions import PermissionPolicy
 from ..funders.api import Funder
@@ -24,10 +23,10 @@ from .schema import AwardSchema
 
 award_relations = RelationsField(
     funders=PIDRelation(
-        'funder',
-        keys=['name'],
+        "funder",
+        keys=["name"],
         pid_field=Funder.pid,
-        cache_key='funder',
+        cache_key="funder",
     )
 )
 
@@ -44,11 +43,11 @@ record_type = RecordTypeFactory(
         "pid": db.Column(db.String, unique=True),
     },
     record_dumper=ElasticsearchDumper(
-        model_fields={'pid': ('id', str)},
+        model_fields={"pid": ("id", str)},
         extensions=[
-            RelationDumperExt('relations'),
+            RelationDumperExt("relations"),
             IndexedAtDumperExt(),
-        ]
+        ],
     ),
     schema_version="1.0.0",
     schema_path="local://awards/award-v1.0.0.json",
@@ -60,5 +59,5 @@ record_type = RecordTypeFactory(
     service_components=service_components,
     permission_policy_cls=PermissionPolicy,
     # Resource layer
-    endpoint_route='/awards',
+    endpoint_route="/awards",
 )

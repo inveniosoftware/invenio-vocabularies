@@ -18,10 +18,8 @@ from pathlib import Path
 
 import pytest
 
-from invenio_vocabularies.datastreams.errors import TransformerError, \
-    WriterError
-from invenio_vocabularies.datastreams.readers import BaseReader, JsonReader, \
-    ZipReader
+from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
+from invenio_vocabularies.datastreams.readers import BaseReader, JsonReader, ZipReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
 from invenio_vocabularies.datastreams.writers import BaseWriter
 
@@ -73,7 +71,7 @@ class FailingTestWriter(BaseWriter):
             raise WriterError(f"{self.fail_on} value found.")
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def app_config(app_config):
     """Mimic an instance's configuration."""
     app_config["VOCABULARIES_DATASTREAM_READERS"] = {
@@ -81,9 +79,7 @@ def app_config(app_config):
         "test": TestReader,
         "zip": ZipReader,
     }
-    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
-        "test": TestTransformer
-    }
+    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {"test": TestTransformer}
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
         "test": TestWriter,
         "fail": FailingTestWriter,
@@ -92,34 +88,19 @@ def app_config(app_config):
     return app_config
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def json_list():
     """Expected json list."""
-    return [
-        {
-            "test": {
-                "inner": "value"
-            }
-        },
-        {
-            "test": {
-                "inner": "value"
-            }
-        }
-    ]
+    return [{"test": {"inner": "value"}}, {"test": {"inner": "value"}}]
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def json_element():
     """Expected json element."""
-    return {
-        "test": {
-            "inner": "value"
-        }
-    }
+    return {"test": {"inner": "value"}}
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def zip_file(json_list):
     """Creates a Zip file with three files (two json) inside.
 
@@ -131,7 +112,7 @@ def zip_file(json_list):
     with zipfile.ZipFile(file=filename, mode="w") as archive:
         for file_ in files:
             inner_filename = Path(file_)
-            with open(inner_filename, 'w') as file:
+            with open(inner_filename, "w") as file:
                 json.dump(json_list, file)
             archive.write(inner_filename)
             inner_filename.unlink()

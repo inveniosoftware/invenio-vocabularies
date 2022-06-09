@@ -27,12 +27,12 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
     id_ = item.id
     data = item.data
 
-    assert id_ == subject_full_data['id']
+    assert id_ == subject_full_data["id"]
     for k, v in subject_full_data.items():
         assert data[k] == v, data
 
     # Read it
-    read_item = service.read(identity, 'https://id.nlm.nih.gov/mesh/D000001')
+    read_item = service.read(identity, "https://id.nlm.nih.gov/mesh/D000001")
     assert item.id == read_item.id
     assert item.data == read_item.data
 
@@ -48,10 +48,10 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
 
     # Update it
     data = read_item.data
-    data['subject'] = 'Antibiotics'
+    data["subject"] = "Antibiotics"
     update_item = service.update(identity, id_, data)
     assert item.id == update_item.id
-    assert update_item['subject'] == 'Antibiotics'
+    assert update_item["subject"] == "Antibiotics"
 
     # Delete it
     assert service.delete(identity, id_)
@@ -74,13 +74,9 @@ def test_indexed_at_query(app, db, service, identity, subject_full_data):
     Subject.index.refresh()
 
     # there is previous to before
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {before}]", size=25, page=1)
     assert res.total == 0
 
     # there is previous to now
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {now}]", size=25, page=1)
     assert res.total == 1

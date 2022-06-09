@@ -45,10 +45,9 @@ def test_valid_full(appctx, schema):
             {
                 "identifier": "grid.1234.5",
                 "scheme": "grid",
-            }
+            },
         ],
         "country": "CH",
-
     }
 
     assert validates(data)
@@ -56,9 +55,7 @@ def test_valid_full(appctx, schema):
 
 def test_valid_empty(appctx, schema):
     # check there are no requirements at JSONSchema level
-    data = {
-        "$schema": schema
-    }
+    data = {"$schema": schema}
 
     assert validates(data)
 
@@ -68,18 +65,12 @@ def test_valid_empty(appctx, schema):
 
 
 def test_fails_name(appctx, schema):
-    data = {
-        "$schema": schema,
-        "name": 1
-    }
+    data = {"$schema": schema, "name": 1}
 
     assert fails(data)
 
 
 def test_fails_country(appctx, schema):
-    data = {
-        "$schema": schema,
-        "country": 1
-    }
+    data = {"$schema": schema, "country": 1}
 
     assert fails(data)

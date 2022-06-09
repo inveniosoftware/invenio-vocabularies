@@ -62,6 +62,7 @@ class DataStream:
 
     def read(self):
         """Recursively read the entries."""
+
         def pipe_gen(gen_funcs, piped_item=None):
             _gen_funcs = list(gen_funcs)  # copy to avoid modifying ref list
             # use and remove the current generator
@@ -77,10 +78,9 @@ class DataStream:
                 except ReaderError as err:
                     yield StreamEntry(
                         entry=item,
-                        errors=[
-                            f"{current_gen_func.__qualname__}: {str(err)}"
-                        ]
+                        errors=[f"{current_gen_func.__qualname__}: {str(err)}"],
                     )
+
         read_gens = [r.read for r in self._readers]
         yield from pipe_gen(read_gens)
 
@@ -103,9 +103,7 @@ class DataStream:
             try:
                 writer.write(stream_entry)
             except WriterError as err:
-                stream_entry.errors.append(
-                    f"{writer.__class__.__name__}: {str(err)}"
-                )
+                stream_entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
 
         return stream_entry
 

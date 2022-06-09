@@ -11,19 +11,18 @@
 from flask import current_app
 from flask_babelex import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
-from invenio_records_resources.services.records.components import \
-    DataComponent, RelationsComponent
+from invenio_records_resources.services.records.components import (
+    DataComponent,
+    RelationsComponent,
+)
 from invenio_records_resources.services.records.facets import TermsFacet
-from invenio_records_resources.services.records.params import \
-    SuggestQueryParser
+from invenio_records_resources.services.records.params import SuggestQueryParser
 from werkzeug.local import LocalProxy
 
 from ...services.components import ModelPIDComponent
 from ..funders.facets import FundersLabels
 
-award_schemes = LocalProxy(
-    lambda: current_app.config["VOCABULARIES_AWARD_SCHEMES"]
-)
+award_schemes = LocalProxy(lambda: current_app.config["VOCABULARIES_AWARD_SCHEMES"])
 
 awards_openaire_funders_mapping = LocalProxy(
     lambda: current_app.config["VOCABULARIES_AWARDS_OPENAIRE_FUNDERS"]
@@ -39,19 +38,17 @@ class AwardsSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            'acronym^100',
-            'title.*^50',
-            'title.*._2gram',
-            'title.*._3gram',
-            'number^10'
+            "acronym^100",
+            "title.*^50",
+            "title.*._2gram",
+            "title.*._3gram",
+            "number^10",
         ],
     )
 
     facets = {
-        'funders': TermsFacet(
-            field='funder.id',
-            label=_('Funders'),
-            value_labels=FundersLabels('funders')
+        "funders": TermsFacet(
+            field="funder.id", label=_("Funders"), value_labels=FundersLabels("funders")
         )
     }
 

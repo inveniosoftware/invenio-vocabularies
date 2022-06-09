@@ -12,14 +12,26 @@ from functools import wraps
 
 import marshmallow as ma
 from flask import g
-from flask_resources import JSONSerializer, MarshmallowJSONSerializer, \
-    ResponseHandler, resource_requestctx, response_handler
-from invenio_records_resources.resources import RecordResource, \
-    RecordResourceConfig, SearchRequestArgsSchema
+from flask_resources import (
+    JSONSerializer,
+    MarshmallowJSONSerializer,
+    ResponseHandler,
+    resource_requestctx,
+    response_handler,
+)
+from invenio_records_resources.resources import (
+    RecordResource,
+    RecordResourceConfig,
+    SearchRequestArgsSchema,
+)
 from invenio_records_resources.resources.records.headers import etag_headers
-from invenio_records_resources.resources.records.resource import \
-    request_data, request_headers, request_search_args, request_view_args, \
-    route
+from invenio_records_resources.resources.records.resource import (
+    request_data,
+    request_headers,
+    request_search_args,
+    request_view_args,
+    route,
+)
 from invenio_records_resources.resources.records.utils import es_preference
 from marshmallow import fields
 
@@ -43,11 +55,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 
     blueprint_name = "vocabularies"
     url_prefix = "/vocabularies"
-    routes = {
-        "list": "/<type>",
-        "item": "/<type>/<pid_value>",
-        "tasks": "/tasks"
-    }
+    routes = {"list": "/<type>", "item": "/<type>/<pid_value>", "tasks": "/tasks"}
 
     request_view_args = {
         "pid_value": ma.fields.Str(),
@@ -57,10 +65,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
     request_search_args = VocabularySearchRequestArgsSchema
 
     response_handlers = {
-        "application/json": ResponseHandler(
-            JSONSerializer(),
-            headers=etag_headers
-        ),
+        "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
         "application/vnd.inveniordm.v1+json": ResponseHandler(
             MarshmallowJSONSerializer(
                 schema_cls=VocabularyL10NItemSchema,
@@ -116,7 +121,7 @@ class VocabulariesResource(RecordResource):
         """Read an item."""
         pid_value = (
             resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"]
+            resource_requestctx.view_args["pid_value"],
         )
         item = self.service.read(g.identity, pid_value)
         return item.to_dict(), 200
@@ -129,7 +134,7 @@ class VocabulariesResource(RecordResource):
         """Update an item."""
         pid_value = (
             resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"]
+            resource_requestctx.view_args["pid_value"],
         )
         item = self.service.update(
             g.identity,
@@ -145,7 +150,7 @@ class VocabulariesResource(RecordResource):
         """Delete an item."""
         pid_value = (
             resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"]
+            resource_requestctx.view_args["pid_value"],
         )
         self.service.delete(
             g.identity,

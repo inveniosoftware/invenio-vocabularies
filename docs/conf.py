@@ -48,9 +48,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"Invenio-Vocabularies"
-copyright = u"2020, CERN"
-author = u"CERN"
+project = "Invenio-Vocabularies"
+copyright = "2020, CERN"
+author = "CERN"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -248,8 +248,8 @@ latex_documents = [
     (
         master_doc,
         "invenio-vocabularies.tex",
-        u"invenio-vocabularies Documentation",
-        u"CERN",
+        "invenio-vocabularies Documentation",
+        "CERN",
         "manual",
     ),
 ]
@@ -283,7 +283,7 @@ man_pages = [
     (
         master_doc,
         "invenio-vocabularies",
-        u"invenio-vocabularies Documentation",
+        "invenio-vocabularies Documentation",
         [author],
         1,
     )
@@ -302,7 +302,7 @@ texinfo_documents = [
     (
         master_doc,
         "invenio-vocabularies",
-        u"Invenio-Vocabularies Documentation",
+        "Invenio-Vocabularies Documentation",
         author,
         "invenio-vocabularies",
         "Invenio module for managing vocabularies.",

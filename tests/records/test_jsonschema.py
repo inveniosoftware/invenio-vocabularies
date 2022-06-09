@@ -21,28 +21,15 @@ def vocabulary_json():
         "$schema": "local://vocabularies/vocabulary-v1.0.0.json",
         "description": {
             "en": "Test affiliation description",
-            "es": "Descripcion de una afiliacion de test"
+            "es": "Descripcion de una afiliacion de test",
         },
         "icon": "test.png",
         "id": "voc-1",
-        "pid": {
-            "pk": 1,
-            "status": "R",
-            "pid_type": "vocid",
-            "obj_type": "voc"
-        },
-        "props": {
-            "example": "test"
-        },
+        "pid": {"pk": 1, "status": "R", "pid_type": "vocid", "obj_type": "voc"},
+        "props": {"example": "test"},
         "tags": ["one_tag", "two_tag"],
-        "title": {
-            "en": "Test affiliation",
-            "es": "Afiliacion de test"
-        },
-        "type": {
-            "id": "vocabulary",
-            "pid_type": "vocid"
-        }
+        "title": {"en": "Test affiliation", "es": "Afiliacion de test"},
+        "type": {"id": "vocabulary", "pid_type": "vocid"},
     }
 
 
@@ -65,23 +52,22 @@ def test_valid_full(appctx, vocabulary_json):
 
 def test_valid_empty(appctx):
     # check there are no requirements at JSONSchema level
-    data = {
-        "$schema": "local://vocabularies/vocabulary-v1.0.0.json"
-    }
+    data = {"$schema": "local://vocabularies/vocabulary-v1.0.0.json"}
 
     assert validates(data)
 
 
 def test_fails_description(appctx, vocabulary_json):
     vocabulary_json["description"] = [
-        "Test affiliation description", "Descripcion de una afiliacion de test"
+        "Test affiliation description",
+        "Descripcion de una afiliacion de test",
     ]
 
     assert fails(vocabulary_json)
 
     vocabulary_json["description"] = [
         {"en": "Test affiliation description"},
-        {"es": "Descripcion de una afiliacion de test"}
+        {"es": "Descripcion de una afiliacion de test"},
     ]
 
     assert fails(vocabulary_json)
@@ -97,9 +83,7 @@ def test_fails_icon(appctx, vocabulary_json):
 
 
 def test_fails_props(appctx, vocabulary_json):
-    vocabulary_json["props"] = {
-        "key": 1234
-    }
+    vocabulary_json["props"] = {"key": 1234}
     assert fails(vocabulary_json)
 
 
@@ -110,15 +94,13 @@ def test_fails_tags(appctx, vocabulary_json):
 
 
 def test_fails_title(appctx, vocabulary_json):
-    vocabulary_json["title"] = [
-        "Test affiliation", "Afiliacion de test"
-    ]
+    vocabulary_json["title"] = ["Test affiliation", "Afiliacion de test"]
 
     assert fails(vocabulary_json)
 
     vocabulary_json["title"] = [
         {"en": "Test affiliation"},
-        {"es": "Afiliacion de test"}
+        {"es": "Afiliacion de test"},
     ]
 
     assert fails(vocabulary_json)

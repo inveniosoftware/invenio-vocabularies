@@ -14,72 +14,74 @@ import pytest
 from invenio_access.permissions import system_identity
 
 from invenio_vocabularies.contrib.awards.api import Award
-from invenio_vocabularies.contrib.awards.datastreams import \
-    AwardsServiceWriter, OpenAIREProjectTransformer
+from invenio_vocabularies.contrib.awards.datastreams import (
+    AwardsServiceWriter,
+    OpenAIREProjectTransformer,
+)
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
 
 
 @pytest.fixture(scope="function")
 def dict_award_entry():
-    return StreamEntry({
-        "acronym": "TA",
-        "code": "0751743",
-        "enddate": "2010-09-30",
-        "funding": [
-            {
-                "funding_stream": {
-                    "description": "Directorate for Geosciences - Division of "
-                                   "Ocean Sciences",
-                    "id": "NSF::GEO/OAD::GEO/OCE",
-                },
-                "jurisdiction": "US",
-                "name": "National Science Foundation",
-                "shortName": "NSF"
-            }
-        ],
-        "h2020programme": [],
-        "id": "40|nsf_________::3eb1b4f6d6e251a19f9fdeed2aab88d8",
-        "openaccessmandatefordataset": False,
-        "openaccessmandateforpublications": False,
-        "startdate": "2008-04-01",
-        "subject": [
-            "Oceanography"
-        ],
-        "title": "Test title",
-        "websiteurl": "https://test.com"
-    })
+    return StreamEntry(
+        {
+            "acronym": "TA",
+            "code": "0751743",
+            "enddate": "2010-09-30",
+            "funding": [
+                {
+                    "funding_stream": {
+                        "description": "Directorate for Geosciences - Division of "
+                        "Ocean Sciences",
+                        "id": "NSF::GEO/OAD::GEO/OCE",
+                    },
+                    "jurisdiction": "US",
+                    "name": "National Science Foundation",
+                    "shortName": "NSF",
+                }
+            ],
+            "h2020programme": [],
+            "id": "40|nsf_________::3eb1b4f6d6e251a19f9fdeed2aab88d8",
+            "openaccessmandatefordataset": False,
+            "openaccessmandateforpublications": False,
+            "startdate": "2008-04-01",
+            "subject": ["Oceanography"],
+            "title": "Test title",
+            "websiteurl": "https://test.com",
+        }
+    )
 
 
 @pytest.fixture(scope="function")
 def dict_award_entry_ec():
     """Full award data."""
-    return StreamEntry({
-        "acronym": "TS",
-        "code": "129123",
-        "enddate": "2025-12-31",
-        "funding": [
-            {
-                "funding_stream": {
-                    "description": "Test stream",
-                    "id": "TST::test::test",
-                },
-                "jurisdiction": "GR",
-                "name": "Test Name",
-                "shortName": "TST"
-            }
-        ],
-        "h2020programme": [],
-        "id": "40|corda__h2020::000000000000000000",
-        "openaccessmandatefordataset": False,
-        "openaccessmandateforpublications": False,
-        "startdate": "2008-04-01",
-        "subject": [
-            "Oceanography"
-        ],
-        "title": "Test title",
-        "websiteurl": "https://test.com"
-    })
+    return StreamEntry(
+        {
+            "acronym": "TS",
+            "code": "129123",
+            "enddate": "2025-12-31",
+            "funding": [
+                {
+                    "funding_stream": {
+                        "description": "Test stream",
+                        "id": "TST::test::test",
+                    },
+                    "jurisdiction": "GR",
+                    "name": "Test Name",
+                    "shortName": "TST",
+                }
+            ],
+            "h2020programme": [],
+            "id": "40|corda__h2020::000000000000000000",
+            "openaccessmandatefordataset": False,
+            "openaccessmandateforpublications": False,
+            "startdate": "2008-04-01",
+            "subject": ["Oceanography"],
+            "title": "Test title",
+            "websiteurl": "https://test.com",
+        }
+    )
 
 
 @pytest.fixture(scope="function")
@@ -98,10 +100,9 @@ def expected_from_award_json():
 def expected_from_award_json_ec():
     return {
         "id": "00k4n6c32::129123",
-        "identifiers": [{
-            "identifier": "https://cordis.europa.eu/projects/129123",
-            "scheme": "url"
-        }],
+        "identifiers": [
+            {"identifier": "https://cordis.europa.eu/projects/129123", "scheme": "url"}
+        ],
         "number": "129123",
         "title": {"en": "Test title"},
         "funder": {"id": "00k4n6c32"},
@@ -111,9 +112,7 @@ def expected_from_award_json_ec():
 
 def test_awards_transformer(app, dict_award_entry, expected_from_award_json):
     transformer = OpenAIREProjectTransformer()
-    assert (
-        expected_from_award_json == transformer.apply(dict_award_entry).entry
-    )
+    assert expected_from_award_json == transformer.apply(dict_award_entry).entry
 
 
 def test_awards_service_writer_create(
@@ -131,16 +130,22 @@ def test_awards_service_writer_create(
 
 
 def test_awards_funder_id_not_exist(
-    app, es_clear, example_funder, example_funder_ec,
+    app,
+    es_clear,
+    example_funder,
+    example_funder_ec,
     award_full_data_invalid_id,
 ):
     awards_writer = AwardsServiceWriter("awards", system_identity)
     with pytest.raises(WriterError) as err:
         awards_writer.write(StreamEntry(award_full_data_invalid_id))
-    expected_error = [{
-        'InvalidRelationValue': 'Invalid value {funder_id}.'.format(
-            funder_id=award_full_data_invalid_id.get('funder').get('id'))
-    }]
+    expected_error = [
+        {
+            "InvalidRelationValue": "Invalid value {funder_id}.".format(
+                funder_id=award_full_data_invalid_id.get("funder").get("id")
+            )
+        }
+    ]
 
     assert expected_error in err.value.args
 
@@ -151,10 +156,13 @@ def test_awards_funder_id_not_exist_no_funders(
     awards_writer = AwardsServiceWriter("awards", system_identity)
     with pytest.raises(WriterError) as err:
         awards_writer.write(StreamEntry(award_full_data_invalid_id))
-    expected_error = [{
-        'InvalidRelationValue': 'Invalid value {funder_id}.'.format(
-            funder_id=award_full_data_invalid_id.get('funder').get('id'))
-    }]
+    expected_error = [
+        {
+            "InvalidRelationValue": "Invalid value {funder_id}.".format(
+                funder_id=award_full_data_invalid_id.get("funder").get("id")
+            )
+        }
+    ]
 
     assert expected_error in err.value.args
 
@@ -168,13 +176,8 @@ def test_awards_transformer_ec_functionality(
     expected_from_award_json_ec,
 ):
     transformer = OpenAIREProjectTransformer()
-    assert (
-        expected_from_award_json == transformer.apply(dict_award_entry).entry
-    )
-    assert (
-        expected_from_award_json_ec ==
-        transformer.apply(dict_award_entry_ec).entry
-    )
+    assert expected_from_award_json == transformer.apply(dict_award_entry).entry
+    assert expected_from_award_json_ec == transformer.apply(dict_award_entry_ec).entry
 
 
 def test_awards_service_writer_duplicate(

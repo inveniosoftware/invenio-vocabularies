@@ -28,7 +28,7 @@ from .errors import ReaderError
 class BaseReader(ABC):
     """Base reader."""
 
-    def __init__(self, origin=None, mode='r', *args, **kwargs):
+    def __init__(self, origin=None, mode="r", *args, **kwargs):
         """Constructor.
 
         :param origin: Data source (e.g. filepath).
@@ -88,9 +88,7 @@ class TarReader(BaseReader):
 class SimpleHTTPReader(BaseReader):
     """Simple HTTP Reader."""
 
-    def __init__(
-        self, origin, id=None, ids=None, content_type=None, *args, **kwargs
-    ):
+    def __init__(self, origin, id=None, ids=None, content_type=None, *args, **kwargs):
         """Constructor."""
         assert id or ids
         self._ids = ids if ids else [id]
@@ -156,9 +154,7 @@ class JsonReader(BaseReader):
             else:
                 yield entries  # just one entry
         except JSONDecodeError as err:
-            raise ReaderError(
-                f"Cannot decode JSON file {fp.name}: {str(err)}"
-            )
+            raise ReaderError(f"Cannot decode JSON file {fp.name}: {str(err)}")
 
 
 class JsonLinesReader(BaseReader):
@@ -190,9 +186,7 @@ class GzipReader(BaseReader):
 class CSVReader(BaseReader):
     """Reads a CSV file and returns a dictionary per element."""
 
-    def __init__(
-        self, *args, csv_options=None, as_dict=True, **kwargs
-    ):
+    def __init__(self, *args, csv_options=None, as_dict=True, **kwargs):
         """Constructor."""
         self.csv_options = csv_options or {}
         self.as_dict = as_dict
@@ -221,16 +215,14 @@ class XMLReader(BaseReader):
             for dc in map(cls._etree_to_dict, children):
                 for k, v in dc.items():
                     dd[k].append(v)
-            d = {tree.tag: {k: v[0] if len(v) == 1 else v
-                            for k, v in dd.items()}}
+            d = {tree.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.items()}}
         if tree.attrib:
-            d[tree.tag].update(('@' + k, v)
-                               for k, v in tree.attrib.items())
+            d[tree.tag].update(("@" + k, v) for k, v in tree.attrib.items())
         if tree.text:
             text = tree.text.strip()
             if children or tree.attrib:
                 if text:
-                    d[tree.tag]['#text'] = text
+                    d[tree.tag]["#text"] = text
             else:
                 d[tree.tag] = text
         return d

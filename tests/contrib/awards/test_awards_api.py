@@ -22,9 +22,7 @@ from invenio_vocabularies.contrib.awards.api import Award
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(
-        current_search_client.get, Award.index._name, doc_type="_doc"
-    )
+    return partial(current_search_client.get, Award.index._name, doc_type="_doc")
 
 
 @pytest.fixture()
@@ -59,16 +57,14 @@ def test_award_schema_validation(app, example_award):
         # number must be a string
         {"number": 123},
         # funder must be an object
-        {"funder": 123}
+        {"funder": 123},
     ]
 
     for ex in examples:
         pytest.raises(SchemaValidationError, Award.create, ex)
 
 
-def test_award_indexing(
-    app, example_award, indexer, search_get
-):
+def test_award_indexing(app, example_award, indexer, search_get):
     """Test indexing of an award."""
     # Index document in ES
     assert indexer.index(example_award)["result"] == "created"

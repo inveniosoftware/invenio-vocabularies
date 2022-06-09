@@ -38,20 +38,10 @@ def test_valid_full(appctx, schema):
         "$schema": schema,
         "acronym": "TEST",
         "id": "aff-1",
-        "identifiers": [
-            {"identifier": "03yrm5c26", "scheme": "ror"}
-        ],
+        "identifiers": [{"identifier": "03yrm5c26", "scheme": "ror"}],
         "name": "Test affiliation",
-        "pid": {
-            "pk": 1,
-            "status": "R",
-            "pid_type": "affid",
-            "obj_type": "aff"
-        },
-        "title": {
-            "en": "Test affiliation",
-            "es": "Afiliacion de test"
-        }
+        "pid": {"pk": 1, "status": "R", "pid_type": "affid", "obj_type": "aff"},
+        "title": {"en": "Test affiliation", "es": "Afiliacion de test"},
     }
 
     assert validates(data)
@@ -59,9 +49,7 @@ def test_valid_full(appctx, schema):
 
 def test_valid_empty(appctx, schema):
     # check there are no requirements at JSONSchema level
-    data = {
-        "$schema": schema
-    }
+    data = {"$schema": schema}
 
     assert validates(data)
 
@@ -71,18 +59,12 @@ def test_valid_empty(appctx, schema):
 
 
 def test_fails_acronym(appctx, schema):
-    data = {
-        "$schema": schema,
-        "acronym": 1
-    }
+    data = {"$schema": schema, "acronym": 1}
 
     assert fails(data)
 
 
 def test_fails_name(appctx, schema):
-    data = {
-        "$schema": schema,
-        "name": 1
-    }
+    data = {"$schema": schema, "name": 1}
 
     assert fails(data)

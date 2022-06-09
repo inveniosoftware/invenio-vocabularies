@@ -13,8 +13,8 @@ from alembic import op
 from sqlalchemy.dialects import mysql, postgresql
 
 # revision identifiers, used by Alembic.
-revision = '17c703ce1eb7'
-down_revision = '4a9a4fd235f8'
+revision = "17c703ce1eb7"
+down_revision = "4a9a4fd235f8"
 branch_labels = ()
 depends_on = None
 
@@ -22,37 +22,33 @@ depends_on = None
 def upgrade():
     """Upgrade database."""
     op.create_table(
-        'name_metadata',
+        "name_metadata",
         sa.Column(
-            'created',
-            sa.DateTime().with_variant(mysql.DATETIME(fsp=6), 'mysql'),
-            nullable=False
+            "created",
+            sa.DateTime().with_variant(mysql.DATETIME(fsp=6), "mysql"),
+            nullable=False,
         ),
         sa.Column(
-            'updated',
-            sa.DateTime().with_variant(mysql.DATETIME(fsp=6), 'mysql'),
-            nullable=False
+            "updated",
+            sa.DateTime().with_variant(mysql.DATETIME(fsp=6), "mysql"),
+            nullable=False,
         ),
+        sa.Column("id", sqlalchemy_utils.types.uuid.UUIDType(), nullable=False),
         sa.Column(
-            'id',
-            sqlalchemy_utils.types.uuid.UUIDType(),
-            nullable=False
-        ),
-        sa.Column(
-            'json',
+            "json",
             sa.JSON()
-            .with_variant(sqlalchemy_utils.types.json.JSONType(), 'mysql')
+            .with_variant(sqlalchemy_utils.types.json.JSONType(), "mysql")
             .with_variant(
-                postgresql.JSONB(none_as_null=True, astext_type=sa.Text()),
-                'postgresql')
-            .with_variant(sqlalchemy_utils.types.json.JSONType(), 'sqlite'),
-            nullable=True
+                postgresql.JSONB(none_as_null=True, astext_type=sa.Text()), "postgresql"
+            )
+            .with_variant(sqlalchemy_utils.types.json.JSONType(), "sqlite"),
+            nullable=True,
         ),
-        sa.Column('version_id', sa.Integer(), nullable=False),
-        sa.PrimaryKeyConstraint('id', name=op.f('pk_name_metadata'))
+        sa.Column("version_id", sa.Integer(), nullable=False),
+        sa.PrimaryKeyConstraint("id", name=op.f("pk_name_metadata")),
     )
 
 
 def downgrade():
     """Downgrade database."""
-    op.drop_table('name_metadata')
+    op.drop_table("name_metadata")

@@ -44,14 +44,11 @@ def test_names_invalid(client, h, prefix):
 def test_names_forbidden(client, h, prefix, example_name, name_full_data):
     """Test invalid type."""
     # invalid type
-    res = client.post(
-        f"{prefix}", headers=h, data=json.dumps(name_full_data))
+    res = client.post(f"{prefix}", headers=h, data=json.dumps(name_full_data))
     assert res.status_code == 403
 
     res = client.put(
-        f"{prefix}/{example_name.id}",
-        headers=h,
-        data=json.dumps(name_full_data)
+        f"{prefix}/{example_name.id}", headers=h, data=json.dumps(name_full_data)
     )
     assert res.status_code == 403
 

@@ -32,9 +32,7 @@ class Vocabulary(Record):
         "local://vocabularies/vocabulary-v1.0.0.json",
     )
 
-    index = IndexField(
-        "vocabularies-vocabulary-v1.0.0", search_alias="vocabularies"
-    )
+    index = IndexField("vocabularies-vocabulary-v1.0.0", search_alias="vocabularies")
 
     #: Disable the metadata system field.
     metadata = None
@@ -42,7 +40,7 @@ class Vocabulary(Record):
     type = RelatedModelField(VocabularyType, required=True)
 
     pid = PIDField(
-        'id',
+        "id",
         provider=VocabularyIdProvider,
         context_cls=VocabularyPIDFieldContext,
         create=False,

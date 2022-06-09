@@ -27,12 +27,12 @@ def test_simple_flow(app, service, identity, funder_full_data):
     item = service.create(identity, funder_full_data)
     id_ = item.id
 
-    assert item.id == funder_full_data['id']
+    assert item.id == funder_full_data["id"]
     for k, v in funder_full_data.items():
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read(identity, '01ggx4157')
+    read_item = service.read(identity, "01ggx4157")
 
     assert item.id == read_item.id
     assert item.data == read_item.data
@@ -41,26 +41,25 @@ def test_simple_flow(app, service, identity, funder_full_data):
     Funder.index.refresh()
 
     # Search it
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0] == read_item.data
 
     # Update its country
     data = read_item.data
-    data['country'] = 'New country'
+    data["country"] = "New country"
     update_item = service.update(identity, id_, data)
     assert item.id == update_item.id
-    assert update_item['country'] == 'New country'
+    assert update_item["country"] == "New country"
 
     # Update its title
     data = read_item.data
-    data['title']['en'] = 'New title'
+    data["title"]["en"] = "New title"
     update_item = service.update(identity, id_, data)
     # the pid is not save to the json metadata
     assert not update_item._record.get("pid")
     assert item.id == update_item.id
-    assert update_item['title']['en'] == 'New title'
+    assert update_item["title"]["en"] == "New title"
 
     # Delete it
     assert service.delete(identity, id_)
@@ -75,8 +74,7 @@ def test_simple_flow(app, service, identity, funder_full_data):
     deleted_rec = service.read(identity, id_).to_dict()
     assert set(deleted_rec.keys()) == base_keys
     # - search
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 0
 
     # not-ideal cleanup
@@ -88,15 +86,13 @@ def test_pid_already_registered(
 ):
     """Recreating a record with same id should fail."""
     # example_funder does the first creation
-    pytest.raises(
-        PIDAlreadyExists, service.create, identity, funder_full_data)
+    pytest.raises(PIDAlreadyExists, service.create, identity, funder_full_data)
 
 
 def test_extra_fields(app, service, identity, funder_full_data):
     """Extra fields in data should fail."""
-    funder_full_data['invalid'] = 1
-    pytest.raises(
-        ValidationError, service.create, identity, funder_full_data)
+    funder_full_data["invalid"] = 1
+    pytest.raises(ValidationError, service.create, identity, funder_full_data)
 
 
 def test_indexed_at_query(app, db, service, identity, funder_full_data):
@@ -106,13 +102,9 @@ def test_indexed_at_query(app, db, service, identity, funder_full_data):
     Funder.index.refresh()
 
     # there is previous to before
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {before}]", size=25, page=1)
     assert res.total == 0
 
     # there is previous to now
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {now}]", size=25, page=1)
     assert res.total == 1

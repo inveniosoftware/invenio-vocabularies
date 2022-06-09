@@ -22,8 +22,7 @@ from mock_module.api import Record
 @pytest.fixture()
 def mock_record(app, db, example_record):
     """An example mock record."""
-    return Record.create({}, metadata={
-        'title': 'Test', 'languages': [{'id': 'eng'}]})
+    return Record.create({}, metadata={"title": "Test", "languages": [{"id": "eng"}]})
 
 
 @pytest.fixture()
@@ -38,9 +37,7 @@ def mock_indexer():
 @pytest.fixture()
 def mock_search():
     """Get a search client."""
-    return partial(
-        current_search_client.get, Record.index._name, doc_type="_doc"
-    )
+    return partial(current_search_client.get, Record.index._name, doc_type="_doc")
 
 
 #
@@ -63,19 +60,19 @@ def test_dereferencing(mock_record):
     """Record dereferencing."""
     # Dereference the linked language record
     mock_record.relations.languages.dereference()
-    deferenced_lang_record = mock_record.metadata['languages'][0]
+    deferenced_lang_record = mock_record.metadata["languages"][0]
     # Test that only part of the language record is denormalised.
-    assert sorted(deferenced_lang_record.keys()) == ['@v', 'id', 'title']
+    assert sorted(deferenced_lang_record.keys()) == ["@v", "id", "title"]
 
 
 def test_dumping(mock_record, example_record):
     """Record schema validation."""
     # Create a record linked to a language record.
-    lang = mock_record.dumps()['metadata']['languages'][0]
+    lang = mock_record.dumps()["metadata"]["languages"][0]
     assert lang == {
-        'id': 'eng',
-        'title': {'da': 'Engelsk', 'en': 'English'},
-        '@v': str(example_record.id) + '::' + str(example_record.revision_id),
+        "id": "eng",
+        "title": {"da": "Engelsk", "en": "English"},
+        "@v": str(example_record.id) + "::" + str(example_record.revision_id),
     }
 
 
@@ -93,5 +90,5 @@ def test_indexing(mock_record, mock_indexer, mock_search, example_record):
 
     # Dereferencing also works
     record.relations.languages.dereference()
-    deferenced_lang_record = mock_record.metadata['languages'][0]
-    assert sorted(deferenced_lang_record.keys()) == ['@v', 'id', 'title']
+    deferenced_lang_record = mock_record.metadata["languages"][0]
+    assert sorted(deferenced_lang_record.keys()) == ["@v", "id", "title"]

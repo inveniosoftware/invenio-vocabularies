@@ -34,9 +34,7 @@ def upgrade():
             sa.DateTime().with_variant(mysql.DATETIME(fsp=6), "mysql"),
             nullable=False,
         ),
-        sa.Column(
-            "id", sqlalchemy_utils.types.uuid.UUIDType(), nullable=False
-        ),
+        sa.Column("id", sqlalchemy_utils.types.uuid.UUIDType(), nullable=False),
         sa.Column(
             "json",
             sa.JSON()
@@ -63,9 +61,7 @@ def upgrade():
             sa.DateTime().with_variant(mysql.DATETIME(fsp=6), "mysql"),
             nullable=False,
         ),
-        sa.Column(
-            "id", sqlalchemy_utils.types.uuid.UUIDType(), nullable=False
-        ),
+        sa.Column("id", sqlalchemy_utils.types.uuid.UUIDType(), nullable=False),
         sa.Column(
             "json",
             sa.JSON()
@@ -85,9 +81,7 @@ def upgrade():
         sa.Column("id", sa.String(), nullable=False),
         sa.Column("pid_type", sa.String(), nullable=True),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_vocabularies_types")),
-        sa.UniqueConstraint(
-            "pid_type", name=op.f("uq_vocabularies_types_pid_type")
-        ),
+        sa.UniqueConstraint("pid_type", name=op.f("uq_vocabularies_types_pid_type")),
     )
 
 

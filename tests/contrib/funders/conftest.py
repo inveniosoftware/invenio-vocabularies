@@ -32,18 +32,18 @@ def funder_full_data():
             {
                 "identifier": "grid.9132.9",
                 "scheme": "grid",
-            }
+            },
         ],
         "name": "CERN",
         "title": {
             "en": "European Organization for Nuclear Research",
-            "fr": "Organisation européenne pour la recherche nucléaire"
+            "fr": "Organisation européenne pour la recherche nucléaire",
         },
-        "country": "CH"
+        "country": "CH",
     }
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def service():
     """Funders service object."""
     return current_service_registry.get("funders")

@@ -31,19 +31,15 @@ def test_awards_invalid(client, h, prefix):
     assert res.status_code == 404
 
 
-def test_awards_forbidden(
-    client, h, prefix, example_award, award_full_data
-):
+def test_awards_forbidden(client, h, prefix, example_award, award_full_data):
     """Test invalid type."""
     # invalid type
     award_full_data_too = deepcopy(award_full_data)
     award_full_data_too["pid"] = "other"
-    res = client.post(
-        f"{prefix}", headers=h, data=json.dumps(award_full_data_too))
+    res = client.post(f"{prefix}", headers=h, data=json.dumps(award_full_data_too))
     assert res.status_code == 403
 
-    res = client.put(
-        f"{prefix}/755021", headers=h, data=json.dumps(award_full_data))
+    res = client.put(f"{prefix}/755021", headers=h, data=json.dumps(award_full_data))
     assert res.status_code == 403
 
     res = client.delete(f"{prefix}/755021")
@@ -58,9 +54,7 @@ def test_awards_get(client, example_award, h, prefix):
     assert res.status_code == 200
     assert res.json["id"] == id_
     # Test links
-    assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/awards/755021"
-    }
+    assert res.json["links"] == {"self": "https://127.0.0.1:5000/api/awards/755021"}
 
 
 def test_awards_search(client, example_award, h, prefix):
@@ -94,26 +88,24 @@ def example_awards(service, identity, indexer, example_funder_ec):
             },
             "id": "847507",
             "number": "847507",
-        }, {
+        },
+        {
             "title": {
                 "en": "Palliative care in Parkinson disease",
             },
             "id": "825785",
             "number": "825785",
-            "funder": {
-                "id": example_funder_ec.id
-            },
-        }, {
+            "funder": {"id": example_funder_ec.id},
+        },
+        {
             "title": {
                 "en": "Palliative Show",
             },
             "acronym": "Palliative",
             "id": "000001",
             "number": "000001",
-            "funder": {
-                "name": "Another Funder"
-            },
-        }
+            "funder": {"name": "Another Funder"},
+        },
     ]
 
     awards = []
@@ -152,9 +144,7 @@ def test_awards_suggest_sort(client, h, prefix, example_awards):
     assert res.json["hits"]["hits"][1]["id"] == "825785"
 
 
-def test_awards_faceted_suggest(
-    client, h, prefix, example_funder_ec, example_awards
-):
+def test_awards_faceted_suggest(client, h, prefix, example_funder_ec, example_awards):
     """Test a successful suggest with filtering."""
     # Should show 1 results because of the funder filtering
     res = client.get(
@@ -173,7 +163,7 @@ def test_awards_delete(
     identity,
     service,
     award_full_data,
-    example_funder_ec
+    example_funder_ec,
 ):
     """Test a successful delete."""
     award = service.create(identity, award_full_data)
@@ -198,7 +188,8 @@ def test_awards_update(
     new_title = "updated"
     award_full_data["title"]["en"] = new_title
     res = client_with_credentials.put(
-        f"{prefix}/755021", headers=h, data=json.dumps(award_full_data))
+        f"{prefix}/755021", headers=h, data=json.dumps(award_full_data)
+    )
     assert res.status_code == 200
     assert res.json["id"] == id_  # result_items wraps pid into id
     assert res.json["title"]["en"] == new_title
@@ -209,6 +200,7 @@ def test_awards_create(
 ):
     """Tests a successful creation."""
     res = client_with_credentials.post(
-        f"{prefix}", headers=h, data=json.dumps(award_full_data))
+        f"{prefix}", headers=h, data=json.dumps(award_full_data)
+    )
     assert res.status_code == 201
     assert res.json["id"] == award_full_data["id"]

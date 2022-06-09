@@ -46,16 +46,14 @@ class XMLTransformer(BaseTransformer):
             for dc in map(cls._etree_to_dict, children):
                 for k, v in dc.items():
                     dd[k].append(v)
-            d = {tree.tag: {k: v[0] if len(v) == 1 else v
-                            for k, v in dd.items()}}
+            d = {tree.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.items()}}
         if tree.attrib:
-            d[tree.tag].update(('@' + k, v)
-                               for k, v in tree.attrib.items())
+            d[tree.tag].update(("@" + k, v) for k, v in tree.attrib.items())
         if tree.text:
             text = tree.text.strip()
             if children or tree.attrib:
                 if text:
-                    d[tree.tag]['#text'] = text
+                    d[tree.tag]["#text"] = text
             else:
                 d[tree.tag] = text
         return d

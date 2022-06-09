@@ -27,12 +27,12 @@ class NamesService(record_type.service_cls):
         (i.e. only one name record can have a pair of identifier:scheme).
         """
         es_query = Q(
-            'bool',
+            "bool",
             minimum_should_match=1,
             must=[
-                Q('term', identifiers__identifier=id_),
-                Q('term', identifiers__scheme=id_type),
-            ]
+                Q("term", identifiers__identifier=id_),
+                Q("term", identifiers__scheme=id_type),
+            ],
         )
 
         # max_records = 1, we assume there cannot be duplicates
