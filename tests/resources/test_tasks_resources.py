@@ -49,18 +49,12 @@ class TestWriter(BaseWriter):
         pass
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def app_config(app_config):
     """Mimic an instance's configuration."""
-    app_config["VOCABULARIES_DATASTREAM_READERS"] = {
-        "test": TestReader
-    }
-    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
-        "test": TestTransformer
-    }
-    app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
-        "test": TestWriter
-    }
+    app_config["VOCABULARIES_DATASTREAM_READERS"] = {"test": TestReader}
+    app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {"test": TestTransformer}
+    app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {"test": TestWriter}
 
     return app_config
 
@@ -68,29 +62,20 @@ def app_config(app_config):
 def test_task_creation(app, client_with_credentials, h):
     client = client_with_credentials
     task_config = {
-        "readers": [{
-            "type": "test",
-            "args": {
-                "origin": "somewhere"
-            }
-        }],
+        "readers": [{"type": "test", "args": {"origin": "somewhere"}}],
         "transformers": [{"type": "test"}],
-        "writers": [{"type": "test"}]
+        "writers": [{"type": "test"}],
     }
 
     with patch.object(
-        TestReader, 'read', side_effect=TestReader.read
-    ) as p_read, \
-        patch.object(
-            TestTransformer, 'apply', side_effect=TestTransformer.apply
-    ) as p_apply, \
-        patch.object(
-            TestWriter, 'write', side_effect=TestWriter.write
+        TestReader, "read", side_effect=TestReader.read
+    ) as p_read, patch.object(
+        TestTransformer, "apply", side_effect=TestTransformer.apply
+    ) as p_apply, patch.object(
+        TestWriter, "write", side_effect=TestWriter.write
     ) as p_write:
         resp = client.post(
-            "/vocabularies/tasks",
-            headers=h,
-            data=json.dumps(task_config)
+            "/vocabularies/tasks", headers=h, data=json.dumps(task_config)
         )
         assert resp.status_code == 202
         p_read.assert_called()

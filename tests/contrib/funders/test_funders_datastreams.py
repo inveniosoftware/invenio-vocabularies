@@ -14,65 +14,42 @@ import pytest
 from invenio_access.permissions import system_identity
 
 from invenio_vocabularies.contrib.funders.api import Funder
-from invenio_vocabularies.contrib.funders.datastreams import \
-    FundersServiceWriter, RORTransformer
+from invenio_vocabularies.contrib.funders.datastreams import (
+    FundersServiceWriter,
+    RORTransformer,
+)
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
 
 
 @pytest.fixture(scope="module")
 def dict_ror_entry():
-    return StreamEntry({
-        "id": "https://ror.org/0aaaaaa11",
-        "name": "Funder",
-        "types": [
-            "Facility"
-        ],
-        "links": [
-            "http://test.com"
-        ],
-        "aliases": [],
-        "acronyms": [
-            "FND"
-        ],
-        "status": "active",
-        "wikipedia_url": "https://en.wikipedia.org/wiki/FUNDER_TEST",
-        "labels": [
-            {
-                "label": "Funder",
-                "iso639": "en"
+    return StreamEntry(
+        {
+            "id": "https://ror.org/0aaaaaa11",
+            "name": "Funder",
+            "types": ["Facility"],
+            "links": ["http://test.com"],
+            "aliases": [],
+            "acronyms": ["FND"],
+            "status": "active",
+            "wikipedia_url": "https://en.wikipedia.org/wiki/FUNDER_TEST",
+            "labels": [
+                {"label": "Funder", "iso639": "en"},
+                {"label": "Geldgeber", "iso639": "de"},
+            ],
+            "email_address": None,
+            "ip_addresses": [],
+            "established": 1954,
+            "country": {"country_code": "GR", "country_name": "Greece"},
+            "relationships": [],
+            "external_ids": {
+                "ISNI": {"preferred": None, "all": ["0000 0001 2156 142X"]},
+                "GRID": {"preferred": "grid.9132.9", "all": "grid.9132.9"},
+                "FundRef": {"preferred": "000000000000", "all": []},
             },
-            {
-                "label": "Geldgeber",
-                "iso639": "de"
-            }
-        ],
-        "email_address": None,
-        "ip_addresses": [],
-        "established": 1954,
-        "country": {
-            "country_code": "GR",
-            "country_name": "Greece"
-        },
-        "relationships": [],
-
-        "external_ids": {
-            "ISNI": {
-                "preferred": None,
-                "all": [
-                    "0000 0001 2156 142X"
-                ]
-            },
-            "GRID": {
-                "preferred": "grid.9132.9",
-                "all": "grid.9132.9"
-            },
-            "FundRef": {
-                "preferred": "000000000000",
-                "all": []
-            }
         }
-    })
+    )
 
 
 @pytest.fixture(scope="module")
@@ -83,16 +60,9 @@ def expected_from_ror_json():
         "title": {"en": "Funder", "de": "Geldgeber"},
         "country": "GR",
         "identifiers": [
-            {
-                "scheme": "isni",
-                "identifier": "0000 0001 2156 142X"
-            }, {
-                "scheme": "grid",
-                "identifier": "grid.9132.9"
-            }, {
-                "scheme": "doi",
-                "identifier": "10.13039/000000000000"
-            }
+            {"scheme": "isni", "identifier": "0000 0001 2156 142X"},
+            {"scheme": "grid", "identifier": "grid.9132.9"},
+            {"scheme": "doi", "identifier": "10.13039/000000000000"},
         ],
     }
 

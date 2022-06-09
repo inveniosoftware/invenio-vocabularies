@@ -39,7 +39,7 @@ def test_valid_full(appctx, schema):
         "identifiers": [
             {
                 "identifier": "https://cordis.europa.eu/project/id/755021",
-                "scheme": "url"
+                "scheme": "url",
             }
         ],
         "title": {
@@ -47,10 +47,7 @@ def test_valid_full(appctx, schema):
                 Ultra-rare CFTR Mutations (and beyond)"
         },
         "number": "755021",
-        "funder": {
-            "id": "ria",
-            "name": "Research annd Innovation action"
-        }
+        "funder": {"id": "ria", "name": "Research annd Innovation action"},
     }
 
     assert validates(data)
@@ -58,9 +55,7 @@ def test_valid_full(appctx, schema):
 
 def test_valid_empty(appctx, schema):
     # check there are no requirements at JSONSchema level
-    data = {
-        "$schema": schema
-    }
+    data = {"$schema": schema}
 
     assert validates(data)
 
@@ -70,9 +65,6 @@ def test_valid_empty(appctx, schema):
 
 
 def test_fails_number(appctx, schema):
-    data = {
-        "$schema": schema,
-        "number": 123
-    }
+    data = {"$schema": schema, "number": 123}
 
     assert fails(data)

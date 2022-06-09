@@ -24,7 +24,7 @@ record_type = RecordTypeFactory(
     # Data layer
     pid_field_kwargs={
         "create": False,
-        "provider": PIDProviderFactory.create(pid_type='sub'),
+        "provider": PIDProviderFactory.create(pid_type="sub"),
         "context_cls": BaseVocabularyPIDFieldContext,
     },
     schema_version="1.0.0",
@@ -41,5 +41,5 @@ record_type = RecordTypeFactory(
     service_components=service_components,
     permission_policy_cls=PermissionPolicy,
     # Resource layer
-    endpoint_route='/subjects',
+    endpoint_route="/subjects",
 )

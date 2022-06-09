@@ -86,7 +86,7 @@ class VocabularyPIDFieldContext(BaseVocabularyPIDFieldContext):
         resolver = self.field._resolver_cls(
             pid_type=pid_type,
             object_type=self.field._object_type,
-            getter=self.record_cls.get_record
+            getter=self.record_cls.get_record,
         )
 
         # Resolve
@@ -110,9 +110,9 @@ class VocabularyPIDFieldContext(BaseVocabularyPIDFieldContext):
         """Get the current defined type."""
         # This ensures that when we use Vocabulary.pid.with_type_ctx('...')
         # we cache the pid type to avoid querying the database every time.
-        type_id = getattr(self, '_type_id', None)
+        type_id = getattr(self, "_type_id", None)
         if type_id:
-            pid_type = getattr(self, '_pid_type', None)
+            pid_type = getattr(self, "_pid_type", None)
             if pid_type is None:
                 pid_type = self.get_pid_type(type_id)
                 self._pid_type = pid_type

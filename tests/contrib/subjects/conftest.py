@@ -23,11 +23,11 @@ def subject_full_data():
     return {
         "id": "https://id.nlm.nih.gov/mesh/D000001",
         "scheme": "MeSH",
-        "subject": "Calcimycin"
+        "subject": "Calcimycin",
     }
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def service():
     """Subjects service object."""
     return current_service_registry.get("subjects")

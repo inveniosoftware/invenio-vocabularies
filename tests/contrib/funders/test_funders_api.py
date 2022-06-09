@@ -21,9 +21,7 @@ from invenio_vocabularies.contrib.funders.api import Funder
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(
-        current_search_client.get, Funder.index._name, doc_type="_doc"
-    )
+    return partial(current_search_client.get, Funder.index._name, doc_type="_doc")
 
 
 @pytest.fixture()
@@ -51,16 +49,14 @@ def test_funder_schema_validation(app, example_funder):
         # name must be a string
         {"name": 123},
         # country must be a string
-        {"name": "cern", "country": 123}
+        {"name": "cern", "country": 123},
     ]
 
     for ex in examples:
         pytest.raises(ValidationError, Funder.create, ex)
 
 
-def test_funder_indexing(
-    app, example_funder, indexer, search_get
-):
+def test_funder_indexing(app, example_funder, indexer, search_get):
     """Test indexing of a funder."""
     # Index document in ES
     assert indexer.index(example_funder)["result"] == "created"

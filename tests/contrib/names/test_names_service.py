@@ -20,9 +20,7 @@ from sqlalchemy.exc import IntegrityError
 from invenio_vocabularies.contrib.names.api import Name
 
 
-def test_simple_flow(
-    app, service, identity, name_full_data, example_affiliation
-):
+def test_simple_flow(app, service, identity, name_full_data, example_affiliation):
     """Test a simple vocabulary service flow."""
     # Service
     assert service.id == "names"
@@ -34,8 +32,9 @@ def test_simple_flow(
 
     # add dereferenced values
     expected_data = deepcopy(name_full_data)
-    expected_data["affiliations"][0]["name"] = \
-        "European Organization for Nuclear Research"
+    expected_data["affiliations"][0][
+        "name"
+    ] = "European Organization for Nuclear Research"
 
     for k, v in expected_data.items():
         assert item.data[k] == v
@@ -49,8 +48,7 @@ def test_simple_flow(
     Name.index.refresh()
 
     # Search it
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0] == read_item.data
 
@@ -59,8 +57,8 @@ def test_simple_flow(
     data["given_name"] = "Jane"
     update_item = service.update(identity, id_, data)
     assert item.id == update_item.id
-    assert update_item['given_name'] == 'Jane'
-    assert update_item['name'] == "Doe, Jane"  # automatic update
+    assert update_item["given_name"] == "Jane"
+    assert update_item["name"] == "Doe, Jane"  # automatic update
 
     # Delete it
     assert service.delete(identity, id_)
@@ -78,7 +76,7 @@ def test_simple_flow(
 
 def test_extra_fields(app, service, identity, name_full_data):
     """Extra fields in data should fail."""
-    name_full_data['invalid'] = 1
+    name_full_data["invalid"] = 1
     pytest.raises(ValidationError, service.create, identity, name_full_data)
 
 
@@ -90,20 +88,12 @@ def test_identifier_resolution(
     id_ = item.id
 
     Name.index.refresh()
-    resolved = service.resolve(
-        identity,
-        id_="0000-0001-8135-3489",
-        id_type="orcid"
-    )
+    resolved = service.resolve(identity, id_="0000-0001-8135-3489", id_type="orcid")
     assert resolved.id == id_
 
     # non-existent orcid
     pytest.raises(
-        PIDDoesNotExistError,
-        service.resolve,
-        identity,
-        "0000-0002-5082-6404",
-        "orcid"
+        PIDDoesNotExistError, service.resolve, identity, "0000-0002-5082-6404", "orcid"
     )
 
     # non-existent scheme
@@ -112,23 +102,15 @@ def test_identifier_resolution(
         service.resolve,
         identity,
         "0000-0001-8135-3489",
-        "invalid"
+        "invalid",
     )
 
 
-def test_names_dereferenced(
-    app, es_clear, service, identity, example_affiliation
-):
+def test_names_dereferenced(app, es_clear, service, identity, example_affiliation):
     """Extra fields in data should fail."""
-    expected_aff = {
-        "id": "cern",
-        "name": "European Organization for Nuclear Research"
-    }
+    expected_aff = {"id": "cern", "name": "European Organization for Nuclear Research"}
 
-    name_data = {
-        "name": "Doe, John",
-        "affiliations": [{"id": "cern"}]
-    }
+    name_data = {"name": "Doe, John", "affiliations": [{"id": "cern"}]}
 
     # data is not dereferenced
     assert not name_data["affiliations"][0].get("name")
@@ -143,8 +125,7 @@ def test_names_dereferenced(
     assert read_item["affiliations"][0] == expected_aff
 
     # search it
-    res = service.search(
-        identity, q=f"id:{id_}", size=25, page=1)
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 1
     assert list(res.hits)[0]["affiliations"][0] == expected_aff
 
@@ -158,13 +139,9 @@ def test_indexed_at_query(
     Name.index.refresh()
 
     # there is previous to before
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {before}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {before}]", size=25, page=1)
     assert res.total == 0
 
     # there is previous to now
-    res = service.search(
-        identity, q=f"indexed_at:[* TO {now}]", size=25, page=1
-    )
+    res = service.search(identity, q=f"indexed_at:[* TO {now}]", size=25, page=1)
     assert res.total == 1

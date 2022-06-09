@@ -24,9 +24,7 @@ def prefix():
 
 
 @pytest.fixture()
-def example_affiliation(
-    app, db, es_clear, identity, service, affiliation_full_data
-):
+def example_affiliation(app, db, es_clear, identity, service, affiliation_full_data):
     """Example affiliation."""
     aff = service.create(identity, affiliation_full_data)
     Affiliation.index.refresh()  # Refresh the index
@@ -49,11 +47,13 @@ def test_affiliations_forbidden(
     affiliation_full_data_too = deepcopy(affiliation_full_data)
     affiliation_full_data_too["id"] = "other"
     res = client.post(
-        f"{prefix}", headers=h, data=json.dumps(affiliation_full_data_too))
+        f"{prefix}", headers=h, data=json.dumps(affiliation_full_data_too)
+    )
     assert res.status_code == 403
 
     res = client.put(
-        f"{prefix}/cern", headers=h, data=json.dumps(affiliation_full_data))
+        f"{prefix}/cern", headers=h, data=json.dumps(affiliation_full_data)
+    )
     assert res.status_code == 403
 
     res = client.delete(f"{prefix}/cern")
@@ -68,9 +68,7 @@ def test_affiliations_get(client, example_affiliation, h, prefix):
     assert res.status_code == 200
     assert res.json["id"] == id_
     # Test links
-    assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/affiliations/cern"
-    }
+    assert res.json["links"] == {"self": "https://127.0.0.1:5000/api/affiliations/cern"}
 
 
 def test_affiliations_search(client, example_affiliation, h, prefix):
@@ -91,25 +89,18 @@ def _create_affiliations(service, identity):
             "name": "CERN",
             "title": {
                 "en": "European Organization for Nuclear Research",
-                "fr": "Conseil Européen pour la Recherche Nucléaire"
-            }
+                "fr": "Conseil Européen pour la Recherche Nucléaire",
+            },
         },
-        {
-            "acronym": "OTHER",
-            "id": "other",
-            "name": "OTHER",
-            "title": {
-                "en": "CERN"
-            }
-        },
+        {"acronym": "OTHER", "id": "other", "name": "OTHER", "title": {"en": "CERN"}},
         {
             "acronym": "CERT",
             "id": "cert",
             "name": "CERT",
             "title": {
                 "en": "Computer Emergency Response Team",
-                "fr": "Équipe d'Intervention d'Urgence Informatique"
-            }
+                "fr": "Équipe d'Intervention d'Urgence Informatique",
+            },
         },
         {
             "acronym": "NU",
@@ -117,8 +108,8 @@ def _create_affiliations(service, identity):
             "name": "Northwestern University",
             "title": {
                 "en": "Northwestern University",
-            }
-        }
+            },
+        },
     ]
     for aff in affiliations:
         service.create(identity, aff)

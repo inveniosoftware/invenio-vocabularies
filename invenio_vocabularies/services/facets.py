@@ -19,21 +19,15 @@ from ..proxies import current_service
 
 def lazy_get_label(vocab_item):
     """Lazy evaluation of a localized vocabulary label."""
-    params = {
-        "locale": current_i18n.locale,
-        "default_locale": "en"
-    }
+    params = {"locale": current_i18n.locale, "default_locale": "en"}
 
-    return make_lazy_string(
-        gettext_from_dict, vocab_item, **params)
+    return make_lazy_string(gettext_from_dict, vocab_item, **params)
 
 
 class VocabularyLabels:
     """Fetching of vocabulary labels for facets."""
 
-    def __init__(
-        self, vocabulary, cache=False, service_name=None, id_field="id"
-    ):
+    def __init__(self, vocabulary, cache=False, service_name=None, id_field="id"):
         """Initialize the labels."""
         self.vocabulary = vocabulary
         self.cache = cache
@@ -61,10 +55,12 @@ class VocabularyLabels:
         identity = AnonymousIdentity()
         if not self.cache:
             vocabs = self.service.read_many(
-                identity, type=self.vocabulary, ids=ids, fields=self.fields)
+                identity, type=self.vocabulary, ids=ids, fields=self.fields
+            )
         else:
             vocabs = self.service.read_all(
-                identity, type=self.vocabulary, fields=self.fields)
+                identity, type=self.vocabulary, fields=self.fields
+            )
 
         labels = {}
         vocab_list = list(vocabs.hits)  # the service returns a generator

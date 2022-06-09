@@ -21,20 +21,16 @@ from invenio_vocabularies.datastreams.factories import DataStreamFactory
 def vocabulary_config():
     """Parsed vocabulary configuration."""
     return {
-        "transformers": [
-            {"type": "test"}
-        ],
+        "transformers": [{"type": "test"}],
         "readers": [
             {
                 "type": "test",
                 "args": {
                     "origin": [1, -1],
-                }
+                },
             }
         ],
-        "writers": [
-            {"type": "test"}
-        ]
+        "writers": [{"type": "test"}],
     }
 
 
@@ -57,10 +53,12 @@ def test_base_datastream(app, vocabulary_config):
 
 def test_base_datastream_fail_on_write(app, vocabulary_config):
     custom_config = dict(vocabulary_config)
-    custom_config["writers"].append({
-        "type": "fail",
-        "args": {"fail_on": 2}  # 2 means 1 as entry cuz transformers sums 1
-    })
+    custom_config["writers"].append(
+        {
+            "type": "fail",
+            "args": {"fail_on": 2},  # 2 means 1 as entry cuz transformers sums 1
+        }
+    )
 
     datastream = DataStreamFactory.create(
         readers_config=vocabulary_config["readers"],
@@ -79,7 +77,7 @@ def test_base_datastream_fail_on_write(app, vocabulary_config):
     assert "TestTransformer: Value cannot be negative" in invalid_tr.errors
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def zip_file(json_list):
     """Creates a Zip file with three files inside.
 
@@ -90,7 +88,7 @@ def zip_file(json_list):
 
     def _correct_file(archive, idx):
         correct_file = Path(f"correct_{idx}.json")
-        with open(correct_file, 'w') as file:
+        with open(correct_file, "w") as file:
             json.dump(json_list, file)
         archive.write(correct_file)
         correct_file.unlink()
@@ -99,7 +97,7 @@ def zip_file(json_list):
     with zipfile.ZipFile(file=filename, mode="w") as archive:
         _correct_file(archive, 1)
         errored_file = Path("errored.json")
-        with open(errored_file, 'w') as file:
+        with open(errored_file, "w") as file:
             file.write(  # to dump incorrect json format
                 # missing comma and closing bracket
                 '[{"test": {"inner": "value"}{"test": {"inner": "value"}}]'
@@ -121,13 +119,11 @@ def test_piping_readers(app, zip_file, json_element):
                 "args": {
                     "origin": "reader_test.zip",
                     "regex": ".json$",
-                }
+                },
             },
-            {"type": "json"}
+            {"type": "json"},
         ],
-        "writers": [
-            {"type": "test"}
-        ]
+        "writers": [{"type": "test"}],
     }
 
     datastream = DataStreamFactory.create(

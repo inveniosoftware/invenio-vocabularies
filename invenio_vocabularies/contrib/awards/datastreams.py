@@ -34,26 +34,31 @@ class OpenAIREProjectTransformer(BaseTransformer):
         award = {}
 
         code = record["code"]
-        openaire_funder_prefix = record['id'].split("::")[0].split("|")[1]
+        openaire_funder_prefix = record["id"].split("::")[0].split("|")[1]
         funder_id = awards_openaire_funders_mapping.get(openaire_funder_prefix)
         if funder_id is None:
             raise TransformerError(
-                _("Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
-                  .format(openaire_funder_prefix=openaire_funder_prefix)))
+                _(
+                    "Unknown OpenAIRE funder prefix {openaire_funder_prefix}".format(
+                        openaire_funder_prefix=openaire_funder_prefix
+                    )
+                )
+            )
 
         award["id"] = f"{funder_id}::{code}"
 
         identifiers = []
         if funder_id == awards_ec_ror_id:
-            identifiers.append({
-                "identifier": f"https://cordis.europa.eu/projects/{code}",
-                "scheme": "url"
-            })
+            identifiers.append(
+                {
+                    "identifier": f"https://cordis.europa.eu/projects/{code}",
+                    "scheme": "url",
+                }
+            )
         elif record.get("websiteurl"):
-            identifiers.append({
-                "identifier": record.get("websiteurl"),
-                "scheme": "url"
-            })
+            identifiers.append(
+                {"identifier": record.get("websiteurl"), "scheme": "url"}
+            )
 
         if identifiers:
             award["identifiers"] = identifiers
@@ -86,7 +91,7 @@ DATASTREAM_CONFIG = {
             "args": {
                 "regex": ".json.gz$",
                 "mode": "r",
-            }
+            },
         },
         {"type": "gzip"},
         {"type": "jsonl"},
@@ -94,13 +99,15 @@ DATASTREAM_CONFIG = {
     "transformers": [
         {"type": "openaire-award"},
     ],
-    "writers": [{
-        "type": "awards-service",
-        "args": {
-            "service_or_name": "awards",
-            "identity": system_identity,
+    "writers": [
+        {
+            "type": "awards-service",
+            "args": {
+                "service_or_name": "awards",
+                "identity": system_identity,
+            },
         }
-    }],
+    ],
 }
 """Data Stream configuration.
 

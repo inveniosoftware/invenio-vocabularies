@@ -38,9 +38,7 @@ def test_service_writer_duplicate(lang_type, lang_data, service, identity):
     assert expected_error in err.value.args
 
 
-def test_service_writer_update_existing(
-    lang_type, lang_data, service, identity
-):
+def test_service_writer_update_existing(lang_type, lang_data, service, identity):
     # create vocabulary
     writer = ServiceWriter(service, identity, update=True)
     lang = writer.write(stream_entry=StreamEntry(lang_data))
@@ -56,9 +54,7 @@ def test_service_writer_update_existing(
     assert dict(record, **updated_lang) == record
 
 
-def test_service_writer_update_non_existing(
-    lang_type, lang_data, service, identity
-):
+def test_service_writer_update_non_existing(lang_type, lang_data, service, identity):
     # vocabulary item not created, call update directly
     updated_lang = deepcopy(lang_data)
     updated_lang["description"]["en"] = "Updated english description"
@@ -73,11 +69,8 @@ def test_service_writer_update_non_existing(
 
 
 def test_yaml_writer():
-    filepath = Path('writer_test.yaml')
-    test_output = [
-        {"key_one": [{"inner_one": 1}]},
-        {"key_two": [{"inner_two": "two"}]}
-    ]
+    filepath = Path("writer_test.yaml")
+    test_output = [{"key_one": [{"inner_one": 1}]}, {"key_two": [{"inner_two": "two"}]}]
 
     writer = YamlWriter(filepath=filepath)
     for output in test_output:

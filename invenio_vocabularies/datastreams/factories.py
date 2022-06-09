@@ -67,9 +67,7 @@ class DataStreamFactory:
     """Data streams factory."""
 
     @classmethod
-    def create(
-        cls, readers_config, writers_config, transformers_config=None, **kwargs
-    ):
+    def create(cls, readers_config, writers_config, transformers_config=None, **kwargs):
         """Creates a data stream based on the config."""
         readers = []
         for r_conf in readers_config:
@@ -84,6 +82,4 @@ class DataStreamFactory:
             for t_conf in transformers_config:
                 transformers.append(TransformerFactory.create(t_conf))
 
-        return DataStream(
-            readers=readers, writers=writers, transformers=transformers
-        )
+        return DataStream(readers=readers, writers=writers, transformers=transformers)

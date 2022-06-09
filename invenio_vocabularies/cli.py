@@ -107,7 +107,7 @@ def _output_process(vocabulary, op, success, errored, filtered):
         f"{success} items succeeded\n"
         f"{errored} contained errors\n"
         f"{filtered} were filtered.",
-        fg=color
+        fg=color,
     )
 
 
@@ -157,22 +157,17 @@ def update(vocabulary, filepath=None, origin=None):
 @click.option("-t", "--target", type=click.STRING)
 @click.option("-n", "--num-samples", type=click.INT)
 @with_appcontext
-def convert(
-    vocabulary, filepath=None, origin=None, target=None, num_samples=None
-):
+def convert(vocabulary, filepath=None, origin=None, target=None, num_samples=None):
     """Convert a vocabulary to a new format."""
     if not filepath and (not origin or not target):
         click.secho(
-            "One of --filepath or --origin and --target must be present.",
-            fg="red"
+            "One of --filepath or --origin and --target must be present.", fg="red"
         )
         exit(1)
 
     config = get_config_for_ds(vocabulary, filepath, origin)
     if not filepath:
-        config["writers"] = [
-            {"type": "yaml", "args": {"filepath": target}}
-        ]
+        config["writers"] = [{"type": "yaml", "args": {"filepath": target}}]
 
     success, errored, filtered = _process_vocab(config, num_samples)
     _output_process(vocabulary, "converted", success, errored, filtered)
@@ -184,31 +179,20 @@ def convert(
     "-i",
     "--identifier",
     type=click.STRING,
-    help="Identifier of the vocabulary item to delete."
+    help="Identifier of the vocabulary item to delete.",
 )
-@click.option(
-    "--all",
-    is_flag=True,
-    default=False,
-    help="Not supported yet."
-)
+@click.option("--all", is_flag=True, default=False, help="Not supported yet.")
 @with_appcontext
 def delete(vocabulary, identifier, all):
     """Delete all items or a specific one of the vocabulary."""
     if not id and not all:
-        click.secho(
-            "An identifier or the --all flag must be present.",
-            fg="red"
-        )
+        click.secho("An identifier or the --all flag must be present.", fg="red")
         exit(1)
 
     service = get_service_for_vocabulary(vocabulary)
     if identifier:
         try:
             if service.delete(identifier, system_identity):
-                click.secho(
-                    f"{identifier} deleted from {vocabulary}.",
-                    fg="green"
-                )
+                click.secho(f"{identifier} deleted from {vocabulary}.", fg="green")
         except (PIDDeletedError, PIDDoesNotExistError):
             click.secho(f"PID {identifier} not found.")

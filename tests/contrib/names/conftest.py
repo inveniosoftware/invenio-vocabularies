@@ -18,7 +18,7 @@ from invenio_records_resources.proxies import current_service_registry
 from invenio_vocabularies.contrib.affiliations.api import Affiliation
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def service():
     """Names service object."""
     return current_service_registry.get("names")
@@ -27,10 +27,9 @@ def service():
 @pytest.fixture()
 def example_affiliation(db):
     """Example affiliation."""
-    aff = Affiliation.create({
-        "id": "cern",
-        "name": "European Organization for Nuclear Research"
-    })
+    aff = Affiliation.create(
+        {"id": "cern", "name": "European Organization for Nuclear Research"}
+    )
     Affiliation.pid.create(aff)
     aff.commit()
     db.session.commit()
@@ -45,20 +44,8 @@ def name_full_data():
         "given_name": "John",
         "family_name": "Doe",
         "identifiers": [
-            {
-                "identifier": "0000-0001-8135-3489",
-                "scheme": "orcid"
-            }, {
-                "identifier": "gnd:4079154-3",
-                "scheme": "gnd"
-            }
+            {"identifier": "0000-0001-8135-3489", "scheme": "orcid"},
+            {"identifier": "gnd:4079154-3", "scheme": "gnd"},
         ],
-        "affiliations": [
-            {
-                "id": "cern"
-            },
-            {
-                "name": "CustomORG"
-            }
-        ]
+        "affiliations": [{"id": "cern"}, {"name": "CustomORG"}],
     }

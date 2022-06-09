@@ -12,14 +12,13 @@ from flask import current_app
 from flask_babelex import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
-from invenio_records_resources.services.records.params import \
-    SuggestQueryParser
+from invenio_records_resources.services.records.params import SuggestQueryParser
 from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
 
 affiliation_schemes = LocalProxy(
-     lambda: current_app.config["VOCABULARIES_AFFILIATION_SCHEMES"]
+    lambda: current_app.config["VOCABULARIES_AFFILIATION_SCHEMES"]
 )
 
 
@@ -28,34 +27,34 @@ class AffiliationsSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            'name^100',
-            'acronym^20',
-            'title.*^5',
-            'title.*._2gram',
-            'title.*._3gram',
+            "name^100",
+            "acronym^20",
+            "title.*^5",
+            "title.*._2gram",
+            "title.*._3gram",
         ],
     )
 
-    sort_default = 'bestmatch'
+    sort_default = "bestmatch"
 
-    sort_default_no_query = 'name'
+    sort_default_no_query = "name"
 
     sort_options = {
         "bestmatch": dict(
-            title=_('Best match'),
-            fields=['_score'],  # ES defaults to desc on `_score` field
+            title=_("Best match"),
+            fields=["_score"],  # ES defaults to desc on `_score` field
         ),
         "name": dict(
-            title=_('Name'),
-            fields=['name_sort'],
+            title=_("Name"),
+            fields=["name_sort"],
         ),
         "newest": dict(
-            title=_('Newest'),
-            fields=['-created'],
+            title=_("Newest"),
+            fields=["-created"],
         ),
         "oldest": dict(
-            title=_('Oldest'),
-            fields=['created'],
+            title=_("Oldest"),
+            fields=["created"],
         ),
     }
 

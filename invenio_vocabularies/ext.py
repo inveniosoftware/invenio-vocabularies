@@ -9,17 +9,36 @@
 """Invenio module for managing vocabularies."""
 
 from . import config
-from .contrib.affiliations import AffiliationsResource, \
-    AffiliationsResourceConfig, AffiliationsService, \
-    AffiliationsServiceConfig
-from .contrib.awards import AwardsResource, AwardsResourceConfig, \
-    AwardsService, AwardsServiceConfig
-from .contrib.funders import FundersResource, FundersResourceConfig, \
-    FundersService, FundersServiceConfig
-from .contrib.names import NamesResource, NamesResourceConfig, NamesService, \
-    NamesServiceConfig
-from .contrib.subjects import SubjectsResource, SubjectsResourceConfig, \
-    SubjectsService, SubjectsServiceConfig
+from .contrib.affiliations import (
+    AffiliationsResource,
+    AffiliationsResourceConfig,
+    AffiliationsService,
+    AffiliationsServiceConfig,
+)
+from .contrib.awards import (
+    AwardsResource,
+    AwardsResourceConfig,
+    AwardsService,
+    AwardsServiceConfig,
+)
+from .contrib.funders import (
+    FundersResource,
+    FundersResourceConfig,
+    FundersService,
+    FundersServiceConfig,
+)
+from .contrib.names import (
+    NamesResource,
+    NamesResourceConfig,
+    NamesService,
+    NamesServiceConfig,
+)
+from .contrib.subjects import (
+    SubjectsResource,
+    SubjectsResourceConfig,
+    SubjectsService,
+    SubjectsServiceConfig,
+)
 from .resources.resource import VocabulariesResource
 from .services.service import VocabulariesService
 
@@ -70,15 +89,9 @@ class InvenioVocabularies(object):
         self.awards_service = AwardsService(
             config=service_configs.awards,
         )
-        self.funders_service = FundersService(
-            config=service_configs.funders
-        )
-        self.names_service = NamesService(
-            config=service_configs.names
-        )
-        self.subjects_service = SubjectsService(
-            config=service_configs.subjects
-        )
+        self.funders_service = FundersService(config=service_configs.funders)
+        self.names_service = NamesService(config=service_configs.names)
+        self.subjects_service = SubjectsService(config=service_configs.subjects)
         self.service = VocabulariesService(
             config=app.config["VOCABULARIES_SERVICE_CONFIG"],
         )

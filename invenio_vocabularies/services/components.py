@@ -9,8 +9,7 @@
 """Vocabulary components."""
 
 from flask_babelex import lazy_gettext as _
-from invenio_records_resources.services.records.components import \
-    ServiceComponent
+from invenio_records_resources.services.records.components import ServiceComponent
 from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -21,15 +20,14 @@ class VocabularyTypeComponent(ServiceComponent):
     """Set the record's vocabulary type."""
 
     def _set_type(self, data, record):
-        type_id = data.pop('type', None)
+        type_id = data.pop("type", None)
         if type_id:
             try:
-                record.type = VocabularyType.query.filter_by(
-                    id=type_id['id']).one()
+                record.type = VocabularyType.query.filter_by(id=type_id["id"]).one()
             except NoResultFound:
                 raise ValidationError(
-                    _('The vocabulary type does not exists.'),
-                    field_name='type',
+                    _("The vocabulary type does not exists."),
+                    field_name="type",
                 )
 
     def create(self, identity, data=None, record=None, **kwargs):

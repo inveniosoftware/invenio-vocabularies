@@ -31,19 +31,17 @@ def test_funders_invalid(client, h, prefix):
     assert res.status_code == 404
 
 
-def test_funders_forbidden(
-    client, h, prefix, example_funder, funder_full_data
-):
+def test_funders_forbidden(client, h, prefix, example_funder, funder_full_data):
     """Test invalid type."""
     # invalid type
     funder_full_data_too = deepcopy(funder_full_data)
     funder_full_data_too["pid"] = "other"
-    res = client.post(
-        f"{prefix}", headers=h, data=json.dumps(funder_full_data_too))
+    res = client.post(f"{prefix}", headers=h, data=json.dumps(funder_full_data_too))
     assert res.status_code == 403
 
     res = client.put(
-        f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data))
+        f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data)
+    )
     assert res.status_code == 403
 
     res = client.delete(f"{prefix}/01ggx4157")
@@ -58,9 +56,7 @@ def test_funders_get(client, example_funder, h, prefix):
     assert res.status_code == 200
     assert res.json["id"] == id_
     # Test links
-    assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/funders/01ggx4157"
-    }
+    assert res.json["links"] == {"self": "https://127.0.0.1:5000/api/funders/01ggx4157"}
 
 
 def test_funders_search(client, example_funder, h, prefix):
@@ -82,25 +78,18 @@ def example_funders(service, identity, indexer):
             "country": "CH",
             "title": {
                 "en": "European Organization for Nuclear Research",
-                "fr": "Conseil Européen pour la Recherche Nucléaire"
-            }
+                "fr": "Conseil Européen pour la Recherche Nucléaire",
+            },
         },
-        {
-            "id": "0aaaaaa11",
-            "name": "OTHER",
-            "country": "CH",
-            "title": {
-                "en": "CERN"
-            }
-        },
+        {"id": "0aaaaaa11", "name": "OTHER", "country": "CH", "title": {"en": "CERN"}},
         {
             "id": "0aaaaaa22",
             "name": "CERT",
             "country": "CH",
             "title": {
                 "en": "Computer Emergency Response Team",
-                "fr": "Équipe d'Intervention d'Urgence Informatique"
-            }
+                "fr": "Équipe d'Intervention d'Urgence Informatique",
+            },
         },
         {
             "id": "000e0be47",
@@ -108,8 +97,8 @@ def example_funders(service, identity, indexer):
             "country": "US",
             "title": {
                 "en": "Northwestern University",
-            }
-        }
+            },
+        },
     ]
     funders = []
     for data in funders_data:
@@ -166,7 +155,8 @@ def test_funders_update(
     new_name = "updated"
     funder_full_data["name"] = new_name
     res = client_with_credentials.put(
-        f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data))
+        f"{prefix}/01ggx4157", headers=h, data=json.dumps(funder_full_data)
+    )
     assert res.status_code == 200
     assert res.json["id"] == id_  # result_items wraps pid into id
     assert res.json["name"] == new_name
@@ -175,6 +165,7 @@ def test_funders_update(
 def test_funders_create(client_with_credentials, funder_full_data, h, prefix):
     """Tests a successful creation."""
     res = client_with_credentials.post(
-        f"{prefix}", headers=h, data=json.dumps(funder_full_data))
+        f"{prefix}", headers=h, data=json.dumps(funder_full_data)
+    )
     assert res.status_code == 201
     assert res.json["id"] == funder_full_data["id"]

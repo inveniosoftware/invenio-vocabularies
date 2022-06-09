@@ -15,32 +15,32 @@ from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.services.facets import VocabularyLabels
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def example_data():
     """Example data."""
     return [
         {
-            'id': 'eng',
-            'title': {'en': 'English', 'da': 'Engelsk'},
-            'type': 'languages',
+            "id": "eng",
+            "title": {"en": "English", "da": "Engelsk"},
+            "type": "languages",
         },
         {
-            'id': 'spa',
-            'title': {'en': 'Spanish', 'da': 'Spansk'},
-            'type': 'languages',
+            "id": "spa",
+            "title": {"en": "Spanish", "da": "Spansk"},
+            "type": "languages",
         },
         {
-            'id': 'fra',
-            'title': {'en': 'French', 'da': 'Fransk'},
-            'type': 'languages',
+            "id": "fra",
+            "title": {"en": "French", "da": "Fransk"},
+            "type": "languages",
         },
     ]
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def example_records(database, identity, service, example_data):
     """Create some example records."""
-    service.create_type(identity, 'languages', 'lng')
+    service.create_type(identity, "languages", "lng")
     records = []
     for data in example_data:
         records.append(service.create(identity, data))

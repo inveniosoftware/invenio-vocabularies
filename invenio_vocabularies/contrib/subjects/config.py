@@ -21,34 +21,34 @@ class SubjectsSearchOptions(SearchOptions):
     """Search options."""
 
     suggest_parser_cls = FilteredSuggestQueryParser.factory(
-        filter_field='scheme',
+        filter_field="scheme",
         fields=[  # suggest fields
-            'subject^100',
-            'subject._2gram',
-            'subject._3gram',
+            "subject^100",
+            "subject._2gram",
+            "subject._3gram",
         ],
     )
 
-    sort_default = 'bestmatch'
+    sort_default = "bestmatch"
 
-    sort_default_no_query = 'subject'
+    sort_default_no_query = "subject"
 
     sort_options = {
         "bestmatch": dict(
-            title=_('Best match'),
-            fields=['_score'],  # ES defaults to desc on `_score` field
+            title=_("Best match"),
+            fields=["_score"],  # ES defaults to desc on `_score` field
         ),
         "subject": dict(
-            title=_('Name'),
-            fields=['subject_sort'],
+            title=_("Name"),
+            fields=["subject_sort"],
         ),
         "newest": dict(
-            title=_('Newest'),
-            fields=['-created'],
+            title=_("Newest"),
+            fields=["-created"],
         ),
         "oldest": dict(
-            title=_('Oldest'),
-            fields=['created'],
+            title=_("Oldest"),
+            fields=["created"],
         ),
     }
 

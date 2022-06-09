@@ -37,12 +37,7 @@ def test_valid_full(appctx, schema):
     data = {
         "$schema": schema,
         "id": "https://id.nlm.nih.gov/mesh/D000001",
-        "pid": {
-            "pk": 1,
-            "status": "R",
-            "pid_type": "subid",
-            "obj_type": "sub"
-        },
+        "pid": {"pk": 1, "status": "R", "pid_type": "subid", "obj_type": "sub"},
         "scheme": "MeSH",
         "subject": "Calcimycin",
     }
@@ -52,26 +47,18 @@ def test_valid_full(appctx, schema):
 
 def test_valid_empty(appctx, schema):
     # check there are no requirements at JSONSchema level
-    data = {
-        "$schema": schema
-    }
+    data = {"$schema": schema}
 
     assert validates(data)
 
 
 def test_fails_scheme(appctx, schema):
-    data = {
-        "$schema": schema,
-        "scheme": 1
-    }
+    data = {"$schema": schema, "scheme": 1}
 
     assert fails(data)
 
 
 def test_fails_name(appctx, schema):
-    data = {
-        "$schema": schema,
-        "subject": 1
-    }
+    data = {"$schema": schema, "subject": 1}
 
     assert fails(data)

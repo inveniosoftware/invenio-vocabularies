@@ -13,8 +13,10 @@ from copy import copy
 import pytest
 from marshmallow import ValidationError
 
-from invenio_vocabularies.contrib.subjects.schema import \
-    SubjectRelationSchema, SubjectSchema
+from invenio_vocabularies.contrib.subjects.schema import (
+    SubjectRelationSchema,
+    SubjectSchema,
+)
 
 
 def test_valid_full(subject_full_data):
@@ -53,9 +55,7 @@ def test_valid_id():
 
 
 def test_valid_subject():
-    valid_subject = {
-        "subject": "Entity One"
-    }
+    valid_subject = {"subject": "Entity One"}
     assert valid_subject == SubjectRelationSchema().load(valid_subject)
 
 

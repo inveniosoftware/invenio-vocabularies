@@ -39,9 +39,7 @@ class BaseWriter(ABC):
 class ServiceWriter(BaseWriter):
     """Writes the entries to an RDM instance using a Service object."""
 
-    def __init__(
-        self, service_or_name, identity, *args, update=False, **kwargs
-    ):
+    def __init__(self, service_or_name, identity, *args, update=False, **kwargs):
         """Constructor.
 
         :param service_or_name: a service instance or a key of the
@@ -70,14 +68,10 @@ class ServiceWriter(BaseWriter):
         entry = stream_entry.entry
         try:
             try:
-                return StreamEntry(
-                    self._service.create(self._identity, entry)
-                )
+                return StreamEntry(self._service.create(self._identity, entry))
             except PIDAlreadyExists:
                 if not self._update:
-                    raise WriterError(
-                        [f"Vocabulary entry already exists: {entry}"]
-                    )
+                    raise WriterError([f"Vocabulary entry already exists: {entry}"])
                 vocab_id = self._entry_id(entry)
                 current = self._resolve(vocab_id)
                 updated = dict(current.to_dict(), **entry)
@@ -106,7 +100,7 @@ class YamlWriter(BaseWriter):
 
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input stream entry using a given service."""
-        with open(self._filepath, 'a') as file:
+        with open(self._filepath, "a") as file:
             # made into array for safer append
             # will always read array (good for reader)
             yaml.safe_dump([stream_entry.entry], file)

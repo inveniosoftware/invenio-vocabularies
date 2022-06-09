@@ -11,8 +11,7 @@
 
 from flask import g
 from flask_resources import resource_requestctx, response_handler, route
-from invenio_records_resources.resources.records.resource import \
-    request_view_args
+from invenio_records_resources.resources.records.resource import request_view_args
 from marshmallow import fields
 
 from .names import record_type
@@ -37,11 +36,7 @@ class NamesResource(record_type.resource_cls):
         routes = self.config.routes
         url_rules = super(NamesResource, self).create_url_rules()
         url_rules += [
-            route(
-                "GET",
-                routes["item-names-resolve"],
-                self.name_resolve_by_id
-            ),
+            route("GET", routes["item-names-resolve"], self.name_resolve_by_id),
         ]
 
         return url_rules

@@ -25,10 +25,10 @@ from .schema import NameSchema
 
 name_relations = RelationsField(
     affiliations=PIDListRelation(
-        'affiliations',
-        keys=['name'],
+        "affiliations",
+        keys=["name"],
         pid_field=Affiliation.pid,
-        cache_key='affiliations',
+        cache_key="affiliations",
     )
 )
 
@@ -38,7 +38,7 @@ record_type = RecordTypeFactory(
     pid_field_kwargs={
         "create": False,
         "provider": PIDProviderFactory.create(
-            pid_type='names', base_cls=RecordIdProviderV2
+            pid_type="names", base_cls=RecordIdProviderV2
         ),
         "context_cls": BaseVocabularyPIDFieldContext,
     },
@@ -47,7 +47,7 @@ record_type = RecordTypeFactory(
     record_relations=name_relations,
     record_dumper=ElasticsearchDumper(
         extensions=[
-            RelationDumperExt('relations'),
+            RelationDumperExt("relations"),
             IndexedAtDumperExt(),
         ]
     ),
@@ -58,5 +58,5 @@ record_type = RecordTypeFactory(
     service_components=service_components,
     permission_policy_cls=PermissionPolicy,
     # Resource layer
-    endpoint_route='/names',
+    endpoint_route="/names",
 )

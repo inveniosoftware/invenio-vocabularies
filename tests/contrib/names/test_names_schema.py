@@ -26,40 +26,29 @@ def test_valid_minimal(app):
     loaded = NameSchema().load(data)
     assert data == loaded
 
-    data = {
-        "family_name": "Doe",
-        "given_name": "John"
-    }
+    data = {"family_name": "Doe", "given_name": "John"}
     loaded = NameSchema().load(data)
-    data["name"] = 'Doe, John'  # it will be calculated and included
+    data["name"] = "Doe, John"  # it will be calculated and included
     assert data == loaded
 
 
 def test_invalid_no_names(app):
     # no name
     invalid = {
-        "identifiers": [
-            {
-                "identifier": "0000-0001-8135-3489",
-                "scheme": "orcid"
-            }
-        ],
-        "affiliations": [
-            {"id": "cern"},
-            {"name": "CustomORG"}
-        ]
+        "identifiers": [{"identifier": "0000-0001-8135-3489", "scheme": "orcid"}],
+        "affiliations": [{"id": "cern"}, {"name": "CustomORG"}],
     }
     with pytest.raises(ValidationError):
         data = NameSchema().load(invalid)
 
     # only given name
-    invalid["given_name"] = "John",
+    invalid["given_name"] = ("John",)
 
     with pytest.raises(ValidationError):
         data = NameSchema().load(invalid)
 
     # only family name
-    invalid["family_name"] = "Doe",
+    invalid["family_name"] = ("Doe",)
     invalid.pop("given_name")
 
     with pytest.raises(ValidationError):

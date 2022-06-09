@@ -40,13 +40,14 @@ class VocabularyIdProvider(BaseProvider):
         :returns: A :class:`VocabularyIdProvider` instance.
         """
         assert record is not None, "Missing or invalid 'record'."
-        assert 'id' in record and \
-            isinstance(record['id'], str), "Missing 'id' key in record."
+        assert "id" in record and isinstance(
+            record["id"], str
+        ), "Missing 'id' key in record."
 
         # Retrieve pid type from type.
         pid_type = record.type.pid_type
         # Retrieve pid value form record.
-        pid_value = record['id']
+        pid_value = record["id"]
 
         # You must assign immediately.
         assert object_uuid
@@ -57,7 +58,7 @@ class VocabularyIdProvider(BaseProvider):
             pid_value=pid_value,
             object_type=object_type,
             object_uuid=object_uuid,
-            status=PIDStatus.REGISTERED
+            status=PIDStatus.REGISTERED,
         )
 
 
@@ -83,11 +84,12 @@ class CustomVocabularyPIDProvider(BaseProvider):
         :returns: A :class:`AffiliationProvider` instance.
         """
         assert record is not None, "Missing or invalid 'record'."
-        assert 'id' in record and \
-            isinstance(record['id'], str), "Missing 'id' key in record."
+        assert "id" in record and isinstance(
+            record["id"], str
+        ), "Missing 'id' key in record."
 
         # Retrieve pid value form record.
-        pid_value = record['id']
+        pid_value = record["id"]
 
         # You must assign immediately.
         assert object_uuid
@@ -98,11 +100,11 @@ class CustomVocabularyPIDProvider(BaseProvider):
             pid_value=pid_value,
             object_type=object_type,
             object_uuid=object_uuid,
-            status=PIDStatus.REGISTERED
+            status=PIDStatus.REGISTERED,
         )
 
 
-class PIDProviderFactory():
+class PIDProviderFactory:
     """Vocabulary PID provider factory."""
 
     @staticmethod
@@ -113,7 +115,5 @@ class PIDProviderFactory():
         }
 
         return type(
-            "CustomVocabularyPIDProvider",
-            (base_cls,),
-            provider_class_attributes
+            "CustomVocabularyPIDProvider", (base_cls,), provider_class_attributes
         )

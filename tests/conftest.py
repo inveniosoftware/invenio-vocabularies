@@ -21,12 +21,14 @@ fixtures are available.
 try:
     # Werkzeug <2.1
     from werkzeug import security
+
     security.safe_str_cmp
 except AttributeError:
     # Werkzeug >=2.1
     import hmac
 
     from werkzeug import security
+
     security.safe_str_cmp = hmac.compare_digest
 
 
@@ -44,7 +46,7 @@ from invenio_cache import current_cache
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
 
-pytest_plugins = ("celery.contrib.pytest", )
+pytest_plugins = ("celery.contrib.pytest",)
 
 
 @pytest.fixture(scope="module")
@@ -57,28 +59,30 @@ def h():
 def extra_entry_points():
     """Extra entry points to load the mock_module features."""
     return {
-        'invenio_db.models': [
-            'mock_module = mock_module.models',
+        "invenio_db.models": [
+            "mock_module = mock_module.models",
         ],
-        'invenio_jsonschemas.schemas': [
-            'mock_module = mock_module.jsonschemas',
+        "invenio_jsonschemas.schemas": [
+            "mock_module = mock_module.jsonschemas",
         ],
-        'invenio_search.mappings': [
-            'records = mock_module.mappings',
-        ]
+        "invenio_search.mappings": [
+            "records = mock_module.mappings",
+        ],
     }
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def app_config(app_config):
     """Mimic an instance's configuration."""
-    app_config["JSONSCHEMAS_HOST"] = 'localhost'
-    app_config["BABEL_DEFAULT_LOCALE"] = 'en'
-    app_config["I18N_LANGUAGES"] = [('da', 'Danish')]
-    app_config['RECORDS_REFRESOLVER_CLS'] = \
-        "invenio_records.resolver.InvenioRefResolver"
-    app_config['RECORDS_REFRESOLVER_STORE'] = \
-        "invenio_jsonschemas.proxies.current_refresolver_store"
+    app_config["JSONSCHEMAS_HOST"] = "localhost"
+    app_config["BABEL_DEFAULT_LOCALE"] = "en"
+    app_config["I18N_LANGUAGES"] = [("da", "Danish")]
+    app_config[
+        "RECORDS_REFRESOLVER_CLS"
+    ] = "invenio_records.resolver.InvenioRefResolver"
+    app_config[
+        "RECORDS_REFRESOLVER_STORE"
+    ] = "invenio_jsonschemas.proxies.current_refresolver_store"
     return app_config
 
 
@@ -97,7 +101,7 @@ def identity_simple():
     return i
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def identity():
     """Simple identity to interact with the service."""
     i = Identity(1)
@@ -107,36 +111,33 @@ def identity():
     return i
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def service(app):
     """Vocabularies service object."""
-    return app.extensions['invenio-vocabularies'].service
+    return app.extensions["invenio-vocabularies"].service
 
 
 @pytest.fixture()
 def lang_type(db):
     """Get a language vocabulary type."""
-    v = VocabularyType.create(id='languages', pid_type='lng')
+    v = VocabularyType.create(id="languages", pid_type="lng")
     db.session.commit()
     return v
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def lang_data():
     """Example data."""
     return {
-        'id': 'eng',
-        'title': {'en': 'English', 'da': 'Engelsk'},
-        'description': {
-            'en': 'English description',
-            'da': 'Engelsk beskrivelse'
+        "id": "eng",
+        "title": {"en": "English", "da": "Engelsk"},
+        "description": {"en": "English description", "da": "Engelsk beskrivelse"},
+        "icon": "file-o",
+        "props": {
+            "akey": "avalue",
         },
-        'icon': 'file-o',
-        'props': {
-            'akey': 'avalue',
-        },
-        'tags': ['recommended'],
-        'type': 'languages',
+        "tags": ["recommended"],
+        "type": "languages",
     }
 
 
@@ -144,7 +145,7 @@ def lang_data():
 def lang_data2(lang_data):
     """Example data for testing invalid cases."""
     data = dict(lang_data)
-    data['id'] = 'new'
+    data["id"] = "new"
     return data
 
 
@@ -159,24 +160,21 @@ def example_record(db, identity, service, example_data):
 
     record = service.create(
         identity=identity,
-        data=dict(
-            **example_data,
-            vocabulary_type_id=vocabulary_type_languages.id
-        ),
+        data=dict(**example_data, vocabulary_type_id=vocabulary_type_languages.id),
     )
 
     Vocabulary.index.refresh()  # Refresh the index
     return record
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def lang_data_many(lang_type, lic_type, lang_data, service, identity):
     """Create many language vocabulary."""
-    lang_ids = ['fr', 'tr', 'gr', 'ger', 'es']
+    lang_ids = ["fr", "tr", "gr", "ger", "es"]
     data = dict(lang_data)
 
     for lang_id in lang_ids:
-        data['id'] = lang_id
+        data["id"] = lang_id
         service.create(identity, data)
     Vocabulary.index.refresh()  # Refresh the index
     return lang_ids
@@ -190,7 +188,7 @@ def user(app, db):
         _user = datastore.create_user(
             email="info@inveniosoftware.org",
             password=hash_password("password"),
-            active=True
+            active=True,
         )
     db.session.commit()
     return _user

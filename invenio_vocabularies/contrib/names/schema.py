@@ -31,28 +31,26 @@ class NameSchema(BaseRecordSchema):
     given_name = SanitizedUnicode()
     family_name = SanitizedUnicode()
     identifiers = IdentifierSet(
-        fields.Nested(partial(
-            IdentifierSchema,
-            # It is intended to allow org schemes to be sent as personal
-            # and viceversa. This is a trade off learnt from running
-            # Zenodo in production.
-            allowed_schemes=names_schemes
-        ))
+        fields.Nested(
+            partial(
+                IdentifierSchema,
+                # It is intended to allow org schemes to be sent as personal
+                # and viceversa. This is a trade off learnt from running
+                # Zenodo in production.
+                allowed_schemes=names_schemes,
+            )
+        )
     )
     affiliations = fields.List(fields.Nested(AffiliationRelationSchema))
 
     @validates_schema
     def validate_names(self, data, **kwargs):
         """Validate names."""
-        can_compose = data.get('family_name') and data.get("given_name")
+        can_compose = data.get("family_name") and data.get("given_name")
         name = data.get("name")
         if not can_compose and not name:
-            messages = [
-                _("name or family_name and given_name must be present.")
-            ]
-            raise ValidationError({
-                "family_name": messages
-            })
+            messages = [_("name or family_name and given_name must be present.")]
+            raise ValidationError({"family_name": messages})
 
     @post_load
     def calculate_name(self, data, **kwargs):

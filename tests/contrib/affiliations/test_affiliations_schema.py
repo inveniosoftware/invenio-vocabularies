@@ -11,8 +11,10 @@
 import pytest
 from marshmallow import ValidationError
 
-from invenio_vocabularies.contrib.affiliations.schema import \
-    AffiliationRelationSchema, AffiliationSchema
+from invenio_vocabularies.contrib.affiliations.schema import (
+    AffiliationRelationSchema,
+    AffiliationSchema,
+)
 
 
 def test_valid_full(app, affiliation_full_data):
@@ -32,13 +34,8 @@ def test_invalid_no_name(app):
     invalid = {
         "acronym": "TEST",
         "id": "aff-1",
-        "identifiers": [
-            {"identifier": "03yrm5c26", "scheme": "ror"}
-        ],
-        "title": {
-            "en": "Test affiliation",
-            "es": "Afiliacion de test"
-        }
+        "identifiers": [{"identifier": "03yrm5c26", "scheme": "ror"}],
+        "title": {"en": "Test affiliation", "es": "Afiliacion de test"},
     }
     with pytest.raises(ValidationError):
         data = AffiliationSchema().load(invalid)
@@ -55,17 +52,12 @@ def test_valid_id():
 
 
 def test_valid_name():
-    valid_name = {
-        "name": "Entity One"
-    }
+    valid_name = {"name": "Entity One"}
     assert valid_name == AffiliationRelationSchema().load(valid_name)
 
 
 def test_valid_both_id_name():
-    valid_id_name = {
-        "id": "test",
-        "name": "Entity One"
-    }
+    valid_id_name = {"id": "test", "name": "Entity One"}
     assert valid_id_name == AffiliationRelationSchema().load(valid_id_name)
 
 
