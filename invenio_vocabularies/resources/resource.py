@@ -8,11 +8,10 @@
 
 """Vocabulary resource."""
 
-from functools import wraps
-
 import marshmallow as ma
 from flask import g
 from flask_resources import (
+    BaseListSchema,
     JSONSerializer,
     MarshmallowJSONSerializer,
     ResponseHandler,
@@ -35,7 +34,7 @@ from invenio_records_resources.resources.records.resource import (
 from invenio_records_resources.resources.records.utils import es_preference
 from marshmallow import fields
 
-from .serializer import VocabularyL10NItemSchema, VocabularyL10NListSchema
+from .serializer import VocabularyL10NItemSchema
 
 
 #
@@ -69,7 +68,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
         "application/vnd.inveniordm.v1+json": ResponseHandler(
             MarshmallowJSONSerializer(
                 schema_cls=VocabularyL10NItemSchema,
-                many_schema_cls=VocabularyL10NListSchema,
+                many_schema_cls=BaseListSchema,
             ),
             headers=etag_headers,
         ),
