@@ -7,3 +7,9 @@
 # details.
 
 """Resources module."""
+from invenio_vocabularies.resources.schema import L10NString, VocabularyL10Schema
+
+__all__ = (
+    "VocabularyL10Schema",
+    "L10NString",
+)

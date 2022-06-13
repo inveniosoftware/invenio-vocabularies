@@ -7,7 +7,12 @@
 # details.
 
 """Vocabulary awards."""
-
+from flask_resources import (
+    BaseListSchema,
+    JSONSerializer,
+    MarshmallowSerializer,
+    ResponseHandler,
+)
 from invenio_db import db
 from invenio_records.dumpers import ElasticsearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
@@ -15,11 +20,13 @@ from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import ModelPIDField, PIDRelation
+from invenio_records_resources.resources.records.headers import etag_headers
 
 from ...services.permissions import PermissionPolicy
 from ..funders.api import Funder
 from .config import AwardsSearchOptions, service_components
 from .schema import AwardSchema
+from .serializer import AwardL10NItemSchema
 
 award_relations = RelationsField(
     funders=PIDRelation(
@@ -60,4 +67,17 @@ record_type = RecordTypeFactory(
     permission_policy_cls=PermissionPolicy,
     # Resource layer
     endpoint_route="/awards",
+    resource_cls_attrs={
+        "response_handlers": {
+            "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
+            "application/vnd.inveniordm.v1+json": ResponseHandler(
+                MarshmallowSerializer(
+                    format_serializer_cls=JSONSerializer,
+                    object_schema_cls=AwardL10NItemSchema,
+                    list_schema_cls=BaseListSchema,
+                ),
+                headers=etag_headers,
+            ),
+        }
+    },
 )

@@ -12,7 +12,8 @@ from functools import partial
 
 from flask import current_app
 from flask_babelex import get_locale
-from marshmallow import Schema, fields
+from flask_resources import BaseListSchema, BaseObjectSchema
+from marshmallow import fields
 from marshmallow_utils.fields import BabelGettextDictField
 
 
@@ -27,7 +28,7 @@ def current_default_locale():
 L10NString = partial(BabelGettextDictField, get_locale, current_default_locale)
 
 
-class VocabularyL10NItemSchema(Schema):
+class VocabularyL10NItemSchema(BaseObjectSchema):
     """Vocabulary serializer schema."""
 
     id = fields.String(dump_only=True)
@@ -36,15 +37,3 @@ class VocabularyL10NItemSchema(Schema):
     props = fields.Dict(dump_only=True)
     icon = fields.String(dump_only=True)
     tags = fields.List(fields.Str(), dump_only=True)
-
-
-class VocabularyL10NListSchema(Schema):
-    """Vocabulary serializer schema."""
-
-    hits = fields.Method("get_hits")
-
-    def get_hits(self, obj_list):
-        """Apply hits transformation."""
-        schema = self.context["schema_cls"]()
-        obj_list["hits"]["hits"] = [schema.dump(h) for h in obj_list["hits"]["hits"]]
-        return obj_list["hits"]
