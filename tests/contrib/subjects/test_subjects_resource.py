@@ -23,7 +23,7 @@ def prefix():
 
 
 @pytest.fixture()
-def example_subject(app, db, es_clear, identity, service, subject_full_data):
+def example_subject(app, db, search_clear, identity, service, subject_full_data):
     """Example subject."""
     subject = service.create(identity, subject_full_data)
     Subject.index.refresh()  # Refresh the index
@@ -80,7 +80,7 @@ def test_search(client, h, prefix, example_subject):
 
 
 @pytest.fixture()
-def example_subjects(app, db, es_clear, identity, service):
+def example_subjects(app, db, search_clear, identity, service):
     subjects = [
         {
             "id": "other-1",

@@ -31,7 +31,7 @@ from invenio_records_resources.resources.records.resource import (
     request_view_args,
     route,
 )
-from invenio_records_resources.resources.records.utils import es_preference
+from invenio_records_resources.resources.records.utils import search_preference
 from marshmallow import fields
 
 from .serializer import VocabularyL10NItemSchema
@@ -99,7 +99,7 @@ class VocabulariesResource(RecordResource):
             identity=g.identity,
             params=resource_requestctx.args,
             type=resource_requestctx.view_args["type"],
-            es_preference=es_preference(),
+            search_preference=search_preference(),
         )
         return hits.to_dict(), 200
 

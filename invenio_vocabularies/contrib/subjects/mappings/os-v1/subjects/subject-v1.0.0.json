@@ -1,0 +1,61 @@
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "$schema": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "created": {
+        "type": "date"
+      },
+      "updated": {
+        "type": "date"
+      },
+      "indexed_at": {
+        "type": "date"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "version_id": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "scheme": {
+        "type": "keyword"
+      },
+      "subject": {
+        "type": "text",
+        "copy_to": "subject_sort",
+        "fields": {
+          "suggest": {
+            "type": "search_as_you_type"
+          }
+        }
+      },
+      "subject_sort": {
+        "type": "keyword"
+      },
+      "pid": {
+        "type": "object",
+        "properties": {
+          "pk": {
+            "type": "integer"
+          },
+          "pid_type": {
+            "type": "keyword"
+          },
+          "obj_type": {
+            "type": "keyword"
+          },
+          "status": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

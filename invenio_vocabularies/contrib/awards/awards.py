@@ -14,7 +14,7 @@ from flask_resources import (
     ResponseHandler,
 )
 from invenio_db import db
-from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import RelationsField
@@ -49,7 +49,7 @@ record_type = RecordTypeFactory(
         # service level when create({}), see records-resources.
         "pid": db.Column(db.String, unique=True),
     },
-    record_dumper=ElasticsearchDumper(
+    record_dumper=SearchDumper(
         model_fields={"pid": ("id", str)},
         extensions=[
             RelationDumperExt("relations"),

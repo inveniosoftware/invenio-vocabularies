@@ -72,7 +72,7 @@ def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
     assert expected_from_ror_json == transformer.apply(dict_ror_entry).entry
 
 
-def test_funders_service_writer_create(app, es_clear, funder_full_data):
+def test_funders_service_writer_create(app, search_clear, funder_full_data):
     writer = FundersServiceWriter()
     funder_rec = writer.write(StreamEntry(funder_full_data))
     funder_dict = funder_rec.entry.to_dict()
@@ -82,7 +82,7 @@ def test_funders_service_writer_create(app, es_clear, funder_full_data):
     funder_rec.entry._record.delete(force=True)
 
 
-def test_funders_service_writer_duplicate(app, es_clear, funder_full_data):
+def test_funders_service_writer_duplicate(app, search_clear, funder_full_data):
     writer = FundersServiceWriter()
     funder_rec = writer.write(stream_entry=StreamEntry(funder_full_data))
     Funder.index.refresh()  # refresh index to make changes live
@@ -97,7 +97,7 @@ def test_funders_service_writer_duplicate(app, es_clear, funder_full_data):
 
 
 def test_funders_service_writer_update_existing(
-    app, es_clear, funder_full_data, service
+    app, search_clear, funder_full_data, service
 ):
     # create vocabulary
     writer = FundersServiceWriter(update=True)
@@ -120,7 +120,7 @@ def test_funders_service_writer_update_existing(
 
 
 def test_funders_service_writer_update_non_existing(
-    app, es_clear, funder_full_data, service
+    app, search_clear, funder_full_data, service
 ):
     # vocabulary item not created, call update directly
     updated_funder = deepcopy(funder_full_data)
