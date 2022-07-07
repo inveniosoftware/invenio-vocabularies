@@ -6,4 +6,4 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Funders Elasticsearch v6 mappings."""
+"""Funders OpenSearch v1 mappings."""

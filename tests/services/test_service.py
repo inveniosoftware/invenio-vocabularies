@@ -152,7 +152,7 @@ def test_read_all_cache(lang_type, lang_data_many, service, identity, cache):
     assert cached is not None
 
 
-def test_read_many(lang_type, lang_data_many, service, identity, es_clear):
+def test_read_many(lang_type, lang_data_many, service, identity, search_clear):
     """read_many method should return all requested languages."""
     ids_ = ["fr", "tr", "es"]
     items = service.read_many(identity, type="languages", ids=ids_, fields=[])

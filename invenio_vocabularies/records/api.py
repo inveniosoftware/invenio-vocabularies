@@ -8,7 +8,7 @@
 
 """Vocabulary data API."""
 
-from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.systemfields import ConstantField, RelatedModelField
 from invenio_records_resources.records.api import Record
@@ -46,7 +46,7 @@ class Vocabulary(Record):
         create=False,
     )
 
-    dumper = ElasticsearchDumper(
+    dumper = SearchDumper(
         extensions=[
             IndexedAtDumperExt(),
         ]

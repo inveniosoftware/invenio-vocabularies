@@ -9,8 +9,6 @@
 
 """Vocabulary service."""
 
-from elasticsearch_dsl.query import Q
-from elasticsearch_dsl.response import Response
 from flask_babelex import lazy_gettext as _
 from invenio_cache import current_cache
 from invenio_db import db
@@ -29,6 +27,7 @@ from invenio_records_resources.services.records.params import (
 )
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
 from invenio_records_resources.services.uow import unit_of_work
+from invenio_search.engine import dsl
 
 from ..records.api import Vocabulary
 from ..records.models import VocabularyType
@@ -128,7 +127,9 @@ class VocabulariesService(RecordService):
         type_ = VocabularyType.create(id=id, pid_type=pid_type)
         return type_
 
-    def search(self, identity, params=None, es_preference=None, type=None, **kwargs):
+    def search(
+        self, identity, params=None, search_preference=None, type=None, **kwargs
+    ):
         """Search for vocabulary entries."""
         self.require_permission(identity, "search")
 
@@ -141,8 +142,8 @@ class VocabulariesService(RecordService):
             "search",
             identity,
             params,
-            es_preference,
-            extra_filter=Q("term", type__id=vocabulary_type.id),
+            search_preference,
+            extra_filter=dsl.Q("term", type__id=vocabulary_type.id),
             **kwargs
         ).execute()
 
@@ -165,16 +166,16 @@ class VocabulariesService(RecordService):
         """Search for records matching the querystring."""
         cache_key = type + "_" + str(extra_filter) + "_" + "-".join(fields)
         results = current_cache.get(cache_key)
-        es_query = Q("match_all")
+        search_query = dsl.Q("match_all")
 
         if not results:
             # If not found, NoResultFound is raised (caught by the resource).
             vocabulary_type = VocabularyType.query.filter_by(id=type).one()
-            vocab_id_filter = Q("term", type__id=vocabulary_type.id)
+            vocab_id_filter = dsl.Q("term", type__id=vocabulary_type.id)
             if extra_filter:
                 vocab_id_filter = vocab_id_filter & extra_filter
             results = self._read_many(
-                identity, es_query, fields, extra_filter=vocab_id_filter, **kwargs
+                identity, search_query, fields, extra_filter=vocab_id_filter, **kwargs
             )
             if cache:
                 # ES DSL Response is not pickable.
@@ -187,25 +188,25 @@ class VocabulariesService(RecordService):
                 record_cls=self.record_cls,
                 search_opts=self.config.search,
                 permission_action="search",
-            ).query(es_query)
+            ).query(search_query)
 
-            results = Response(search, results)
+            results = dsl.response.Response(search, results)
 
         return self.result_list(self, identity, results)
 
     def read_many(self, identity, type, ids, fields=None, **kwargs):
         """Search for records matching the querystring filtered by ids."""
-        es_query = Q("match_all")
+        search_query = dsl.Q("match_all")
         vocabulary_type = VocabularyType.query.filter_by(id=type).one()
-        vocab_id_filter = Q("term", type__id=vocabulary_type.id)
+        vocab_id_filter = dsl.Q("term", type__id=vocabulary_type.id)
         filters = []
 
         for id_ in ids:
-            filters.append(Q("term", **{"id": id_}))
-        filter = Q("bool", minimum_should_match=1, should=filters)
+            filters.append(dsl.Q("term", **{"id": id_}))
+        filter = dsl.Q("bool", minimum_should_match=1, should=filters)
         filter = filter & vocab_id_filter
         results = self._read_many(
-            identity, es_query, fields, extra_filter=filter, **kwargs
+            identity, search_query, fields, extra_filter=filter, **kwargs
         )
 
         return self.result_list(self, identity, results)

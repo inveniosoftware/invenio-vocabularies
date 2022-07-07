@@ -71,7 +71,9 @@ def test_affiliation_schema_validation(app, db, example_affiliation):
         pytest.raises(SchemaValidationError, Affiliation.create, ex)
 
 
-def test_affiliation_indexing(app, db, es, example_affiliation, indexer, search_get):
+def test_affiliation_indexing(
+    app, db, search, example_affiliation, indexer, search_get
+):
     """Test indexing of an affiliation."""
     # Index document in ES
     assert indexer.index(example_affiliation)["result"] == "created"

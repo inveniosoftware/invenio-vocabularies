@@ -66,7 +66,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
 
 
 def test_pid_already_registered(
-    app, db, es_clear, service, identity, affiliation_full_data
+    app, db, search_clear, service, identity, affiliation_full_data
 ):
     """Recreating a record with same id should fail."""
     service.create(identity, affiliation_full_data)

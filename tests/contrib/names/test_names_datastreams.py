@@ -146,7 +146,7 @@ def test_orcid_http_reader(_, bytes_xml_data):
     assert bytes_xml_data == results[0]
 
 
-def test_names_service_writer_create(app, es_clear, name_full_data):
+def test_names_service_writer_create(app, search_clear, name_full_data):
     writer = NamesServiceWriter()
     record = writer.write(StreamEntry(name_full_data))
     record = record.entry.to_dict()
@@ -154,7 +154,7 @@ def test_names_service_writer_create(app, es_clear, name_full_data):
     assert dict(record, **name_full_data) == record
 
 
-def test_names_service_writer_duplicate(app, es_clear, name_full_data):
+def test_names_service_writer_duplicate(app, search_clear, name_full_data):
     writer = NamesServiceWriter()
     _ = writer.write(stream_entry=StreamEntry(name_full_data))
     Name.index.refresh()  # refresh index to make changes live
@@ -165,7 +165,7 @@ def test_names_service_writer_duplicate(app, es_clear, name_full_data):
     assert expected_error in err.value.args
 
 
-def test_names_service_writer_update_existing(app, es_clear, name_full_data):
+def test_names_service_writer_update_existing(app, search_clear, name_full_data):
     # create vocabulary
     writer = NamesServiceWriter(update=True)
     name = writer.write(stream_entry=StreamEntry(name_full_data))
@@ -185,7 +185,7 @@ def test_names_service_writer_update_existing(app, es_clear, name_full_data):
     assert dict(record, **updated_name) == record
 
 
-def test_names_service_writer_update_non_existing(app, es_clear, name_full_data):
+def test_names_service_writer_update_non_existing(app, search_clear, name_full_data):
     # vocabulary item not created, call update directly
     updated_name = deepcopy(name_full_data)
     updated_name["given_name"] = "Pablo"

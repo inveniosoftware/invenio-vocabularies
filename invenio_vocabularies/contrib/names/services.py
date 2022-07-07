@@ -8,9 +8,8 @@
 
 """Names services."""
 
-from elasticsearch_dsl.query import Q
 from invenio_pidstore.errors import PIDDoesNotExistError
-from invenio_records_resources.config import lt_es7
+from invenio_search.engine import dsl
 
 from .names import record_type
 
@@ -26,20 +25,20 @@ class NamesService(record_type.service_cls):
         This method assumes that the are no duplicates in the system
         (i.e. only one name record can have a pair of identifier:scheme).
         """
-        es_query = Q(
+        search_query = dsl.Q(
             "bool",
             minimum_should_match=1,
             must=[
-                Q("term", identifiers__identifier=id_),
-                Q("term", identifiers__scheme=id_type),
+                dsl.Q("term", identifiers__identifier=id_),
+                dsl.Q("term", identifiers__scheme=id_type),
             ],
         )
 
         # max_records = 1, we assume there cannot be duplicates
         # the loading process needs to make sure of that
-        results = self._read_many(identity, es_query, max_records=1)
+        results = self._read_many(identity, search_query, max_records=1)
         # cant use the results_item because it returns dicts intead of records
-        total = results.hits.total if lt_es7 else results.hits.total["value"]
+        total = results.hits.total["value"]
         if total == 0:
             # Not a PID but trated as such
             raise PIDDoesNotExistError(pid_type=id_type, pid_value=id_)

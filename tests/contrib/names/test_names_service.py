@@ -106,7 +106,7 @@ def test_identifier_resolution(
     )
 
 
-def test_names_dereferenced(app, es_clear, service, identity, example_affiliation):
+def test_names_dereferenced(app, search_clear, service, identity, example_affiliation):
     """Extra fields in data should fail."""
     expected_aff = {"id": "cern", "name": "European Organization for Nuclear Research"}
 
