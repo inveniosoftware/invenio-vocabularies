@@ -8,11 +8,13 @@
 """Custom Fields for InvenioRDM."""
 
 from flask import g
+from invenio_vocabularies.resources.serializer import VocabularyL10NItemSchema
 from marshmallow import fields
 
 from invenio_records_resources.services.custom_fields.base import BaseCF
 from invenio_records_resources.records.systemfields import PIDListRelation, PIDRelation
 from ..proxies import current_service
+
 
 class VocabularyCF(BaseCF):
     """Vocabulary custom field.
@@ -49,28 +51,23 @@ class VocabularyCF(BaseCF):
         # This need to `UNKONW=EXCLUDE`
         return fields.Mapping()
 
+    def ui_schema(self):
+        """Marshmallow UI schema for vocabulary custom fields.
+
+        This schema is used in the UIJSONSerializer and controls how the field will be
+        dumped in the UI. It takes responsibility of the localization of strings.
+        """
+        return fields.Nested(VocabularyL10NItemSchema)
+
     def options(self):
         """Retrurn the vocabulary options (items)."""
         # FIXME: should use g.identity? or be pass identity as argument?
         # I prefer the second
         vocabs = current_service.read_all(
-            g.identity,
-            fields=["id", "props", "title", "icon"],
-            type=self.vocabulary_id
+            g.identity, fields=["id", "props", "title", "icon"], type=self.vocabulary_id
         )
-
         options = []
-
         for vocab in vocabs:
-            # FIXME: should return properly title, id, props icon
-            # should serialize in ui (app-rdm/react)
-            options.append(
-                {
-                    "value": vocab["id"],
-                    "text": vocab["title"]["en"],
-                    # "icon": vocab["icon"],
-                    # "props": vocab["props"],
-                }
-            )
+            options.append(VocabularyL10NItemSchema().dump(vocab))
 
         return options
