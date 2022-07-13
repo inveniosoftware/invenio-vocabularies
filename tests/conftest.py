@@ -168,7 +168,7 @@ def example_record(db, identity, service, example_data):
 
 
 @pytest.fixture(scope="function")
-def lang_data_many(lang_type, lic_type, lang_data, service, identity):
+def lang_data_many(lang_type, lang_data, service, identity):
     """Create many language vocabulary."""
     lang_ids = ["fr", "tr", "gr", "ger", "es"]
     data = dict(lang_data)
