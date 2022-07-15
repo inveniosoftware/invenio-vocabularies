@@ -118,7 +118,7 @@ def test_awards_transformer(app, dict_award_entry, expected_from_award_json):
 def test_awards_service_writer_create(
     app, es_clear, example_funder_ec, award_full_data
 ):
-    awards_writer = AwardsServiceWriter("awards", system_identity)
+    awards_writer = AwardsServiceWriter()
     award_rec = awards_writer.write(StreamEntry(award_full_data))
     award_dict = award_rec.entry.to_dict()
 
@@ -136,7 +136,7 @@ def test_awards_funder_id_not_exist(
     example_funder_ec,
     award_full_data_invalid_id,
 ):
-    awards_writer = AwardsServiceWriter("awards", system_identity)
+    awards_writer = AwardsServiceWriter()
     with pytest.raises(WriterError) as err:
         awards_writer.write(StreamEntry(award_full_data_invalid_id))
     expected_error = [
@@ -153,7 +153,7 @@ def test_awards_funder_id_not_exist(
 def test_awards_funder_id_not_exist_no_funders(
     app, es_clear, award_full_data_invalid_id
 ):
-    awards_writer = AwardsServiceWriter("awards", system_identity)
+    awards_writer = AwardsServiceWriter()
     with pytest.raises(WriterError) as err:
         awards_writer.write(StreamEntry(award_full_data_invalid_id))
     expected_error = [
@@ -183,7 +183,7 @@ def test_awards_transformer_ec_functionality(
 def test_awards_service_writer_duplicate(
     app, es_clear, example_funder_ec, award_full_data
 ):
-    writer = AwardsServiceWriter("awards", system_identity)
+    writer = AwardsServiceWriter()
     award_rec = writer.write(stream_entry=StreamEntry(award_full_data))
     Award.index.refresh()  # refresh index to make changes live
     with pytest.raises(WriterError) as err:
@@ -200,7 +200,7 @@ def test_awards_service_writer_update_existing(
     app, es_clear, example_funder_ec, award_full_data, service
 ):
     # create vocabulary
-    writer = AwardsServiceWriter("awards", system_identity, update=True)
+    writer = AwardsServiceWriter(update=True)
     orig_award_rec = writer.write(stream_entry=StreamEntry(award_full_data))
     Award.index.refresh()  # refresh index to make changes live
     # update vocabulary
@@ -227,7 +227,7 @@ def test_awards_service_writer_update_non_existing(
     updated_award = deepcopy(award_full_data)
     updated_award["title"] = {"en": "New Test title"}
     # check changes vocabulary
-    writer = AwardsServiceWriter("awards", system_identity, update=True)
+    writer = AwardsServiceWriter(update=True)
     award_rec = writer.write(stream_entry=StreamEntry(updated_award))
     award_rec = service.read(system_identity, award_rec.entry.id)
     award_dict = award_rec.to_dict()

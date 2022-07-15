@@ -20,6 +20,11 @@ from .config import awards_ec_ror_id, awards_openaire_funders_mapping
 class AwardsServiceWriter(ServiceWriter):
     """Funders service writer."""
 
+    def __init__(self, *args, **kwargs):
+        """Constructor."""
+        service_or_name = kwargs.pop("service_or_name", "awards")
+        super().__init__(service_or_name=service_or_name, *args, **kwargs)
+
     def _entry_id(self, entry):
         """Get the id from an entry."""
         return entry["id"]
@@ -103,7 +108,6 @@ DATASTREAM_CONFIG = {
         {
             "type": "awards-service",
             "args": {
-                "service_or_name": "awards",
                 "identity": system_identity,
             },
         }
