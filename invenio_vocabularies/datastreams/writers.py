@@ -39,7 +39,7 @@ class BaseWriter(ABC):
 class ServiceWriter(BaseWriter):
     """Writes the entries to an RDM instance using a Service object."""
 
-    def __init__(self, service_or_name, identity, *args, update=False, **kwargs):
+    def __init__(self, service_or_name, *args, identity=None, update=False, **kwargs):
         """Constructor.
 
         :param service_or_name: a service instance or a key of the
@@ -51,7 +51,7 @@ class ServiceWriter(BaseWriter):
             service_or_name = current_service_registry.get(service_or_name)
 
         self._service = service_or_name
-        self._identity = system_identity
+        self._identity = identity or system_identity
         self._update = update
 
         super().__init__(*args, **kwargs)

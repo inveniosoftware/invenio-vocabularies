@@ -21,6 +21,11 @@ from .config import funder_fundref_doi_prefix, funder_schemes
 class FundersServiceWriter(ServiceWriter):
     """Funders service writer."""
 
+    def __init__(self, *args, **kwargs):
+        """Constructor."""
+        service_or_name = kwargs.pop("service_or_name", "funders")
+        super().__init__(service_or_name=service_or_name, *args, **kwargs)
+
     def _entry_id(self, entry):
         """Get the id from an entry."""
         return entry["id"]
@@ -102,7 +107,6 @@ DATASTREAM_CONFIG = {
         {
             "type": "funders-service",
             "args": {
-                "service_or_name": "funders",
                 "identity": system_identity,
             },
         }

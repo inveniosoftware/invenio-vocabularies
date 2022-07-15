@@ -20,7 +20,7 @@ from invenio_vocabularies.datastreams.writers import ServiceWriter, YamlWriter
 
 
 def test_service_writer_non_existing(lang_type, lang_data, service, identity):
-    writer = ServiceWriter(service, identity)
+    writer = ServiceWriter(service, identity=identity)
     lang = writer.write(stream_entry=StreamEntry(lang_data))
     record = service.read(identity, ("languages", lang.entry.id))
     record = record.to_dict()
@@ -29,7 +29,7 @@ def test_service_writer_non_existing(lang_type, lang_data, service, identity):
 
 
 def test_service_writer_duplicate(lang_type, lang_data, service, identity):
-    writer = ServiceWriter(service, identity)
+    writer = ServiceWriter(service, identity=identity)
     _ = writer.write(stream_entry=StreamEntry(lang_data))
     with pytest.raises(WriterError) as err:
         writer.write(stream_entry=StreamEntry(lang_data))
@@ -40,7 +40,7 @@ def test_service_writer_duplicate(lang_type, lang_data, service, identity):
 
 def test_service_writer_update_existing(lang_type, lang_data, service, identity):
     # create vocabulary
-    writer = ServiceWriter(service, identity, update=True)
+    writer = ServiceWriter(service, identity=identity, update=True)
     lang = writer.write(stream_entry=StreamEntry(lang_data))
     # update vocabulary
     updated_lang = deepcopy(lang_data)
@@ -60,7 +60,7 @@ def test_service_writer_update_non_existing(lang_type, lang_data, service, ident
     updated_lang["description"]["en"] = "Updated english description"
     updated_lang["tags"].append("updated")
     # check changes vocabulary
-    writer = ServiceWriter(service, identity, update=True)
+    writer = ServiceWriter(service, identity=identity, update=True)
     lang = writer.write(stream_entry=StreamEntry(updated_lang))
     record = service.read(identity, ("languages", lang.entry.id))
     record = record.to_dict()

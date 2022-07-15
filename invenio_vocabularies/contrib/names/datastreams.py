@@ -81,8 +81,9 @@ class NamesServiceWriter(ServiceWriter):
 
     def __init__(self, *args, scheme_id="orcid", **kwargs):
         """Constructor."""
+        service_or_name = kwargs.pop("service_or_name", "names")
+        super().__init__(service_or_name=service_or_name, *args, **kwargs)
         self._scheme_id = scheme_id
-        super().__init__(*args, **kwargs)
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
@@ -147,7 +148,6 @@ DATASTREAM_CONFIG = {
         {
             "type": "names-service",
             "args": {
-                "service_or_name": "names",
                 "identity": system_identity,
             },
         }

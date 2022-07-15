@@ -147,7 +147,7 @@ def test_orcid_http_reader(_, bytes_xml_data):
 
 
 def test_names_service_writer_create(app, es_clear, name_full_data):
-    writer = NamesServiceWriter("names", system_identity)
+    writer = NamesServiceWriter()
     record = writer.write(StreamEntry(name_full_data))
     record = record.entry.to_dict()
 
@@ -155,7 +155,7 @@ def test_names_service_writer_create(app, es_clear, name_full_data):
 
 
 def test_names_service_writer_duplicate(app, es_clear, name_full_data):
-    writer = NamesServiceWriter("names", system_identity)
+    writer = NamesServiceWriter()
     _ = writer.write(stream_entry=StreamEntry(name_full_data))
     Name.index.refresh()  # refresh index to make changes live
     with pytest.raises(WriterError) as err:
@@ -167,7 +167,7 @@ def test_names_service_writer_duplicate(app, es_clear, name_full_data):
 
 def test_names_service_writer_update_existing(app, es_clear, name_full_data):
     # create vocabulary
-    writer = NamesServiceWriter("names", system_identity, update=True)
+    writer = NamesServiceWriter(update=True)
     name = writer.write(stream_entry=StreamEntry(name_full_data))
     Name.index.refresh()  # refresh index to make changes live
     # update vocabulary
@@ -191,7 +191,7 @@ def test_names_service_writer_update_non_existing(app, es_clear, name_full_data)
     updated_name["given_name"] = "Pablo"
     updated_name["family_name"] = "Panero"
     # check changes vocabulary
-    writer = NamesServiceWriter("names", system_identity, update=True)
+    writer = NamesServiceWriter(update=True)
     name = writer.write(stream_entry=StreamEntry(updated_name))
     service = current_service_registry.get("names")
     record = service.read(system_identity, name.entry.id)
