@@ -26,35 +26,23 @@ from .datastreams import DataStreamFactory
 
 def get_config_for_ds(vocabulary, filepath=None, origin=None):
     """Calculates the configuration for a Data Stream."""
+    config = None
     if vocabulary == "names":  # FIXME: turn into a proper factory
         config = deepcopy(names_ds_config)
-        if filepath:
-            with open(filepath) as f:
-                config = yaml.safe_load(f).get(vocabulary)
-        if origin:
-            config["readers"][0]["args"]["origin"] = origin
-
-        return config
-
-    if vocabulary == "funders":
+    elif vocabulary == "funders":
         config = deepcopy(funders_ds_config)
-        if filepath:
-            with open(filepath) as f:
-                config = yaml.safe_load(f).get(vocabulary)
-        if origin:
-            config["readers"][0]["args"]["origin"] = origin
-
-        return config
-
-    if vocabulary == "awards":
+    elif vocabulary == "awards":
         config = deepcopy(awards_ds_config)
+
+    if config:
         if filepath:
             with open(filepath) as f:
                 config = yaml.safe_load(f).get(vocabulary)
         if origin:
+            config["readers"][0].setdefault("args", {})
             config["readers"][0]["args"]["origin"] = origin
 
-        return config
+    return config
 
 
 def get_service_for_vocabulary(vocabulary):
