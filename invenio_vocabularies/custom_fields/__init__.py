@@ -31,8 +31,6 @@ class VocabularyCF(BaseCF):
     @property
     def mapping(self):
         """Return the mapping."""
-        # FIXME: can objects be done with ES objects
-        # deal with compatibility between versions (e.g. keyword changes name)
         _mapping = {
             "type": "object",
             "properties": {
@@ -46,9 +44,6 @@ class VocabularyCF(BaseCF):
 
     def schema(self):
         """Marshmallow schema for vocabulary custom fields."""
-        # FIXME: use common schema
-        # https://github.com/inveniosoftware/invenio-vocabularies/issues/188
-        # This need to `UNKONW=EXCLUDE`
         return fields.Mapping()
 
     def ui_schema(self):
@@ -61,8 +56,6 @@ class VocabularyCF(BaseCF):
 
     def options(self):
         """Retrurn the vocabulary options (items)."""
-        # FIXME: should use g.identity? or be pass identity as argument?
-        # I prefer the second
         vocabs = current_service.read_all(
             g.identity, fields=["id", "props", "title", "icon"], type=self.vocabulary_id
         )
