@@ -13,6 +13,7 @@ from invenio_records_resources.services.custom_fields.base import BaseCF
 from marshmallow import fields
 
 from ..proxies import current_service
+from ..services.schema import VocabularyRelationSchema
 from ..resources.serializer import VocabularyL10NItemSchema
 
 
@@ -42,11 +43,11 @@ class VocabularyCF(BaseCF):
 
         return _mapping
 
-    def schema(self):
+    def field(self):
         """Marshmallow schema for vocabulary custom fields."""
-        return fields.Mapping()
+        return fields.Nested(VocabularyRelationSchema)
 
-    def ui_schema(self):
+    def ui_field(self):
         """Marshmallow UI schema for vocabulary custom fields.
 
         This schema is used in the UIJSONSerializer and controls how the field will be
