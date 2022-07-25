@@ -10,10 +10,9 @@
 """Subjects schema."""
 
 from flask_babelex import lazy_gettext as _
-from marshmallow import Schema, ValidationError, validates_schema
 from marshmallow_utils.fields import SanitizedUnicode
 
-from ...services.schema import BaseVocabularySchema
+from ...services.schema import BaseVocabularySchema, ContribVocabularyRelationSchema
 
 
 class SubjectSchema(BaseVocabularySchema):
@@ -27,23 +26,9 @@ class SubjectSchema(BaseVocabularySchema):
     subject = SanitizedUnicode(required=True)
 
 
-class SubjectRelationSchema(Schema):
+class SubjectRelationSchema(ContribVocabularyRelationSchema):
     """Schema to define an optional subject relation in another schema."""
 
-    id = SanitizedUnicode()
+    ftf_name = "subject"
+    parent_field_name = "subjects"
     subject = SanitizedUnicode()
-
-    @validates_schema
-    def validate_subject(self, data, **kwargs):
-        """Validates that either id either name are present."""
-        id_ = data.get("id")
-        subject = data.get("subject")
-        if id_:
-            data = {"id": id_}
-        elif subject:
-            data = {"subject": subject}
-
-        if not id_ and not subject:
-            raise ValidationError(
-                _("An existing id or a free text subject must be present."), "subjects"
-            )
