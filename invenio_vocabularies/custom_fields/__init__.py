@@ -7,14 +7,14 @@
 
 """Custom Fields for InvenioRDM."""
 
-from flask import g
+from invenio_access.permissions import system_identity
 from invenio_records_resources.records.systemfields import PIDListRelation, PIDRelation
 from invenio_records_resources.services.custom_fields.base import BaseCF
 from marshmallow import fields
 
 from ..proxies import current_service
-from ..services.schema import VocabularyRelationSchema
 from ..resources.serializer import VocabularyL10NItemSchema
+from ..services.schema import VocabularyRelationSchema
 
 
 class VocabularyCF(BaseCF):
@@ -43,10 +43,12 @@ class VocabularyCF(BaseCF):
 
         return _mapping
 
+    @property
     def field(self):
         """Marshmallow schema for vocabulary custom fields."""
         return fields.Nested(VocabularyRelationSchema)
 
+    @property
     def ui_field(self):
         """Marshmallow UI schema for vocabulary custom fields.
 
@@ -58,7 +60,9 @@ class VocabularyCF(BaseCF):
     def options(self):
         """Return UI serialized vocabulary items."""
         vocabs = current_service.read_all(
-            g.identity, fields=["id", "props", "title", "icon"], type=self.vocabulary_id
+            system_identity,
+            fields=["id", "props", "title", "icon"],
+            type=self.vocabulary_id,
         )
         options = []
         for vocab in vocabs:
