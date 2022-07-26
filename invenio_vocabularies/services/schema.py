@@ -62,7 +62,7 @@ class ContribVocabularyRelationSchema(Schema):
     parent_field_name = None
 
     @validates_schema
-    def validate_affiliation(self, data, **kwargs):
+    def validate_relation_schema(self, data, **kwargs):
         """Validates that either id either the free text field are present."""
         id_ = data.get("id")
         free_text = data.get(self.ftf_name)
