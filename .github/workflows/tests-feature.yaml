@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2020 CERN.
-# Copyright (C) 2022 Graz University of Technology.
+# Copyright (C) 2022 CERN.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
-name: CI
+name: Feature development CI
 
 on:
-  push:
-    branches: master
   pull_request:
     branches:
-      - master
-      - "maint-**"
+      - "feature/**"
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: "0 3 * * 6"
@@ -31,23 +27,23 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8] # for efficiency test only one specific python version
         requirements-level: [pypi]
-        db-service: [postgresql10, postgresql13]
+        cache-service: [redis]
+        db-service: [postgresql13]
         search-service: [elasticsearch7]
-        exclude:
-          - python-version: 3.7
-            db-service: postgresql13
-
         include:
+          - db-service: postgresql13
+            DB_EXTRAS: "postgresql"
+
           - search-service: elasticsearch7
             SEARCH_EXTRAS: "elasticsearch7"
 
     env:
+      CACHE: ${{ matrix.cache-service }}
       DB: ${{ matrix.db-service }}
       SEARCH: ${{ matrix.search-service }}
       EXTRAS: tests,${{ matrix.SEARCH_EXTRAS }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -70,7 +66,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+
           pip install -r .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
+          pip install -r requirements-feature.txt # this file is used only when targeting a feature/* branch
           pip install ".[$EXTRAS]"
           pip freeze
           docker --version
