@@ -9,8 +9,8 @@
 """Relations system fields."""
 
 from flask import current_app
-from werkzeug.local import LocalProxy
 from invenio_records.systemfields import RelationsField
+from werkzeug.local import LocalProxy
 
 from ..api import Vocabulary
 
