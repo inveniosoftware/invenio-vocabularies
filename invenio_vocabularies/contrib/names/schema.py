@@ -49,7 +49,11 @@ class NameSchema(BaseRecordSchema):
         can_compose = data.get("family_name") and data.get("given_name")
         name = data.get("name")
         if not can_compose and not name:
-            messages = [_("name or family_name and given_name must be present.")]
+            messages = [
+                _(
+                    "A name or the family name together with the given name must be present."
+                )
+            ]
             raise ValidationError({"family_name": messages})
 
     @post_load
