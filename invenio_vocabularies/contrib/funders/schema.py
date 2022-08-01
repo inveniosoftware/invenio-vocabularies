@@ -69,7 +69,7 @@ class FunderSchema(BaseVocabularySchema):
     )
 
     id = SanitizedUnicode(
-        validate=validate.Length(min=1, error=_("Pid cannot be blank."))
+        validate=validate.Length(min=1, error=_("PID cannot be blank."))
     )
 
     @validates_schema
