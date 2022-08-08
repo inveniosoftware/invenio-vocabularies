@@ -12,7 +12,7 @@ import pytest
 from invenio_records_resources.records.systemfields import PIDListRelation, PIDRelation
 from marshmallow import Schema
 
-from invenio_vocabularies.custom_fields import VocabularyCF
+from invenio_vocabularies.services.custom_fields import VocabularyCF
 
 
 @pytest.fixture(scope="module")
