@@ -12,11 +12,17 @@ from flask import current_app
 from invenio_records.systemfields import RelationsField
 from werkzeug.local import LocalProxy
 
+from invenio_vocabularies.services.custom_fields import VocabularyCF
+
 from ..api import Vocabulary
 
 
 class CustomFieldsRelation(RelationsField):
-    """Relation field to manage custom fields."""
+    """Relation field to manage custom fields.
+
+    Iterates through all configured custom fields and collects the ones
+    defining a relation dependency e.g vocabularies.
+    """
 
     def __init__(self, fields_var):
         """Initialize the field."""
@@ -29,10 +35,10 @@ class CustomFieldsRelation(RelationsField):
 
         relations = {}
         for cf in cfs.values():
-            if cf.relation_cls:
+            if getattr(cf, "relation_cls", None):
                 relations[cf.name] = cf.relation_cls(
-                    f"custom.{cf.name}",
-                    keys=["title", "props", "icon"],
+                    f"custom_fields.{cf.name}",
+                    keys=VocabularyCF.field_keys,
                     pid_field=Vocabulary.pid.with_type_ctx(cf.vocabulary_id),
                     cache_key=cf.vocabulary_id,
                 )

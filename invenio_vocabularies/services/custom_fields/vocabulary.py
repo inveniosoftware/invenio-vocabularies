@@ -12,9 +12,9 @@ from invenio_records_resources.records.systemfields import PIDListRelation, PIDR
 from invenio_records_resources.services.custom_fields.base import BaseCF
 from marshmallow import fields
 
-from ..proxies import current_service
-from ..resources.serializer import VocabularyL10NItemSchema
-from ..services.schema import VocabularyRelationSchema
+from ...proxies import current_service
+from ...resources.serializer import VocabularyL10NItemSchema
+from ...services.schema import VocabularyRelationSchema
 
 
 class VocabularyCF(BaseCF):
@@ -22,6 +22,8 @@ class VocabularyCF(BaseCF):
 
     Supporting common vocabulary structure.
     """
+
+    field_keys = ["id", "props", "title", "icon"]
 
     def __init__(self, name, vocabulary_id, multiple=False):
         """Constructor."""
@@ -61,7 +63,7 @@ class VocabularyCF(BaseCF):
         """Return UI serialized vocabulary items."""
         vocabs = current_service.read_all(
             system_identity,
-            fields=["id", "props", "title", "icon"],
+            fields=self.field_keys,
             type=self.vocabulary_id,
         )
         options = []
