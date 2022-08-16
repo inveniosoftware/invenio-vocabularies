@@ -64,10 +64,10 @@ class VocabularyCF(BaseCF):
         """
         return fields.Nested(VocabularyL10NItemSchema)
 
-    def options(self):
+    def options(self, identity):
         """Return UI serialized vocabulary items."""
         vocabs = current_service.read_all(
-            system_identity,
+            identity,
             fields=self.field_keys,
             type=self.vocabulary_id,
         )
