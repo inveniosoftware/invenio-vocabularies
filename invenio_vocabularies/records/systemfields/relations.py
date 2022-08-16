@@ -31,14 +31,14 @@ class CustomFieldsRelation(RelationsField):
         self._fields = LocalProxy(lambda: self._load_custom_fields_relations())
 
     def _load_custom_fields_relations(self):
-        cfs = current_app.config.get(self._fields_var, {})
+        custom_fields = current_app.config.get(self._fields_var, {})
 
         relations = {}
-        for cf in cfs.values():
+        for cf in custom_fields:
             if getattr(cf, "relation_cls", None):
                 relations[cf.name] = cf.relation_cls(
                     f"custom_fields.{cf.name}",
-                    keys=VocabularyCF.field_keys,
+                    keys=cf.field_keys,
                     pid_field=Vocabulary.pid.with_type_ctx(cf.vocabulary_id),
                     cache_key=cf.vocabulary_id,
                 )

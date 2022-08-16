@@ -24,6 +24,11 @@ class VocabularyCF(BaseCF):
     """
 
     field_keys = ["id", "props", "title", "icon"]
+    """Return field's keys for querying.
+
+    These keys are used to select which information to return from the
+    vocabulary that is queried.
+    """
 
     def __init__(self, name, vocabulary_id, multiple=False):
         """Constructor."""
