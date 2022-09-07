@@ -10,10 +10,7 @@
 
 from flask import current_app
 from invenio_records.systemfields import RelationsField
-from werkzeug.local import LocalProxy
 from werkzeug.utils import cached_property
-
-from invenio_vocabularies.services.custom_fields import VocabularyCF
 
 from ..api import Vocabulary
 
@@ -29,10 +26,9 @@ class CustomFieldsRelation(RelationsField):
         """Initialize the field."""
         super().__init__()
         self._fields_var = fields_var
-        self._fields = LocalProxy(lambda: self._custom_fields_relations)
 
     @cached_property
-    def _custom_fields_relations(self):
+    def _fields(self):
         """Loads custom fields relations from config."""
         custom_fields = current_app.config.get(self._fields_var, {})
 
