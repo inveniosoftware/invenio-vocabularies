@@ -32,3 +32,4 @@ class SubjectRelationSchema(ContribVocabularyRelationSchema):
     ftf_name = "subject"
     parent_field_name = "subjects"
     subject = SanitizedUnicode()
+    scheme = SanitizedUnicode()
