@@ -32,6 +32,7 @@ class SubjectRelationSchema(Schema):
 
     id = SanitizedUnicode()
     subject = SanitizedUnicode()
+    scheme = SanitizedUnicode()
 
     @validates_schema
     def validate_subject(self, data, **kwargs):
