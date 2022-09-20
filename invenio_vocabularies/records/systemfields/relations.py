@@ -35,8 +35,9 @@ class CustomFieldsRelation(RelationsField):
         relations = {}
         for cf in custom_fields:
             if getattr(cf, "relation_cls", None):
-                relations[cf.name] = cf.relation_cls(
-                    f"custom_fields.{cf.name}",
+                rel_name = cf.name.replace(":", "_")  # for namespaces
+                relations[rel_name] = cf.relation_cls(
+                    f"custom_fields.{cf.name}",  # needs : due to ES field name
                     keys=cf.field_keys,
                     pid_field=Vocabulary.pid.with_type_ctx(cf.vocabulary_id),
                     cache_key=cf.vocabulary_id,
