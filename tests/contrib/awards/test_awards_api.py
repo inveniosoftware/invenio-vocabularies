@@ -22,7 +22,7 @@ from invenio_vocabularies.contrib.awards.api import Award
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(current_search_client.get, Award.index._name, doc_type="_doc")
+    return partial(current_search_client.get, Award.index._name)
 
 
 @pytest.fixture()

@@ -31,7 +31,7 @@ def indexer():
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(current_search_client.get, Vocabulary.index._name, doc_type="_doc")
+    return partial(current_search_client.get, Vocabulary.index._name)
 
 
 @pytest.fixture()
