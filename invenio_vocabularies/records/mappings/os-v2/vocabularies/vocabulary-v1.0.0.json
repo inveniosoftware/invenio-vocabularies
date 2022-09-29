@@ -1,0 +1,90 @@
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "$schema": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "created": {
+        "type": "date"
+      },
+      "updated": {
+        "type": "date"
+      },
+      "indexed_at": {
+        "type": "date"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "version_id": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "keyword",
+        "fields": {
+          "text": {
+            "type": "search_as_you_type"
+          }
+        }
+      },
+      "type": {
+        "type": "object",
+        "properties": {
+          "pid_type": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          }
+        }
+      },
+      "pid": {
+        "type": "object",
+        "properties": {
+          "pk": {
+            "type": "integer"
+          },
+          "pid_type": {
+            "type": "keyword"
+          },
+          "obj_type": {
+            "type": "keyword"
+          },
+          "status": {
+            "type": "keyword"
+          }
+        }
+      },
+      "title_sort": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "object",
+        "dynamic": true,
+        "properties": {
+          "en": {
+            "type": "search_as_you_type",
+            "copy_to": "title_sort"
+          }
+        }
+      },
+      "description": {
+        "type": "object",
+        "dynamic": true
+      },
+      "icon": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "tags": {
+        "type": "keyword"
+      },
+      "props": {
+        "type": "object",
+        "dynamic": true
+      }
+    }
+  }
+}
