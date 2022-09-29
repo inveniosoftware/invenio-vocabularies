@@ -37,7 +37,7 @@ def mock_indexer():
 @pytest.fixture()
 def mock_search():
     """Get a search client."""
-    return partial(current_search_client.get, Record.index._name, doc_type="_doc")
+    return partial(current_search_client.get, Record.index._name)
 
 
 #

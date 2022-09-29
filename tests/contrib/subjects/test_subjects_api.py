@@ -21,7 +21,7 @@ from invenio_vocabularies.contrib.subjects.api import Subject
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(current_search_client.get, Subject.index._name, doc_type="_doc")
+    return partial(current_search_client.get, Subject.index._name)
 
 
 @pytest.fixture()
