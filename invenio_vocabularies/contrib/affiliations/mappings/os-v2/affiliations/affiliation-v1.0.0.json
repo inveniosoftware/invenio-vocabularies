@@ -1,5 +1,16 @@
 {
   "mappings": {
+    "dynamic_templates": [
+      {
+        "i18n_title": {
+          "path_match": "title.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "search_as_you_type"
+          }
+        }
+      }
+    ],
     "dynamic": "strict",
     "properties": {
       "$schema": {
@@ -73,12 +84,7 @@
       },
       "title": {
         "type": "object",
-        "dynamic": true,
-        "properties": {
-          "en": {
-            "type": "search_as_you_type"
-          }
-        }
+        "dynamic": true
       }
     }
   }
