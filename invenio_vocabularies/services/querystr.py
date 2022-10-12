@@ -10,8 +10,8 @@
 
 from functools import partial
 
-from elasticsearch_dsl import Q
 from invenio_records_resources.services.records.params import SuggestQueryParser
+from invenio_search.engine import dsl
 
 
 class FilteredSuggestQueryParser(SuggestQueryParser):
@@ -32,7 +32,7 @@ class FilteredSuggestQueryParser(SuggestQueryParser):
         subtype_s, query_str = self.extract_subtype_s(query_str)
         query = super().parse(query_str)
         if subtype_s:
-            query = query & Q("terms", **{self.filter_field: subtype_s})
+            query = query & dsl.Q("terms", **{self.filter_field: subtype_s})
         return query
 
     def extract_subtype_s(self, query_str):

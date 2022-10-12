@@ -50,7 +50,7 @@ def test_record_schema_validation(app, db, lang_type):
         pytest.raises(SchemaValidationError, Vocabulary.create, ex)
 
 
-def test_record_indexing(app, db, es, example_record, indexer, search_get):
+def test_record_indexing(app, db, search, example_record, indexer, search_get):
     """Test indexing of a record."""
     # Index document in ES
     assert indexer.index(example_record)["result"] == "created"

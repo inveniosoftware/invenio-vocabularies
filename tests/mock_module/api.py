@@ -11,7 +11,7 @@
 """Example of a record API."""
 
 from invenio_pidstore.providers.recordid_v2 import RecordIdProviderV2
-from invenio_records.dumpers import ElasticsearchDumper
+from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.relations import RelationDumperExt
 from invenio_records.systemfields import ConstantField, RelationsField
 from invenio_records_resources.records.api import Record as RecordBase
@@ -44,7 +44,7 @@ class Record(RecordBase):
         ),
     )
 
-    dumper = ElasticsearchDumper(
+    dumper = SearchDumper(
         extensions=[
             RelationDumperExt("relations"),
         ]

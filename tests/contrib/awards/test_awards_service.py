@@ -102,7 +102,7 @@ def test_extra_fields(app, service, identity, award_full_data, example_funder):
 
 
 def test_award_dereferenced(
-    app, es_clear, service, identity, award_full_data, example_funder_ec
+    app, search_clear, service, identity, award_full_data, example_funder_ec
 ):
     """Extra fields in data should fail."""
     expected_funder = {

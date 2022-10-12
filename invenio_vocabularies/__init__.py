@@ -10,6 +10,6 @@
 
 from .ext import InvenioVocabularies
 
-__version__ = "0.12.3"
+__version__ = "0.13.2"
 
 __all__ = ("__version__", "InvenioVocabularies")

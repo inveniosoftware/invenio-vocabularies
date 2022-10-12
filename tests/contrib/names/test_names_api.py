@@ -22,7 +22,7 @@ from invenio_vocabularies.contrib.names.api import Name
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(current_search_client.get, Name.index._name, doc_type="_doc")
+    return partial(current_search_client.get, Name.index._name)
 
 
 @pytest.fixture()
@@ -78,7 +78,7 @@ def test_name_schema_validation(app, db, example_name):
     pytest.raises(InvalidRelationValue, invalid_name.commit)
 
 
-def test_name_indexing(app, db, es, example_name, indexer, search_get):
+def test_name_indexing(app, db, search, example_name, indexer, search_get):
     """Test indexing of a name."""
     # Index document in ES
     assert indexer.index(example_name)["result"] == "created"

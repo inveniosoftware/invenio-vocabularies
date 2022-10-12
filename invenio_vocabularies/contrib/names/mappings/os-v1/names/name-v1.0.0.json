@@ -1,0 +1,98 @@
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "$schema": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "created": {
+        "type": "date"
+      },
+      "updated": {
+        "type": "date"
+      },
+      "indexed_at": {
+        "type": "date"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "version_id": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "name_sort": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "text",
+        "copy_to": "name_sort",
+        "fields": {
+          "suggest": {
+            "type": "search_as_you_type"
+          }
+        }
+      },
+      "given_name": {
+        "type": "text"
+      },
+      "family_name": {
+        "type": "text"
+      },
+      "identifiers": {
+        "properties": {
+          "identifier": {
+            "type": "keyword",
+            "fields": {
+              "suggest": {
+                "type": "search_as_you_type"
+              }
+            }
+          },
+          "scheme": {
+            "type": "keyword"
+          }
+        }
+      },
+      "affiliations": {
+        "type": "object",
+        "properties": {
+          "@v": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "keyword",
+            "fields": {
+              "suggest": {
+                "type": "search_as_you_type"
+              }
+            }
+          }
+        }
+      },
+      "pid": {
+        "type": "object",
+        "properties": {
+          "pk": {
+            "type": "integer"
+          },
+          "pid_type": {
+            "type": "keyword"
+          },
+          "obj_type": {
+            "type": "keyword"
+          },
+          "status": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

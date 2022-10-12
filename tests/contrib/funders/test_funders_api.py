@@ -21,7 +21,7 @@ from invenio_vocabularies.contrib.funders.api import Funder
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(current_search_client.get, Funder.index._name, doc_type="_doc")
+    return partial(current_search_client.get, Funder.index._name)
 
 
 @pytest.fixture()

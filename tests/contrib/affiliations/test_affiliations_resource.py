@@ -24,7 +24,9 @@ def prefix():
 
 
 @pytest.fixture()
-def example_affiliation(app, db, es_clear, identity, service, affiliation_full_data):
+def example_affiliation(
+    app, db, search_clear, identity, service, affiliation_full_data
+):
     """Example affiliation."""
     aff = service.create(identity, affiliation_full_data)
     Affiliation.index.refresh()  # Refresh the index
@@ -118,7 +120,7 @@ def _create_affiliations(service, identity):
 
 
 def test_affiliations_suggest_sort(
-    app, db, es_clear, identity, service, client, h, prefix
+    app, db, search_clear, identity, service, client, h, prefix
 ):
     """Test a successful search."""
     _create_affiliations(service, identity)

@@ -25,7 +25,7 @@ def prefix():
 
 @pytest.fixture()
 def example_name(
-    app, db, es_clear, identity, service, name_full_data, example_affiliation
+    app, db, search_clear, identity, service, name_full_data, example_affiliation
 ):
     """Example affiliation."""
     name = service.create(identity, name_full_data)

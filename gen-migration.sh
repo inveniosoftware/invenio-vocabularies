@@ -26,7 +26,7 @@ fi
 parent_id=$1
 message=$2
 
-eval "$(docker-services-cli up --db ${DB:-postgresql} --search ${ES:-elasticsearch} --mq ${CACHE:-redis} --env)"
+eval "$(docker-services-cli up --db ${DB:-postgresql} --search ${ES:-opensearch} --mq ${CACHE:-redis} --env)"
 export INVENIO_SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
 invenio db drop --yes-i-know
 invenio alembic upgrade

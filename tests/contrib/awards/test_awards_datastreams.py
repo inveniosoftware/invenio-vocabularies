@@ -116,7 +116,7 @@ def test_awards_transformer(app, dict_award_entry, expected_from_award_json):
 
 
 def test_awards_service_writer_create(
-    app, es_clear, example_funder_ec, award_full_data
+    app, search_clear, example_funder_ec, award_full_data
 ):
     awards_writer = AwardsServiceWriter()
     award_rec = awards_writer.write(StreamEntry(award_full_data))
@@ -131,7 +131,7 @@ def test_awards_service_writer_create(
 
 def test_awards_funder_id_not_exist(
     app,
-    es_clear,
+    search_clear,
     example_funder,
     example_funder_ec,
     award_full_data_invalid_id,
@@ -151,7 +151,7 @@ def test_awards_funder_id_not_exist(
 
 
 def test_awards_funder_id_not_exist_no_funders(
-    app, es_clear, award_full_data_invalid_id
+    app, search_clear, award_full_data_invalid_id
 ):
     awards_writer = AwardsServiceWriter()
     with pytest.raises(WriterError) as err:
@@ -169,7 +169,7 @@ def test_awards_funder_id_not_exist_no_funders(
 
 def test_awards_transformer_ec_functionality(
     app,
-    es_clear,
+    search_clear,
     dict_award_entry,
     dict_award_entry_ec,
     expected_from_award_json,
@@ -181,7 +181,7 @@ def test_awards_transformer_ec_functionality(
 
 
 def test_awards_service_writer_duplicate(
-    app, es_clear, example_funder_ec, award_full_data
+    app, search_clear, example_funder_ec, award_full_data
 ):
     writer = AwardsServiceWriter()
     award_rec = writer.write(stream_entry=StreamEntry(award_full_data))
@@ -197,7 +197,7 @@ def test_awards_service_writer_duplicate(
 
 
 def test_awards_service_writer_update_existing(
-    app, es_clear, example_funder_ec, award_full_data, service
+    app, search_clear, example_funder_ec, award_full_data, service
 ):
     # create vocabulary
     writer = AwardsServiceWriter(update=True)
@@ -221,7 +221,7 @@ def test_awards_service_writer_update_existing(
 
 
 def test_awards_service_writer_update_non_existing(
-    app, es_clear, example_funder_ec, award_full_data, service
+    app, search_clear, example_funder_ec, award_full_data, service
 ):
     # vocabulary item not created, call update directly
     updated_award = deepcopy(award_full_data)
