@@ -73,7 +73,11 @@ class ContribVocabularyRelationSchema(Schema):
 
         if not id_ and not free_text:
             raise ValidationError(
-                _(f"An existing id or a free text {self.ftf_name} must be present."),
+                _(
+                    "An existing id or a free text {ftf_name} must be present.".format(
+                        ftf_name=self.ftf_name
+                    )
+                ),
                 self.parent_field_name,
             )
 
