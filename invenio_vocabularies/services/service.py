@@ -83,6 +83,7 @@ class VocabulariesServiceConfig(RecordServiceConfig):
     """Vocabulary service configuration."""
 
     service_id = "vocabularies"
+    indexer_queue_name = "vocabularies"
     permission_policy_cls = PermissionPolicy
     record_cls = Vocabulary
     schema = VocabularySchema
