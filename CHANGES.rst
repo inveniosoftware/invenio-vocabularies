@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.0.0 (released 2022-11-04)
+
+- bump invenio-records-resources
+
 Version 0.1.5 (released 2020-12-11)
 
 - Bug fixes in contrib vocabulary
