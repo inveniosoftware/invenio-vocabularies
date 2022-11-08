@@ -6,11 +6,8 @@
 # 
 # Translators:
 # Alizee Pace <alizee.pace@gmail.com>, 2021
-# David Eckhard <dabombeeer@gmail.com>, 2022
-# Mojib Wali <mojib.wali@tugraz.at>, 2022
 # Tibor Simko <tibor.simko@cern.ch>, 2022
-# Hermann Schranzhofer <hermann.schranzhofer@tugraz.at>, 2022
-# chriz_uniba <christina.zeller@uni-bamberg.de>, 2022
+# Jesús Martín <jesusmartin@sallep.net>, 2022
 # 
 #, fuzzy
 msgid ""
@@ -19,14 +16,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2022-10-12 12:27+0000\n"
 "PO-Revision-Date: 2021-07-13 12:40+0000\n"
-"Last-Translator: chriz_uniba <christina.zeller@uni-bamberg.de>, 2022\n"
-"Language-Team: German (https://www.transifex.com/inveniosoftware/teams/23537/de/)\n"
+"Last-Translator: Jesús Martín <jesusmartin@sallep.net>, 2022\n"
+"Language-Team: Spanish (https://www.transifex.com/inveniosoftware/teams/23537/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
-"Language: de\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: invenio_vocabularies/config.py:37
 msgid "GRID"
@@ -62,14 +59,14 @@ msgstr "ORCID"
 #: invenio_vocabularies/contrib/subjects/config.py:38
 #: invenio_vocabularies/services/service.py:64
 msgid "Best match"
-msgstr "Höchste Übereinstimmung"
+msgstr "Mejor coincidencia"
 
 #: invenio_vocabularies/contrib/affiliations/config.py:48
 #: invenio_vocabularies/contrib/funders/config.py:49
 #: invenio_vocabularies/contrib/names/config.py:49
 #: invenio_vocabularies/contrib/subjects/config.py:42
 msgid "Name"
-msgstr "Name"
+msgstr "Nombre"
 
 #: invenio_vocabularies/contrib/affiliations/config.py:52
 #: invenio_vocabularies/contrib/funders/config.py:53
@@ -77,7 +74,7 @@ msgstr "Name"
 #: invenio_vocabularies/contrib/subjects/config.py:46
 #: invenio_vocabularies/services/service.py:72
 msgid "Newest"
-msgstr "Neuester"
+msgstr "El más nuevo"
 
 #: invenio_vocabularies/contrib/affiliations/config.py:56
 #: invenio_vocabularies/contrib/funders/config.py:57
@@ -85,65 +82,67 @@ msgstr "Neuester"
 #: invenio_vocabularies/contrib/subjects/config.py:50
 #: invenio_vocabularies/services/service.py:76
 msgid "Oldest"
-msgstr "Ältester"
+msgstr "El más antiguo"
 
 #: invenio_vocabularies/contrib/awards/config.py:51
 msgid "Funders"
-msgstr "FördermittelgeberInnen"
+msgstr "Financiadores"
 
 #: invenio_vocabularies/contrib/awards/datastreams.py:47
 msgid "Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
 msgstr ""
-"Unbekanntes Präfix für OpenAIRE FördermittelgeberIn {openaire_funder_prefix}"
+"Prefijo de financiador de OpenAIRE desconocido {openaire_funder_prefix}"
 
 #: invenio_vocabularies/contrib/awards/schema.py:46
 msgid "Number cannot be blank."
-msgstr "Nummer darf nicht leer sein."
+msgstr "El número no puede estar en blanco."
 
 #: invenio_vocabularies/contrib/awards/schema.py:53
 #: invenio_vocabularies/contrib/funders/schema.py:57
 msgid "PID cannot be blank."
-msgstr ""
+msgstr "El PID no puede estar en blanco."
 
 #: invenio_vocabularies/contrib/awards/schema.py:61
 #: invenio_vocabularies/contrib/funders/schema.py:65
 msgid "Missing PID."
-msgstr "PID fehlt."
+msgstr "PID perdido."
 
 #: invenio_vocabularies/contrib/awards/schema.py:103
 msgid "An existing id or number/title must be present."
-msgstr "ID (existierend) oder Nummer/Titel darf nicht leer sein."
+msgstr "Debe estar presente un identificador existente o número/título."
 
 #: invenio_vocabularies/contrib/awards/schema.py:120
 msgid "At least award or funder should be present."
-msgstr "Förderprogramm oder FördermittelgeberIn darf nicht leer sein."
+msgstr "Debe estar presente al menos el premio o el financiador."
 
 #: invenio_vocabularies/contrib/funders/datastreams.py:44
 msgid "Id not found in ROR entry."
-msgstr "ID im ROR-Eintrag nicht gefunden."
+msgstr "ID no encontrado en la entrada ROR."
 
 #: invenio_vocabularies/contrib/funders/datastreams.py:48
 msgid "Name not found in ROR entry."
-msgstr "Name im ROR-Eintrag nicht gefunden."
+msgstr "Nombre no encontrado en la entrada ROR."
 
 #: invenio_vocabularies/contrib/funders/schema.py:35
 #: invenio_vocabularies/contrib/funders/schema.py:43
 msgid "Name cannot be blank."
-msgstr "Name darf nicht leer sein."
+msgstr "El nombre no puede estar el blanco"
 
 #: invenio_vocabularies/contrib/names/schema.py:53
 msgid ""
 "A name or the family name together with the given name must be present."
 msgstr ""
+"Debe estar presente un nombre o el apellido junto con el nombre de pila."
 
 #: invenio_vocabularies/services/components.py:29
 msgid "The vocabulary type does not exists."
-msgstr "Der Vokabeltyp ist nicht vorhanden."
+msgstr "El tipo de vocabulario no existe."
 
 #: invenio_vocabularies/services/schema.py:77
 msgid "An existing id or a free text {ftf_name} must be present."
 msgstr ""
+"Debe estar presente un identificador existente o un texto libre {ftf_name}."
 
 #: invenio_vocabularies/services/service.py:68
 msgid "Title"
-msgstr "Titel"
+msgstr "Título"
