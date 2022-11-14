@@ -56,7 +56,9 @@ class VocabularyCF(BaseCF):
     @property
     def field(self):
         """Marshmallow schema for vocabulary custom fields."""
-        return fields.Nested(VocabularyRelationSchema, many=self.multiple)
+        return fields.Nested(
+            VocabularyRelationSchema, many=self.multiple, **self._field_args
+        )
 
     @property
     def ui_field(self):
@@ -65,7 +67,9 @@ class VocabularyCF(BaseCF):
         This schema is used in the UIJSONSerializer and controls how the field will be
         dumped in the UI. It takes responsibility of the localization of strings.
         """
-        return fields.Nested(VocabularyL10NItemSchema, many=self.multiple)
+        return fields.Nested(
+            VocabularyL10NItemSchema, many=self.multiple, **self._field_args
+        )
 
     def options(self, identity):
         """Return UI serialized vocabulary items."""
