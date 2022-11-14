@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.0.2 (released 2022-11-14)
+
+- Fix missing field_args in VocabularyCF
+
 Version 1.0.1 (released 2022-11-14)
 
 - Allow kwargs in VocabularyCF
