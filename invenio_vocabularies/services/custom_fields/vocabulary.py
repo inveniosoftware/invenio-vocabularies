@@ -29,9 +29,11 @@ class VocabularyCF(BaseCF):
     vocabulary that is queried.
     """
 
-    def __init__(self, name, vocabulary_id, multiple=False, dump_options=True):
+    def __init__(
+        self, name, vocabulary_id, multiple=False, dump_options=True, **kwargs
+    ):
         """Constructor."""
-        super().__init__(name)
+        super().__init__(name, **kwargs)
         self.relation_cls = PIDRelation if not multiple else PIDListRelation
         self.vocabulary_id = vocabulary_id
         self.dump_options = dump_options
