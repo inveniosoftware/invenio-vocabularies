@@ -8,9 +8,13 @@
 Changes
 =======
 
+Version 1.0.1 (released 2022-11-14)
+
+- Allow kwargs in VocabularyCF
+
 Version 1.0.0 (released 2022-11-04)
 
-- bump invenio-records-resources
+- Bump invenio-records-resources
 
 Version 0.1.5 (released 2020-12-11)
 
