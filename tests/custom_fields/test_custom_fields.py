@@ -10,7 +10,7 @@
 
 import pytest
 from invenio_records_resources.records.systemfields import PIDListRelation, PIDRelation
-from marshmallow import Schema
+from marshmallow import Schema, ValidationError
 
 from invenio_vocabularies.services.custom_fields import VocabularyCF
 
@@ -101,3 +101,19 @@ def test_options(lang_data_many, identity):
     ]
 
     assert cf.options(identity) == expected_options
+
+
+def test_vocab_field_required():
+    cf = VocabularyCF("test", "test", field_args={"required": True})
+    schema = Schema.from_dict({"test": cf.field})()
+
+    with pytest.raises(ValidationError):
+        schema.load({})
+
+
+def test_vocab_ui_field_required():
+    cf = VocabularyCF("test", "test", field_args={"required": True})
+    schema = Schema.from_dict({"test": cf.ui_field})()
+
+    with pytest.raises(ValidationError):
+        schema.load({})
