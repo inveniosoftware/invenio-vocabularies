@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.0.3 (released 2022-11-25)
+
+- Add i18n translations.
+
 Version 1.0.2 (released 2022-11-14)
 
 - Fix missing field_args in VocabularyCF
