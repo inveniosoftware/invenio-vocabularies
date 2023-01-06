@@ -13,6 +13,7 @@ from invenio_i18n.ext import current_i18n
 from invenio_records_resources.proxies import current_service_registry
 from marshmallow_utils.fields.babel import gettext_from_dict
 from speaklater import make_lazy_string
+from sqlalchemy.exc import NoResultFound
 
 from ..proxies import current_service
 
@@ -53,17 +54,22 @@ class VocabularyLabels:
     def __call__(self, ids):
         """Return the mapping when evaluated."""
         identity = AnonymousIdentity()
-        if not self.cache:
-            vocabs = self.service.read_many(
-                identity, type=self.vocabulary, ids=ids, fields=self.fields
-            )
-        else:
-            vocabs = self.service.read_all(
-                identity, type=self.vocabulary, fields=self.fields
-            )
+        try:
+            if not self.cache:
+                vocabs = self.service.read_many(
+                    identity, type=self.vocabulary, ids=ids, fields=self.fields
+                )
+            else:
+                vocabs = self.service.read_all(
+                    identity, type=self.vocabulary, fields=self.fields
+                )
+            vocab_list = list(vocabs.hits)  # the service returns a generator
+        except NoResultFound:
+            # in the case the vocabulary type does not exist
+            # facets should not fail but be empty
+            vocab_list = []
 
         labels = {}
-        vocab_list = list(vocabs.hits)  # the service returns a generator
         ids = set(ids)
         seen = set()
         for vocab in vocab_list:
