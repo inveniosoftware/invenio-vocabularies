@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,6 +11,7 @@
 from flask_principal import AnonymousIdentity
 from invenio_i18n.ext import current_i18n
 from invenio_records_resources.proxies import current_service_registry
+from invenio_records_resources.services.errors import FacetNotFoundError
 from marshmallow_utils.fields.babel import gettext_from_dict
 from speaklater import make_lazy_string
 from sqlalchemy.exc import NoResultFound
@@ -63,13 +64,11 @@ class VocabularyLabels:
                 vocabs = self.service.read_all(
                     identity, type=self.vocabulary, fields=self.fields
                 )
-            vocab_list = list(vocabs.hits)  # the service returns a generator
         except NoResultFound:
-            # in the case the vocabulary type does not exist
-            # facets should not fail but be empty
-            vocab_list = []
+            raise FacetNotFoundError(self.vocabulary)
 
         labels = {}
+        vocab_list = list(vocabs.hits)  # the service returns a generator
         ids = set(ids)
         seen = set()
         for vocab in vocab_list:
