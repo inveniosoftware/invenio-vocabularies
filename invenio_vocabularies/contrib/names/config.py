@@ -9,7 +9,7 @@
 """Vocabulary names configuration."""
 
 from flask import current_app
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import (
     DataComponent,

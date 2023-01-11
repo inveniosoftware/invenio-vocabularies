@@ -10,7 +10,7 @@
 
 from functools import partial
 
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from marshmallow import (
     ValidationError,
     fields,

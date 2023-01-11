@@ -9,7 +9,7 @@
 
 """Subjects schema."""
 
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from marshmallow_utils.fields import SanitizedUnicode
 
 from ...services.schema import BaseVocabularySchema, ContribVocabularyRelationSchema

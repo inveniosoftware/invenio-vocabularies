@@ -11,8 +11,8 @@
 from functools import partial
 
 from flask import current_app
-from flask_babelex import get_locale
 from flask_resources import BaseListSchema, BaseObjectSchema
+from invenio_i18n import get_locale
 from marshmallow import fields
 from marshmallow_utils.fields import BabelGettextDictField
 

@@ -8,7 +8,7 @@
 
 """Vocabulary components."""
 
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services.records.components import ServiceComponent
 from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound

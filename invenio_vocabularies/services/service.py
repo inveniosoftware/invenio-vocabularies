@@ -9,9 +9,9 @@
 
 """Vocabulary service."""
 
-from flask_babelex import lazy_gettext as _
 from invenio_cache import current_cache
 from invenio_db import db
+from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import (
     Link,
     LinksTemplate,
