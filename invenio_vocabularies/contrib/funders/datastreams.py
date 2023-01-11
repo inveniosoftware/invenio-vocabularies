@@ -55,7 +55,7 @@ class RORTransformer(BaseTransformer):
         for label in record.get("labels", []):
             funder["title"][label["iso639"]] = label["label"]
 
-        """The ROR is always listed in identifiers, expected by serialization"""
+        # The ROR is always listed in identifiers, expected by serialization
         funder["identifiers"] = [{"identifier": funder["id"], "scheme": "ror"}]
         valid_schemes = set(funder_schemes.keys())
         fund_ref = "fundref"
