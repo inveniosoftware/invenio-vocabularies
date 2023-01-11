@@ -60,6 +60,7 @@ def expected_from_ror_json():
         "title": {"en": "Funder", "de": "Geldgeber"},
         "country": "GR",
         "identifiers": [
+            {"scheme": "ror", "identifier": "0aaaaaa11"},
             {"scheme": "isni", "identifier": "0000 0001 2156 142X"},
             {"scheme": "grid", "identifier": "grid.9132.9"},
             {"scheme": "doi", "identifier": "10.13039/000000000000"},
