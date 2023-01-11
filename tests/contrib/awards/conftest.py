@@ -13,7 +13,7 @@ fixtures are available.
 """
 
 import pytest
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from invenio_indexer.proxies import current_indexer_registry
 from invenio_records_resources.proxies import current_service_registry
 

@@ -10,7 +10,7 @@
 """Vocabularies configuration."""
 
 import idutils
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 
 from .datastreams.readers import (
     CSVReader,

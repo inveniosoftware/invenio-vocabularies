@@ -11,7 +11,7 @@
 from functools import partial
 
 from attr import attr
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from marshmallow import (
     Schema,
     ValidationError,

@@ -8,9 +8,9 @@
 
 """Funders datastreams, transformers, writers and readers."""
 
-from flask_babelex import lazy_gettext as _
 from idutils import normalize_ror
 from invenio_access.permissions import system_identity
+from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.errors import TransformerError
 from ...datastreams.transformers import BaseTransformer

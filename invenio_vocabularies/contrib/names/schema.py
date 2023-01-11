@@ -10,7 +10,7 @@
 
 from functools import partial
 
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services.records.schema import BaseRecordSchema
 from marshmallow import ValidationError, fields, post_load, validates_schema
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
