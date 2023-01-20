@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.0.4 (released 2023-01-20)
+
+- funders: Add ROR to identifiers for all funders in datastream
+- facets: add not found facet exception (when facet is configured but not provided in setup)
+- facets: handle non existing vocabulary type
+
 Version 1.0.3 (released 2022-11-25)
 
 - Add i18n translations.
