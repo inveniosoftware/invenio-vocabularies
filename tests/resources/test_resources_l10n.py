@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2023 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -9,6 +10,7 @@
 """Resources layer tests."""
 
 import pytest
+from flask import g
 
 from invenio_vocabularies.records.api import Vocabulary
 
@@ -91,16 +93,28 @@ def test_get(client, example_record, h, prefix, expected_da, expected_en):
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.json == expected_en
 
+    # the used context is not reseted, every new client.get call uses the cache
+    # which is bad
+    g._flask_babel.babel_locale = None
+
     # Choose via querystring (?ln=da)
     res = client.get(f"{prefix}/{id_}?ln=da", headers=h)
     assert res.json == expected_da
+
+    g._flask_babel.babel_locale = None
+
     res = client.get(f"{prefix}/{id_}?ln=en", headers=h)
     assert res.json == expected_en
+
+    g._flask_babel.babel_locale = None
 
     # Choose via header
     h["accept-language"] = "da"
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.json == expected_da
+
+    g._flask_babel.babel_locale = None
+
     h["accept-language"] = "en"
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.json == expected_en
@@ -115,16 +129,26 @@ def test_search(client, example_record, h, prefix, expected_da, expected_en):
     res = client.get(f"{prefix}", headers=h)
     assert res.json == expected_en
 
+    g._flask_babel.babel_locale = None
+
     # Choose via querystring (?ln=da)
     res = client.get(f"{prefix}?ln=da", headers=h)
     assert res.json == expected_da
+
+    g._flask_babel.babel_locale = None
+
     res = client.get(f"{prefix}?ln=en", headers=h)
     assert res.json == expected_en
+
+    g._flask_babel.babel_locale = None
 
     # Choose via header
     h["accept-language"] = "da"
     res = client.get(f"{prefix}", headers=h)
     assert res.json == expected_da
+
+    g._flask_babel.babel_locale = None
+
     h["accept-language"] = "en"
     res = client.get(f"{prefix}", headers=h)
     assert res.json == expected_en
