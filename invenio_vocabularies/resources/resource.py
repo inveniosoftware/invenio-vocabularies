@@ -13,7 +13,7 @@ from flask import g
 from flask_resources import (
     BaseListSchema,
     JSONSerializer,
-    MarshmallowJSONSerializer,
+    MarshmallowSerializer,
     ResponseHandler,
     resource_requestctx,
     response_handler,
@@ -66,9 +66,10 @@ class VocabulariesResourceConfig(RecordResourceConfig):
     response_handlers = {
         "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
         "application/vnd.inveniordm.v1+json": ResponseHandler(
-            MarshmallowJSONSerializer(
-                schema_cls=VocabularyL10NItemSchema,
-                many_schema_cls=BaseListSchema,
+            MarshmallowSerializer(
+                format_serializer_cls=JSONSerializer,
+                object_schema_cls=VocabularyL10NItemSchema,
+                list_schema_cls=BaseListSchema,
             ),
             headers=etag_headers,
         ),
