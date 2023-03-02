@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.1.0 (released 2023-03-02)
+
+- serializers: deprecate marshamllow JSON
+- mappings: add dynamic template for i18n titles and descriptions
+- remove deprecated flask-babelex dependency and imports
+
 Version 1.0.4 (released 2023-01-20)
 
 - funders: Add ROR to identifiers for all funders in datastream
