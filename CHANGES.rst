@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.2.0 (2023-03-24)
+
+- bump invenio-records-resources to v2.0.0
+
 Version 1.1.0 (released 2023-03-02)
 
 - serializers: deprecate marshamllow JSON
