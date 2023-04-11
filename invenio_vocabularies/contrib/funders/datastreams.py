@@ -41,11 +41,11 @@ class RORTransformer(BaseTransformer):
 
         funder["id"] = normalize_ror(record.get("id"))
         if not funder["id"]:
-            raise TransformerError(_(f"Id not found in ROR entry."))
+            raise TransformerError(_("Id not found in ROR entry."))
 
         funder["name"] = record.get("name")
         if not funder["name"]:
-            raise TransformerError(_(f"Name not found in ROR entry."))
+            raise TransformerError(_("Name not found in ROR entry."))
 
         country_code = record.get("country", {}).get("country_code")
         if country_code:
