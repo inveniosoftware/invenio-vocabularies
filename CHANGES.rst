@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.3.0 (2023-04-20)
+
+- add UI deposit contrib components
+
 Version 1.2.0 (2023-03-24)
 
 - bump invenio-records-resources to v2.0.0
