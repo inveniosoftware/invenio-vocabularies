@@ -62,15 +62,18 @@ VOCABULARIES_AWARD_SCHEMES = {
 """Awards allowed identifier schemes."""
 
 VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
-    "anr_________": "00rbzpz17",
     "aka_________": "05k73zm37",
+    "anr_________": "00rbzpz17",
     "arc_________": "05mmh0f86",
+    "asap________": "03zj4c476",
     "cihr________": "01gavpb45",
     "corda_______": "00k4n6c32",
+    "corda_____he": "00k4n6c32",
     "corda__h2020": "00k4n6c32",
     "euenvagency_": "02k4b9v70",
     "fct_________": "00snfqn58",
     "fwf_________": "013tf3c58",
+    "inca________": "03m8vkq32",
     "irb_hr______": "03n51vw80",
     "mestd_______": "01znas443",
     "nhmrc_______": "011kf5r70",
@@ -78,12 +81,12 @@ VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
     "nserc_______": "01h531d29",
     "nsf_________": "021nxhr62",
     "nwo_________": "04jsz6e67",
-    "rcuk________": "10.13039/501100000690",
-    "ukri________": "001aqnf71",
+    "rcuk________": "00dq2kk65",  # deprecated funder org
     "sfi_________": "0271asj38",
     "snsf________": "00yjd3n13",
     "sshrc_______": "006cvnv84",
     "tubitakf____": "04w9kkr77",
+    "ukri________": "001aqnf71",
     "wt__________": "029chgv08",
 }
 """Mapping of OpenAIRE and ROR funder codes."""
