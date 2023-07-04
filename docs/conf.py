@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020 CERN.
+# Copyright (C) 2022 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,6 +12,8 @@
 import os
 
 import sphinx.environment
+
+from invenio_vocabularies import __version__
 
 # -- General configuration ------------------------------------------------
 
@@ -46,9 +49,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"Invenio-Vocabularies"
-copyright = u"2020, CERN"
-author = u"CERN"
+project = "Invenio-Vocabularies"
+copyright = "2020, CERN"
+author = "CERN"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -57,15 +60,7 @@ author = u"CERN"
 # The short X.Y version.
 
 # Get the version string. Cannot be done with import!
-g = {}
-with open(
-    os.path.join(
-        os.path.dirname(__file__), "..", "invenio_vocabularies", "version.py"
-    ),
-    "rt",
-) as fp:
-    exec(fp.read(), g)
-    version = g["__version__"]
+version = __version__
 
 # The full version, including alpha/beta/rc tags.
 release = version
@@ -75,7 +70,7 @@ release = version
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -254,8 +249,8 @@ latex_documents = [
     (
         master_doc,
         "invenio-vocabularies.tex",
-        u"invenio-vocabularies Documentation",
-        u"CERN",
+        "invenio-vocabularies Documentation",
+        "CERN",
         "manual",
     ),
 ]
@@ -289,7 +284,7 @@ man_pages = [
     (
         master_doc,
         "invenio-vocabularies",
-        u"invenio-vocabularies Documentation",
+        "invenio-vocabularies Documentation",
         [author],
         1,
     )
@@ -308,7 +303,7 @@ texinfo_documents = [
     (
         master_doc,
         "invenio-vocabularies",
-        u"Invenio-Vocabularies Documentation",
+        "Invenio-Vocabularies Documentation",
         author,
         "invenio-vocabularies",
         "Invenio module for managing vocabularies.",

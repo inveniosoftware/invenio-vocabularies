@@ -7,7 +7,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Test the affiliation vocabulary resources."""
+"""Affiliation vocabulary resources."""
 
 from .affiliations import record_type
 

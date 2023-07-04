@@ -16,4 +16,4 @@ from invenio_records.models import RecordMetadataBase
 class RecordMetadata(db.Model, RecordMetadataBase):
     """Model for mock module metadata."""
 
-    __tablename__ = 'mock_metadata'
+    __tablename__ = "mock_metadata"

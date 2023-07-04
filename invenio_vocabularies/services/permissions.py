@@ -21,6 +21,3 @@ class PermissionPolicy(RecordPermissionPolicy):
     can_update = [SystemProcess()]
     can_delete = [SystemProcess()]
     can_manage = [SystemProcess()]
-
-    # Type permissions
-    can_manage = [SystemProcess()]

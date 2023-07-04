@@ -8,6 +8,8 @@
 
 """Vocabulary data API."""
 
+from invenio_records.dumpers import SearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.systemfields import ConstantField, RelatedModelField
 from invenio_records_resources.records.api import Record
 from invenio_records_resources.records.systemfields import IndexField, PIDField
@@ -30,9 +32,7 @@ class Vocabulary(Record):
         "local://vocabularies/vocabulary-v1.0.0.json",
     )
 
-    index = IndexField(
-        "vocabularies-vocabulary-v1.0.0", search_alias="vocabularies"
-    )
+    index = IndexField("vocabularies-vocabulary-v1.0.0", search_alias="vocabularies")
 
     #: Disable the metadata system field.
     metadata = None
@@ -40,8 +40,14 @@ class Vocabulary(Record):
     type = RelatedModelField(VocabularyType, required=True)
 
     pid = PIDField(
-        'id',
+        "id",
         provider=VocabularyIdProvider,
         context_cls=VocabularyPIDFieldContext,
         create=False,
+    )
+
+    dumper = SearchDumper(
+        extensions=[
+            IndexedAtDumperExt(),
+        ]
     )

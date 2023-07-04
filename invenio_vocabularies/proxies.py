@@ -15,12 +15,13 @@ from werkzeug.local import LocalProxy
 
 def _ext_proxy(attr):
     return LocalProxy(
-        lambda: getattr(current_app.extensions['invenio-vocabularies'], attr))
+        lambda: getattr(current_app.extensions["invenio-vocabularies"], attr)
+    )
 
 
-current_service = _ext_proxy('service')
+current_service = _ext_proxy("service")
 """Proxy to the instantiated vocabulary service."""
 
 
-current_resource = _ext_proxy('resource')
+current_resource = _ext_proxy("resource")
 """Proxy to the instantiated vocabulary resource."""

@@ -1,62 +1,67 @@
+# -*- coding: utf-8 -*-
+#
+# This file is part of Invenio.
+# Copyright (C) 2020 CERN.
+# Copyright (C) 2022 Graz University of Technology.
+#
+# Invenio is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
+
 name: CI
 
 on:
   push:
     branches: master
   pull_request:
-    branches: master
+    branches:
+      - master
+      - "maint-**"
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 3 * * 6'
+    - cron: "0 3 * * 6"
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Reason'
+        description: "Reason"
         required: false
-        default: 'Manual trigger'
+        default: "Manual trigger"
 
 jobs:
   Tests:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-          python-version: [3.6, 3.7, 3.8]
-          # You can add more combinations e.g. dev requirements or MySQL by adding
-          # a new item to this list. Add its corresponding definition below.
-          # EXTRAS and REQUIREMENTS_LEVEL are always needed.
-          services: [release, lowest, devel]
-          include:
-          - services: release
-            SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://invenio:invenio@localhost:5432/invenio"
-            POSTGRESQL_VERSION: POSTGRESQL_12_LATEST
-            ES_VERSION: "ES_7_LATEST"
-            ES: "elasticsearch7"
-            EXTRAS: "all,postgresql,elasticsearch7"
-            REQUIREMENTS_LEVEL: "pypi"
-          - services: lowest
-            SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://invenio:invenio@localhost:5432/invenio"
-            POSTGRESQL_VERSION: POSTGRESQL_9_LATEST
-            ES_VERSION: "ES_6_LATEST"
-            ES: "elasticsearch6"
-            EXTRAS: "all,postgresql,elasticsearch6"
-            REQUIREMENTS_LEVEL: "min"
-          - services: devel
-            SQLALCHEMY_DATABASE_URI: "postgresql+psycopg2://invenio:invenio@localhost:5432/invenio"
-            POSTGRESQL_VERSION: POSTGRESQL_12_LATEST
-            ES_VERSION: "ES_7_LATEST"
-            ES: "elasticsearch7"
-            EXTRAS: "all,postgresql,elasticsearch7"
-            REQUIREMENTS_LEVEL: "dev"
+        python-version: [3.7, 3.8, 3.9]
+        requirements-level: [pypi]
+        db-service: [postgresql10, postgresql13]
+        search-service: [opensearch2,elasticsearch7]
+        node-version: [16.x]
+        exclude:
+          - python-version: 3.7
+            db-service: postgresql13
+
+        include:
+          - search-service: opensearch2
+            SEARCH_EXTRAS: "opensearch2"
+
+          - search-service: elasticsearch7
+            SEARCH_EXTRAS: "elasticsearch7"
 
     env:
-      SQLALCHEMY_DATABASE_URI: ${{matrix.SQLALCHEMY_DATABASE_URI}}
-      POSTGRESQL_VERSION: ${{matrix.POSTGRESQL_VERSION}}
-      ES_VERSION: ${{matrix.ES_VERSION}}
-      ES: ${{matrix.ES}}
+      DB: ${{ matrix.db-service }}
+      SEARCH: ${{ matrix.search-service }}
+      EXTRAS: tests,${{ matrix.SEARCH_EXTRAS }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Run eslint test
+        run: ./run-js-linter.sh -i
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -64,37 +69,36 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Generate dependencies
-        if: ${{ matrix.REQUIREMENTS_LEVEL != 'dev' }}
         run: |
-          pip --version
           pip install wheel requirements-builder
-          requirements-builder -e ${{ matrix.EXTRAS }} --level=${{ matrix.REQUIREMENTS_LEVEL }} setup.py > .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-          cat .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-
-      - name: Generate dependencies devel
-        if: ${{ matrix.REQUIREMENTS_LEVEL == 'dev' }}
-        run: |
-          pip --version
-          pip install wheel requirements-builder
-          requirements-builder -e ${{ matrix.EXTRAS }} --level=${{ matrix.REQUIREMENTS_LEVEL }} --req requirements-devel.txt setup.py > .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-          cat .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
+          requirements-builder -e "$EXTRAS" --level=${{ matrix.requirements-level }} setup.py > .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
 
       - name: Cache pip
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('.${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('.${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt') }}
 
       - name: Install dependencies
         run: |
-          pip install -r .${{ matrix.REQUIREMENTS_LEVEL }}-${{ matrix.python-version }}-requirements.txt
-          pip install -e ".[${{ matrix.EXTRAS }}]"
+          pip install -r .${{ matrix.requirements-level }}-${{ matrix.python-version }}-requirements.txt
+          pip install ".[$EXTRAS]"
           pip freeze
           docker --version
           docker-compose --version
 
       - name: Run tests
-        # You must change the ignore command for the manifest check.
-        # Remove `.travis-*` and add `.*-requirements.txt`
         run: |
           ./run-tests.sh
+
+      - name: Install deps for frontend tests
+        working-directory: ./invenio_vocabularies/assets/semantic-ui/js/invenio_vocabularies
+        run: npm install
+
+      - name: Install deps for frontend tests - translations
+        working-directory: ./invenio_vocabularies/assets/semantic-ui/translations/invenio_vocabularies
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: ./invenio_vocabularies/assets/semantic-ui/js/invenio_vocabularies
+        run: npm test

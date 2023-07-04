@@ -24,6 +24,7 @@ class SubjectsService(record_type.service_cls):
         """Create a row for the subject scheme metadata."""
         self.require_permission(identity, "manage")
         scheme = VocabularyScheme.create(
-            id=id_, parent_id="subjects", name=name, uri=uri)
+            id=id_, parent_id="subjects", name=name, uri=uri
+        )
         db.session.commit()
         return scheme

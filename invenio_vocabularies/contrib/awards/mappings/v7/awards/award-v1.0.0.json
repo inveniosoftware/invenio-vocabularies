@@ -1,0 +1,74 @@
+{
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "i18n_title": {
+          "path_match": "title.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "search_as_you_type"
+          }
+        }
+      }
+    ],
+    "dynamic": "strict",
+    "properties": {
+      "$schema": {
+        "type": "keyword",
+        "index": "false"
+      },
+      "created": {
+        "type": "date"
+      },
+      "updated": {
+        "type": "date"
+      },
+      "indexed_at": {
+        "type": "date"
+      },
+      "uuid": {
+        "type": "keyword"
+      },
+      "version_id": {
+        "type": "integer"
+      },
+      "identifiers": {
+        "properties": {
+          "identifier": {
+            "type": "keyword"
+          },
+          "scheme": {
+            "type": "keyword"
+          }
+        }
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "object",
+        "dynamic": true
+      },
+      "number": {
+        "type": "keyword"
+      },
+      "acronym": {
+        "type": "keyword"
+      },
+      "funder": {
+        "type": "object",
+        "properties": {
+          "@v": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "name": {
+            "type": "text"
+          }
+        }
+      }
+    }
+  }
+}

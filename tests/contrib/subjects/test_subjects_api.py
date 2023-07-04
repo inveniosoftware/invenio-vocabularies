@@ -21,9 +21,7 @@ from invenio_vocabularies.contrib.subjects.api import Subject
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(
-        current_search_client.get, Subject.index._name, doc_type="_doc"
-    )
+    return partial(current_search_client.get, Subject.index._name)
 
 
 @pytest.fixture()
@@ -45,9 +43,7 @@ def example_subject(db, subject_full_data):
     return subj
 
 
-def test_subject_indexing(
-    app, db, es, example_subject, indexer, search_get
-):
+def test_subject_indexing(app, db, search, example_subject, indexer, search_get):
     """Test indexing of a subject."""
     # Index document in ES
     assert indexer.index(example_subject)["result"] == "created"

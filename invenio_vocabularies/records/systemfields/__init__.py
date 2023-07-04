@@ -11,6 +11,6 @@
 from .pid import BaseVocabularyPIDFieldContext, VocabularyPIDFieldContext
 
 __all__ = (
-    'BaseVocabularyPIDFieldContext',
-    'VocabularyPIDFieldContext',
+    "BaseVocabularyPIDFieldContext",
+    "VocabularyPIDFieldContext",
 )

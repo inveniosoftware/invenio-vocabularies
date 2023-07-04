@@ -32,8 +32,8 @@ class VocabularyType(db.Model):
     def dump_obj(cls, field, record, obj):
         """Serializer the object into a record."""
         record[field.attr_name] = {
-            'id': obj.id,
-            'pid_type': obj.pid_type,
+            "id": obj.id,
+            "pid_type": obj.pid_type,
         }
 
     @classmethod
@@ -42,8 +42,8 @@ class VocabularyType(db.Model):
         data = record.get(field.attr_name)
         if data:
             obj = cls(
-                id=data.get('id'),
-                pid_type=data.get('pid_type'),
+                id=data.get("id"),
+                pid_type=data.get("pid_type"),
             )
             return obj
         return None
@@ -79,7 +79,9 @@ class VocabularyScheme(db.Model):
         """Create a new vocabulary subtype."""
         banned = [",", ":"]
         for b in banned:
-            assert b not in data["id"], f"No '{b}' allowed in VocabularyScheme.id"  # noqa
+            assert (
+                b not in data["id"]
+            ), f"No '{b}' allowed in VocabularyScheme.id"  # noqa
 
         with db.session.begin_nested():
             obj = cls(**data)

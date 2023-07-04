@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2020-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -9,6 +9,7 @@
 """Invenio module for managing vocabularies."""
 
 from .ext import InvenioVocabularies
-from .version import __version__
+
+__version__ = "1.5.0"
 
 __all__ = ("__version__", "InvenioVocabularies")

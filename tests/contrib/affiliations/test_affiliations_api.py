@@ -21,9 +21,7 @@ from invenio_vocabularies.contrib.affiliations.api import Affiliation
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(
-        current_search_client.get, Affiliation.index._name, doc_type="_doc"
-    )
+    return partial(current_search_client.get, Affiliation.index._name)
 
 
 @pytest.fixture()
@@ -66,7 +64,7 @@ def test_affiliation_schema_validation(app, db, example_affiliation):
         # name must be a string
         {"id": "cern", "name": 123},
         # acronym must be a string
-        {"id": "cern", "name": "cern", "acronym": 123}
+        {"id": "cern", "name": "cern", "acronym": 123},
     ]
 
     for ex in examples:
@@ -74,7 +72,7 @@ def test_affiliation_schema_validation(app, db, example_affiliation):
 
 
 def test_affiliation_indexing(
-    app, db, es, example_affiliation, indexer, search_get
+    app, db, search, example_affiliation, indexer, search_get
 ):
     """Test indexing of an affiliation."""
     # Index document in ES

@@ -8,21 +8,33 @@
 
 """Vocabulary resource."""
 
-from functools import wraps
-
 import marshmallow as ma
 from flask import g
-from flask_resources import JSONSerializer, MarshmallowJSONSerializer, \
-    ResponseHandler, resource_requestctx, response_handler
-from invenio_records_resources.resources import RecordResource, \
-    RecordResourceConfig, SearchRequestArgsSchema
+from flask_resources import (
+    BaseListSchema,
+    JSONSerializer,
+    MarshmallowSerializer,
+    ResponseHandler,
+    resource_requestctx,
+    response_handler,
+)
+from invenio_records_resources.resources import (
+    RecordResource,
+    RecordResourceConfig,
+    SearchRequestArgsSchema,
+)
 from invenio_records_resources.resources.records.headers import etag_headers
-from invenio_records_resources.resources.records.resource import \
-    request_data, request_headers, request_search_args, request_view_args
-from invenio_records_resources.resources.records.utils import es_preference
+from invenio_records_resources.resources.records.resource import (
+    request_data,
+    request_headers,
+    request_search_args,
+    request_view_args,
+    route,
+)
+from invenio_records_resources.resources.records.utils import search_preference
 from marshmallow import fields
 
-from .serializer import VocabularyL10NItemSchema, VocabularyL10NListSchema
+from .serializer import VocabularyL10NItemSchema
 
 
 #
@@ -42,10 +54,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 
     blueprint_name = "vocabularies"
     url_prefix = "/vocabularies"
-    routes = {
-        "list": "/<type>",
-        "item": "/<type>/<pid_value>",
-    }
+    routes = {"list": "/<type>", "item": "/<type>/<pid_value>", "tasks": "/tasks"}
 
     request_view_args = {
         "pid_value": ma.fields.Str(),
@@ -55,14 +64,12 @@ class VocabulariesResourceConfig(RecordResourceConfig):
     request_search_args = VocabularySearchRequestArgsSchema
 
     response_handlers = {
-        "application/json": ResponseHandler(
-            JSONSerializer(),
-            headers=etag_headers
-        ),
+        "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
         "application/vnd.inveniordm.v1+json": ResponseHandler(
-            MarshmallowJSONSerializer(
-                schema_cls=VocabularyL10NItemSchema,
-                many_schema_cls=VocabularyL10NListSchema,
+            MarshmallowSerializer(
+                format_serializer_cls=JSONSerializer,
+                object_schema_cls=VocabularyL10NItemSchema,
+                list_schema_cls=BaseListSchema,
             ),
             headers=etag_headers,
         ),
@@ -75,6 +82,15 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 class VocabulariesResource(RecordResource):
     """Resource for generic vocabularies."""
 
+    def create_url_rules(self):
+        """Create the URL rules for the record resource."""
+        routes = self.config.routes
+        rules = super().create_url_rules()
+        rules.append(
+            route("POST", routes["tasks"], self.launch),
+        )
+        return rules
+
     @request_search_args
     @request_view_args
     @response_handler(many=True)
@@ -84,7 +100,7 @@ class VocabulariesResource(RecordResource):
             identity=g.identity,
             params=resource_requestctx.args,
             type=resource_requestctx.view_args["type"],
-            es_preference=es_preference(),
+            search_preference=search_preference(),
         )
         return hits.to_dict(), 200
 
@@ -105,7 +121,7 @@ class VocabulariesResource(RecordResource):
         """Read an item."""
         pid_value = (
             resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"]
+            resource_requestctx.view_args["pid_value"],
         )
         item = self.service.read(g.identity, pid_value)
         return item.to_dict(), 200
@@ -118,7 +134,7 @@ class VocabulariesResource(RecordResource):
         """Update an item."""
         pid_value = (
             resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"]
+            resource_requestctx.view_args["pid_value"],
         )
         item = self.service.update(
             g.identity,
@@ -134,7 +150,7 @@ class VocabulariesResource(RecordResource):
         """Delete an item."""
         pid_value = (
             resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"]
+            resource_requestctx.view_args["pid_value"],
         )
         self.service.delete(
             g.identity,
@@ -142,3 +158,9 @@ class VocabulariesResource(RecordResource):
             revision_id=resource_requestctx.headers.get("if_match"),
         )
         return "", 204
+
+    @request_data
+    def launch(self):
+        """Create a task."""
+        self.service.launch(g.identity, resource_requestctx.data or {})
+        return "", 202

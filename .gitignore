@@ -9,7 +9,7 @@ __pycache__/
 .vscode/
 
 # DS_Store
-.DS_Store/
+*.DS_Store
 
 # C extensions
 *.so
@@ -33,7 +33,6 @@ var/
 *.egg
 Pipfile
 Pipfile.lock
-pyproject.toml
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -69,3 +68,5 @@ target/
 
 # Vim swapfiles
 .*.sw?
+
+*.DS_Store

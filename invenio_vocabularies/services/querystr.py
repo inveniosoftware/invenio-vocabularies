@@ -10,9 +10,8 @@
 
 from functools import partial
 
-from elasticsearch_dsl import Q
-from invenio_records_resources.services.records.params import \
-    SuggestQueryParser
+from invenio_records_resources.services.records.params import SuggestQueryParser
+from invenio_search.engine import dsl
 
 
 class FilteredSuggestQueryParser(SuggestQueryParser):
@@ -21,9 +20,7 @@ class FilteredSuggestQueryParser(SuggestQueryParser):
     @classmethod
     def factory(cls, filter_field=None, **extra_params):
         """Create a prepared instance of the query parser."""
-        return partial(
-            cls, filter_field=filter_field, extra_params=extra_params
-        )
+        return partial(cls, filter_field=filter_field, extra_params=extra_params)
 
     def __init__(self, identity=None, filter_field=None, extra_params=None):
         """Constructor."""
@@ -35,7 +32,7 @@ class FilteredSuggestQueryParser(SuggestQueryParser):
         subtype_s, query_str = self.extract_subtype_s(query_str)
         query = super().parse(query_str)
         if subtype_s:
-            query = query & Q('terms', **{self.filter_field: subtype_s})
+            query = query & dsl.Q("terms", **{self.filter_field: subtype_s})
         return query
 
     def extract_subtype_s(self, query_str):

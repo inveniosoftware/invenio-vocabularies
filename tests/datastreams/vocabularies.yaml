@@ -1,0 +1,22 @@
+testone:
+  pid-type: testid
+  transformers:
+    - type: test
+  readers:
+    - type: test
+      args:
+        origin: [-1, 2, 3]
+  writers:
+    - type: test
+testtwo:
+  pid-type: testit
+  transformers:
+    - type: test
+  readers:
+    - type: test
+      args:
+        origin: [1, 2, 3]
+  writers:
+    - type: fail
+      args:
+        fail_on: 2

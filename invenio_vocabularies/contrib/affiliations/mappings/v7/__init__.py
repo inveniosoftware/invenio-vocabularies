@@ -6,4 +6,4 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Affiliations Elasticsearch 7 mappings."""
+"""Affiliations Elasticsearch v7 mappings."""

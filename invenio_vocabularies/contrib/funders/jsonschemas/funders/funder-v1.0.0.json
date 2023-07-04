@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "local://funders/funder-v1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "$ref": "local://definitions-v1.0.0.json#/$schema"
+    },
+    "country": {
+      "type": "string",
+      "description": "Represents a funder's origin country."
+    },
+    "identifiers": {
+      "description": "Alternate identifiers for the record.",
+      "type": "array",
+      "items": {
+        "$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"
+      },
+      "uniqueItems": true
+    },
+    "name": {
+      "type": "string",
+      "description": "Funders name."
+    },
+    "title": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
+    }
+  }
+}

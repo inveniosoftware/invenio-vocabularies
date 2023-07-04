@@ -31,27 +31,25 @@ def indexer():
 @pytest.fixture()
 def search_get():
     """Get a document from an index."""
-    return partial(
-        current_search_client.get, Vocabulary.index._name, doc_type="_doc"
-    )
+    return partial(current_search_client.get, Vocabulary.index._name)
 
 
 @pytest.fixture()
 def lic_type():
     """Get a language vocabulary type."""
-    return VocabularyType.create(id='licenses', pid_type='lic')
+    return VocabularyType.create(id="licenses", pid_type="lic")
 
 
 @pytest.fixture()
 def example_data():
     """Example data."""
     return {
-        'id': 'eng',
-        'title': {'en': 'English', 'da': 'Engelsk'},
-        'description': {'en': 'Text', 'da': 'Tekst'},
-        'icon': 'file-o',
-        'props': {
-            'datacite_type': 'Text',
+        "id": "eng",
+        "title": {"en": "English", "da": "Engelsk"},
+        "description": {"en": "Text", "da": "Tekst"},
+        "icon": "file-o",
+        "props": {
+            "datacite_type": "Text",
         },
     }
 

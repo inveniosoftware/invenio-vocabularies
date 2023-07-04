@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 Northwestern University.
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2022 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -9,10 +9,10 @@
 
 """Subjects schema."""
 
-from marshmallow import fields
+from invenio_i18n import lazy_gettext as _
 from marshmallow_utils.fields import SanitizedUnicode
 
-from ...services.schema import BaseVocabularySchema
+from ...services.schema import BaseVocabularySchema, ContribVocabularyRelationSchema
 
 
 class SubjectSchema(BaseVocabularySchema):
@@ -24,3 +24,12 @@ class SubjectSchema(BaseVocabularySchema):
     id = SanitizedUnicode(required=True)
     scheme = SanitizedUnicode(required=True)
     subject = SanitizedUnicode(required=True)
+
+
+class SubjectRelationSchema(ContribVocabularyRelationSchema):
+    """Schema to define an optional subject relation in another schema."""
+
+    ftf_name = "subject"
+    parent_field_name = "subjects"
+    subject = SanitizedUnicode()
+    scheme = SanitizedUnicode()

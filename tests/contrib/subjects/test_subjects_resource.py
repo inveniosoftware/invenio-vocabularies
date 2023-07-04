@@ -23,7 +23,7 @@ def prefix():
 
 
 @pytest.fixture()
-def example_subject(app, db, es_clear, identity, service, subject_full_data):
+def example_subject(app, db, search_clear, identity, service, subject_full_data):
     """Example subject."""
     subject = service.create(identity, subject_full_data)
     Subject.index.refresh()  # Refresh the index
@@ -48,14 +48,12 @@ def test_get(client, h, prefix, example_subject):
     assert res.status_code == 200
 
 
-def test_get_invalid(client, h, prefix, example_subject):
+def test_get_invalid(client, h, prefix):
     res = client.get(f"{prefix}/invalid", headers=h)
     assert res.status_code == 404
 
 
-def test_forbidden_endpoints(
-    client, h, prefix, example_subject, subject_full_data
-):
+def test_forbidden_endpoints(client, h, prefix, example_subject, subject_full_data):
     # POST
     subject_full_data_too = deepcopy(subject_full_data)
     subject_full_data_too["id"] = "other"
@@ -82,11 +80,11 @@ def test_search(client, h, prefix, example_subject):
 
 
 @pytest.fixture()
-def example_subjects(app, db, es_clear, identity, service):
+def example_subjects(app, db, search_clear, identity, service):
     subjects = [
         {
-            'id': 'other-1',
-            'scheme': 'Other',
+            "id": "other-1",
+            "scheme": "Other",
             "subject": "Abdomen",
         },
         {
@@ -95,19 +93,19 @@ def example_subjects(app, db, es_clear, identity, service):
             "subject": "Calcimycin",
         },
         {
-            'id': 'https://id.nlm.nih.gov/mesh/D000005',
-            'scheme': 'MeSH',
-            'subject': 'Abdomen',
+            "id": "https://id.nlm.nih.gov/mesh/D000005",
+            "scheme": "MeSH",
+            "subject": "Abdomen",
         },
         {
-            'id': 'https://id.nlm.nih.gov/mesh/D000006',
-            'scheme': 'MeSH',
-            'subject': 'Abdomen, Acute',
+            "id": "https://id.nlm.nih.gov/mesh/D000006",
+            "scheme": "MeSH",
+            "subject": "Abdomen, Acute",
         },
         {
-            'id': 'yet-another-954514',
-            'scheme': 'Other2',
-            'subject': 'Abdomen',
+            "id": "yet-another-954514",
+            "scheme": "Other2",
+            "subject": "Abdomen",
         },
     ]
     records = [service.create(identity, s) for s in subjects]
@@ -118,20 +116,20 @@ def example_subjects(app, db, es_clear, identity, service):
 def test_suggest(client, h, prefix, example_subjects):
     """Test FilteredSuggestParam."""
     # No filter
-    res = client.get(f'{prefix}?suggest=abdo', headers=h)
+    res = client.get(f"{prefix}?suggest=abdo", headers=h)
     assert res.json["hits"]["total"] == 4
 
     # Single filter
-    res = client.get(f'{prefix}?suggest=MeSH:abdo', headers=h)
+    res = client.get(f"{prefix}?suggest=MeSH:abdo", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
 
     # Multiple filters
-    res = client.get(f'{prefix}?suggest=MeSH,Other:abdo', headers=h)
+    res = client.get(f"{prefix}?suggest=MeSH,Other:abdo", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 3
 
     # Ignore non existing filter
-    res = client.get(f'{prefix}?suggest=MeSH,Foo:abdo', headers=h)
+    res = client.get(f"{prefix}?suggest=MeSH,Foo:abdo", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2

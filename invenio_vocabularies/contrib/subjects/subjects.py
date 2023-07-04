@@ -9,6 +9,8 @@
 
 """Vocabulary subjects."""
 
+from invenio_records.dumpers import SearchDumper
+from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records_resources.factories.factory import RecordTypeFactory
 
 from ...records.pidprovider import PIDProviderFactory
@@ -22,16 +24,22 @@ record_type = RecordTypeFactory(
     # Data layer
     pid_field_kwargs={
         "create": False,
-        "provider": PIDProviderFactory.create(pid_type='sub'),
+        "provider": PIDProviderFactory.create(pid_type="sub"),
         "context_cls": BaseVocabularyPIDFieldContext,
     },
     schema_version="1.0.0",
     schema_path="local://subjects/subject-v1.0.0.json",
+    record_dumper=SearchDumper(
+        extensions=[
+            IndexedAtDumperExt(),
+        ]
+    ),
     # Service layer
+    service_id="subjects",
     service_schema=SubjectSchema,
     search_options=SubjectsSearchOptions,
     service_components=service_components,
     permission_policy_cls=PermissionPolicy,
     # Resource layer
-    endpoint_route='/subjects',
+    endpoint_route="/subjects",
 )

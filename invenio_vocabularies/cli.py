@@ -7,134 +7,180 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Commands to create and manage vocabulary."""
+"""Commands to create and manage vocabularies."""
 
-import csv
-from os.path import dirname, join
+from copy import deepcopy
 
 import click
+import yaml
 from flask.cli import with_appcontext
-from flask_principal import Identity
-from invenio_access import any_user
-from invenio_db import db
+from invenio_access.permissions import system_identity
+from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
+from invenio_records_resources.proxies import current_service_registry
 
-from invenio_vocabularies.contrib.subjects.subjects import \
-    record_type as subject_record_type
-from invenio_vocabularies.records.models import VocabularyType
-from invenio_vocabularies.services.service import VocabulariesService
-
-data_directory = join(dirname(__file__), "data")
+from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config
+from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
+from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
+from .datastreams import DataStreamFactory
 
 
-def get_available_vocabularies():
-    """Specify the available vocabularies."""
-    return {
-        "licenses": {
-            "path": join(data_directory, "licenses.csv"),
-        },
-        "subjects": {
-            "path": join(data_directory, "subjects.csv"),
-            "specific": _create_subjects_vocabulary,
-        },
-    }
+def get_config_for_ds(vocabulary, filepath=None, origin=None):
+    """Calculates the configuration for a Data Stream."""
+    config = None
+    if vocabulary == "names":  # FIXME: turn into a proper factory
+        config = deepcopy(names_ds_config)
+    elif vocabulary == "funders":
+        config = deepcopy(funders_ds_config)
+    elif vocabulary == "awards":
+        config = deepcopy(awards_ds_config)
+
+    if config:
+        if filepath:
+            with open(filepath) as f:
+                config = yaml.safe_load(f).get(vocabulary)
+        if origin:
+            config["readers"][0].setdefault("args", {})
+            config["readers"][0]["args"]["origin"] = origin
+
+    return config
 
 
-def _load_csv_data(path):
-    with open(path) as f:
-        reader = csv.DictReader(f, skipinitialspace=True)
-        dicts = [row for row in reader]
-        return dicts
-
-
-def _create_subjects_vocabulary(vocabulary_type_name, source_path):
-    identity = Identity(1)
-    identity.provides.add(any_user)
-    service = subject_record_type.service_cls()
-
-    rows = _load_csv_data(source_path)
-
-    records = []
-    for row in rows:
-        metadata = {
-            "title": row["title"],
-            "term": row["id"],
-            "identifier": row["id"],
-            "scheme": row["scheme"],
-        }
-
-        record = service.create(
-            identity=identity,
-            data={
-                "metadata": metadata,
-            },
-        )
-
-        records.append(record)
-
-    return records
-
-
-def _create_vocabulary(vocabulary_type_name, source_path):
-    identity = Identity(1)
-    identity.provides.add(any_user)
-    service = VocabulariesService()
-
-    # Load data
-    rows = _load_csv_data(source_path)
-
-    # Create vocabulary type
-    vocabulary_type = VocabularyType(name=vocabulary_type_name)
-    db.session.add(vocabulary_type)
-    db.session.commit()
-
-    i18n = ["title", "description"]  # Attributes with i18n support
-    other = ["icon"]  # Other top-level attributes
-
-    default_language = "en"  # Static (dependent on the files)
-
-    metadata = {"title": {}, "description": {}, "props": {}}
-
-    records = []
-    for row in rows:
-        for attribute in row:
-            value = row[attribute]
-            if attribute in i18n:
-                metadata[attribute][default_language] = value
-            elif any(map(lambda s: value.startswith(s + "_"), i18n)):
-                [prefix_attr, language] = attribute.split("_", 1)
-                metadata[prefix_attr][language] = value
-            elif attribute in other:
-                metadata[attribute] = value
-            else:
-                metadata["props"][attribute] = value
-
-        # Create record
-        record = service.create(
-            identity=identity,
-            data={
-                "metadata": metadata,
-                "vocabulary_type_id": vocabulary_type.id,
-            },
-        )
-
-        records.append(record)
-
-    return records
+def get_service_for_vocabulary(vocabulary):
+    """Calculates the configuration for a Data Stream."""
+    if vocabulary == "names":  # FIXME: turn into a proper factory
+        return current_service_registry.get("names")
 
 
 @click.group()
 def vocabularies():
     """Vocabularies command."""
-    pass
+
+
+def _process_vocab(config, num_samples=None):
+    """Import a vocabulary."""
+    ds = DataStreamFactory.create(
+        readers_config=config["readers"],
+        transformers_config=config.get("transformers"),
+        writers_config=config["writers"],
+    )
+
+    success, errored, filtered = 0, 0, 0
+    left = num_samples or -1
+    for result in ds.process():
+        left = left - 1
+        if result.filtered:
+            filtered += 1
+        if result.errors:
+            for err in result.errors:
+                click.secho(err, fg="red")
+            errored += 1
+        else:
+            success += 1
+        if left == 0:
+            click.secho(f"Number of samples reached {num_samples}", fg="green")
+            break
+    return success, errored, filtered
+
+
+def _output_process(vocabulary, op, success, errored, filtered):
+    """Outputs the result of an operation."""
+    total = success + errored
+
+    color = "green"
+    if errored:
+        color = "yellow" if success else "red"
+
+    click.secho(
+        f"Vocabulary {vocabulary} {op}. Total items {total}. \n"
+        f"{success} items succeeded\n"
+        f"{errored} contained errors\n"
+        f"{filtered} were filtered.",
+        fg=color,
+    )
 
 
 @vocabularies.command(name="import")
-@click.argument(
-    "vocabulary_types",
-    nargs=-1,
-    type=click.Choice([v for v in get_available_vocabularies()]),
-)
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option("-f", "--filepath", type=click.STRING)
+@click.option("-o", "--origin", type=click.STRING)
+@click.option("-n", "--num-samples", type=click.INT)
 @with_appcontext
-def load(vocabulary_types):
-    """Index CSV-based vocabularies in Elasticsearch."""
-    click.secho("Temporarily disabled", color="red")
+def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
+    """Import a vocabulary."""
+    if not filepath and not origin:
+        click.secho("One of --filepath or --origin must be present.", fg="red")
+        exit(1)
+
+    config = get_config_for_ds(vocabulary, filepath, origin)
+    success, errored, filtered = _process_vocab(config, num_samples)
+
+    _output_process(vocabulary, "imported", success, errored, filtered)
+
+
+@vocabularies.command()
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option("-f", "--filepath", type=click.STRING)
+@click.option("-o", "--origin", type=click.STRING)
+@with_appcontext
+def update(vocabulary, filepath=None, origin=None):
+    """Import a vocabulary."""
+    if not filepath and not origin:
+        click.secho("One of --filepath or --origin must be present.", fg="red")
+        exit(1)
+
+    config = get_config_for_ds(vocabulary, filepath, origin)
+
+    for w_conf in config["writers"]:
+        w_conf["args"]["update"] = True
+
+    success, errored, filtered = _process_vocab(config)
+
+    _output_process(vocabulary, "updated", success, errored, filtered)
+
+
+@vocabularies.command()
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option("-f", "--filepath", type=click.STRING)
+@click.option("-o", "--origin", type=click.STRING)
+@click.option("-t", "--target", type=click.STRING)
+@click.option("-n", "--num-samples", type=click.INT)
+@with_appcontext
+def convert(vocabulary, filepath=None, origin=None, target=None, num_samples=None):
+    """Convert a vocabulary to a new format."""
+    if not filepath and (not origin or not target):
+        click.secho(
+            "One of --filepath or --origin and --target must be present.", fg="red"
+        )
+        exit(1)
+
+    config = get_config_for_ds(vocabulary, filepath, origin)
+    if not filepath:
+        config["writers"] = [{"type": "yaml", "args": {"filepath": target}}]
+
+    success, errored, filtered = _process_vocab(config, num_samples)
+    _output_process(vocabulary, "converted", success, errored, filtered)
+
+
+@vocabularies.command()
+@click.option("-v", "--vocabulary", type=click.STRING, required=True)
+@click.option(
+    "-i",
+    "--identifier",
+    type=click.STRING,
+    help="Identifier of the vocabulary item to delete.",
+)
+@click.option("--all", is_flag=True, default=False, help="Not supported yet.")
+@with_appcontext
+def delete(vocabulary, identifier, all):
+    """Delete all items or a specific one of the vocabulary."""
+    if not id and not all:
+        click.secho("An identifier or the --all flag must be present.", fg="red")
+        exit(1)
+
+    service = get_service_for_vocabulary(vocabulary)
+    if identifier:
+        try:
+            if service.delete(identifier, system_identity):
+                click.secho(f"{identifier} deleted from {vocabulary}.", fg="green")
+        except (PIDDeletedError, PIDDoesNotExistError):
+            click.secho(f"PID {identifier} not found.")
