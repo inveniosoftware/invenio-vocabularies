@@ -47,7 +47,7 @@ record_type = RecordTypeFactory(
     model_cls_attrs={
         # cannot set to nullable=False because it would fail at
         # service level when create({}), see records-resources.
-        "pid": db.Column(db.String, unique=True),
+        "pid": db.Column(db.String(255), unique=True),
     },
     record_dumper=SearchDumper(
         model_fields={"pid": ("id", str)},

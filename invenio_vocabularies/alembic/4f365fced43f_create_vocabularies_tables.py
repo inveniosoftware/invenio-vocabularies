@@ -78,8 +78,8 @@ def upgrade():
     )
     op.create_table(
         "vocabularies_types",
-        sa.Column("id", sa.String(), nullable=False),
-        sa.Column("pid_type", sa.String(), nullable=True),
+        sa.Column("id", sa.String(255), nullable=False),
+        sa.Column("pid_type", sa.String(255), nullable=True),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_vocabularies_types")),
         sa.UniqueConstraint("pid_type", name=op.f("uq_vocabularies_types_pid_type")),
     )

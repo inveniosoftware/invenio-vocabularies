@@ -24,7 +24,7 @@ trap cleanup EXIT
 python -m check_manifest
 python -m setup extract_messages --output-file /dev/null
 python -m sphinx.cmd.build -qnNW docs docs/_build/html
-eval "$(docker-services-cli up --db ${DB:-postgresql} --search ${ES:-opensearch} --mq ${CACHE:-redis} --env)"
+eval "$(docker-services-cli up --db ${DB:-mysql} --search ${ES:-opensearch} --mq ${CACHE:-redis} --env)"
 python -m pytest $@
 tests_exit_code=$?
 exit "$tests_exit_code"
