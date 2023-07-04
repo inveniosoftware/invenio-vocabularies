@@ -17,8 +17,8 @@ class VocabularyType(db.Model):
 
     __tablename__ = "vocabularies_types"
 
-    id = db.Column(db.String, primary_key=True)
-    pid_type = db.Column(db.String, unique=True)
+    id = db.Column(db.String(255), primary_key=True)
+    pid_type = db.Column(db.String(255), unique=True)
 
     @classmethod
     def create(cls, **data):
@@ -67,11 +67,11 @@ class VocabularyScheme(db.Model):
 
     __tablename__ = "vocabularies_schemes"
 
-    id = db.Column(db.String, primary_key=True)
+    id = db.Column(db.String(255), primary_key=True)
     # This is e.g. `subjects`, 'affiliations', ...
-    parent_id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String)
-    uri = db.Column(db.String)
+    parent_id = db.Column(db.String(255), primary_key=True)
+    name = db.Column(db.String(255))
+    uri = db.Column(db.String(255))
     # Any extra metadata is added as columns.
 
     @classmethod

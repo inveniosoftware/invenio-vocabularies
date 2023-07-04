@@ -20,10 +20,10 @@ def upgrade():
     """Upgrade database."""
     op.create_table(
         "vocabularies_schemes",
-        sa.Column("id", sa.String(), nullable=False),
-        sa.Column("parent_id", sa.String(), nullable=False),
-        sa.Column("name", sa.String(), nullable=True),
-        sa.Column("uri", sa.String(), nullable=True),
+        sa.Column("id", sa.String(255), nullable=False),
+        sa.Column("parent_id", sa.String(255), nullable=False),
+        sa.Column("name", sa.String(255), nullable=True),
+        sa.Column("uri", sa.String(255), nullable=True),
         sa.PrimaryKeyConstraint(
             "id", "parent_id", name=op.f("pk_vocabularies_schemes")
         ),
