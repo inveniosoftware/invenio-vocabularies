@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.5.1 (2023-07-07)
+
+- fix string type columns for mysql
+
 Version 1.5.0 (2023-04-25)
 
 - upgrade invenio-records-resources
