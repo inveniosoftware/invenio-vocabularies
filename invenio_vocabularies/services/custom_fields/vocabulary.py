@@ -30,7 +30,13 @@ class VocabularyCF(BaseCF):
     """
 
     def __init__(
-        self, name, vocabulary_id, multiple=False, dump_options=True, **kwargs
+        self,
+        name,
+        vocabulary_id,
+        multiple=False,
+        dump_options=True,
+        sort_by=None,
+        **kwargs
     ):
         """Constructor."""
         super().__init__(name, **kwargs)
@@ -38,6 +44,7 @@ class VocabularyCF(BaseCF):
         self.vocabulary_id = vocabulary_id
         self.dump_options = dump_options
         self.multiple = multiple
+        self.sort_by = sort_by
 
     @property
     def mapping(self):
@@ -78,6 +85,7 @@ class VocabularyCF(BaseCF):
                 identity,
                 fields=self.field_keys,
                 type=self.vocabulary_id,
+                sort=self.sort_by,
             )
             options = []
             for vocab in vocabs:
