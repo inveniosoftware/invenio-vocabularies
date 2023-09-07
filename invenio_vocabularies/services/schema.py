@@ -14,6 +14,8 @@ from marshmallow import (
     Schema,
     ValidationError,
     fields,
+    post_load,
+    pre_dump,
     pre_load,
     validate,
     validates_schema,
@@ -96,6 +98,32 @@ class VocabularySchema(BaseVocabularySchema):
     props = fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())
     tags = fields.List(SanitizedUnicode())
     type = fields.Str(attribute="type.id", required=True)
+
+
+class ModePIDFieldVocabularyMixin:
+    """Mixin for vocabularies using a model field for their PID."""
+
+    @validates_schema
+    def validate_id(self, data, **kwargs):
+        """Validates ID."""
+        is_create = "record" not in self.context
+        if is_create and "id" not in data:
+            raise ValidationError(_("Missing PID."), "id")
+        if not is_create:
+            data.pop("id", None)
+
+    @post_load(pass_many=False)
+    def move_id(self, data, **kwargs):
+        """Moves id to pid."""
+        if "id" in data:
+            data["pid"] = data.pop("id")
+        return data
+
+    @pre_dump(pass_many=False)
+    def extract_pid_value(self, data, **kwargs):
+        """Extracts the PID value."""
+        data["id"] = data.pid.pid_value
+        return data
 
 
 class DatastreamObject(Schema):

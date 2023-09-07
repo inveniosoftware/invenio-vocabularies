@@ -11,7 +11,7 @@
 
 import arrow
 import pytest
-from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
+from invenio_pidstore.errors import PIDAlreadyExists
 from marshmallow.exceptions import ValidationError
 
 from invenio_vocabularies.contrib.affiliations.api import Affiliation
@@ -59,7 +59,9 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
 
     # Fail to retrieve it
     # - db
-    pytest.raises(PIDDeletedError, service.read, identity, id_)
+    base_keys = {"created", "updated", "id", "links", "revision_id"}
+    deleted_rec = service.read(identity, id_).to_dict()
+    assert set(deleted_rec.keys()) == base_keys
     # - search
     res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 0

@@ -8,6 +8,7 @@
 
 """Affiliations API tests."""
 
+from copy import deepcopy
 from functools import partial
 
 import pytest
@@ -36,8 +37,9 @@ def indexer():
 @pytest.fixture()
 def example_affiliation(db, affiliation_full_data):
     """Example affiliation."""
-    aff = Affiliation.create(affiliation_full_data)
-    Affiliation.pid.create(aff)
+    api_affiliation = deepcopy(affiliation_full_data)
+    pid = api_affiliation.pop("id")
+    aff = Affiliation.create(api_affiliation, pid=pid)
     aff.commit()
     db.session.commit()
     return aff
@@ -95,5 +97,4 @@ def test_affiliation_pid(app, db, example_affiliation):
     aff = example_affiliation
 
     assert aff.pid.pid_value == "cern"
-    assert aff.pid.pid_type == "aff"
     assert Affiliation.pid.resolve("cern")

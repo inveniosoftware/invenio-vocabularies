@@ -37,10 +37,8 @@ def test_valid_full(appctx, schema):
     data = {
         "$schema": schema,
         "acronym": "TEST",
-        "id": "aff-1",
         "identifiers": [{"identifier": "03yrm5c26", "scheme": "ror"}],
         "name": "Test affiliation",
-        "pid": {"pk": 1, "status": "R", "pid_type": "affid", "obj_type": "aff"},
         "title": {"en": "Test affiliation", "es": "Afiliacion de test"},
     }
 

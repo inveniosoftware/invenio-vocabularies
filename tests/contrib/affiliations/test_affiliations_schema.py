@@ -19,15 +19,20 @@ from invenio_vocabularies.contrib.affiliations.schema import (
 
 def test_valid_full(app, affiliation_full_data):
     loaded = AffiliationSchema().load(affiliation_full_data)
+    affiliation_full_data["pid"] = affiliation_full_data.pop("id")
     assert affiliation_full_data == loaded
 
 
 def test_valid_minimal(app):
     data = {
+        "id": "test",
         "name": "Test affiliation",
     }
     loaded = AffiliationSchema().load(data)
-    assert data == loaded
+    assert {
+        "pid": "test",
+        "name": "Test affiliation",
+    } == loaded
 
 
 def test_invalid_no_name(app):

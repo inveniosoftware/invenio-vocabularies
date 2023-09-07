@@ -10,9 +10,6 @@
     "acronym": {
       "type": "string"
     },
-    "id": {
-      "$ref": "local://definitions-v1.0.0.json#/identifier"
-    },
     "identifiers": {
       "description": "Alternate identifiers for the record.",
       "type": "array",
@@ -21,9 +18,6 @@
     },
     "name": {
       "type": "string"
-    },
-    "pid": {
-      "$ref": "local://definitions-v1.0.0.json#/internal-pid"
     },
     "title": {
       "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"

@@ -9,12 +9,9 @@
 """Names datastreams, transformers, writers and readers."""
 
 from invenio_access.permissions import system_identity
-from invenio_pidstore.errors import PIDDoesNotExistError
 from invenio_records.dictutils import dict_lookup
-from marshmallow import ValidationError
 
-from ...datastreams import StreamEntry
-from ...datastreams.errors import TransformerError, WriterError
+from ...datastreams.errors import TransformerError
 from ...datastreams.readers import SimpleHTTPReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
@@ -40,13 +37,14 @@ class OrcidTransformer(BaseTransformer):
         """Applies the transformation to the stream entry."""
         record = stream_entry.entry
         person = record["person"]
-        orcid_id = record["orcid-identifier"]["uri"]
+        orcid_id = record["orcid-identifier"]["path"]
 
         name = person.get("name")
         if name is None:
             raise TransformerError(f"Name not found in ORCiD entry.")
 
         entry = {
+            "id": orcid_id,
             "given_name": name.get("given-names"),
             "family_name": name.get("family-name"),
             "identifiers": [{"scheme": "orcid", "identifier": orcid_id}],
@@ -79,41 +77,14 @@ class OrcidTransformer(BaseTransformer):
 class NamesServiceWriter(ServiceWriter):
     """Names service writer."""
 
-    def __init__(self, *args, scheme_id="orcid", **kwargs):
+    def __init__(self, *args, **kwargs):
         """Constructor."""
         service_or_name = kwargs.pop("service_or_name", "names")
         super().__init__(service_or_name=service_or_name, *args, **kwargs)
-        self._scheme_id = scheme_id
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
-        for identifier in entry.get("identifiers"):
-            if identifier.get("scheme") == self._scheme_id:
-                return identifier["identifier"]
-
-    def _resolve(self, id_):
-        """Resolve an entry given an id."""
-        return self._service.resolve(self._identity, id_=id_, id_type=self._scheme_id)
-
-    def write(self, stream_entry, *args, **kwargs):
-        """Writes the input entry using a given service."""
-        entry = stream_entry.entry
-        try:
-            vocab_id = self._entry_id(entry)
-            # it is resolved before creation to avoid duplicates since
-            # the pid is recidv2 not e.g. the orcid
-            current = self._resolve(vocab_id)
-            if not self._update:
-                raise WriterError([f"Vocabulary entry already exists: {entry}"])
-            updated = dict(current.to_dict(), **entry)
-            return StreamEntry(
-                self._service.update(self._identity, current.id, updated)
-            )
-        except PIDDoesNotExistError:
-            return StreamEntry(self._service.create(self._identity, entry))
-
-        except ValidationError as err:
-            raise WriterError([{"ValidationError": err.messages}])
+        return entry["id"]
 
 
 VOCABULARIES_DATASTREAM_READERS = {

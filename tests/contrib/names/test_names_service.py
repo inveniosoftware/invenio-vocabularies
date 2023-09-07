@@ -13,9 +13,8 @@ from copy import deepcopy
 
 import arrow
 import pytest
-from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
+from invenio_pidstore.errors import PIDDoesNotExistError
 from marshmallow.exceptions import ValidationError
-from sqlalchemy.exc import IntegrityError
 
 from invenio_vocabularies.contrib.names.api import Name
 
@@ -68,7 +67,10 @@ def test_simple_flow(app, service, identity, name_full_data, example_affiliation
 
     # Fail to retrieve it
     # - db
-    pytest.raises(PIDDeletedError, service.read, identity, id_)
+    # only the metadata is removed from the record, it is still resolvable
+    base_keys = {"created", "updated", "id", "links", "revision_id"}
+    deleted_rec = service.read(identity, id_).to_dict()
+    assert set(deleted_rec.keys()) == base_keys
     # - search
     res = service.search(identity, q=f"id:{id_}", size=25, page=1)
     assert res.total == 0
@@ -81,7 +83,7 @@ def test_extra_fields(app, service, identity, name_full_data):
 
 
 def test_identifier_resolution(
-    app, service, identity, name_full_data, example_affiliation
+    app, search_clear, service, identity, name_full_data, example_affiliation
 ):
     # Create it
     item = service.create(identity, name_full_data)
@@ -110,7 +112,11 @@ def test_names_dereferenced(app, search_clear, service, identity, example_affili
     """Extra fields in data should fail."""
     expected_aff = {"id": "cern", "name": "European Organization for Nuclear Research"}
 
-    name_data = {"name": "Doe, John", "affiliations": [{"id": "cern"}]}
+    name_data = {
+        "id": "0000-0001-8135-3489",
+        "name": "Doe, John",
+        "affiliations": [{"id": "cern"}],
+    }
 
     # data is not dereferenced
     assert not name_data["affiliations"][0].get("name")
