@@ -15,11 +15,15 @@ from marshmallow import fields
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
-from ...services.schema import BaseVocabularySchema, ContribVocabularyRelationSchema
+from ...services.schema import (
+    BaseVocabularySchema,
+    ContribVocabularyRelationSchema,
+    ModePIDFieldVocabularyMixin,
+)
 from .config import affiliation_schemes
 
 
-class AffiliationSchema(BaseVocabularySchema):
+class AffiliationSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     """Service schema for affiliations."""
 
     acronym = SanitizedUnicode()

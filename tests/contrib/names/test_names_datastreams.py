@@ -29,6 +29,7 @@ from invenio_vocabularies.datastreams.errors import WriterError
 def name_full_data():
     """Full name data."""
     return {
+        "id": "0000-0001-8135-3489",
         "given_name": "Lars Holm",
         "family_name": "Nielsen",
         "identifiers": [
@@ -44,11 +45,10 @@ def name_full_data():
 @pytest.fixture(scope="module")
 def expected_from_xml():
     return {
+        "id": "0000-0001-8135-3489",
         "given_name": "Lars Holm",
         "family_name": "Nielsen",
-        "identifiers": [
-            {"scheme": "orcid", "identifier": "https://orcid.org/0000-0001-8135-3489"}
-        ],
+        "identifiers": [{"scheme": "orcid", "identifier": "0000-0001-8135-3489"}],
         "affiliations": [{"name": "CERN"}],
     }
 
@@ -146,7 +146,7 @@ def test_orcid_http_reader(_, bytes_xml_data):
     assert bytes_xml_data == results[0]
 
 
-def test_names_service_writer_create(app, search_clear, name_full_data):
+def test_names_service_writer_create(app, db, search_clear, name_full_data):
     writer = NamesServiceWriter()
     record = writer.write(StreamEntry(name_full_data))
     record = record.entry.to_dict()
@@ -154,7 +154,7 @@ def test_names_service_writer_create(app, search_clear, name_full_data):
     assert dict(record, **name_full_data) == record
 
 
-def test_names_service_writer_duplicate(app, search_clear, name_full_data):
+def test_names_service_writer_duplicate(app, db, search_clear, name_full_data):
     writer = NamesServiceWriter()
     _ = writer.write(stream_entry=StreamEntry(name_full_data))
     Name.index.refresh()  # refresh index to make changes live
@@ -165,7 +165,7 @@ def test_names_service_writer_duplicate(app, search_clear, name_full_data):
     assert expected_error in err.value.args
 
 
-def test_names_service_writer_update_existing(app, search_clear, name_full_data):
+def test_names_service_writer_update_existing(app, db, search_clear, name_full_data):
     # create vocabulary
     writer = NamesServiceWriter(update=True)
     name = writer.write(stream_entry=StreamEntry(name_full_data))
@@ -185,9 +185,12 @@ def test_names_service_writer_update_existing(app, search_clear, name_full_data)
     assert dict(record, **updated_name) == record
 
 
-def test_names_service_writer_update_non_existing(app, search_clear, name_full_data):
+def test_names_service_writer_update_non_existing(
+    app, db, search_clear, name_full_data
+):
     # vocabulary item not created, call update directly
     updated_name = deepcopy(name_full_data)
+    updated_name
     updated_name["given_name"] = "Pablo"
     updated_name["family_name"] = "Panero"
     # check changes vocabulary

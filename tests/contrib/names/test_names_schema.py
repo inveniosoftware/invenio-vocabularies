@@ -16,20 +16,33 @@ from invenio_vocabularies.contrib.names.schema import NameSchema
 
 def test_valid_full(app, name_full_data):
     loaded = NameSchema().load(name_full_data)
+    name_full_data["pid"] = name_full_data.pop("id")
     assert name_full_data == loaded
 
 
 def test_valid_minimal(app):
     data = {
+        "id": "0000-0001-8135-3489",
         "name": "Doe, John",
     }
     loaded = NameSchema().load(data)
-    assert data == loaded
+    assert {
+        "pid": "0000-0001-8135-3489",
+        "name": "Doe, John",
+    } == loaded
 
-    data = {"family_name": "Doe", "given_name": "John"}
+    data = {
+        "id": "0000-0001-8135-3489",
+        "family_name": "Doe",
+        "given_name": "John",
+    }
     loaded = NameSchema().load(data)
-    data["name"] = "Doe, John"  # it will be calculated and included
-    assert data == loaded
+    assert {
+        "pid": "0000-0001-8135-3489",
+        "family_name": "Doe",
+        "given_name": "John",
+        "name": "Doe, John",
+    } == loaded
 
 
 def test_invalid_no_names(app):

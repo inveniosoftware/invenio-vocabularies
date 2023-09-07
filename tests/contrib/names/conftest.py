@@ -15,8 +15,6 @@ fixtures are available.
 import pytest
 from invenio_records_resources.proxies import current_service_registry
 
-from invenio_vocabularies.contrib.affiliations.api import Affiliation
-
 
 @pytest.fixture(scope="module")
 def service():
@@ -24,22 +22,31 @@ def service():
     return current_service_registry.get("names")
 
 
+@pytest.fixture(scope="module")
+def affiliations_service():
+    """Names service object."""
+    return current_service_registry.get("affiliations")
+
+
 @pytest.fixture()
-def example_affiliation(db):
+def example_affiliation(db, identity, affiliations_service):
     """Example affiliation."""
-    aff = Affiliation.create(
-        {"id": "cern", "name": "European Organization for Nuclear Research"}
+    aff = affiliations_service.create(
+        identity,
+        {"id": "cern", "name": "European Organization for Nuclear Research"},
     )
-    Affiliation.pid.create(aff)
-    aff.commit()
+    affiliations_service.record_cls.index.refresh()
+    yield aff
+    aff._record.delete(force=True)
+    affiliations_service.indexer.delete(aff._record, refresh=True)
     db.session.commit()
-    return aff
 
 
 @pytest.fixture(scope="function")
 def name_full_data():
     """Full name data."""
     return {
+        "id": "0000-0001-8135-3489",
         "name": "Doe, John",
         "given_name": "John",
         "family_name": "Doe",

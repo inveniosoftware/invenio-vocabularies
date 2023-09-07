@@ -8,13 +8,6 @@
     "$schema": {
       "$ref": "local://definitions-v1.0.0.json#/$schema"
     },
-    "id": {
-      "description": "URI or classification code as identifier - globally unique among all names schemes.",
-      "$ref": "local://definitions-v1.0.0.json#/identifier"
-    },
-    "pid": {
-      "$ref": "local://definitions-v1.0.0.json#/internal-pid"
-    },
     "scheme": {
       "description": "Identifier of the name scheme.",
       "$ref": "local://definitions-v1.0.0.json#/identifier"

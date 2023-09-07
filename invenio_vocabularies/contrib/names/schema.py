@@ -11,16 +11,16 @@
 from functools import partial
 
 from invenio_i18n import lazy_gettext as _
-from invenio_records_resources.services.records.schema import BaseRecordSchema
 from marshmallow import ValidationError, fields, post_load, validates_schema
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
+from ...services.schema import BaseVocabularySchema, ModePIDFieldVocabularyMixin
 from ..affiliations.schema import AffiliationRelationSchema
 from .config import names_schemes
 
 
-class NameSchema(BaseRecordSchema):
+class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     """Service schema for names.
 
     Note that this vocabulary is very different from the base vocabulary

@@ -8,6 +8,7 @@
 
 """Names API tests."""
 
+from copy import deepcopy
 from functools import partial
 
 import pytest
@@ -37,8 +38,9 @@ def indexer():
 @pytest.fixture()
 def example_name(db, name_full_data, example_affiliation):
     """Example name."""
-    name = Name.create(name_full_data)
-    Name.pid.create(name)
+    api_name = deepcopy(name_full_data)
+    pid = api_name.pop("id")  # at API level it's passed as an arg
+    name = Name.create(api_name, pid=pid)
     name.commit()
     db.session.commit()
     return name
@@ -97,7 +99,4 @@ def test_name_indexing(app, db, search, example_name, indexer, search_get):
 
 def test_name_pid(app, db, example_name):
     """Test name pid creation."""
-    name = example_name
-
-    assert name.pid.pid_value
-    assert name.pid.pid_type == "names"
+    assert example_name.pid.pid_value == "0000-0001-8135-3489"

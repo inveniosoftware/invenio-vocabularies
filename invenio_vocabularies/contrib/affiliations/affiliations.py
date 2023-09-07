@@ -8,12 +8,12 @@
 
 """Vocabulary affiliations."""
 
+from invenio_db import db
 from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records_resources.factories.factory import RecordTypeFactory
+from invenio_records_resources.records.systemfields import ModelPIDField
 
-from ...records.pidprovider import PIDProviderFactory
-from ...records.systemfields import BaseVocabularyPIDFieldContext
 from ...services.permissions import PermissionPolicy
 from .config import AffiliationsSearchOptions, service_components
 from .schema import AffiliationSchema
@@ -21,17 +21,22 @@ from .schema import AffiliationSchema
 record_type = RecordTypeFactory(
     "Affiliation",
     # Data layer
+    pid_field_cls=ModelPIDField,
     pid_field_kwargs={
-        "create": False,
-        "provider": PIDProviderFactory.create(pid_type="aff"),
-        "context_cls": BaseVocabularyPIDFieldContext,
+        "model_field_name": "pid",
+    },
+    model_cls_attrs={
+        # cannot set to nullable=False because it would fail at
+        # service level when create({}), see records-resources.
+        "pid": db.Column(db.String(255), unique=True),
     },
     schema_version="1.0.0",
     schema_path="local://affiliations/affiliation-v1.0.0.json",
     record_dumper=SearchDumper(
+        model_fields={"pid": ("id", str)},
         extensions=[
             IndexedAtDumperExt(),
-        ]
+        ],
     ),
     # Service layer
     service_id="affiliations",
