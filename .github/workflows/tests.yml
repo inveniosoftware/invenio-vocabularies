@@ -31,28 +31,16 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9]
         requirements-level: [pypi]
-        db-service: [postgresql11, postgresql13, mysql8]
+        db-service: [postgresql14]
         search-service: [opensearch2, elasticsearch7]
         node-version: [16.x]
-        exclude:
-          - python-version: 3.7
-            db-service: postgresql13
-
-          - python-version: 3.7
-            db-service: mysql8
-
         include:
           - search-service: opensearch2
             SEARCH_EXTRAS: "opensearch2"
-
           - search-service: elasticsearch7
             SEARCH_EXTRAS: "elasticsearch7"
-
-          - db-service: mysql8
-            DB_EXTRAS: "mysql"
-
     env:
       DB: ${{ matrix.db-service }}
       SEARCH: ${{ matrix.search-service }}
