@@ -49,6 +49,8 @@ class AwardSchema(BaseVocabularySchema):
 
     acronym = SanitizedUnicode()
 
+    program = SanitizedUnicode()
+
     id = SanitizedUnicode(
         validate=validate.Length(min=1, error=_("PID cannot be blank."))
     )

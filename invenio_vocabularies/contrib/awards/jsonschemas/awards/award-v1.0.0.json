@@ -36,6 +36,9 @@
     },
     "acronym": {
       "type": "string"
+    },
+    "program": {
+      "type": "string"
     }
   }
 }
