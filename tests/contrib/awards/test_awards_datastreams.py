@@ -93,6 +93,7 @@ def expected_from_award_json():
         "title": {"en": "Test title"},
         "funder": {"id": "021nxhr62"},
         "acronym": "TA",
+        "program": "GEO/OAD",
     }
 
 
@@ -107,6 +108,7 @@ def expected_from_award_json_ec():
         "title": {"en": "Test title"},
         "funder": {"id": "00k4n6c32"},
         "acronym": "TS",
+        "program": "test",
     }
 
 
