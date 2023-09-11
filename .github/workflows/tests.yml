@@ -33,7 +33,7 @@ jobs:
       matrix:
         python-version: [3.7, 3.8, 3.9]
         requirements-level: [pypi]
-        db-service: [postgresql10, postgresql13, mysql8]
+        db-service: [postgresql11, postgresql13, mysql8]
         search-service: [opensearch2, elasticsearch7]
         node-version: [16.x]
         exclude:
