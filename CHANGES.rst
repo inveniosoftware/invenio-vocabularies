@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.6.0 (2023-09-12)
+
+- awards: add acronym to schema
+
 Version 1.5.1 (2023-07-07)
 
 - fix string type columns for mysql
