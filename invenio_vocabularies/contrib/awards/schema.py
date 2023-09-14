@@ -67,6 +67,7 @@ class AwardRelationSchema(Schema):
         )
     )
     acronym = SanitizedUnicode()
+    program = SanitizedUnicode()
 
     @validates_schema
     def validate_data(self, data, **kwargs):
