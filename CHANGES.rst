@@ -8,6 +8,15 @@
 Changes
 =======
 
+Version 2.0.0 (2023-09-14)
+
+- contrib-awards: add "program" to schema fields
+- global: switch names and affiliations to model PID field
+- ci: update matrix
+- awards: add "program" field
+- config: update awards funders mapping
+- service: add sort option to load vocabs
+
 Version 1.6.0 (2023-09-12)
 
 - awards: add acronym to schema
