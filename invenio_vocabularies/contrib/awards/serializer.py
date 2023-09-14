@@ -35,5 +35,6 @@ class AwardL10NItemSchema(Schema):
     description = L10NString(data_key="description_l10n")
     number = fields.String(dump_only=True)
     acronym = fields.String(dump_only=True)
+    program = fields.String(dump_only=True)
     funder = fields.Nested(FunderRelationSchema, dump_only=True)
     identifiers = fields.List(fields.Nested(IdentifierSchema), dump_only=True)

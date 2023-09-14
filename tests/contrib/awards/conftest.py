@@ -94,6 +94,7 @@ def award_full_data():
         },
         "funder": {"id": "00k4n6c32"},
         "acronym": "HIT-CF",
+        "program": "H2020",
     }
 
 
@@ -115,6 +116,7 @@ def award_full_data_invalid_id():
         },
         "funder": {"id": "010101010"},
         "acronym": "HIT-CF",
+        "program": "H2020",
     }
 
 
