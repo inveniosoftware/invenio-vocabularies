@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 2.1.0 (2023-09-15)
+
+- custom_fields: allow to pass schema to the VocabularyCF
+- affiliations: add facet labels
+
 Version 2.0.0 (2023-09-14)
 
 - contrib-awards: add "program" to schema fields
