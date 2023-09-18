@@ -107,47 +107,47 @@ function FundingFieldForm(props) {
               />
             );
           })}
-          <FundingModal
-            searchConfig={searchConfig}
-            trigger={
-              <Button
-                type="button"
-                key="custom"
-                icon
-                labelPosition="left"
-                className="mb-5"
-              >
-                <Icon name="add" />
-                {i18next.t("Add award")}
-              </Button>
-            }
-            onAwardChange={(selectedFunding) => {
-              formikArrayPush(selectedFunding);
-            }}
-            mode="standard"
-            action="add"
-            deserializeAward={deserializeAward}
-            deserializeFunder={deserializeFunder}
-            computeFundingContents={computeFundingContents}
-          />
-          <FundingModal
-            searchConfig={searchConfig}
-            trigger={
-              <Button type="button" key="custom" icon labelPosition="left">
-                <Icon name="add" />
-                {i18next.t("Add custom")}
-              </Button>
-            }
-            onAwardChange={(selectedFunding) => {
-              formikArrayPush(selectedFunding);
-            }}
-            mode="custom"
-            action="add"
-            deserializeAward={deserializeAward}
-            deserializeFunder={deserializeFunder}
-            computeFundingContents={computeFundingContents}
-          />
         </List>
+        <FundingModal
+          searchConfig={searchConfig}
+          trigger={
+            <Button
+              type="button"
+              key="custom"
+              icon
+              labelPosition="left"
+              className="mb-5"
+            >
+              <Icon name="add" />
+              {i18next.t("Add award")}
+            </Button>
+          }
+          onAwardChange={(selectedFunding) => {
+            formikArrayPush(selectedFunding);
+          }}
+          mode="standard"
+          action="add"
+          deserializeAward={deserializeAward}
+          deserializeFunder={deserializeFunder}
+          computeFundingContents={computeFundingContents}
+        />
+        <FundingModal
+          searchConfig={searchConfig}
+          trigger={
+            <Button type="button" key="custom" icon labelPosition="left">
+              <Icon name="add" />
+              {i18next.t("Add custom")}
+            </Button>
+          }
+          onAwardChange={(selectedFunding) => {
+            formikArrayPush(selectedFunding);
+          }}
+          mode="custom"
+          action="add"
+          deserializeAward={deserializeAward}
+          deserializeFunder={deserializeFunder}
+          computeFundingContents={computeFundingContents}
+        />
       </Form.Field>
     </DndProvider>
   );
