@@ -12,7 +12,7 @@
 import pytest
 
 from invenio_vocabularies.records.api import Vocabulary
-from invenio_vocabularies.services.facets import VocabularyLabels
+from invenio_vocabularies.services.facets import VocabularyLabels, cached_vocabs
 
 
 @pytest.fixture(scope="module")
@@ -71,7 +71,32 @@ def test_vocabulary_label_no_cache(example_records):
 def test_vocabulary_label_not_found(example_records):
     # Uses example record to have two languages created on the vocabulary
     labels_instance = VocabularyLabels(vocabulary="languages", cache=True)
-    labels = labels_instance(["eng", "glg"])
+    labels = labels_instance(("eng", "glg"))
 
     assert labels["eng"] == "English"
     assert not labels.get("glg")  # search wont fail
+
+
+def test_lru_cache():
+    # reset
+    cached_vocabs.cache_clear()
+    # 1st exec, cache miss
+    assert cached_vocabs(None, "languages", ("eng", "glg"), ("id", "title"), ttl_hash=1)
+    cache_info = cached_vocabs.cache_info()
+    assert cache_info.hits == 0
+    assert cache_info.misses == 1
+    assert cache_info.currsize == 1
+
+    # 2nd exec with same params, cache hit
+    assert cached_vocabs(None, "languages", ("eng", "glg"), ("id", "title"), ttl_hash=1)
+    cache_info = cached_vocabs.cache_info()
+    assert cache_info.hits == 1
+    assert cache_info.misses == 1
+    assert cache_info.currsize == 1
+
+    # 3rd exec with different ttl_hash to expire the cache, cache miss
+    assert cached_vocabs(None, "languages", ("eng", "glg"), ("id", "title"), ttl_hash=2)
+    cache_info = cached_vocabs.cache_info()
+    assert cache_info.hits == 1
+    assert cache_info.misses == 2
+    assert cache_info.currsize == 2
