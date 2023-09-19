@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.1.1 (2023-09-19)
+
+- funding: fixed accessiblity issues
+
 Version 2.1.0 (2023-09-15)
 
 - custom_fields: allow to pass schema to the VocabularyCF
