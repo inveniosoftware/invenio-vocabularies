@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.2.0 (2023-09-19)
+
+- facets: implement in-memory cache
+
 Version 2.1.1 (2023-09-19)
 
 - funding: fixed accessiblity issues
