@@ -13,7 +13,6 @@ from unittest.mock import patch
 
 import pytest
 
-from invenio_vocabularies.datastreams.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.readers import BaseReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
 from invenio_vocabularies.datastreams.writers import BaseWriter
