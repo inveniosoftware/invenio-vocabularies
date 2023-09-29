@@ -72,6 +72,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
         selectOnNavigation={false}
         required
         search={(options) => options}
+        isFocused
         onValueChange={({ formikProps }, selectedFundersArray) => {
           if (selectedFundersArray.length === 1) {
             const selectedFunder = selectedFundersArray[0];
