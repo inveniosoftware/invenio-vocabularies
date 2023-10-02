@@ -1,5 +1,5 @@
 ..
-    Copyright (C) 2020 CERN.
+    Copyright (C) 2020-2023 CERN.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -7,6 +7,12 @@
 
 Changes
 =======
+
+Version 2.2.1 (2023-10-02)
+
+- facets: change caching strategy by caching each vocabulary by id. Replace
+  lru_cache with invenio-cache to ensure that cache expiration uses a TTL that
+  is correctly computed.
 
 Version 2.2.0 (2023-09-19)
 
