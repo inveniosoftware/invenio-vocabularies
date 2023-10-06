@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.2.2 (2023-10-06)
+
+- alembic rcp: set explicit dependency on pidstore create table
+
 Version 2.2.1 (2023-10-02)
 
 - facets: change caching strategy by caching each vocabulary by id. Replace
