@@ -14,7 +14,7 @@ from alembic import op
 revision = "55a700f897b6"
 down_revision = "e1146238edd3"
 branch_labels = ()
-depends_on = None
+depends_on = "999c62899c20"
 
 
 pids_table = sa.sql.table(
