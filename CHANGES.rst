@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.2.3 (2023-10-08)
+
+- contrib: fix ``name`` serialization for the Names vocabulary.
+
 Version 2.2.2 (2023-10-06)
 
 - alembic rcp: set explicit dependency on pidstore create table
