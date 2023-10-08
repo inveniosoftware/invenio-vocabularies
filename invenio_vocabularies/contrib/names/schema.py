@@ -11,7 +11,7 @@
 from functools import partial
 
 from invenio_i18n import lazy_gettext as _
-from marshmallow import ValidationError, fields, post_load, validates_schema
+from marshmallow import ValidationError, fields, post_dump, post_load, validates_schema
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -57,7 +57,7 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
             raise ValidationError({"family_name": messages})
 
     @post_load
-    def calculate_name(self, data, **kwargs):
+    def update_name(self, data, **kwargs):
         """Update names for person.
 
         Fill name from given_name and family_name if person.
@@ -67,4 +67,17 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
         if family_name and given_name:
             data["name"] = f"{family_name}, {given_name}"
 
+        return data
+
+    @post_dump
+    def dump_name(self, data, **kwargs):
+        """Dumps the name if not present in the serialized data."""
+        name = data.get("name")
+        if not name:
+            family_name = data.get("family_name")
+            given_name = data.get("given_name")
+            if family_name and given_name:
+                data["name"] = f"{family_name}, {given_name}"
+            elif family_name:
+                data["name"] = family_name
         return data
