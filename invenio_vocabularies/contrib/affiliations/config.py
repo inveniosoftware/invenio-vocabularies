@@ -29,9 +29,6 @@ class AffiliationsSearchOptions(SearchOptions):
         fields=[
             "name^100",
             "acronym^20",
-            "title.*^5",
-            "title.*._2gram",
-            "title.*._3gram",
         ],
     )
 
