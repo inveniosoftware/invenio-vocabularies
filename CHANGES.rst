@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.2.4 (2023-10-19)
+
+- search: decrease number of searching fields
+
 Version 2.2.3 (2023-10-08)
 
 - contrib: fix ``name`` serialization for the Names vocabulary.
