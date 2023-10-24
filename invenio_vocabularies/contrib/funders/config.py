@@ -30,9 +30,7 @@ class FundersSearchOptions(SearchOptions):
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
             "name^100",
-            "title.*^5",
-            "title.*._2gram",
-            "title.*._3gram",
+            "identifiers.identifier^10",
         ]
     )
 
