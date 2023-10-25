@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 2.3.0 (2023-10-25)
+
+- contrib: allow search funders by id
+- contrib: funders and awards fix TransportError in OS caused by suggestion search in too many fields
+
 Version 2.2.4 (2023-10-19)
 
 - search: decrease number of searching fields
