@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.3.1 (2023-11-01)
+
+- contrib: add affiliation suggestion by id
+
 Version 2.3.0 (2023-10-25)
 
 - contrib: allow search funders by id
