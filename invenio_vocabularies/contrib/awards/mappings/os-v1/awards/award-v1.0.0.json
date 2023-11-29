@@ -53,7 +53,10 @@
         "type": "keyword"
       },
       "acronym": {
-        "type": "keyword"
+        "type": "keyword",
+        "fields": {
+          "text": { "type": "text"}
+        }
       },
       "program": {
         "type": "keyword"
