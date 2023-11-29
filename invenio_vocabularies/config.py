@@ -86,6 +86,7 @@ VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
     "snsf________": "00yjd3n13",
     "sshrc_______": "006cvnv84",
     "tubitakf____": "04w9kkr77",
+    "twcf________": "00x0z1472",
     "ukri________": "001aqnf71",
     "wt__________": "029chgv08",
 }
