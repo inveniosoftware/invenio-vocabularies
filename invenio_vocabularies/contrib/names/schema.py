@@ -56,6 +56,20 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
             ]
             raise ValidationError({"family_name": messages})
 
+    @validates_schema
+    def validate_affiliatons(self, data, **kwargs):
+        """Validate names."""
+        affiliations = data.get("affiliations", [])
+        seen_names = set()
+        for affiliation in affiliations:
+            name = affiliation.get("name")
+            if not affiliation.get("id") and name:
+                if name in seen_names:
+                    messages = [_("Duplicated affiliations.")]
+                    raise ValidationError({"affiliations": messages})
+                else:
+                    seen_names.add(name)
+
     @post_load
     def update_name(self, data, **kwargs):
         """Update names for person.
