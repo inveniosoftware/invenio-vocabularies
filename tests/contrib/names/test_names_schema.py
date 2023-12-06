@@ -66,3 +66,19 @@ def test_invalid_no_names(app):
 
     with pytest.raises(ValidationError):
         data = NameSchema().load(invalid)
+
+
+def test_duplicated_affiliations(app):
+    invalid = {
+        "family_name": "Doe",
+        "given_name": "John",
+        "name": "Doe, John",
+        "id": "0000-0001-8135-3489",
+        "identifiers": [{"identifier": "0000-0001-8135-3489", "scheme": "orcid"}],
+        "affiliations": [{"name": "CustomORG"}, {"name": "CustomORG"}],
+    }
+    with pytest.raises(ValidationError) as e:
+        NameSchema().load(invalid)
+
+    messages = e.value.normalized_messages()
+    assert {"affiliations": ["Duplicated affiliations."]} == messages
