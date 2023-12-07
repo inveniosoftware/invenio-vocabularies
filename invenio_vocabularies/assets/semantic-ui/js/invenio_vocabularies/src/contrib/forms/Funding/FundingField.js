@@ -111,7 +111,7 @@ function FundingFieldForm(props) {
           })}
         </List>
 
-        <Overridable id="ReactInvenioDeposit.FundingField.AddAward.Button">
+        <Overridable id="InvenioVocabularies.FundingField.AddAward.Button">
           <FundingModal
             searchConfig={searchConfig}
             trigger={
@@ -137,7 +137,7 @@ function FundingFieldForm(props) {
           />
         </Overridable>
 
-        <Overridable id="ReactInvenioDeposit.FundingField.AddCustom.Button">
+        <Overridable id="InvenioVocabularies.FundingField.AddCustom.Button">
           <FundingModal
             searchConfig={searchConfig}
             trigger={
