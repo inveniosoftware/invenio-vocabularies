@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 2.4.0 (2023-12-07)
+
+- schema: add validation for affiliations
+- mappings: add a text subfield for award acronyms
+- config: add new TWCF funder
+
 Version 2.3.1 (2023-11-01)
 
 - contrib: add affiliation suggestion by id
