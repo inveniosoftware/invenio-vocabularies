@@ -95,35 +95,34 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
           }}
         />
       </Overridable>
-
-      <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformation.container">
+      <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformation.Header">
         <Header as="h3" size="small">
-          {i18next.t("Award information (optional)")}
+          {i18next.t("Award information")} ({i18next.t("optional")})
         </Header>
-        <Form.Group widths="equal">
-          <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumber.TextField">
-            <TextField
-              label={i18next.t("Number")}
-              placeholder={i18next.t("Award number")}
-              fieldPath="selectedFunding.award.number"
-            />
-          </Overridable>
-          <Overridable id="InvenioVocabularies.CustomAwardForm.AwardTitle.TextField">
-            <TextField
-              label={i18next.t("Title")}
-              placeholder={i18next.t("Award Title")}
-              fieldPath="selectedFunding.award.title"
-            />
-          </Overridable>
-          <Overridable id="InvenioVocabularies.CustomAwardForm.AwardUrl.TextField">
-            <TextField
-              label={i18next.t("URL")}
-              placeholder={i18next.t("Award URL")}
-              fieldPath="selectedFunding.award.url"
-            />
-          </Overridable>
-        </Form.Group>
       </Overridable>
+      <Form.Group widths="equal">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumber.TextField">
+          <TextField
+            label={i18next.t("Number")}
+            placeholder={i18next.t("Award number")}
+            fieldPath="selectedFunding.award.number"
+          />
+        </Overridable>
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardTitle.TextField">
+          <TextField
+            label={i18next.t("Title")}
+            placeholder={i18next.t("Award Title")}
+            fieldPath="selectedFunding.award.title"
+          />
+        </Overridable>
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardUrl.TextField">
+          <TextField
+            label={i18next.t("URL")}
+            placeholder={i18next.t("Award URL")}
+            fieldPath="selectedFunding.award.url"
+          />
+        </Overridable>
+      </Form.Group>
     </Form>
   );
 }
