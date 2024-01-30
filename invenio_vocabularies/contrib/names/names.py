@@ -8,6 +8,7 @@
 
 """Vocabulary names."""
 
+from flask_resources import JSONSerializer, ResponseHandler
 from invenio_db import db
 from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
@@ -18,6 +19,7 @@ from invenio_records_resources.records.systemfields import (
     ModelPIDField,
     PIDListRelation,
 )
+from invenio_records_resources.resources.records.headers import etag_headers
 
 from ...services.permissions import PermissionPolicy
 from ..affiliations.api import Affiliation
@@ -63,4 +65,12 @@ record_type = RecordTypeFactory(
     permission_policy_cls=PermissionPolicy,
     # Resource layer
     endpoint_route="/names",
+    resource_cls_attrs={
+        "response_handlers": {
+            "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
+            "application/vnd.inveniordm.v1+json": ResponseHandler(
+                JSONSerializer(), headers=etag_headers
+            ),
+        }
+    },
 )
