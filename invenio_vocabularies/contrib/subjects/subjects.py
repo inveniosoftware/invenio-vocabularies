@@ -9,9 +9,11 @@
 
 """Vocabulary subjects."""
 
+from flask_resources import JSONSerializer, ResponseHandler
 from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records_resources.factories.factory import RecordTypeFactory
+from invenio_records_resources.resources.records.headers import etag_headers
 
 from ...records.pidprovider import PIDProviderFactory
 from ...records.systemfields import BaseVocabularyPIDFieldContext
@@ -42,4 +44,12 @@ record_type = RecordTypeFactory(
     permission_policy_cls=PermissionPolicy,
     # Resource layer
     endpoint_route="/subjects",
+    resource_cls_attrs={
+        "response_handlers": {
+            "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
+            "application/vnd.inveniordm.v1+json": ResponseHandler(
+                JSONSerializer(), headers=etag_headers
+            ),
+        }
+    },
 )
