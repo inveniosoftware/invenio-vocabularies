@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2022 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -23,6 +23,7 @@ import yaml
 from lxml.html import parse as html_parse
 
 from .errors import ReaderError
+from .xml import etree_to_dict
 
 
 class BaseReader(ABC):
@@ -206,32 +207,11 @@ class CSVReader(BaseReader):
 class XMLReader(BaseReader):
     """XML reader."""
 
-    @classmethod
-    def _etree_to_dict(cls, tree):
-        d = {tree.tag: {} if tree.attrib else None}
-        children = list(tree)
-        if children:
-            dd = defaultdict(list)
-            for dc in map(cls._etree_to_dict, children):
-                for k, v in dc.items():
-                    dd[k].append(v)
-            d = {tree.tag: {k: v[0] if len(v) == 1 else v for k, v in dd.items()}}
-        if tree.attrib:
-            d[tree.tag].update(("@" + k, v) for k, v in tree.attrib.items())
-        if tree.text:
-            text = tree.text.strip()
-            if children or tree.attrib:
-                if text:
-                    d[tree.tag]["#text"] = text
-            else:
-                d[tree.tag] = text
-        return d
-
     def _iter(self, fp, *args, **kwargs):
         """Read and parse an XML file to dict."""
         # NOTE: We parse HTML, to skip XML validation and strip XML namespaces
         xml_tree = html_parse(fp).getroot()
-        record = self._etree_to_dict(xml_tree)["html"]["body"].get("record")
+        record = etree_to_dict(xml_tree)["html"]["body"].get("record")
 
         if not record:
             raise ReaderError(f"Record not found in XML entry.")
