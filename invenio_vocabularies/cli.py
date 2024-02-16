@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2020-2021 CERN.
 # Copyright (C) 2021 Graz University of Technology.
+# Copyright (C) 2024 KTH Royal Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -131,7 +132,7 @@ def update(vocabulary, filepath=None, origin=None):
     config = get_config_for_ds(vocabulary, filepath, origin)
 
     for w_conf in config["writers"]:
-        w_conf["args"]["update"] = True
+        w_conf.setdefault("args", {})["update"] = True
 
     success, errored, filtered = _process_vocab(config)
 
