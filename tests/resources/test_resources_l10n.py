@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2020-2021 CERN.
 # Copyright (C) 2023 Graz University of Technology.
+# Copyright (C) 2024 KTH Royal Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -122,9 +123,22 @@ def test_get(client, example_record, h, prefix, expected_da, expected_en):
 
 def test_search(client, example_record, h, prefix, expected_da, expected_en):
     """Test search result serialization."""
-    expected_en = {"hits": {"hits": [expected_en], "total": 1}}
-    expected_da = {"hits": {"hits": [expected_da], "total": 1}}
 
+    def generate_expected_dict(expected_hits):
+        """Generate expected dict for search results."""
+        return {
+            "hits": {
+                "hits": [expected_hits],
+                "total": 1,
+            },
+            "links": {
+                "self": "https://127.0.0.1:5000/api/vocabularies/resourcetypes2?page=1&size=25&sort=title"
+            },
+            "sortBy": "title",
+        }
+
+    expected_en = generate_expected_dict(expected_en)
+    expected_da = generate_expected_dict(expected_da)
     # Default locale
     res = client.get(f"{prefix}", headers=h)
     assert res.json == expected_en
