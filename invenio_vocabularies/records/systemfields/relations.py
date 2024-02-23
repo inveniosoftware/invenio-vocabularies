@@ -38,7 +38,7 @@ class CustomFieldsRelation(RelationsField):
                 relations[cf.name] = cf.relation_cls(
                     f"custom_fields.{cf.name}",
                     keys=cf.field_keys,
-                    pid_field=Vocabulary.pid.with_type_ctx(cf.vocabulary_id),
+                    pid_field=cf.pid_field,
                     cache_key=cf.vocabulary_id,
                 )
 

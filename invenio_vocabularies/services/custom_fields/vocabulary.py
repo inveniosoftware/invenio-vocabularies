@@ -12,6 +12,7 @@ from invenio_records_resources.services.custom_fields.base import BaseCF
 from marshmallow import fields
 
 from ...proxies import current_service
+from ...records.api import Vocabulary
 from ...resources.serializer import VocabularyL10NItemSchema
 from ...services.schema import VocabularyRelationSchema
 
@@ -49,6 +50,7 @@ class VocabularyCF(BaseCF):
         self.sort_by = sort_by
         self.schema = schema
         self.ui_schema = ui_schema
+        self.pid_field = Vocabulary.pid.with_type_ctx(self.vocabulary_id)
 
     @property
     def mapping(self):
