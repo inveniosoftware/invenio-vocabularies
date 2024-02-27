@@ -58,7 +58,7 @@ class VocabularyCF(BaseCF):
             "properties": {
                 "@v": {"type": "keyword"},
                 "id": {"type": "keyword"},
-                "title": {"type": "object", "dynamic": True},
+                "title": {"type": "object", "dynamic": "true"},
             },
         }
 

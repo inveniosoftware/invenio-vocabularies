@@ -44,7 +44,7 @@ def test_cf_mapping(vocabulary_cf):
         "properties": {
             "@v": {"type": "keyword"},
             "id": {"type": "keyword"},
-            "title": {"type": "object", "dynamic": True},
+            "title": {"type": "object", "dynamic": "true"},
         },
     }
 
