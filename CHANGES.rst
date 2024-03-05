@@ -8,6 +8,14 @@
 Changes
 =======
 
+Version 3.1.0 (released 2024-03-05)
+
+- custom_fields: added subject field
+- custom_fields: add pid_field to custom fields
+- mappings: change "dynamic" values to string
+- ci: upgrade tests matrix
+- bumps react-invenio-forms
+
 Version 3.0.0 (released 2024-01-30)
 
 - installation: bump invenio-records-resources
