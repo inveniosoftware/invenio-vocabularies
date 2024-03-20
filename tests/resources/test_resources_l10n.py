@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2023 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -122,8 +122,20 @@ def test_get(client, example_record, h, prefix, expected_da, expected_en):
 
 def test_search(client, example_record, h, prefix, expected_da, expected_en):
     """Test search result serialization."""
-    expected_en = {"hits": {"hits": [expected_en], "total": 1}}
-    expected_da = {"hits": {"hits": [expected_da], "total": 1}}
+    expected_en = {
+        "hits": {"hits": [expected_en], "total": 1},
+        "links": {
+            "self": "https://127.0.0.1:5000/api/vocabularies/resourcetypes2?page=1&size=25&sort=title"
+        },
+        "sortBy": "title",
+    }
+    expected_da = {
+        "hits": {"hits": [expected_da], "total": 1},
+        "links": {
+            "self": "https://127.0.0.1:5000/api/vocabularies/resourcetypes2?page=1&size=25&sort=title"
+        },
+        "sortBy": "title",
+    }
 
     # Default locale
     res = client.get(f"{prefix}", headers=h)
