@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2020-2021 CERN.
+# Copyright (C)      2022 TU Wien.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -13,6 +14,7 @@ import arrow
 import pytest
 from invenio_cache import current_cache
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
+from invenio_records_resources.services.errors import PermissionDeniedError
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError
 
@@ -181,3 +183,44 @@ def test_indexed_at_query(app, db, service, identity, lang_type, lang_data):
         type="languages",
     )
     assert res.total == 1
+
+
+#
+# Read-only mode
+#
+
+
+def test_create_ro(app, service, identity, lang_type, lang_data):
+    """Try to create a vocabulary in read-only mode."""
+    app.config["RECORDS_PERMISSIONS_READ_ONLY"] = True
+
+    pytest.raises(PermissionDeniedError, service.create, identity, lang_data)
+
+
+def test_update_ro(app, service, identity, lang_type, lang_data):
+    """Try to update a vocabulary in read-only mode."""
+    app.config["RECORDS_PERMISSIONS_READ_ONLY"] = False
+    item = service.create(identity, lang_data)
+
+    app.config["RECORDS_PERMISSIONS_READ_ONLY"] = True
+    pytest.raises(
+        PermissionDeniedError, service.update, identity, ("languages", "eng"), lang_data
+    )
+
+
+def test_delete_ro(app, service, identity, lang_type, lang_data):
+    """Try to delete a vocabulary in read-only mode."""
+    app.config["RECORDS_PERMISSIONS_READ_ONLY"] = False
+    item = service.create(identity, lang_data)
+
+    app.config["RECORDS_PERMISSIONS_READ_ONLY"] = True
+    pytest.raises(PermissionDeniedError, service.delete, identity, ("languages", "eng"))
+
+
+def test_create_type_ro(app, service, identity):
+    """Try to create a vocabulary type in read-only mode."""
+    app.config["RECORDS_PERMISSIONS_READ_ONLY"] = True
+
+    pytest.raises(
+        PermissionDeniedError, service.create_type, identity, "newtype", "new"
+    )
