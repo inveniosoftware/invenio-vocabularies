@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2022 CERN.
+# Copyright (C) 2024 KTH Royal Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -15,7 +16,7 @@ import pytest
 from invenio_access.permissions import system_identity
 from invenio_records_resources.proxies import current_service_registry
 
-from invenio_vocabularies.cli import _process_vocab, get_config_for_ds, vocabularies
+from invenio_vocabularies.cli import _process_vocab, vocabularies
 from invenio_vocabularies.config import (
     VOCABULARIES_DATASTREAM_TRANSFORMERS,
     VOCABULARIES_DATASTREAM_WRITERS,
@@ -27,6 +28,7 @@ from invenio_vocabularies.contrib.names.datastreams import (
 from invenio_vocabularies.contrib.names.datastreams import (
     VOCABULARIES_DATASTREAM_WRITERS as NAMES_WRITERS,
 )
+from invenio_vocabularies.factories import get_vocabulary_config
 
 
 @pytest.fixture(scope="module")
@@ -98,7 +100,8 @@ def names_tar_file(name_xml):
 
 def test_process(app, names_tar_file):
     service = current_service_registry.get("names")
-    config = get_config_for_ds(vocabulary="names", origin=names_tar_file.absolute())
+    vocab_factory = get_vocabulary_config("names")
+    config = vocab_factory.get_config(origin=names_tar_file.absolute())
     _process_vocab(config)
     Name.index.refresh()
 
