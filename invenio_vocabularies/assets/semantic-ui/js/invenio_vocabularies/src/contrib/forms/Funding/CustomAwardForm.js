@@ -16,13 +16,18 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
   function deserializeFunderToDropdown(funderItem) {
     let funderName = null;
     let funderPID = null;
+    let funderCountry = null;
 
     if (funderItem.name) {
       funderName = funderItem.name;
     }
 
-    if (funderItem.pid) {
-      funderPID = funderItem.pid;
+    if (funderItem.id) {
+      funderPID = funderItem.id;
+    }
+
+    if (funderItem.country) {
+      funderCountry = funderItem.country;
     }
 
     if (!funderName && !funderPID) {
@@ -30,7 +35,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
     }
 
     return {
-      text: funderName || funderPID,
+      text: [funderName, funderCountry, funderPID].filter((val) => val).join(", "),
       value: funderItem.id,
       key: funderItem.id,
       ...(funderName && { name: funderName }),
