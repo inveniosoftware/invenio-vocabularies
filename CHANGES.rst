@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version 3.2.0 (released 2024-03-22)
+
+- funding: add country and ror to funder search results
+- init: move record_once to finalize_app (removes deprecation on `before_first_request`)
+- installation: upgrade invenio-app
+
+
 Version 3.1.0 (released 2024-03-05)
 
 - custom_fields: added subject field
