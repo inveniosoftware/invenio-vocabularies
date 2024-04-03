@@ -55,7 +55,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
 
   return (
     <Form>
-      <Overridable id="InvenioVocabularies.CustomAwardForm.RemoteSelectField.SelectedFundingFunderId">
+      <Overridable id="InvenioVocabularies.CustomAwardForm.RemoteSelectField.Container">
         <RemoteSelectField
           fieldPath="selectedFunding.funder.id"
           suggestionAPIUrl="/api/funders"
@@ -95,27 +95,27 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
           }}
         />
       </Overridable>
-      <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformation.Header">
+      <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformation.Container">
         <Header as="h3" size="small">
           {i18next.t("Award information")} ({i18next.t("optional")})
         </Header>
       </Overridable>
       <Form.Group widths="equal">
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumber.TextField">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumber.Container">
           <TextField
             label={i18next.t("Number")}
             placeholder={i18next.t("Award number")}
             fieldPath="selectedFunding.award.number"
           />
         </Overridable>
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardTitle.TextField">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardTitle.Container">
           <TextField
             label={i18next.t("Title")}
             placeholder={i18next.t("Award Title")}
             fieldPath="selectedFunding.award.title"
           />
         </Overridable>
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardUrl.TextField">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardUrl.Container">
           <TextField
             label={i18next.t("URL")}
             placeholder={i18next.t("Award URL")}

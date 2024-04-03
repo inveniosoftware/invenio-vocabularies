@@ -111,7 +111,7 @@ function FundingFieldForm(props) {
           })}
         </List>
 
-        <Overridable id="InvenioVocabularies.FundingField.AddAward.Button">
+        <Overridable id="InvenioVocabularies.FundingField.AddAwardFundingModal.Container">
           <FundingModal
             searchConfig={searchConfig}
             trigger={
@@ -137,7 +137,7 @@ function FundingFieldForm(props) {
           />
         </Overridable>
 
-        <Overridable id="InvenioVocabularies.FundingField.AddCustom.Button">
+        <Overridable id="InvenioVocabularies.FundingField.AddCustomFundingModal.Container">
           <FundingModal
             searchConfig={searchConfig}
             trigger={
