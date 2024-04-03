@@ -1,5 +1,5 @@
 ..
-    Copyright (C) 2020-2023 CERN.
+    Copyright (C) 2020-2024 CERN.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -7,6 +7,25 @@
 
 Changes
 =======
+
+Version 3.2.0 (released 2024-03-22)
+
+- funding: add country and ror to funder search results
+- init: move record_once to finalize_app (removes deprecation on `before_first_request`)
+- installation: upgrade invenio-app
+
+
+Version 3.1.0 (released 2024-03-05)
+
+- custom_fields: added subject field
+- custom_fields: add pid_field to custom fields
+- mappings: change "dynamic" values to string
+- ci: upgrade tests matrix
+- bumps react-invenio-forms
+
+Version 3.0.0 (released 2024-01-30)
+
+- installation: bump invenio-records-resources
 
 Version 2.4.0 (2023-12-07)
 

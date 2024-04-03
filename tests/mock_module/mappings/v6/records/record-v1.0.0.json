@@ -38,7 +38,7 @@
                 },
                 "title": {
                   "type": "object",
-                  "dynamic": true
+                  "dynamic": "true"
                 }
               }
             }
