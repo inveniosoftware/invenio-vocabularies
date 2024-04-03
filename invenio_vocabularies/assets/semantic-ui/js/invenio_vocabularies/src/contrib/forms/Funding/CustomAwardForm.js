@@ -95,27 +95,27 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
           }}
         />
       </Overridable>
-      <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformation.Container">
+      <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformationHeader.Container">
         <Header as="h3" size="small">
           {i18next.t("Award information")} ({i18next.t("optional")})
         </Header>
       </Overridable>
       <Form.Group widths="equal">
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumber.Container">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumberTextField.Container">
           <TextField
             label={i18next.t("Number")}
             placeholder={i18next.t("Award number")}
             fieldPath="selectedFunding.award.number"
           />
         </Overridable>
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardTitle.Container">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardTitleTextField.Container">
           <TextField
             label={i18next.t("Title")}
             placeholder={i18next.t("Award Title")}
             fieldPath="selectedFunding.award.title"
           />
         </Overridable>
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardUrl.Container">
+        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardUrlTextField.Container">
           <TextField
             label={i18next.t("URL")}
             placeholder={i18next.t("Award URL")}
