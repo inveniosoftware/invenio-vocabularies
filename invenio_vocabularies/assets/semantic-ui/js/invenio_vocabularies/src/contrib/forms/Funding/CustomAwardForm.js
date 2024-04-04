@@ -101,7 +101,10 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
         </Header>
       </Overridable>
       <Form.Group widths="equal">
-        <Overridable id="InvenioVocabularies.CustomAwardForm.AwardNumberTextField.Container" fieldPath="selectedFunding.award.number">
+        <Overridable
+          id="InvenioVocabularies.CustomAwardForm.AwardNumberTextField.Container"
+          fieldPath="selectedFunding.award.number"
+        >
           <TextField
             label={i18next.t("Number")}
             placeholder={i18next.t("Award number")}
