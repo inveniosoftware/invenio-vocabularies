@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.3.0 (released 2024-04-16)
+
+- assets: add overridable awards and funding
+
 Version 3.2.0 (released 2024-03-22)
 
 - funding: add country and ror to funder search results
