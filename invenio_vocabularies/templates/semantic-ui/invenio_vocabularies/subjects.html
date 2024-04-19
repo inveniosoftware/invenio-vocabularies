@@ -1,0 +1,23 @@
+{#
+  Copyright (C) 2024 CERN.
+
+  Invenio RDM Records is free software; you can redistribute it and/or modify
+  it under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+{%- set subjects = field_value -%}
+{% if subjects %}
+  <ul class="ui horizontal list no-bullets subjects">
+    {%- for subject in subjects %}
+    <li class="item">
+      {%- set q = 'metadata.subjects.subject:"' + subject.subject + '"' %}
+      <a href="{{ url_for('invenio_search_ui.search', q=q) }}"
+          class="subject"
+          title="{{ _('Search results for ') + subject.subject }}"
+      >
+        {{ subject.subject }}
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+{% endif %}

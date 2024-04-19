@@ -11,7 +11,9 @@
 
 from flask import Blueprint
 
-blueprint = Blueprint("invenio_vocabularies_ext", __name__)
+blueprint = Blueprint(
+    "invenio_vocabularies_ext", __name__, template_folder="./templates"
+)
 
 
 def create_blueprint_from_app(app):

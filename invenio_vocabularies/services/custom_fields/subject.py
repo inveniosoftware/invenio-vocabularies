@@ -65,6 +65,7 @@ SUBJECT_FIELDS_UI = [
                     clearable=True,
                     allowAdditions=False,
                 ),
+                template="invenio_vocabularies/subjects.html",
             )
         ],
     }
