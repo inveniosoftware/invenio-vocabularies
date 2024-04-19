@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 3.4.0 (released 2024-04-19)
+
+- templates: add subject fields UI template (#303)
+
 Version 3.3.0 (released 2024-04-16)
 
 - assets: add overridable awards and funding
