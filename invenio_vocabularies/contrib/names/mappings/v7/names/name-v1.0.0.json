@@ -24,6 +24,9 @@
       "id": {
         "type": "keyword"
       },
+      "tags": {
+        "type": "keyword"
+      },
       "name_sort": {
         "type": "keyword"
       },

@@ -7,6 +7,9 @@
     "$schema": {
       "$ref": "local://definitions-v1.0.0.json#/$schema"
     },
+    "tags": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/tags"
+    },
     "country": {
       "type": "string",
       "description": "Represents a funder's origin country as a country code."

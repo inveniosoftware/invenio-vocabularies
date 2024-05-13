@@ -55,6 +55,9 @@
             "type": "keyword"
           }
         }
+      },
+      "tags": {
+        "type": "keyword"
       }
     }
   }

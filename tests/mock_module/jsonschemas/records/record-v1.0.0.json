@@ -9,6 +9,9 @@
       "description": "JSONSchema declaration.",
       "type": "string"
     },
+    "tags": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/tags"
+    },
     "id": {
       "description": "Persistent record identifier (alphanumeric).",
       "type": "string"

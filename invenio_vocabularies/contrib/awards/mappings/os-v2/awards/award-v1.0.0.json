@@ -49,6 +49,9 @@
         "type": "object",
         "dynamic": "true"
       },
+      "tags": {
+        "type": "keyword"
+      },
       "number": {
         "type": "keyword"
       },
