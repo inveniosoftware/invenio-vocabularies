@@ -96,7 +96,7 @@ DATASTREAM_CONFIG = {
         {
             "type": "zip",
             "args": {
-                "regex": ".json$",
+                "regex": "(?<!_schema_v2)\\.json$",
             },
         },
         {"type": "json"},
