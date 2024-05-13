@@ -10,5 +10,12 @@
   },
   "icon": {
     "type": "string"
+  },
+  "tags": {
+    "type": "array",
+    "description": "Tags for a vocabulary item.",
+    "items": {
+      "type": "string"
+    }
   }
 }

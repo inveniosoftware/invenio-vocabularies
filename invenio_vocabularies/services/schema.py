@@ -90,13 +90,13 @@ class BaseVocabularySchema(BaseRecordSchema):
     title = i18n_strings
     description = i18n_strings
     icon = fields.Str(allow_none=False)
+    tags = fields.List(SanitizedUnicode())
 
 
 class VocabularySchema(BaseVocabularySchema):
     """Service schema for vocabulary records."""
 
     props = fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())
-    tags = fields.List(SanitizedUnicode())
     type = fields.Str(attribute="type.id", required=True)
 
 

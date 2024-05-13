@@ -34,10 +34,7 @@
       }
     },
     "tags": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/tags"
     },
     "title": {
       "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
