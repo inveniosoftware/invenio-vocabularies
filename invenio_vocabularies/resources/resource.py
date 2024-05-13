@@ -54,7 +54,12 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 
     blueprint_name = "vocabularies"
     url_prefix = "/vocabularies"
-    routes = {"list": "/<type>", "item": "/<type>/<pid_value>", "tasks": "/tasks"}
+    routes = {
+        "list": "/<type>",
+        "item": "/<type>/<pid_value>",
+        "tasks": "/tasks",
+        "all": "/",
+    }
 
     request_view_args = {
         "pid_value": ma.fields.Str(),
@@ -89,7 +94,16 @@ class VocabulariesResource(RecordResource):
         rules.append(
             route("POST", routes["tasks"], self.launch),
         )
+        # Add "vocabularies/" route
+        rules.append(
+            route("GET", routes["all"], self.get_all),
+        )
         return rules
+
+    @response_handler(many=True)
+    def get_all(self):
+        """Get all items."""
+        return {"status": 200, "message": "hello world!"}, 200
 
     @request_search_args
     @request_view_args
