@@ -103,7 +103,7 @@ DATASTREAM_CONFIG = {
         {
             "type": "tar",
             "args": {
-                "regex": ".json.gz$",
+                "regex": "\\.json.gz$",
                 "mode": "r",
             },
         },
