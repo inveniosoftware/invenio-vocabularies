@@ -124,3 +124,21 @@ VOCABULARIES_DATASTREAM_WRITERS = {
     "yaml": YamlWriter,
 }
 """Data Streams writers."""
+
+VOCABULARIES_SORT_OPTIONS = {
+    "name": dict(
+        title=_("Name"),
+        fields=["Name"],
+    ),
+    "entries": dict(
+        title=_("entries"),
+        fields=["entries"],
+    ),
+}
+"""Definitions of available Vocabularies sort options. """
+
+VOCABULARIES_SEARCH = {
+    "facets": [],
+    "sort": ["name", "entries"],
+}
+"""Vocabularies search configuration."""
