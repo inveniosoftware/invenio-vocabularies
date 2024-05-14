@@ -85,7 +85,13 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 # Resource
 #
 class VocabulariesResource(RecordResource):
-    """Resource for generic vocabularies."""
+    """Resource for generic vocabularies.
+
+    As stated by slint:
+
+    > Generic vocabularies have a relatively small number of entries (<10,000)
+
+    """
 
     def create_url_rules(self):
         """Create the URL rules for the record resource."""
@@ -103,7 +109,40 @@ class VocabulariesResource(RecordResource):
     @response_handler(many=True)
     def get_all(self):
         """Get all items."""
-        return {"status": 200, "message": "hello world!"}, 200
+        # TODO gather information about _all_ vocabularies
+        # in the meantime, return a mocked response
+
+        return {
+            "hits": {
+                "hits": [
+                    {
+                        "id": "rights",
+                        "pid_type": "v-lic",
+                        "count": 36,
+                        "links": {
+                            "self": "https://docs.narodni-repozitar.cz/api/vocabularies/rights",
+                            "self_html": "https://docs.narodni-repozitar.cz/vocabularies/rights",
+                        },
+                    },
+                    {
+                        "id": "funders",
+                        "pid_type": "v-f",
+                        "count": 75,
+                        "name": {
+                            "cs": "Poskytovatelé finanční podpory",
+                            "en": "Research funders",
+                        },
+                        "props": {"acronym": {"label": "Acronym"}},
+                        "links": {
+                            "self": "https://docs.narodni-repozitar.cz/api/vocabularies/funders",
+                            "self_html": "https://docs.narodni-repozitar.cz/vocabularies/funders",
+                        },
+                    },
+                ],
+                "total": 11,
+            },
+            "links": {"self": "https://docs.narodni-repozitar.cz/api/vocabularies"},
+        }, 200
 
     @request_search_args
     @request_view_args
