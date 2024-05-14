@@ -109,7 +109,7 @@ DATASTREAM_CONFIG = {
         {
             "type": "tar",
             "args": {
-                "regex": ".xml$",
+                "regex": "\\.xml$",
             },
         },
         {"type": "xml"},

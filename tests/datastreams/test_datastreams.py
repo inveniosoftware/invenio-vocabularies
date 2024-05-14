@@ -118,7 +118,7 @@ def test_piping_readers(app, zip_file, json_element):
                 "type": "zip",
                 "args": {
                     "origin": "reader_test.zip",
-                    "regex": ".json$",
+                    "regex": "\\.json$",
                 },
             },
             {"type": "json"},
