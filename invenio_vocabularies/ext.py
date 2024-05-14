@@ -40,7 +40,8 @@ from .contrib.subjects import (
     SubjectsService,
     SubjectsServiceConfig,
 )
-from .contrib.information import InformationResource, InformationResourceConfig
+
+# from .contrib.information import InformationResource, InformationResourceConfig
 from .resources.resource import VocabulariesResource, VocabulariesResourceConfig
 from .services.service import VocabulariesService
 
