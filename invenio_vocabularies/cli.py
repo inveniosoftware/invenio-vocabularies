@@ -9,46 +9,14 @@
 
 """Commands to create and manage vocabularies."""
 
-from copy import deepcopy
 
 import click
-import yaml
 from flask.cli import with_appcontext
 from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
-from invenio_records_resources.proxies import current_service_registry
 
-from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config
-from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
-from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
 from .datastreams import DataStreamFactory
-
-
-def get_config_for_ds(vocabulary, filepath=None, origin=None):
-    """Calculates the configuration for a Data Stream."""
-    config = None
-    if vocabulary == "names":  # FIXME: turn into a proper factory
-        config = deepcopy(names_ds_config)
-    elif vocabulary == "funders":
-        config = deepcopy(funders_ds_config)
-    elif vocabulary == "awards":
-        config = deepcopy(awards_ds_config)
-
-    if config:
-        if filepath:
-            with open(filepath) as f:
-                config = yaml.safe_load(f).get(vocabulary)
-        if origin:
-            config["readers"][0].setdefault("args", {})
-            config["readers"][0]["args"]["origin"] = origin
-
-    return config
-
-
-def get_service_for_vocabulary(vocabulary):
-    """Calculates the configuration for a Data Stream."""
-    if vocabulary == "names":  # FIXME: turn into a proper factory
-        return current_service_registry.get("names")
+from .factories import get_vocabulary_config
 
 
 @click.group()
@@ -111,7 +79,9 @@ def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
         click.secho("One of --filepath or --origin must be present.", fg="red")
         exit(1)
 
-    config = get_config_for_ds(vocabulary, filepath, origin)
+    vc = get_vocabulary_config(vocabulary)
+    config = vc.get_config(filepath, origin)
+
     success, errored, filtered = _process_vocab(config, num_samples)
 
     _output_process(vocabulary, "imported", success, errored, filtered)
@@ -127,8 +97,8 @@ def update(vocabulary, filepath=None, origin=None):
     if not filepath and not origin:
         click.secho("One of --filepath or --origin must be present.", fg="red")
         exit(1)
-
-    config = get_config_for_ds(vocabulary, filepath, origin)
+    vc = get_vocabulary_config(vocabulary)
+    config = vc.get_config(filepath, origin)
 
     for w_conf in config["writers"]:
         w_conf["args"]["update"] = True
@@ -153,7 +123,8 @@ def convert(vocabulary, filepath=None, origin=None, target=None, num_samples=Non
         )
         exit(1)
 
-    config = get_config_for_ds(vocabulary, filepath, origin)
+    vc = get_vocabulary_config(vocabulary)
+    config = vc.get_config(filepath, origin)
     if not filepath:
         config["writers"] = [{"type": "yaml", "args": {"filepath": target}}]
 
@@ -176,8 +147,8 @@ def delete(vocabulary, identifier, all):
     if not id and not all:
         click.secho("An identifier or the --all flag must be present.", fg="red")
         exit(1)
-
-    service = get_service_for_vocabulary(vocabulary)
+    vc = get_vocabulary_config(vocabulary)
+    service = vc.get_service()
     if identifier:
         try:
             if service.delete(identifier, system_identity):
