@@ -103,6 +103,16 @@ VOCABULARIES_NAMES_SCHEMES = {
 }
 """Names allowed identifier schemes."""
 
+# configure CUSTOM_VOCABULARY_TYPES to differentiate output. Is used in VocabulariesServiceConfig
+VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
+    "names",
+    "affiliations",
+    "awards",
+    "funders",
+    "subjects",
+]
+
+
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
     "json": JsonReader,

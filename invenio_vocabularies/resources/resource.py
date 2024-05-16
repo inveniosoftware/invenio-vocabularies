@@ -19,6 +19,8 @@ from flask_resources import (
     resource_requestctx,
     response_handler,
 )
+from invenio_vocabularies.proxies import current_service
+from invenio_access.permissions import system_identity
 from invenio_records_resources.resources import (
     RecordResource,
     RecordResourceConfig,
@@ -33,9 +35,12 @@ from invenio_records_resources.resources.records.resource import (
     route,
 )
 from invenio_records_resources.resources.records.utils import search_preference
+
+from invenio_vocabularies.services.service import VocabularyTypeService
 from marshmallow import fields
 
 from .serializer import VocabularyL10NItemSchema
+import json
 
 
 #
@@ -86,13 +91,7 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 # Resource
 #
 class VocabulariesResource(RecordResource):
-    """Resource for generic vocabularies.
-
-    As stated by slint:
-
-    > Generic vocabularies have a relatively small number of entries (<10,000)
-
-    """
+    """Resource for generic vocabularies."""
 
     def create_url_rules(self):
         """Create the URL rules for the record resource."""
@@ -107,43 +106,16 @@ class VocabulariesResource(RecordResource):
         )
         return rules
 
+    @request_search_args
     @response_handler(many=True)
     def get_all(self):
-        """Get all items."""
-        # TODO gather information about _all_ vocabularies
-        # in the meantime, return a mocked response
+        """Return information about _all_ vocabularies."""
+        config = current_service.config
+        vocabtypeservice = VocabularyTypeService(config)
+        identity = g.identity
+        hits = vocabtypeservice.search(identity)
 
-        return {
-            "hits": {
-                "hits": [
-                    {
-                        "id": "rights",
-                        "pid_type": "v-lic",
-                        "count": 36,
-                        "links": {
-                            "self": "https://docs.narodni-repozitar.cz/api/vocabularies/rights",
-                            "self_html": "https://docs.narodni-repozitar.cz/vocabularies/rights",
-                        },
-                    },
-                    {
-                        "id": "funders",
-                        "pid_type": "v-f",
-                        "count": 75,
-                        "name": {
-                            "cs": "Poskytovatelé finanční podpory",
-                            "en": "Research funders",
-                        },
-                        "props": {"acronym": {"label": "Acronym"}},
-                        "links": {
-                            "self": "https://docs.narodni-repozitar.cz/api/vocabularies/funders",
-                            "self_html": "https://docs.narodni-repozitar.cz/vocabularies/funders",
-                        },
-                    },
-                ],
-                "total": 11,
-            },
-            "links": {"self": "https://docs.narodni-repozitar.cz/api/vocabularies"},
-        }, 200
+        return hits.to_dict(), 200
 
     @request_search_args
     @request_view_args
