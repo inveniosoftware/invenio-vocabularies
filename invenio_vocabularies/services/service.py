@@ -8,9 +8,10 @@
 # details.
 
 """Vocabulary service."""
-
+from flask import current_app
 from invenio_cache import current_cache
 from invenio_db import db
+from invenio_records_resources.services.base import Service, ConditionalLink
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import (
     Link,
@@ -25,16 +26,154 @@ from invenio_records_resources.services.records.params import (
     FilterParam,
     SuggestQueryParser,
 )
+from invenio_records_resources.services.base import ServiceListResult
+from invenio_records_resources.services.errors import PermissionDeniedError
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
 from invenio_records_resources.services.uow import unit_of_work
+from invenio_vocabularies.proxies import current_service
+from invenio_search import current_search_client
 from invenio_search.engine import dsl
-
+from invenio_records_resources.proxies import current_service_registry
 from ..records.api import Vocabulary
 from ..records.models import VocabularyType
 from .components import PIDComponent, VocabularyTypeComponent
 from .permissions import PermissionPolicy
 from .schema import TaskSchema, VocabularySchema
 from .tasks import process_datastream
+
+
+def is_custom_vocabulary_type(vocabulary_type, context):
+    """Check if the vocabulary type is a custom vocabulary type."""
+    return vocabulary_type["id"] in current_app.config.get(
+        "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
+    )
+
+
+class VocabularyMetadataList(ServiceListResult):
+    def __init__(
+        self,
+        service,
+        identity,
+        results,
+        links_tpl=None,
+        links_item_tpl=None,
+    ):
+        """Constructor.
+
+        :params service: a service instance
+        :params identity: an identity that performed the service request
+        :params results: the search results
+        """
+        self._identity = identity
+        self._results = results
+        self._service = service
+        self._links_tpl = links_tpl
+        self._links_item_tpl = links_item_tpl
+
+    def to_dict(self):
+        hits = list(self._results)
+
+        for hit in hits:
+            if self._links_item_tpl:
+                hit["links"] = self._links_item_tpl.expand(self._identity, hit)
+
+        res = {
+            "hits": {
+                "hits": hits,
+                "total": len(hits),
+            }
+        }
+
+        if self._links_tpl:
+            res["links"] = self._links_tpl.expand(self._identity, None)
+
+        return res
+
+
+class VocabularyTypeService(Service):
+    """oarepo Vocabulary types service.
+    search method uses VocabularyType.query.all()
+    """
+
+    @property
+    def schema(self):
+        """Returns the data schema instance."""
+        return ServiceSchemaWrapper(self, schema=self.config.schema)
+
+    @property
+    def links_item_tpl(self):
+        """Item links template."""
+        return LinksTemplate(
+            self.config.vocabularies_listing_item,
+        )
+
+    @property
+    def custom_vocabulary_names(self):
+        return current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", [])
+
+    def search(self, identity):
+        """Search for vocabulary types entries."""
+        self.require_permission(identity, "list_vocabularies")
+
+        vocabulary_types = VocabularyType.query.all()
+
+        # config_vocab_types = current_app.config["INVENIO_VOCABULARY_TYPE_METADATA"]
+        config_vocab_types = current_app.config.get(
+            "INVENIO_VOCABULARY_TYPE_METADATA", {}
+        )
+        count_terms_agg = (
+            self._generic_vocabulary_statistics() | self._custom_vocabulary_statistics()
+        )
+
+        # Extend database data with configuration & aggregation data.
+        results = []
+        for db_vocab_type in vocabulary_types:
+            result = {
+                "id": db_vocab_type.id,
+                "pid_type": db_vocab_type.pid_type,
+                "count": count_terms_agg.get(db_vocab_type.id, 0),
+            }
+
+            if db_vocab_type.id in config_vocab_types:
+                for k, v in config_vocab_types[db_vocab_type.id].items():
+                    result[k] = v
+
+            results.append(result)
+
+        return self.config.vocabularies_listing_resultlist_cls(
+            self,
+            identity,
+            results,
+            links_tpl=LinksTemplate({"self": Link("{+api}/vocabularies")}),
+            links_item_tpl=self.links_item_tpl,
+        )
+
+    def _custom_vocabulary_statistics(self):
+        # query database for count of terms in custom vocabularies
+        returndict = {}
+        for vocab_type in self.custom_vocabulary_names:
+            custom_service = current_service_registry.get(vocab_type)
+            record_cls = custom_service.config.record_cls
+            returndict[vocab_type] = record_cls.model_cls.query.count()
+
+        return returndict
+
+    def _generic_vocabulary_statistics(self):
+        # Opensearch query for generic vocabularies
+        config: RecordServiceConfig = current_service.config
+        search_opts = config.search
+
+        search = search_opts.search_cls(
+            using=current_search_client,
+            index=config.record_cls.index.search_alias,
+        )
+
+        search.aggs.bucket("vocabularies", {"terms": {"field": "type.id", "size": 100}})
+
+        search_result = search.execute()
+        buckets = search_result.aggs.to_dict()["vocabularies"]["buckets"]
+
+        return {bucket["key"]: bucket["doc_count"] for bucket in buckets}
 
 
 class VocabularySearchOptions(SearchOptions):
@@ -88,6 +227,21 @@ class VocabulariesServiceConfig(RecordServiceConfig):
     record_cls = Vocabulary
     schema = VocabularySchema
     task_schema = TaskSchema
+    vocabularies_listing_resultlist_cls = VocabularyMetadataList
+
+    vocabularies_listing_item = {
+        "self": ConditionalLink(
+            cond=is_custom_vocabulary_type,
+            if_=Link(
+                "{+api}/{id}",
+                vars=lambda vocab_type, vars: vars.update({"id": vocab_type["id"]}),
+            ),
+            else_=Link(
+                "{+api}/vocabularies/{id}",
+                vars=lambda vocab_type, vars: vars.update({"id": vocab_type["id"]}),
+            ),
+        )
+    }
 
     search = VocabularySearchOptions
 
@@ -145,7 +299,7 @@ class VocabulariesService(RecordService):
             params,
             search_preference,
             extra_filter=dsl.Q("term", type__id=vocabulary_type.id),
-            **kwargs
+            **kwargs,
         ).execute()
 
         return self.result_list(
