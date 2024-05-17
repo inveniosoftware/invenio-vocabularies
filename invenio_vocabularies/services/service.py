@@ -11,8 +11,8 @@
 from flask import current_app
 from invenio_cache import current_cache
 from invenio_db import db
-from invenio_records_resources.services.base import Service, ConditionalLink
 from invenio_i18n import lazy_gettext as _
+from invenio_records_resources.proxies import current_service_registry
 from invenio_records_resources.services import (
     Link,
     LinksTemplate,
@@ -21,19 +21,24 @@ from invenio_records_resources.services import (
     SearchOptions,
     pagination_links,
 )
+from invenio_records_resources.services.base import (
+    ConditionalLink,
+    Service,
+    ServiceListResult,
+)
+from invenio_records_resources.services.errors import PermissionDeniedError
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import (
     FilterParam,
     SuggestQueryParser,
 )
-from invenio_records_resources.services.base import ServiceListResult
-from invenio_records_resources.services.errors import PermissionDeniedError
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
 from invenio_records_resources.services.uow import unit_of_work
-from invenio_vocabularies.proxies import current_service
 from invenio_search import current_search_client
 from invenio_search.engine import dsl
-from invenio_records_resources.proxies import current_service_registry
+
+from invenio_vocabularies.proxies import current_service
+
 from ..records.api import Vocabulary
 from ..records.models import VocabularyType
 from .components import PIDComponent, VocabularyTypeComponent
@@ -50,6 +55,8 @@ def is_custom_vocabulary_type(vocabulary_type, context):
 
 
 class VocabularyMetadataList(ServiceListResult):
+    """Ensures that vocabulary metadata is returned in the proper format."""
+
     def __init__(
         self,
         service,
@@ -71,6 +78,7 @@ class VocabularyMetadataList(ServiceListResult):
         self._links_item_tpl = links_item_tpl
 
     def to_dict(self):
+        """Formats result to a dict of hits."""
         hits = list(self._results)
 
         for hit in hits:
@@ -91,9 +99,7 @@ class VocabularyMetadataList(ServiceListResult):
 
 
 class VocabularyTypeService(Service):
-    """oarepo Vocabulary types service.
-    search method uses VocabularyType.query.all()
-    """
+    """Vocabulary type service."""
 
     @property
     def schema(self):
@@ -109,6 +115,7 @@ class VocabularyTypeService(Service):
 
     @property
     def custom_vocabulary_names(self):
+        """Checks whether vocabulary is a custom vocabulary."""
         return current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", [])
 
     def search(self, identity):

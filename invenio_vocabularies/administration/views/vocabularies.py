@@ -7,14 +7,13 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-from invenio_administration.views.base import (
-    AdminResourceListView,
-)
+"""Vocabularies admin interface."""
+from invenio_administration.views.base import AdminResourceListView
 from invenio_i18n import lazy_gettext as _
 
 
 class VocabulariesListView(AdminResourceListView):
-    """Configuration for OAI-PMH sets list view."""
+    """Configuration for vocabularies list view."""
 
     api_endpoint = "/vocabularies/"
     name = "Vocabularies"
