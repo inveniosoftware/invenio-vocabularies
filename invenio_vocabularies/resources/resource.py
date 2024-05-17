@@ -9,6 +9,8 @@
 
 """Vocabulary resource."""
 
+import json
+
 import marshmallow as ma
 from flask import g
 from flask_resources import (
@@ -19,7 +21,6 @@ from flask_resources import (
     resource_requestctx,
     response_handler,
 )
-from invenio_vocabularies.proxies import current_service
 from invenio_access.permissions import system_identity
 from invenio_records_resources.resources import (
     RecordResource,
@@ -35,12 +36,12 @@ from invenio_records_resources.resources.records.resource import (
     route,
 )
 from invenio_records_resources.resources.records.utils import search_preference
-
-from invenio_vocabularies.services.service import VocabularyTypeService
 from marshmallow import fields
 
+from invenio_vocabularies.proxies import current_service
+from invenio_vocabularies.services.service import VocabularyTypeService
+
 from .serializer import VocabularyL10NItemSchema
-import json
 
 
 #
