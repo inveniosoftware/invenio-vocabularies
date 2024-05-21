@@ -136,7 +136,12 @@ class ZipReader(BaseReader):
         """Opens a Zip archive or uses the given file pointer."""
         # https://docs.python.org/3/library/zipfile.html
         if item:
-            yield from self._iter(fp=item, *args, **kwargs)
+            if isinstance(item, zipfile.ZipFile):
+                yield from self._iter(fp=item, *args, **kwargs)
+            else:
+                # If the item is not already a ZipFile (e.g. if it is a BytesIO), try to create a ZipFile from the item.
+                with zipfile.ZipFile(item, **self._options) as archive:
+                    yield from self._iter(fp=archive, *args, **kwargs)
         else:
             with zipfile.ZipFile(self._origin, **self._options) as archive:
                 yield from self._iter(fp=archive, *args, **kwargs)
