@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -9,6 +9,7 @@
 """Data Streams readers tests."""
 import json
 import tarfile
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -87,6 +88,27 @@ def test_zip_reader(zip_file, json_list):
     reader = ZipReader(zip_file, regex=".json$")
     total = 0
     for data in reader.read():
+        assert json.load(data) == json_list
+        total += 1
+
+    assert total == 2  # ignored the `.other` file
+
+
+def test_zip_reader_item_zipfile_instance(zip_file, json_list):
+    reader = ZipReader(regex=".json$")
+    total = 0
+    with zipfile.ZipFile(zip_file) as archive:
+        for data in reader.read(archive):
+            assert json.load(data) == json_list
+            total += 1
+
+    assert total == 2  # ignored the `.other` file
+
+
+def test_zip_reader_item_filename_not_zipfile_instance(zip_file, json_list):
+    reader = ZipReader(regex=".json$")
+    total = 0
+    for data in reader.read(zip_file):
         assert json.load(data) == json_list
         total += 1
 
