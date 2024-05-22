@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2022 CERN.
+# Copyright (C) 2024 California Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -43,6 +44,8 @@ class FunderSchema(BaseVocabularySchema):
         required=True, validate=validate.Length(min=1, error=_("Name cannot be blank."))
     )
     country = SanitizedUnicode()
+    country_name = SanitizedUnicode()
+    location_name = SanitizedUnicode()
     identifiers = IdentifierSet(
         fields.Nested(
             partial(
@@ -56,6 +59,11 @@ class FunderSchema(BaseVocabularySchema):
     id = SanitizedUnicode(
         validate=validate.Length(min=1, error=_("PID cannot be blank."))
     )
+
+    acronym = SanitizedUnicode()
+    aliases = fields.List(SanitizedUnicode())
+    status = SanitizedUnicode()
+    types = fields.List(SanitizedUnicode())
 
     @validates_schema
     def validate_id(self, data, **kwargs):

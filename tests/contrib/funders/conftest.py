@@ -25,21 +25,28 @@ def funder_full_data():
     return {
         "id": "01ggx4157",
         "identifiers": [
+            {"scheme": "ror", "identifier": "01ggx4157"},
             {
-                "identifier": "000000012156142X",
+                "identifier": "0000 0001 2156 142X",
                 "scheme": "isni",
             },
             {
                 "identifier": "grid.9132.9",
                 "scheme": "grid",
             },
+            {"scheme": "doi", "identifier": "10.13039/100012470"},
         ],
-        "name": "CERN",
+        "acronym": "CERN",
+        "name": "European Organization for Nuclear Research",
         "title": {
             "en": "European Organization for Nuclear Research",
             "fr": "Organisation européenne pour la recherche nucléaire",
         },
         "country": "CH",
+        "country_name": "Switzerland",
+        "location_name": "Geneva",
+        "status": "active",
+        "types": ["facility", "funder"],
     }
 
 
