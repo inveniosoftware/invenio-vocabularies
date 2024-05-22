@@ -45,49 +45,6 @@ from .serializer import VocabularyL10NItemSchema
 
 
 #
-# Request args
-#
-class VocabularySearchRequestArgsSchema(SearchRequestArgsSchema):
-    """Add parameter to parse tags."""
-
-    tags = fields.Str()
-
-
-#
-# Resource config
-#
-class VocabulariesResourceConfig(RecordResourceConfig):
-    """Vocabulary resource configuration."""
-
-    blueprint_name = "vocabularies"
-    url_prefix = "/vocabularies"
-    routes = {
-        "list": "/<type>",
-        "item": "/<type>/<pid_value>",
-        "tasks": "/tasks",
-    }
-
-    request_view_args = {
-        "pid_value": ma.fields.Str(),
-        "type": ma.fields.Str(required=True),
-    }
-
-    request_search_args = VocabularySearchRequestArgsSchema
-
-    response_handlers = {
-        "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
-        "application/vnd.inveniordm.v1+json": ResponseHandler(
-            MarshmallowSerializer(
-                format_serializer_cls=JSONSerializer,
-                object_schema_cls=VocabularyL10NItemSchema,
-                list_schema_cls=BaseListSchema,
-            ),
-            headers=etag_headers,
-        ),
-    }
-
-
-#
 # Resource
 #
 class VocabulariesResource(RecordResource):
@@ -107,7 +64,7 @@ class VocabulariesResource(RecordResource):
         # rules.append(
         #     route("GET", routes["all"], self.get_all),
         # )
-        # return rules
+        return rules
 
     # @request_search_args
     # @response_handler(many=True)
@@ -202,7 +159,7 @@ class VocabulariesAdminResource(RecordResource):
         rules = super().create_url_rules()
 
         rules.append(
-            route("GET", routes["list"], self.get_all_vocabulary_types),
+            route("GET", routes["all"], self.get_all_vocabulary_types),
         )
         return rules
 
