@@ -65,7 +65,6 @@ class VocabulariesResourceConfig(RecordResourceConfig):
         "list": "/<type>",
         "item": "/<type>/<pid_value>",
         "tasks": "/tasks",
-        "all": "/",
     }
 
     request_view_args = {
@@ -92,7 +91,10 @@ class VocabulariesResourceConfig(RecordResourceConfig):
 # Resource
 #
 class VocabulariesResource(RecordResource):
-    """Resource for generic vocabularies."""
+    """Resource for generic vocabularies.
+
+    Provide the API /api/vocabularies/
+    """
 
     def create_url_rules(self):
         """Create the URL rules for the record resource."""
@@ -101,22 +103,22 @@ class VocabulariesResource(RecordResource):
         rules.append(
             route("POST", routes["tasks"], self.launch),
         )
-        # Add "vocabularies/" route
-        rules.append(
-            route("GET", routes["all"], self.get_all),
-        )
-        return rules
+        # # Add "vocabularies/" route
+        # rules.append(
+        #     route("GET", routes["all"], self.get_all),
+        # )
+        # return rules
 
-    @request_search_args
-    @response_handler(many=True)
-    def get_all(self):
-        """Return information about _all_ vocabularies."""
-        config = current_service.config
-        vocabtypeservice = VocabularyTypeService(config)
-        identity = g.identity
-        hits = vocabtypeservice.search(identity)
+    # @request_search_args
+    # @response_handler(many=True)
+    # def get_all(self):
+    #     """Return information about _all_ vocabularies."""
+    #     config = current_service.config
+    #     vocabtypeservice = VocabularyTypeService(config)
+    #     identity = g.identity
+    #     hits = vocabtypeservice.search(identity)
 
-        return hits.to_dict(), 200
+    #     return hits.to_dict(), 200
 
     @request_search_args
     @request_view_args
@@ -191,3 +193,26 @@ class VocabulariesResource(RecordResource):
         """Create a task."""
         self.service.launch(g.identity, resource_requestctx.data or {})
         return "", 202
+
+
+class VocabulariesAdminResource(RecordResource):
+    def create_url_rules(self):
+        """Create the URL rules for the record resource."""
+        routes = self.config.routes
+        rules = super().create_url_rules()
+
+        rules.append(
+            route("GET", routes["list"], self.get_all_vocabulary_types),
+        )
+        return rules
+
+    @request_search_args
+    @response_handler(many=True)
+    def get_all_vocabulary_types(self):
+        """Return information about _all_ vocabularies."""
+        config = current_service.config
+        vocabtypeservice = VocabularyTypeService(config)
+        identity = g.identity
+        hits = vocabtypeservice.search(identity)
+
+        return hits.to_dict(), 200

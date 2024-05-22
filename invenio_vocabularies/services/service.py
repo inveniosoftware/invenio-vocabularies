@@ -128,9 +128,13 @@ class VocabularyTypeService(Service):
         config_vocab_types = current_app.config.get(
             "INVENIO_VOCABULARY_TYPE_METADATA", {}
         )
-        count_terms_agg = (
-            self._generic_vocabulary_statistics() | self._custom_vocabulary_statistics()
-        )
+
+        count_terms_agg = {}
+        generic_stats = self._generic_vocabulary_statistics()
+        custom_stats = self._custom_vocabulary_statistics()
+
+        for k in generic_stats.keys() | custom_stats.keys():
+            count_terms_agg[k] = generic_stats.get(k, 0) + custom_stats.get(k, 0)
 
         # Extend database data with configuration & aggregation data.
         results = []
@@ -139,6 +143,8 @@ class VocabularyTypeService(Service):
                 "id": db_vocab_type.id,
                 "pid_type": db_vocab_type.pid_type,
                 "count": count_terms_agg.get(db_vocab_type.id, 0),
+                "is_custom_vocabulary": db_vocab_type.id
+                in self.custom_vocabulary_names,
             }
 
             if db_vocab_type.id in config_vocab_types:
