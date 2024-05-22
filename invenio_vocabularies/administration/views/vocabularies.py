@@ -19,10 +19,10 @@ from invenio_i18n import lazy_gettext as _
 class VocabulariesListView(AdminResourceListView):
     """Configuration for vocabularies list view."""
 
-    api_endpoint = "/vocabularies/"
+    api_endpoint = "/vocabularies"
     name = "Vocabularies"
     resource_config = "resource"
-    search_request_headers = {"Accept": "application/vnd.inveniordm.v1+json"}
+    search_request_headers = {"Accept": "application/json"}
     title = "Vocabulary"
     category = "Site management"
     # pid_path ist das mapping in welchem JSON key die ID des eintrags steht
@@ -43,7 +43,7 @@ class VocabulariesListView(AdminResourceListView):
     search_facets_config_name = "VOCABULARIES_FACETS"
     search_sort_config_name = "VOCABULARIES_SORT_OPTIONS"
 
-    resource_name = "resource"
+    resource_name = "vocabulary_admin_resource"
 
 
 class VocabularyTypesDetailsView(AdminResourceListView):
@@ -51,7 +51,7 @@ class VocabularyTypesDetailsView(AdminResourceListView):
 
     name = "Vocabularies_Detail"
     url = "/vocabularies/<pid_value>"
-    api_endpoint = "/vocabularies/<pid_value>/test"
+    api_endpoint = "/vocabularies/<pid_value>"
 
     # name of the resource's list view name, enables navigation between detail view and list view.
     list_view_name = "Vocabularies"
