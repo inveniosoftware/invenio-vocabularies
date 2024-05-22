@@ -42,7 +42,13 @@ from .contrib.subjects import (
 )
 
 # from .contrib.information import InformationResource, InformationResourceConfig
-from .resources.resource import VocabulariesResource, VocabulariesResourceConfig
+
+from .resources import (
+    VocabulariesResourceConfig,
+    VocabularyTypeResourceConfig,
+    VocabulariesResource,
+    VocabulariesAdminResource,
+)
 from .services.service import VocabulariesService
 
 
@@ -122,12 +128,13 @@ class InvenioVocabularies(object):
             service=self.subjects_service,
             config=SubjectsResourceConfig,
         )
-        # self.vocabularies_resource = InformationResource(
-        #     config=InformationResourceConfig,
-        # )
         self.resource = VocabulariesResource(
             service=self.service,
             config=app.config["VOCABULARIES_RESOURCE_CONFIG"],
+        )
+        self.vocabulary_admin_resource = VocabulariesAdminResource(
+            service=self.service,
+            config=VocabularyTypeResourceConfig,
         )
 
 

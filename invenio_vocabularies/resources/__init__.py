@@ -8,8 +8,14 @@
 
 """Resources module."""
 from invenio_vocabularies.resources.schema import L10NString, VocabularyL10Schema
+from .config import VocabularyTypeResourceConfig, VocabulariesResourceConfig
+from .resource import VocabulariesResource, VocabulariesAdminResource
 
 __all__ = (
     "VocabularyL10Schema",
     "L10NString",
+    "VocabulariesResourceConfig",
+    "VocabularyTypeResourceConfig",
+    "VocabulariesAdminResource",
+    "VocabulariesResource",
 )
