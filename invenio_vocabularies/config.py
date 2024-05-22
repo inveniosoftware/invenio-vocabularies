@@ -138,11 +138,11 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 VOCABULARIES_SORT_OPTIONS = {
     "name": dict(
         title=_("Name"),
-        fields=["Name"],
+        fields=["id"],
     ),
     "entries": dict(
         title=_("entries"),
-        fields=["entries"],
+        fields=["count"],
     ),
 }
 """Definitions of available Vocabularies sort options. """
