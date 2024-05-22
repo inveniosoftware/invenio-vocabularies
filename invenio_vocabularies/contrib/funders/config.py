@@ -31,6 +31,8 @@ class FundersSearchOptions(SearchOptions):
         fields=[
             "name^100",
             "identifiers.identifier^10",
+            "acronym^10",
+            "aliases^10",
         ]
     )
 
