@@ -135,20 +135,21 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 }
 """Data Streams writers."""
 
+
 VOCABULARIES_SORT_OPTIONS = {
     "name": dict(
         title=_("Name"),
         fields=["id"],
     ),
-    "entries": dict(
-        title=_("entries"),
-        fields=["count"],
+    "created": dict(
+        title=_("created"),
+        fields=["created"],
     ),
 }
 """Definitions of available Vocabularies sort options. """
 
 VOCABULARIES_SEARCH = {
     "facets": [],
-    "sort": ["name", "entries"],
+    "sort": ["name", "created"],
 }
 """Vocabularies search configuration."""
