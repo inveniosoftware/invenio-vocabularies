@@ -30,15 +30,6 @@ from invenio_records_resources.resources import (
 from .serializer import VocabularyL10NItemSchema
 
 
-class TasksResourceConfig(ResourceConfig, ConfiguratorMixin):
-    """Celery tasks resource config."""
-
-    # Blueprint configuration
-    blueprint_name = "tasks"
-    url_prefix = "/tasks"
-    routes = {"list": ""}
-
-
 class VocabularySearchRequestArgsSchema(SearchRequestArgsSchema):
     """Vocabularies search request parameters."""
 
@@ -88,19 +79,30 @@ class VocabularyTypeResourceConfig(ResourceConfig, ConfiguratorMixin):
 
     routes = {
         "all": "/",
-        "list": "/vocabularies/<vocabulary_id>",
-        "item": "/vocabularies/<vocabulary_id>/<vocabulary_type_id>",
+        "list": "/vocabularies/<pid_value>",
+        "item": "/vocabularies/<pid_value>/<vocabulary_type_id>",
     }
 
     # Request parsing
     request_read_args = {}
     request_view_args = {
-        "vocabulary_id": ma.fields.String,
-        "vocabulary_type_id": ma.fields.String,
+        "pid_value": ma.fields.String,
+        "type": ma.fields.String,
     }
     request_search_args = VocabularySearchRequestArgsSchema
 
     error_handlers = {
         **ErrorHandlersMixin.error_handlers,
         # TODO: Add custom error handlers here
+    }
+    response_handlers = {
+        "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
+        "application/vnd.inveniordm.v1+json": ResponseHandler(
+            MarshmallowSerializer(
+                format_serializer_cls=JSONSerializer,
+                object_schema_cls=VocabularyL10NItemSchema,
+                list_schema_cls=BaseListSchema,
+            ),
+            headers=etag_headers,
+        ),
     }
