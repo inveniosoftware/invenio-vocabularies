@@ -57,25 +57,11 @@ class VocabulariesResource(RecordResource):
         """Create the URL rules for the record resource."""
         routes = self.config.routes
         rules = super().create_url_rules()
+
         rules.append(
             route("POST", routes["tasks"], self.launch),
         )
-        # # Add "vocabularies/" route
-        # rules.append(
-        #     route("GET", routes["all"], self.get_all),
-        # )
         return rules
-
-    # @request_search_args
-    # @response_handler(many=True)
-    # def get_all(self):
-    #     """Return information about _all_ vocabularies."""
-    #     config = current_service.config
-    #     vocabtypeservice = VocabularyTypeService(config)
-    #     identity = g.identity
-    #     hits = vocabtypeservice.search(identity)
-
-    #     return hits.to_dict(), 200
 
     @request_search_args
     @request_view_args
@@ -173,3 +159,14 @@ class VocabulariesAdminResource(RecordResource):
         hits = vocabtypeservice.search(identity)
 
         return hits.to_dict(), 200
+
+    @request_view_args
+    @response_handler()
+    def read(self):
+        """Read an item."""
+        pid_value = (
+            resource_requestctx.view_args["type"],
+            resource_requestctx.view_args["pid_value"],
+        )
+        item = self.service.read(g.identity, pid_value)
+        return item.to_dict(), 200
