@@ -19,7 +19,7 @@ from invenio_i18n import lazy_gettext as _
 class VocabulariesListView(AdminResourceListView):
     """Configuration for vocabularies list view."""
 
-    api_endpoint = "/vocabularies"
+    api_endpoint = "/vocabularies/"
     name = "Vocabularies"
     resource_config = "resource"
     search_request_headers = {"Accept": "application/json"}
@@ -51,6 +51,7 @@ class VocabularyTypesDetailsView(AdminResourceListView):
 
     name = "Vocabularies_Detail"
     url = "/vocabularies/<pid_value>"
+    # FIXME the <pid_value> is not expaned correctly but rather gets passed as an url encoded string like GET /api/vocabularies/%3Cpid_value%3E?q=
     api_endpoint = "/vocabularies/<pid_value>"
 
     # name of the resource's list view name, enables navigation between detail view and list view.
