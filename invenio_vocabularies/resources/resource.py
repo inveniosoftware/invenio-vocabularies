@@ -139,6 +139,8 @@ class VocabulariesResource(RecordResource):
 
 
 class VocabulariesAdminResource(RecordResource):
+    """Resource for vocabularies admin interface."""
+
     def create_url_rules(self):
         """Create the URL rules for the record resource."""
         routes = self.config.routes

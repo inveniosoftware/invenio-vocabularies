@@ -40,16 +40,15 @@ from .contrib.subjects import (
     SubjectsService,
     SubjectsServiceConfig,
 )
-
-# from .contrib.information import InformationResource, InformationResourceConfig
-
 from .resources import (
-    VocabularyTypeResourceConfig,
-    VocabulariesResource,
     VocabulariesAdminResource,
+    VocabulariesResource,
     VocabulariesResourceConfig,
+    VocabularyTypeResourceConfig,
 )
 from .services.service import VocabulariesService
+
+# from .contrib.information import InformationResource, InformationResourceConfig
 
 
 class InvenioVocabularies(object):
