@@ -129,12 +129,10 @@ class InvenioVocabularies(object):
             config=SubjectsResourceConfig,
         )
         self.resource = VocabulariesResource(
-            # connects resource with the config
             service=self.service,
             config=app.config["VOCABULARIES_RESOURCE_CONFIG"],
         )
         self.vocabulary_admin_resource = VocabulariesAdminResource(
-            # should connect the vocabulary_admin_resource with the config
             service=self.service,
             config=VocabularyTypeResourceConfig,
         )
