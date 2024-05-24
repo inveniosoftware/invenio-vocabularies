@@ -141,15 +141,15 @@ VOCABULARIES_TYPES_SORT_OPTIONS = {
         title=_("Name"),
         fields=["id"],
     ),
-    "created": dict(
-        title=_("created"),
-        fields=["created"],
+    "entries": dict(
+        title=_("Number of entries"),
+        fields=["count"],
     ),
 }
 """Definitions of available Vocabulary types sort options. """
 
 VOCABULARIES_TYPES_SEARCH = {
     "facets": [],
-    "sort": ["name", "created"],
+    "sort": ["name", "entries"],
 }
 """Vocabulary type search configuration."""

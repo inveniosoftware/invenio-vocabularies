@@ -10,23 +10,24 @@
 
 import marshmallow as ma
 from flask_resources import (
-    HTTPJSONException,
-    ResourceConfig,
-    create_error_handler,
-    JSONSerializer,
     BaseListSchema,
+    HTTPJSONException,
+    JSONSerializer,
     MarshmallowSerializer,
+    ResourceConfig,
     ResponseHandler,
+    create_error_handler,
 )
-from invenio_records_resources.resources.records.headers import etag_headers
-from invenio_records_resources.resources.errors import ErrorHandlersMixin
-from invenio_records_resources.resources.records.args import SearchRequestArgsSchema
-from invenio_records_resources.services.base.config import ConfiguratorMixin
 from invenio_records_resources.resources import (
     RecordResource,
     RecordResourceConfig,
     SearchRequestArgsSchema,
 )
+from invenio_records_resources.resources.errors import ErrorHandlersMixin
+from invenio_records_resources.resources.records.args import SearchRequestArgsSchema
+from invenio_records_resources.resources.records.headers import etag_headers
+from invenio_records_resources.services.base.config import ConfiguratorMixin
+
 from .serializer import VocabularyL10NItemSchema
 
 
