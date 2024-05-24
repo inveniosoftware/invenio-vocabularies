@@ -111,7 +111,6 @@ VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
     "subjects",
 ]
 
-
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
     "json": JsonReader,
@@ -135,8 +134,7 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 }
 """Data Streams writers."""
 
-
-VOCABULARIES_SORT_OPTIONS = {
+VOCABULARIES_TYPES_SORT_OPTIONS = {
     "name": dict(
         title=_("Name"),
         fields=["id"],
@@ -146,10 +144,10 @@ VOCABULARIES_SORT_OPTIONS = {
         fields=["created"],
     ),
 }
-"""Definitions of available Vocabularies sort options. """
+"""Definitions of available Vocabulary types sort options. """
 
-VOCABULARIES_SEARCH = {
+VOCABULARIES_TYPES_SEARCH = {
     "facets": [],
     "sort": ["name", "created"],
 }
-"""Vocabularies search configuration."""
+"""Vocabulary type search configuration."""
