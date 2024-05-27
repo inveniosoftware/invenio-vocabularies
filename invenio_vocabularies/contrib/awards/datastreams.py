@@ -91,7 +91,20 @@ class OpenAIREProjectTransformer(BaseTransformer):
             award["identifiers"] = identifiers
 
         award["number"] = code
+
+        # `title` is a mandatory attribute of the `Project` object in the OpenAIRE Graph Data Model.
+        # See: https://graph.openaire.eu/docs/data-model/entities/project#title
+        # However, 15'000+ awards for the FCT funder (and 1 record the NIH funder) are missing a title attribute.
+        if "title" not in record:
+            raise TransformerError(
+                _(
+                    "Missing title attribute for award {award_id}".format(
+                        award_id=award["id"]
+                    )
+                )
+            )
         award["title"] = {"en": record["title"]}
+
         award["funder"] = {"id": funder_id}
         acronym = record.get("acronym")
         if acronym:
