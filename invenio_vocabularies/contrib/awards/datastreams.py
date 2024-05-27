@@ -39,7 +39,20 @@ class OpenAIREProjectTransformer(BaseTransformer):
         award = {}
 
         code = record["code"]
-        openaire_funder_prefix = record["id"].split("::")[0].split("|")[1]
+
+        # The `id` should follow the format `sourcePrefix::md5(localId)` where `sourcePrefix` is 12 characters long.
+        # See: https://graph.openaire.eu/docs/data-model/pids-and-identifiers#identifiers-in-the-graph
+        #
+        # The format of `id` in the full OpenAIRE Graph Dataset (https://doi.org/10.5281/zenodo.3516917)
+        # follows this format (e.g. 'abc_________::0123456789abcdef0123456789abcdef').
+        # However, the format of `id` in the new collected projects dataset (https://doi.org/10.5281/zenodo.6419021)
+        # does not follow this format, and has a `40|` prefix (e.g. '40|abc_________::0123456789abcdef0123456789abcdef').
+        #
+        # The number '40' corresponds to the entity types 'Project'.
+        # See: https://ec.europa.eu/research/participants/documents/downloadPublic?documentIds=080166e5a3a1a213&appId=PPGMS
+        # See: https://graph.openaire.eu/docs/5.0.0/data-model/entities/project#id
+        openaire_funder_prefix = record["id"].split("::", 1)[0].split("|", 1)[-1]
+
         funder_id = awards_openaire_funders_mapping.get(openaire_funder_prefix)
         if funder_id is None:
             raise TransformerError(
