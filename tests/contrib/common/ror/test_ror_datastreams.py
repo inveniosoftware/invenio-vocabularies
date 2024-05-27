@@ -87,7 +87,6 @@ def download_file_bytes_content():
     "requests.get",
     side_effect=lambda url, headers=None: MockResponse(API_JSON_RESPONSE_CONTENT),
 )
-# @patch("requests.get", side_effect=lambda url, headers: MockResponse())
 def test_ror_http_reader(_, download_file_bytes_content):
     reader = RORHTTPReader()
     results = []
