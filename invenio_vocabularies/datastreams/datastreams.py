@@ -8,6 +8,8 @@
 
 """Base data stream."""
 
+import logging
+
 from .errors import ReaderError, TransformerError, WriterError
 
 
@@ -47,6 +49,7 @@ class DataStream:
         the reader, apply the transformations and yield the result of
         writing it.
         """
+        logging.warning("Starting to process data stream.!")
         for stream_entry in self.read():
             if stream_entry.errors:
                 yield stream_entry  # reading errors
@@ -81,6 +84,8 @@ class DataStream:
                         errors=[f"{current_gen_func.__qualname__}: {str(err)}"],
                     )
 
+        logging.warning("Starting to read!")
+        logging.warning(self._readers)
         read_gens = [r.read for r in self._readers]
         yield from pipe_gen(read_gens)
 

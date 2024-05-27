@@ -9,6 +9,7 @@
 """DataStreams tests."""
 
 import json
+import logging
 import zipfile
 from pathlib import Path
 
@@ -144,3 +145,31 @@ def test_piping_readers(app, zip_file, json_element):
             assert entry.errors == expected_errors
 
     assert count == 5  # 2 good + 1 bad + 2 good
+
+
+def test_oaipmh_reader(app):
+    ds_config = {
+        "readers": [
+            {
+                "type": "oai-pmh",
+                "args": {
+                    "base_url": "https://services.dnb.de/oai/repository",
+                    "metadata_prefix": "MARC21plus-1-xml",
+                    "set": "authorities:sachbegriff",
+                    "from_date": "2024-01-01",
+                    "until_date": "2024-01-31",
+                },
+            },
+        ],
+        "writers": [{"type": "test"}],
+    }
+
+    datastream = DataStreamFactory.create(
+        readers_config=ds_config["readers"],
+        writers_config=ds_config["writers"],
+    )
+    iter = datastream.process()
+    for count, entry in enumerate(iter, start=1):
+        logging.warning(count)
+
+    assert False

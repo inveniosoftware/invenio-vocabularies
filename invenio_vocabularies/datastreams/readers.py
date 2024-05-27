@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2024 CERN.
+# Copyright (C)      2024 University of Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,15 +12,17 @@
 import csv
 import gzip
 import json
+import logging
 import re
 import tarfile
 import zipfile
 from abc import ABC, abstractmethod
-from collections import defaultdict
 from json.decoder import JSONDecodeError
 
 import requests
 import yaml
+from invenio_oaipmh_scythe import Scythe
+from invenio_oaipmh_scythe.iterator import OAIResponseIterator
 from lxml.html import parse as html_parse
 
 from .errors import ReaderError
@@ -222,3 +225,50 @@ class XMLReader(BaseReader):
             raise ReaderError(f"Record not found in XML entry.")
 
         yield record
+
+
+class OAIPMHReader(BaseReader):
+    """OAIPMH reader."""
+
+    def __init__(
+        self,
+        *args,
+        base_url=None,
+        metadata_prefix=None,
+        set=None,
+        from_date=None,
+        until_date=None,
+        verb=None,
+        **kwargs,
+    ):
+        """Constructor."""
+        self._base_url = base_url
+        self._metadata_prefix = metadata_prefix if not None else "oai_dc"
+        self._set = set
+        self._until = until_date
+        self._from = from_date
+        self._verb = verb if not None else "ListRecords"
+        super().__init__(*args, **kwargs)
+
+    def _iter(self, scythe, *args, **kwargs):
+        """Read and parse an OAIPMH stream to dict."""
+        responses = scythe.list_records(
+            from_=self._from,
+            until=self._until,
+            metadata_prefix=self._metadata_prefix,
+            set_=self._set,
+            ignore_deleted=True,
+        )
+        for response in responses:
+            logging.warning(response)
+            next(responses)
+            yield response
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads from item or opens the file descriptor from origin."""
+        if item:
+            pass
+            # this will never be called!
+        else:
+            with Scythe(self._base_url, iterator=OAIResponseIterator) as scythe:
+                yield from self._iter(scythe=scythe, *args, **kwargs)

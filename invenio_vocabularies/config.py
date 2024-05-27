@@ -17,6 +17,7 @@ from .datastreams.readers import (
     GzipReader,
     JsonLinesReader,
     JsonReader,
+    OAIPMHReader,
     TarReader,
     XMLReader,
     YamlReader,
@@ -111,6 +112,7 @@ VOCABULARIES_DATASTREAM_READERS = {
     "yaml": YamlReader,
     "zip": ZipReader,
     "xml": XMLReader,
+    "oai-pmh": OAIPMHReader,
 }
 """Data Streams readers."""
 
