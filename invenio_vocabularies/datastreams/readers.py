@@ -12,7 +12,6 @@
 import csv
 import gzip
 import json
-import logging
 import re
 import tarfile
 import zipfile
@@ -22,10 +21,10 @@ from json.decoder import JSONDecodeError
 import requests
 import yaml
 from invenio_oaipmh_scythe import Scythe
-from invenio_oaipmh_scythe.iterator import OAIResponseIterator
 from lxml.html import parse as html_parse
 
 from .errors import ReaderError
+from .models import OAIRecord
 from .xml import etree_to_dict
 
 
@@ -252,6 +251,7 @@ class OAIPMHReader(BaseReader):
 
     def _iter(self, scythe, *args, **kwargs):
         """Read and parse an OAIPMH stream to dict."""
+        scythe.class_mapping["ListRecords"] = OAIRecord
         responses = scythe.list_records(
             from_=self._from,
             until=self._until,
@@ -260,9 +260,9 @@ class OAIPMHReader(BaseReader):
             ignore_deleted=True,
         )
         for response in responses:
-            logging.warning(response)
             next(responses)
-            yield response
+            oaipmh_record = {"header": response.header, "metadata": response.metadata["record"]}
+            yield oaipmh_record
 
     def read(self, item=None, *args, **kwargs):
         """Reads from item or opens the file descriptor from origin."""
@@ -270,5 +270,5 @@ class OAIPMHReader(BaseReader):
             pass
             # this will never be called!
         else:
-            with Scythe(self._base_url, iterator=OAIResponseIterator) as scythe:
+            with Scythe(self._base_url) as scythe:
                 yield from self._iter(scythe=scythe, *args, **kwargs)
