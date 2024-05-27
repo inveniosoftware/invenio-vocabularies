@@ -132,12 +132,15 @@ def test_zip_reader_item_zipfile_instance(zip_file, json_list):
     assert total == 2  # ignored the `.other` file
 
 
-def test_zip_reader_item_filename_not_zipfile_instance(zip_file, json_list):
+def test_zip_reader_item_bytesio_not_zipfile_instance(zip_file, json_list):
     reader = ZipReader(regex=".json$")
     total = 0
-    for data in reader.read(zip_file):
-        assert json.load(data) == json_list
-        total += 1
+    with open(zip_file, "rb") as zip_file_stream, io.BytesIO(
+        zip_file_stream.read()
+    ) as zip_file_bytesio:
+        for data in reader.read(zip_file_bytesio):
+            assert json.load(data) == json_list
+            total += 1
 
     assert total == 2  # ignored the `.other` file
 
