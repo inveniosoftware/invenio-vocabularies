@@ -1,20 +1,77 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2022 CERN.
+# Copyright (C) 2022-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
 """Awards datastreams, transformers, writers and readers."""
+import io
 
+import requests
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
-from ...datastreams.errors import TransformerError
+from ...datastreams.errors import ReaderError, TransformerError
+from ...datastreams.readers import BaseReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from .config import awards_ec_ror_id, awards_openaire_funders_mapping
+
+
+class OpenAIREProjectHTTPReader(BaseReader):
+    """OpenAIRE Project HTTP Reader returning an in-memory binary stream of the latest OpenAIRE Graph Dataset project tar file."""
+
+    def _iter(self, fp, *args, **kwargs):
+        raise NotImplementedError(
+            "OpenAIREProjectHTTPReader downloads one file and therefore does not iterate through items"
+        )
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads the latest OpenAIRE Graph Dataset project tar file from Zenodo and yields an in-memory binary stream of it."""
+        if item:
+            raise NotImplementedError(
+                "OpenAIREProjectHTTPReader does not support being chained after another reader"
+            )
+
+        if self._origin == "full":
+            # OpenAIRE Graph Dataset
+            api_url = "https://zenodo.org/api/records/3516917"
+        elif self._origin == "diff":
+            # OpenAIRE Graph dataset: new collected projects
+            api_url = "https://zenodo.org/api/records/6419021"
+        else:
+            raise ReaderError("The --origin option should be either 'full' or 'diff'")
+
+        # Call the signposting `linkset+json` endpoint for the Concept DOI (i.e. latest version) of the OpenAIRE Graph Dataset.
+        # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
+        headers = {"Accept": "application/linkset+json"}
+        api_resp = requests.get(api_url, headers=headers)
+        api_resp.raise_for_status()
+
+        # Extract the Landing page Link Set Object located as the first (index 0) item.
+        landing_page_linkset = api_resp.json()["linkset"][0]
+
+        # Extract the URL of the only project tar file linked to the record.
+        landing_page_project_tar_items = [
+            item
+            for item in landing_page_linkset["item"]
+            if item["type"] == "application/x-tar"
+            and item["href"].endswith("/project.tar")
+        ]
+        if len(landing_page_project_tar_items) != 1:
+            raise ReaderError(
+                f"Expected 1 project tar item but got {len(landing_page_project_tar_items)}"
+            )
+        file_url = landing_page_project_tar_items[0]["href"]
+
+        # Download the project tar file and fully load the response bytes content in memory.
+        # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `tarfile.open`).
+        # Using directly `file_resp.raw` is not possible since `tarfile.open` requires the file-like object to be seekable.
+        file_resp = requests.get(file_url)
+        file_resp.raise_for_status()
+        yield io.BytesIO(file_resp.content)
 
 
 class AwardsServiceWriter(ServiceWriter):
@@ -87,6 +144,10 @@ class OpenAIREProjectTransformer(BaseTransformer):
         stream_entry.entry = award
         return stream_entry
 
+
+VOCABULARIES_DATASTREAM_READERS = {
+    "openaire-project-http": OpenAIREProjectHTTPReader,
+}
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "openaire-award": OpenAIREProjectTransformer,
