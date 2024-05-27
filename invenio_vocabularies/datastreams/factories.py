@@ -36,7 +36,7 @@ class Factory:
         try:
             type_ = config["type"]
             args = config.get("args", {})
-
+            print(cls.options())
             return cls.options()[type_](**args)
         except KeyError:
             raise FactoryError(name=cls.FACTORY_NAME, key=type_)
