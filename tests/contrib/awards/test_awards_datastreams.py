@@ -42,7 +42,7 @@ def dict_award_entry():
                 }
             ],
             "h2020programme": [],
-            "id": "40|nsf_________::3eb1b4f6d6e251a19f9fdeed2aab88d8",
+            "id": "nsf_________::3eb1b4f6d6e251a19f9fdeed2aab88d8",
             "openaccessmandatefordataset": False,
             "openaccessmandateforpublications": False,
             "startdate": "2008-04-01",
