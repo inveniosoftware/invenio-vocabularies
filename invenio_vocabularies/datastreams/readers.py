@@ -15,7 +15,6 @@ import re
 import tarfile
 import zipfile
 from abc import ABC, abstractmethod
-from collections import defaultdict
 from json.decoder import JSONDecodeError
 
 import requests
@@ -80,7 +79,12 @@ class TarReader(BaseReader):
     def read(self, item=None, *args, **kwargs):
         """Opens a tar archive or uses the given file pointer."""
         if item:
-            yield from self._iter(fp=item, *args, **kwargs)
+            if isinstance(item, tarfile.TarFile):
+                yield from self._iter(fp=item, *args, **kwargs)
+            else:
+                # If the item is not already a TarFile (e.g. if it is a BytesIO), try to create a TarFile from the item.
+                with tarfile.open(mode=self._mode, fileobj=item) as archive:
+                    yield from self._iter(fp=archive, *args, **kwargs)
         else:
             with tarfile.open(self._origin, self._mode) as archive:
                 yield from self._iter(fp=archive, *args, **kwargs)

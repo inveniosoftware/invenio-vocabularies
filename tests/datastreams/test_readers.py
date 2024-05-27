@@ -7,6 +7,7 @@
 # details.
 
 """Data Streams readers tests."""
+import io
 import json
 import tarfile
 import zipfile
@@ -80,6 +81,32 @@ def test_tar_reader(tar_file, expected_from_tar):
     for data in reader.read():
         assert yaml.safe_load(data) == expected_from_tar
         total += 1
+
+    assert total == 2  # ignored the `.other` file
+
+
+def test_tar_reader_item_tarfile_instance(tar_file, expected_from_tar):
+    reader = TarReader(regex=".yaml$")
+
+    total = 0
+    with tarfile.open(tar_file) as archive:
+        for data in reader.read(archive):
+            assert yaml.safe_load(data) == expected_from_tar
+            total += 1
+
+    assert total == 2  # ignored the `.other` file
+
+
+def test_tar_reader_item_bytesio_not_tarfile_instance(tar_file, expected_from_tar):
+    reader = TarReader(regex=".yaml$")
+
+    total = 0
+    with open(tar_file, "rb") as tar_file_stream, io.BytesIO(
+        tar_file_stream.read()
+    ) as tar_file_bytesio:
+        for data in reader.read(tar_file_bytesio):
+            assert yaml.safe_load(data) == expected_from_tar
+            total += 1
 
     assert total == 2  # ignored the `.other` file
 
