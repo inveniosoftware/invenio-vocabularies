@@ -141,7 +141,7 @@ VOCABULARIES_TYPES_SORT_OPTIONS = {
         title=_("Name"),
         fields=["id"],
     ),
-    "entries": dict(
+    "count": dict(
         title=_("Number of entries"),
         fields=["count"],
     ),
@@ -150,6 +150,6 @@ VOCABULARIES_TYPES_SORT_OPTIONS = {
 
 VOCABULARIES_TYPES_SEARCH = {
     "facets": [],
-    "sort": ["name", "entries"],
+    "sort": ["name", "count"],
 }
 """Vocabulary type search configuration."""
