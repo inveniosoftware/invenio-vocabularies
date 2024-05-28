@@ -9,7 +9,6 @@
 """DataStreams tests."""
 
 import json
-import logging
 import zipfile
 from pathlib import Path
 
@@ -170,6 +169,6 @@ def test_oaipmh_reader(app):
     )
     iter = datastream.process()
     for count, entry in enumerate(iter, start=1):
-        logging.warning(count)
-
-    assert True
+        assert "header" in entry.entry
+        assert "metadata" in entry.entry
+        break

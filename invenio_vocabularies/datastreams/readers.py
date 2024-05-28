@@ -261,7 +261,10 @@ class OAIPMHReader(BaseReader):
         )
         for response in responses:
             next(responses)
-            oaipmh_record = {"header": response.header, "metadata": response.metadata["record"]}
+            oaipmh_record = {
+                "header": response.header,
+                "metadata": response.metadata["record"],
+            }
             yield oaipmh_record
 
     def read(self, item=None, *args, **kwargs):
