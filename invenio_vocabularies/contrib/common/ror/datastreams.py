@@ -18,8 +18,6 @@ from invenio_vocabularies.datastreams.errors import ReaderError, TransformerErro
 from invenio_vocabularies.datastreams.readers import BaseReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
 
-from .config import funder_fundref_doi_prefix, funder_schemes
-
 
 class RORHTTPReader(BaseReader):
     """ROR HTTP Reader returning an in-memory binary stream of the latest ROR data dump ZIP file."""
@@ -74,24 +72,34 @@ VOCABULARIES_DATASTREAM_READERS = {
 class RORTransformer(BaseTransformer):
     """Transforms a JSON ROR record into a funders record."""
 
+    def __init__(
+        self, *args, vocab_schemes=None, funder_fundref_doi_prefix=None, **kwargs
+    ):
+        """Initializes the transformer."""
+        self.vocab_schemes = vocab_schemes
+        self.funder_fundref_doi_prefix = funder_fundref_doi_prefix
+        super().__init__(*args, **kwargs)
+
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
         record = stream_entry.entry
-        funder = {}
-        funder["title"] = {}
+        ror = {}
+        ror["title"] = {}
 
-        funder["id"] = normalize_ror(record.get("id"))
-        if not funder["id"]:
+        ror["id"] = normalize_ror(record.get("id"))
+        if not ror["id"]:
             raise TransformerError(_("Id not found in ROR entry."))
 
         aliases = []
         acronym = None
         for name in record.get("names"):
             lang = name.get("lang", "en")
+            if lang == None:
+                lang = "en"
             if "ror_display" in name["types"]:
-                funder["name"] = name["value"]
+                ror["name"] = name["value"]
             if "label" in name["types"]:
-                funder["title"][lang] = name["value"]
+                ror["title"][lang] = name["value"]
             if "alias" in name["types"]:
                 aliases.append(name["value"])
             if "acronym" in name["types"]:
@@ -102,12 +110,12 @@ class RORTransformer(BaseTransformer):
                 else:
                     aliases.append(name["value"])
         if acronym:
-            funder["acronym"] = acronym
+            ror["acronym"] = acronym
         if aliases:
-            funder["aliases"] = aliases
+            ror["aliases"] = aliases
 
         # ror_display is required and should be in every entry
-        if not funder["name"]:
+        if not ror["name"]:
             raise TransformerError(
                 _("Name with type ror_display not found in ROR entry.")
             )
@@ -115,38 +123,43 @@ class RORTransformer(BaseTransformer):
         # This only gets the first location, to maintain compatability
         # with existing data structure
         location = record.get("locations", [{}])[0].get("geonames_details", {})
-        funder["country"] = location.get("country_code")
-        funder["country_name"] = location.get("country_name")
-        funder["location_name"] = location.get("name")
+        ror["country"] = location.get("country_code")
+        ror["country_name"] = location.get("country_name")
+        ror["location_name"] = location.get("name")
 
-        funder["types"] = record.get("types")
+        ror["types"] = record.get("types")
 
         status = record.get("status")
-        funder["status"] = status
+        ror["status"] = status
 
         # The ROR is always listed in identifiers, expected by serialization
-        funder["identifiers"] = [{"identifier": funder["id"], "scheme": "ror"}]
-        valid_schemes = set(funder_schemes.keys())
+        ror["identifiers"] = [{"identifier": ror["id"], "scheme": "ror"}]
+        if self.vocab_schemes:
+            valid_schemes = set(self.vocab_schemes.keys())
+        else:
+            valid_schemes = set()
         fund_ref = "fundref"
-        valid_schemes.add(fund_ref)
+        if self.funder_fundref_doi_prefix:
+            valid_schemes.add(fund_ref)
         for identifier in record.get("external_ids"):
             scheme = identifier["type"]
             if scheme in valid_schemes:
                 value = identifier.get("preferred") or identifier.get("all")[0]
                 if scheme == fund_ref:
-                    value = f"{funder_fundref_doi_prefix}/{value}"
-                    scheme = "doi"
-                funder["identifiers"].append(
+                    if self.funder_fundref_doi_prefix:
+                        value = f"{self.funder_fundref_doi_prefix}/{value}"
+                        scheme = "doi"
+                ror["identifiers"].append(
                     {
                         "identifier": value,
                         "scheme": scheme,
                     }
                 )
 
-        stream_entry.entry = funder
+        stream_entry.entry = ror
         return stream_entry
 
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
-    "ror-funder": RORTransformer,
+    "ror": RORTransformer,
 }

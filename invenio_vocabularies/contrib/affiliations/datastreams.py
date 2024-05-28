@@ -13,6 +13,7 @@ from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
+from .config import affiliation_schemes
 
 
 class AffiliationsServiceWriter(ServiceWriter):
@@ -38,13 +39,18 @@ DATASTREAM_CONFIG = {
         {
             "type": "zip",
             "args": {
-                "regex": "(?<!_schema_v2)\\.json$",
+                "regex": "_schema_v2\\.json$",
             },
         },
         {"type": "json"},
     ],
     "transformers": [
-        {"type": "ror"},
+        {
+            "type": "ror",
+            "args": {
+                "vocab_schemes": affiliation_schemes,
+            },
+        },
     ],
     "writers": [
         {

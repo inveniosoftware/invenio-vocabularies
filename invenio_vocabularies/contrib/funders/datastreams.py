@@ -14,6 +14,7 @@ from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
+from .config import funder_fundref_doi_prefix, funder_schemes
 
 
 class FundersServiceWriter(ServiceWriter):
@@ -46,7 +47,13 @@ DATASTREAM_CONFIG = {
         {"type": "json"},
     ],
     "transformers": [
-        {"type": "ror"},
+        {
+            "type": "ror",
+            "args": {
+                "vocab_schemes": funder_schemes,
+                "funder_fundref_doi_prefix": funder_fundref_doi_prefix,
+            },
+        },
     ],
     "writers": [
         {

@@ -15,11 +15,42 @@ import pytest
 from invenio_access.permissions import system_identity
 
 from invenio_vocabularies.contrib.affiliations.api import Affiliation
+from invenio_vocabularies.contrib.affiliations.config import affiliation_schemes
 from invenio_vocabularies.contrib.affiliations.datastreams import (
     AffiliationsServiceWriter,
 )
+from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
+
+
+@pytest.fixture(scope="module")
+def expected_from_ror_json():
+    return {
+        "id": "05dxps055",
+        "name": "California Institute of Technology",
+        "title": {
+            "en": "California Institute of Technology",
+            "es": "Instituto de Tecnología de California",
+        },
+        "acronym": "CIT",
+        "aliases": ["Caltech"],
+        "country": "US",
+        "country_name": "United States",
+        "location_name": "Pasadena",
+        "status": "active",
+        "identifiers": [
+            {"scheme": "ror", "identifier": "05dxps055"},
+            {"scheme": "grid", "identifier": "grid.20861.3d"},
+            {"scheme": "isni", "identifier": "0000 0001 0706 8890"},
+        ],
+        "types": ["education", "funder"],
+    }
+
+
+def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
+    transformer = RORTransformer(vocab_schemes=affiliation_schemes)
+    assert expected_from_ror_json == transformer.apply(dict_ror_entry).entry
 
 
 def test_affiliations_service_writer_create(app, search_clear, affiliation_full_data):

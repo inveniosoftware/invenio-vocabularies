@@ -14,10 +14,48 @@ from copy import deepcopy
 import pytest
 from invenio_access.permissions import system_identity
 
+from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.contrib.funders.api import Funder
+from invenio_vocabularies.contrib.funders.config import (
+    funder_fundref_doi_prefix,
+    funder_schemes,
+)
 from invenio_vocabularies.contrib.funders.datastreams import FundersServiceWriter
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
+
+
+@pytest.fixture(scope="module")
+def expected_from_ror_json():
+    return {
+        "id": "05dxps055",
+        "name": "California Institute of Technology",
+        "title": {
+            "en": "California Institute of Technology",
+            "es": "Instituto de Tecnología de California",
+        },
+        "acronym": "CIT",
+        "aliases": ["Caltech"],
+        "country": "US",
+        "country_name": "United States",
+        "location_name": "Pasadena",
+        "status": "active",
+        "identifiers": [
+            {"scheme": "ror", "identifier": "05dxps055"},
+            {"scheme": "doi", "identifier": "10.13039/100006961"},
+            {"scheme": "grid", "identifier": "grid.20861.3d"},
+            {"scheme": "isni", "identifier": "0000 0001 0706 8890"},
+        ],
+        "types": ["education", "funder"],
+    }
+
+
+def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
+    transformer = RORTransformer(
+        vocab_schemes=funder_schemes,
+        funder_fundref_doi_prefix=funder_fundref_doi_prefix,
+    )
+    assert expected_from_ror_json == transformer.apply(dict_ror_entry).entry
 
 
 def test_funders_service_writer_create(app, search_clear, funder_full_data):
