@@ -22,7 +22,7 @@ class OAIRecord(Record):
         )
 
 
-def xml_to_dict(tree: etree._Element) -> dict[str, list[str | None]]:
+def xml_to_dict(tree: etree._Element):
     """Convert an XML tree to a dictionary.
 
     This function takes an XML element tree and converts it into a dictionary.

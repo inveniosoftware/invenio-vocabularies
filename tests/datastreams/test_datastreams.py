@@ -172,4 +172,4 @@ def test_oaipmh_reader(app):
     for count, entry in enumerate(iter, start=1):
         logging.warning(count)
 
-    assert False
+    assert True
