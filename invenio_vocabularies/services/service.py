@@ -246,7 +246,7 @@ class VocabularySearchOptions(SearchOptions):
 
     sort_direction_default = "asc"
 
-    sort_default_no_query = "title"
+    sort_default_no_query = "id"
 
     sort_direction_options = {
         "asc": dict(
@@ -284,6 +284,7 @@ class VocabularySearchOptions(SearchOptions):
 
     pagination_options = {
         "default_results_per_page": 10,
+        "default_max_results": 20,
     }
 
 
