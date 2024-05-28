@@ -44,138 +44,138 @@ def is_custom_vocabulary_type(vocabulary_type, context):
     )
 
 
-class VocabularyMetadataList(ServiceListResult):
-    """Ensures that vocabulary metadata is returned in the proper format."""
+# class VocabularyMetadataList(ServiceListResult):
+#     """Ensures that vocabulary metadata is returned in the proper format."""
 
-    def __init__(
-        self,
-        service,
-        identity,
-        results,
-        links_tpl=None,
-        links_item_tpl=None,
-    ):
-        """Constructor.
+#     def __init__(
+#         self,
+#         service,
+#         identity,
+#         results,
+#         links_tpl=None,
+#         links_item_tpl=None,
+#     ):
+#         """Constructor.
 
-        :params service: a service instance
-        :params identity: an identity that performed the service request
-        :params results: the search results
-        """
-        self._identity = identity
-        self._results = results
-        self._service = service
-        self._links_tpl = links_tpl
-        self._links_item_tpl = links_item_tpl
+#         :params service: a service instance
+#         :params identity: an identity that performed the service request
+#         :params results: the search results
+#         """
+#         self._identity = identity
+#         self._results = results
+#         self._service = service
+#         self._links_tpl = links_tpl
+#         self._links_item_tpl = links_item_tpl
 
-    def to_dict(self):
-        """Formats result to a dict of hits."""
-        hits = list(self._results)
+#     def to_dict(self):
+#         """Formats result to a dict of hits."""
+#         hits = list(self._results)
 
-        for hit in hits:
-            if self._links_item_tpl:
-                hit["links"] = self._links_item_tpl.expand(self._identity, hit)
+#         for hit in hits:
+#             if self._links_item_tpl:
+#                 hit["links"] = self._links_item_tpl.expand(self._identity, hit)
 
-        res = {
-            "hits": {
-                "hits": hits,
-                "total": len(hits),
-            }
-        }
+#         res = {
+#             "hits": {
+#                 "hits": hits,
+#                 "total": len(hits),
+#             }
+#         }
 
-        if self._links_tpl:
-            res["links"] = self._links_tpl.expand(self._identity, None)
+#         if self._links_tpl:
+#             res["links"] = self._links_tpl.expand(self._identity, None)
 
-        return res
+#         return res
 
 
-class VocabularyTypeService(Service):
-    """Vocabulary type service."""
+# class VocabularyTypeService(Service):
+#     """Vocabulary type service."""
 
-    @property
-    def schema(self):
-        """Returns the data schema instance."""
-        return ServiceSchemaWrapper(self, schema=self.config.schema)
+#     @property
+#     def schema(self):
+#         """Returns the data schema instance."""
+#         return ServiceSchemaWrapper(self, schema=self.config.schema)
 
-    @property
-    def links_item_tpl(self):
-        """Item links template."""
-        return LinksTemplate(
-            self.config.vocabularies_listing_item,
-        )
+#     @property
+#     def links_item_tpl(self):
+#         """Item links template."""
+#         return LinksTemplate(
+#             self.config.vocabularies_listing_item,
+#         )
 
-    @property
-    def custom_vocabulary_names(self):
-        """Checks whether vocabulary is a custom vocabulary."""
-        return current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", [])
+#     @property
+#     def custom_vocabulary_names(self):
+#         """Checks whether vocabulary is a custom vocabulary."""
+#         return current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", [])
 
-    def search(self, identity):
-        """Search for vocabulary types entries."""
-        self.require_permission(identity, "list_vocabularies")
+#     def search(self, identity):
+#         """Search for vocabulary types entries."""
+#         self.require_permission(identity, "list_vocabularies")
 
-        vocabulary_types = VocabularyType.query.all()
+#         vocabulary_types = VocabularyType.query.all()
 
-        config_vocab_types = current_app.config.get(
-            "INVENIO_VOCABULARY_TYPE_METADATA", {}
-        )
+#         config_vocab_types = current_app.config.get(
+#             "INVENIO_VOCABULARY_TYPE_METADATA", {}
+#         )
 
-        count_terms_agg = {}
-        generic_stats = self._generic_vocabulary_statistics()
-        custom_stats = self._custom_vocabulary_statistics()
+#         count_terms_agg = {}
+#         generic_stats = self._generic_vocabulary_statistics()
+#         custom_stats = self._custom_vocabulary_statistics()
 
-        for k in generic_stats.keys() | custom_stats.keys():
-            count_terms_agg[k] = generic_stats.get(k, 0) + custom_stats.get(k, 0)
+#         for k in generic_stats.keys() | custom_stats.keys():
+#             count_terms_agg[k] = generic_stats.get(k, 0) + custom_stats.get(k, 0)
 
-        # Extend database data with configuration & aggregation data.
-        results = []
-        for db_vocab_type in vocabulary_types:
-            result = {
-                "id": db_vocab_type.id,
-                "pid_type": db_vocab_type.pid_type,
-                "count": count_terms_agg.get(db_vocab_type.id, 0),
-                "is_custom_vocabulary": db_vocab_type.id
-                in self.custom_vocabulary_names,
-            }
+#         # Extend database data with configuration & aggregation data.
+#         results = []
+#         for db_vocab_type in vocabulary_types:
+#             result = {
+#                 "id": db_vocab_type.id,
+#                 "pid_type": db_vocab_type.pid_type,
+#                 "count": count_terms_agg.get(db_vocab_type.id, 0),
+#                 "is_custom_vocabulary": db_vocab_type.id
+#                 in self.custom_vocabulary_names,
+#             }
 
-            if db_vocab_type.id in config_vocab_types:
-                for k, v in config_vocab_types[db_vocab_type.id].items():
-                    result[k] = v
+#             if db_vocab_type.id in config_vocab_types:
+#                 for k, v in config_vocab_types[db_vocab_type.id].items():
+#                     result[k] = v
 
-            results.append(result)
+#             results.append(result)
 
-        return self.config.vocabularies_listing_resultlist_cls(
-            self,
-            identity,
-            results,
-            links_tpl=LinksTemplate({"self": Link("{+api}/vocabularies")}),
-            links_item_tpl=self.links_item_tpl,
-        )
+#         return self.config.vocabularies_listing_resultlist_cls(
+#             self,
+#             identity,
+#             results,
+#             links_tpl=LinksTemplate({"self": Link("{+api}/vocabularies")}),
+#             links_item_tpl=self.links_item_tpl,
+#         )
 
-    def _custom_vocabulary_statistics(self):
-        # query database for count of terms in custom vocabularies
-        returndict = {}
-        for vocab_type in self.custom_vocabulary_names:
-            custom_service = current_service_registry.get(vocab_type)
-            record_cls = custom_service.config.record_cls
-            returndict[vocab_type] = record_cls.model_cls.query.count()
+#     def _custom_vocabulary_statistics(self):
+#         # query database for count of terms in custom vocabularies
+#         returndict = {}
+#         for vocab_type in self.custom_vocabulary_names:
+#             custom_service = current_service_registry.get(vocab_type)
+#             record_cls = custom_service.config.record_cls
+#             returndict[vocab_type] = record_cls.model_cls.query.count()
 
-        return returndict
+#         return returndict
 
-    def _generic_vocabulary_statistics(self):
-        # Opensearch query for generic vocabularies
-        config: RecordServiceConfig = current_service.config
-        search_opts = config.search
+#     def _generic_vocabulary_statistics(self):
+#         # Opensearch query for generic vocabularies
+#         config: RecordServiceConfig = current_service.config
+#         search_opts = config.search
 
-        search = search_opts.search_cls(
-            using=current_search_client,
-            index=config.record_cls.index.search_alias,
-        )
+#         search = search_opts.search_cls(
+#             using=current_search_client,
+#             index=config.record_cls.index.search_alias,
+#         )
 
-        search.aggs.bucket("vocabularies", {"terms": {"field": "type.id", "size": 100}})
+#         search.aggs.bucket("vocabularies", {"terms": {"field": "type.id", "size": 100}})
 
-        search_result = search.execute()
-        buckets = search_result.aggs.to_dict()["vocabularies"]["buckets"]
+#         search_result = search.execute()
+#         buckets = search_result.aggs.to_dict()["vocabularies"]["buckets"]
 
-        return {bucket["key"]: bucket["doc_count"] for bucket in buckets}
+#         return {bucket["key"]: bucket["doc_count"] for bucket in buckets}
 
 
 class VocabularySearchOptions(SearchOptions):

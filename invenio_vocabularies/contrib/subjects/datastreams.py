@@ -18,7 +18,10 @@ from ...datastreams.writers import ServiceWriter
 
 
 class SubjectsYAMLReader(BaseReader):
-    """Subjects YAML Reader."""
+    """Subjects YAML Reader.
+
+    This is needed for backwards compatibility with the old way of reading data.
+    """
 
     def __init__(self, *args, options=None, **kwargs):
         """Constructor."""
@@ -36,12 +39,8 @@ class SubjectsYAMLReader(BaseReader):
 
         with open(self._options["filename"], "r") as f:
             data = yaml.safe_load(f)
-            yield from self._iter(data=data, *args, **kwargs)
-
-
-class OAIPMHSubjectsReader(BaseReader):
-    # not implemented
-    pass
+            for entry in self._iter(data=data, *args, **kwargs):
+                yield entry
 
 
 class SubjectsYAMLTransformer(BaseTransformer):
@@ -51,12 +50,10 @@ class SubjectsYAMLTransformer(BaseTransformer):
         """Transform the data to the invenio subjects format."""
         record = stream_entry.entry
         subject_entry = {}
-        print("Transforming data to invenio subjects format...")
 
         subject_entry["subject"] = record.get("subject")
-        subject_entry["identifier"] = record.get("identifier")
+        subject_entry["id"] = record.get("id")
         subject_entry["scheme"] = record.get("scheme")
-        subject_entry["parent"] = record.get("parent")
 
         return subject_entry
 
@@ -70,6 +67,8 @@ class SubjectsServiceWriter(ServiceWriter):
 
     def write(self, data, *args, **kwargs):
         """Write the data to the service."""
+
+        raise NotImplementedError("Not implemented yet.")
 
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
