@@ -158,7 +158,7 @@ class VocabulariesAdminResource(RecordResource):
         config = current_service.config
         vocabtypeservice = VocabularyTypeService(config)
         identity = g.identity
-        hits = vocabtypeservice.search(identity)
+        hits = vocabtypeservice.search(identity, params=resource_requestctx.args)
 
         return hits.to_dict(), 200
 
