@@ -17,32 +17,6 @@ from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 
 
-class SubjectsYAMLReader(BaseReader):
-    """Subjects YAML Reader.
-
-    This is needed for backwards compatibility with the old way of reading data.
-    """
-
-    def __init__(self, *args, options=None, **kwargs):
-        """Constructor."""
-        self._options = options or {}
-        super().__init__(*args, **kwargs)
-
-    def _iter(self, data, *args, **kwargs):
-        """Iterates over a dictionary and returns a dictionary per element."""
-        for entry in data:
-            yield entry
-
-    def read(self, item=None, *args, **kwargs):
-        """Read the YAML file."""
-        import yaml
-
-        with open(self._options["filename"], "r") as f:
-            data = yaml.safe_load(f)
-            for entry in self._iter(data=data, *args, **kwargs):
-                yield entry
-
-
 class SubjectsYAMLTransformer(BaseTransformer):
     """Subjects Transformer."""
 
