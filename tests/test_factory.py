@@ -11,6 +11,9 @@
 import pytest
 from invenio_records_resources.proxies import current_service_registry
 
+from invenio_vocabularies.contrib.affiliations.datastreams import (
+    DATASTREAM_CONFIG as affiliations_ds_config,
+)
 from invenio_vocabularies.contrib.awards.datastreams import (
     DATASTREAM_CONFIG as awards_ds_config,
 )
@@ -21,6 +24,7 @@ from invenio_vocabularies.contrib.names.datastreams import (
     DATASTREAM_CONFIG as names_ds_config,
 )
 from invenio_vocabularies.factories import (
+    AffiliationsVocabularyConfig,
     AwardsVocabularyConfig,
     FundersVocabularyConfig,
     NamesVocabularyConfig,
@@ -33,9 +37,14 @@ from invenio_vocabularies.factories import (
         (AwardsVocabularyConfig(), awards_ds_config, "awards-service"),
         (NamesVocabularyConfig(), names_ds_config, "names-service"),
         (FundersVocabularyConfig(), funders_ds_config, "funders-service"),
+        (
+            AffiliationsVocabularyConfig(),
+            affiliations_ds_config,
+            "affiliations-service",
+        ),
     ],
 )
-def test_vocabulary_config(conf, ds_config, service_type):
+def test_vocabulary_config(conf, ds_config, service_type, app):
     """Test VocabularyConfig."""
     config = conf.get_config()
 
