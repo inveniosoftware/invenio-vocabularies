@@ -8,6 +8,8 @@
 # details.
 
 """Vocabulary service."""
+from functools import partial
+
 from flask import current_app
 from invenio_cache import current_cache
 from invenio_db import db
@@ -38,8 +40,6 @@ from invenio_records_resources.services.records.schema import ServiceSchemaWrapp
 from invenio_records_resources.services.uow import unit_of_work
 from invenio_search import current_search_client
 from invenio_search.engine import dsl
-from sqlalchemy import asc, desc, or_
-from sqlalchemy.sql import text
 
 from invenio_vocabularies.proxies import current_service
 
@@ -62,13 +62,13 @@ class VocabularyMetadataList(ServiceListResult):
     """Ensures that vocabulary metadata is returned in the proper format."""
 
     def __init__(
-        self,
-        service,
-        identity,
-        results,
-        params=None,
-        links_tpl=None,
-        links_item_tpl=None,
+            self,
+            service,
+            identity,
+            results,
+            params=None,
+            links_tpl=None,
+            links_item_tpl=None,
     ):
         """Constructor.
 
@@ -143,24 +143,21 @@ class VocabularyTypeService(RecordService):
         """Search for vocabulary types entries."""
         self.require_permission(identity, "list_vocabularies")
 
+        vocabulary_types = VocabularyType.query.all()
+
         search_params = map_search_params(self.config.search, params)
 
         query_param = search_params["q"]
-        filters = []
 
         if query_param:
-            filters.extend([VocabularyType.id.ilike(f"%{query_param}%")])
+            vocabulary_types = [
+                voc_type
+                for voc_type in vocabulary_types
+                if (query_param in voc_type.id.lower())
+            ]
 
-        vocabulary_types = (
-            VocabularyType.query.filter(or_(*filters)).order_by(
-                search_params["sort_direction"](text(",".join(search_params["sort"])))
-            )
-            # .paginate(
-            #     page=search_params["page"],
-            #     per_page=search_params["size"],
-            #     error_out=False,
-            # )
-        )
+        sort_direction = search_params["sort_direction"]
+        vocabulary_types = sort_direction(vocabulary_types)
 
         config_vocab_types = current_app.config.get(
             "INVENIO_VOCABULARY_TYPE_METADATA", {}
@@ -181,7 +178,7 @@ class VocabularyTypeService(RecordService):
                 "pid_type": db_vocab_type.pid_type,
                 "count": count_terms_agg.get(db_vocab_type.id, 0),
                 "is_custom_vocabulary": db_vocab_type.id
-                in self.custom_vocabulary_names,
+                                        in self.custom_vocabulary_names,
             }
 
             if db_vocab_type.id in config_vocab_types:
@@ -231,8 +228,8 @@ class VocabularySearchOptions(SearchOptions):
     """Search options."""
 
     params_interpreters_cls = [
-        FilterParam.factory(param="tags", field="tags"),
-    ] + SearchOptions.params_interpreters_cls
+                                  FilterParam.factory(param="tags", field="tags"),
+                              ] + SearchOptions.params_interpreters_cls
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
@@ -254,11 +251,11 @@ class VocabularySearchOptions(SearchOptions):
     sort_direction_options = {
         "asc": dict(
             title=_("Ascending"),
-            fn=asc,
+            fn=partial(sorted, key=lambda t: t.id),
         ),
         "desc": dict(
             title=_("Descending"),
-            fn=desc,
+            fn=partial(sorted, key=lambda t: t.id, reverse=True),
         ),
     }
 
@@ -355,7 +352,7 @@ class VocabulariesService(RecordService):
         return type_
 
     def search(
-        self, identity, params=None, search_preference=None, type=None, **kwargs
+            self, identity, params=None, search_preference=None, type=None, **kwargs
     ):
         """Search for vocabulary entries."""
         self.require_permission(identity, "search")
