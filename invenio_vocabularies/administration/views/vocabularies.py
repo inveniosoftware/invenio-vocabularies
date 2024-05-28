@@ -36,7 +36,7 @@ class VocabulariesListView(AdminResourceListView):
 
     item_field_list = {
         "id": {"text": "Name", "order": 1},
-        "entries": {"text": "Number of entries", "order": 2},
+        "count": {"text": "Number of entries", "order": 2},
     }
 
     search_config_name = "VOCABULARIES_TYPES_SEARCH"
