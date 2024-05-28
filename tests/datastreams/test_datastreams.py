@@ -14,6 +14,7 @@ from pathlib import Path
 
 import pytest
 
+from invenio_vocabularies.datastreams.errors import ReaderError
 from invenio_vocabularies.datastreams.factories import DataStreamFactory
 
 
@@ -155,8 +156,8 @@ def test_oaipmh_reader(app):
                     "base_url": "https://services.dnb.de/oai/repository",
                     "metadata_prefix": "MARC21plus-1-xml",
                     "set": "authorities:sachbegriff",
-                    "from_date": "2024-01-01",
-                    "until_date": "2024-01-31",
+                    "from_date": "2024-01-01T09:00:00Z",
+                    "until_date": "2024-01-31T10:00:00Z",
                 },
             },
         ],
@@ -172,3 +173,32 @@ def test_oaipmh_reader(app):
         assert "header" in entry.entry
         assert "metadata" in entry.entry
         break
+
+
+def test_oaipmh_reader_no_records_match(app):
+    ds_config = {
+        "readers": [
+            {
+                "type": "oai-pmh",
+                "args": {
+                    "base_url": "https://services.dnb.de/oai/repository",
+                    "metadata_prefix": "MARC21plus-1-xml",
+                    "set": "authorities:sachbegriff",
+                    "from_date": "2024-01-01T09:00:00Z",
+                    "until_date": "2024-01-01T10:00:00Z",
+                },
+            },
+        ],
+        "writers": [{"type": "test"}],
+    }
+
+    datastream = DataStreamFactory.create(
+        readers_config=ds_config["readers"],
+        writers_config=ds_config["writers"],
+    )
+    stream_iter = datastream.process()
+    try:
+        _ = next(stream_iter)
+        assert False
+    except ReaderError:
+        assert True

@@ -21,6 +21,7 @@ from json.decoder import JSONDecodeError
 import requests
 import yaml
 from invenio_oaipmh_scythe import Scythe
+from invenio_oaipmh_scythe.exceptions import NoRecordsMatch
 from lxml.html import parse as html_parse
 
 from .errors import ReaderError
@@ -252,20 +253,22 @@ class OAIPMHReader(BaseReader):
     def _iter(self, scythe, *args, **kwargs):
         """Read and parse an OAIPMH stream to dict."""
         scythe.class_mapping["ListRecords"] = OAIRecord
-        responses = scythe.list_records(
-            from_=self._from,
-            until=self._until,
-            metadata_prefix=self._metadata_prefix,
-            set_=self._set,
-            ignore_deleted=True,
-        )
-        for response in responses:
-            next(responses)
-            oaipmh_record = {
-                "header": response.header,
-                "metadata": response.metadata["record"],
-            }
-            yield oaipmh_record
+        try:
+            responses = scythe.list_records(
+                from_=self._from,
+                until=self._until,
+                metadata_prefix=self._metadata_prefix,
+                set_=self._set,
+                ignore_deleted=True,
+            )
+            for response in responses:
+                oaipmh_record = {
+                    "header": response.header,
+                    "metadata": response.metadata["record"],
+                }
+                yield oaipmh_record
+        except NoRecordsMatch:
+            raise ReaderError(f"No records found in OAI-PMH request.")
 
     def read(self, item=None, *args, **kwargs):
         """Reads from item or opens the file descriptor from origin."""
