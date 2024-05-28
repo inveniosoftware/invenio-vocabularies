@@ -12,6 +12,7 @@ from flask import current_app
 from invenio_cache import current_cache
 from invenio_db import db
 from invenio_i18n import lazy_gettext as _
+from invenio_records_resources.pagination import Pagination
 from invenio_records_resources.proxies import current_service_registry
 from invenio_records_resources.services import (
     Link,
@@ -26,6 +27,7 @@ from invenio_records_resources.services.base import (
     Service,
     ServiceListResult,
 )
+from invenio_records_resources.services.base.utils import map_search_params
 from invenio_records_resources.services.errors import PermissionDeniedError
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import (
@@ -36,6 +38,8 @@ from invenio_records_resources.services.records.schema import ServiceSchemaWrapp
 from invenio_records_resources.services.uow import unit_of_work
 from invenio_search import current_search_client
 from invenio_search.engine import dsl
+from sqlalchemy import asc, desc, or_
+from sqlalchemy.sql import text
 
 from invenio_vocabularies.proxies import current_service
 
@@ -58,12 +62,13 @@ class VocabularyMetadataList(ServiceListResult):
     """Ensures that vocabulary metadata is returned in the proper format."""
 
     def __init__(
-        self,
-        service,
-        identity,
-        results,
-        links_tpl=None,
-        links_item_tpl=None,
+            self,
+            service,
+            identity,
+            results,
+            params=None,
+            links_tpl=None,
+            links_item_tpl=None,
     ):
         """Constructor.
 
@@ -73,9 +78,24 @@ class VocabularyMetadataList(ServiceListResult):
         """
         self._identity = identity
         self._results = results
+        self._params = params
         self._service = service
         self._links_tpl = links_tpl
         self._links_item_tpl = links_item_tpl
+
+    @property
+    def total(self):
+        """Get total number of hits."""
+        return len(list(self._results))
+
+    @property
+    def pagination(self):
+        """Create a pagination object."""
+        return Pagination(
+            self._params["size"],
+            self._params["page"],
+            self.total,
+        )
 
     def to_dict(self):
         """Formats result to a dict of hits."""
@@ -88,17 +108,18 @@ class VocabularyMetadataList(ServiceListResult):
         res = {
             "hits": {
                 "hits": hits,
-                "total": len(hits),
+                "total": self.total,
             }
         }
 
-        if self._links_tpl:
-            res["links"] = self._links_tpl.expand(self._identity, None)
+        if self._params:
+            if self._links_tpl:
+                res["links"] = self._links_tpl.expand(self._identity, self.pagination)
 
         return res
 
 
-class VocabularyTypeService(Service):
+class VocabularyTypeService(RecordService):
     """Vocabulary type service."""
 
     @property
@@ -118,11 +139,28 @@ class VocabularyTypeService(Service):
         """Checks whether vocabulary is a custom vocabulary."""
         return current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", [])
 
-    def search(self, identity):
+    def search(self, identity, params=None):
         """Search for vocabulary types entries."""
         self.require_permission(identity, "list_vocabularies")
 
-        vocabulary_types = VocabularyType.query.all()
+        search_params = map_search_params(self.config.search, params)
+
+        query_param = search_params["q"]
+        filters = []
+
+        if query_param:
+            filters.extend([VocabularyType.id.ilike(f"%{query_param}%")])
+
+        vocabulary_types = (
+            VocabularyType.query.filter(or_(*filters)).order_by(
+                search_params["sort_direction"](text(",".join(search_params["sort"])))
+            )
+            # .paginate(
+            #     page=search_params["page"],
+            #     per_page=search_params["size"],
+            #     error_out=False,
+            # )
+        )
 
         config_vocab_types = current_app.config.get(
             "INVENIO_VOCABULARY_TYPE_METADATA", {}
@@ -143,7 +181,7 @@ class VocabularyTypeService(Service):
                 "pid_type": db_vocab_type.pid_type,
                 "count": count_terms_agg.get(db_vocab_type.id, 0),
                 "is_custom_vocabulary": db_vocab_type.id
-                in self.custom_vocabulary_names,
+                                        in self.custom_vocabulary_names,
             }
 
             if db_vocab_type.id in config_vocab_types:
@@ -156,7 +194,8 @@ class VocabularyTypeService(Service):
             self,
             identity,
             results,
-            links_tpl=LinksTemplate({"self": Link("{+api}/vocabularies")}),
+            params,
+            links_tpl=LinksTemplate(self.config.links_search, context={"args": params}),
             links_item_tpl=self.links_item_tpl,
         )
 
@@ -192,8 +231,8 @@ class VocabularySearchOptions(SearchOptions):
     """Search options."""
 
     params_interpreters_cls = [
-        FilterParam.factory(param="tags", field="tags"),
-    ] + SearchOptions.params_interpreters_cls
+                                  FilterParam.factory(param="tags", field="tags"),
+                              ] + SearchOptions.params_interpreters_cls
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
@@ -206,9 +245,22 @@ class VocabularySearchOptions(SearchOptions):
         ],
     )
 
-    sort_default = "bestmatch"
+    sort_default = "id"
+
+    sort_direction_default = "asc"
 
     sort_default_no_query = "title"
+
+    sort_direction_options = {
+        "asc": dict(
+            title=_("Ascending"),
+            fn=asc,
+        ),
+        "desc": dict(
+            title=_("Descending"),
+            fn=desc,
+        ),
+    }
 
     sort_options = {
         "bestmatch": dict(
@@ -227,6 +279,14 @@ class VocabularySearchOptions(SearchOptions):
             title=_("Oldest"),
             fields=["created"],
         ),
+        "id": dict(
+            title=_("ID"),
+            fields=["id"],
+        )
+    }
+
+    pagination_options = {
+        "default_results_per_page": 10,
     }
 
 
@@ -295,7 +355,7 @@ class VocabulariesService(RecordService):
         return type_
 
     def search(
-        self, identity, params=None, search_preference=None, type=None, **kwargs
+            self, identity, params=None, search_preference=None, type=None, **kwargs
     ):
         """Search for vocabulary entries."""
         self.require_permission(identity, "search")
