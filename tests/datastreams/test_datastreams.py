@@ -170,8 +170,7 @@ def test_oaipmh_reader(app):
     )
     iter = datastream.process()
     for count, entry in enumerate(iter, start=1):
-        assert "header" in entry.entry
-        assert "metadata" in entry.entry
+        assert "record" in entry.entry
         break
 
 
