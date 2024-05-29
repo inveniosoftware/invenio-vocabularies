@@ -8,7 +8,7 @@
 
 """Record Model for Scythe."""
 
-from invenio_oaipmh_scythe.models import Record
+from oaipmh_scythe.models import Record
 from lxml import etree
 
 

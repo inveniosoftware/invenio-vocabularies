@@ -20,8 +20,8 @@ from json.decoder import JSONDecodeError
 
 import requests
 import yaml
-from invenio_oaipmh_scythe import Scythe
-from invenio_oaipmh_scythe.exceptions import NoRecordsMatch
+from oaipmh_scythe import Scythe
+from oaipmh_scythe.exceptions import NoRecordsMatch
 from lxml.html import parse as html_parse
 
 from .errors import ReaderError
