@@ -62,13 +62,13 @@ class VocabularyMetadataList(ServiceListResult):
     """Ensures that vocabulary metadata is returned in the proper format."""
 
     def __init__(
-            self,
-            service,
-            identity,
-            results,
-            params=None,
-            links_tpl=None,
-            links_item_tpl=None,
+        self,
+        service,
+        identity,
+        results,
+        params=None,
+        links_tpl=None,
+        links_item_tpl=None,
     ):
         """Constructor.
 
@@ -178,7 +178,7 @@ class VocabularyTypeService(RecordService):
                 "pid_type": db_vocab_type.pid_type,
                 "count": count_terms_agg.get(db_vocab_type.id, 0),
                 "is_custom_vocabulary": db_vocab_type.id
-                                        in self.custom_vocabulary_names,
+                in self.custom_vocabulary_names,
             }
 
             if db_vocab_type.id in config_vocab_types:
@@ -254,8 +254,8 @@ class VocabularySearchOptions(SearchOptions):
     """Search options."""
 
     params_interpreters_cls = [
-                                  FilterParam.factory(param="tags", field="tags"),
-                              ] + SearchOptions.params_interpreters_cls
+        FilterParam.factory(param="tags", field="tags"),
+    ] + SearchOptions.params_interpreters_cls
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
@@ -379,7 +379,7 @@ class VocabulariesService(RecordService):
         return type_
 
     def search(
-            self, identity, params=None, search_preference=None, type=None, **kwargs
+        self, identity, params=None, search_preference=None, type=None, **kwargs
     ):
         """Search for vocabulary entries."""
         self.require_permission(identity, "search")

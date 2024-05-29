@@ -9,9 +9,10 @@
 
 """Vocabularies admin interface."""
 from flask import current_app
-from invenio_administration.views.base import (AdminResourceEditView,
-                                               AdminResourceListView,
-                                               )
+from invenio_administration.views.base import (
+    AdminResourceEditView,
+    AdminResourceListView,
+)
 from invenio_i18n import lazy_gettext as _
 
 
@@ -52,7 +53,7 @@ class VocabularyTypesDetailsView(AdminResourceListView):
         """overwrite get_api_endpoint to accept pid_value"""
 
         if vocab_type in current_app.config.get(
-                "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
+            "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
         ):
             return f"/api/{vocab_type}"
         else:
@@ -123,7 +124,7 @@ class VocabularyTypesDetailsEditView(AdminResourceEditView):
     def get_api_endpoint(self, vocab_type=None, pid=None):
         """overwrite get_api_endpoint to accept pid_value"""
         if vocab_type in current_app.config.get(
-                "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
+            "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
         ):
             return f"/api/{vocab_type}/{pid}"
         else:

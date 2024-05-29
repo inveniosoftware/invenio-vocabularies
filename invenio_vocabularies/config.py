@@ -164,7 +164,7 @@ VOCABULARIES_TYPES_ITEMS_SORT_OPTIONS = {
     "created": dict(
         title=_("Created"),
         fields=["created"],
-    )
+    ),
 }
 """Definitions of available Vocabulary types sort options. """
 
