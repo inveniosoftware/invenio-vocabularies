@@ -8,13 +8,11 @@
 # details.
 
 """Vocabularies admin interface."""
-from invenio_administration.views.base import (
-    AdminResourceDetailView,
-    AdminResourceEditView,
-    AdminResourceListView,
-)
-from invenio_i18n import lazy_gettext as _
 from flask import current_app
+from invenio_administration.views.base import (AdminResourceEditView,
+                                               AdminResourceListView,
+                                               )
+from invenio_i18n import lazy_gettext as _
 
 
 class VocabulariesListView(AdminResourceListView):
@@ -50,13 +48,15 @@ class VocabulariesListView(AdminResourceListView):
 class VocabularyTypesDetailsView(AdminResourceListView):
     """Configuration for vocabularies list view."""
 
-    def get_api_endpoint(self, pid_value=None):
+    def get_api_endpoint(self, vocab_type=None):
         """overwrite get_api_endpoint to accept pid_value"""
 
-        if pid_value in current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []):
-            return f"/api/{pid_value}"
+        if vocab_type in current_app.config.get(
+                "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
+        ):
+            return f"/api/{vocab_type}"
         else:
-            return f"/api/vocabularies/{pid_value}"
+            return f"/api/vocabularies/{vocab_type}"
 
     def get_context(self, **kwargs):
         """Create details view context."""
@@ -85,8 +85,8 @@ class VocabularyTypesDetailsView(AdminResourceListView):
             ),
         }
 
-    name = "Vocabularies_Detail"
-    url = "/vocabularies/<pid_value>"
+    name = "vocabularies_details"
+    url = "/vocabularies/<vocab_type>"
 
     api_endpoint = "/vocabularies/"
 
@@ -95,9 +95,6 @@ class VocabularyTypesDetailsView(AdminResourceListView):
 
     resource_config = "vocabulary_admin_resource"
     search_request_headers = {"Accept": "application/json"}
-    # TODO The title should contain the <pid_value> as well
-    # title = f"{pid_value} Detail"
-    title = "Vocabularies Detail"
     pid_path = "id"
 
     # INFO only if disabled() (as a function) its not in the sidebar, see https://github.com/inveniosoftware/invenio-administration/blob/main/invenio_administration/menu/menu.py#L54
@@ -107,18 +104,46 @@ class VocabularyTypesDetailsView(AdminResourceListView):
 
     display_delete = False
     display_create = False
-    display_edit = False
+    display_edit = True
     display_search = False
 
     item_field_list = {
         "id": {"text": "Name", "order": 0},
-        "created": {"text": "Created", "order": 1}
+        "created": {"text": "Created", "order": 1},
     }
 
     search_config_name = "VOCABULARIES_TYPES_ITEMS_SEARCH"
     search_facets_config_name = "VOCABULARIES_TYPES_ITEMS_FACETS"
     search_sort_config_name = "VOCABULARIES_TYPES_ITEMS_SORT_OPTIONS"
 
-    # search_config_name = "VOCABULARIES_TYPES_SEARCH"
-    # search_facets_config_name = "VOCABULARIES_TYPES_FACETS"
-    # search_sort_config_name = "VOCABULARIES_TYPES_SORT_OPTIONS"
+
+class VocabularyTypesDetailsEditView(AdminResourceEditView):
+    """Configuration for vocabulary item edit view."""
+
+    def get_api_endpoint(self, vocab_type=None, pid=None):
+        """overwrite get_api_endpoint to accept pid_value"""
+        if vocab_type in current_app.config.get(
+                "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
+        ):
+            return f"/api/{vocab_type}/{pid}"
+        else:
+            return f"/api/vocabularies/{vocab_type}/{pid}"
+
+    name = "vocabularies_details_edit"
+    url = "/vocabularies/<vocab_type>/<pid_value>/edit"
+    resource_config = "vocabulary_admin_resource"
+    pid_path = "id"
+    api_endpoint = "/vocabularies"
+    title = "Edit vocabulary item"
+
+    list_view_name = "vocabularies_details"
+
+    form_fields = {
+        "ID": {
+            "order": 1,
+            "text": _("Set ID"),
+            "description": _("Some ID."),
+        },
+        "created": {"order": 2},
+        "updated": {"order": 3},
+    }

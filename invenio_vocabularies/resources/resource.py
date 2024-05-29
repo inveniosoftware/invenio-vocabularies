@@ -172,3 +172,16 @@ class VocabulariesAdminResource(RecordResource):
         )
         item = self.service.read(g.identity, pid_value)
         return item.to_dict(), 200
+
+    @request_headers
+    @request_view_args
+    @request_data
+    @response_handler()
+    def update(self):
+        """Update an item."""
+        item = self.service.update(
+            g.identity,
+            resource_requestctx.view_args["id"],
+            resource_requestctx.data,
+        )
+        return item.to_dict(), 200

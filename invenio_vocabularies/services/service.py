@@ -196,6 +196,32 @@ class VocabularyTypeService(RecordService):
             links_item_tpl=self.links_item_tpl,
         )
 
+    @unit_of_work()
+    def update(self, identity, id_, data, uow=None):
+        """Update an OAI set."""
+        self.require_permission(identity, "update")
+
+        vocabulary_item, errors = self._get_one(id=id_)
+        # if oai_set.system_created:
+        #     raise OAIPMHSetNotEditable(oai_set.id)
+
+        valid_data, errors = self.schema.load(
+            data,
+            context={"identity": identity},
+            raise_errors=True,
+        )
+
+        for key, value in valid_data.items():
+            setattr(vocabulary_item, key, value)
+        # uow.register(OAISetCommitOp(oai_set))
+
+        return self.result_item(
+            service=self,
+            identity=identity,
+            item=vocabulary_item,
+            links_tpl=self.links_item_tpl,
+        )
+
     def _custom_vocabulary_statistics(self):
         # query database for count of terms in custom vocabularies
         returndict = {}
