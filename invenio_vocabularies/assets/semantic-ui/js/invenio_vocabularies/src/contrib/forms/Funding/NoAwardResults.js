@@ -16,7 +16,7 @@ export function NoAwardResults({ switchToCustom }) {
       basic
       content={
         <p>
-          {i18next.t("Did not find your award? ")}
+          {i18next.t("Did not find your award/grant? ")}
           <a
             href="/"
             onClick={(e) => {
@@ -24,7 +24,7 @@ export function NoAwardResults({ switchToCustom }) {
               switchToCustom();
             }}
           >
-            {i18next.t("Add a custom award.")}
+            {i18next.t("Add a custom award/grant.")}
           </a>
         </p>
       }
