@@ -292,8 +292,5 @@ def test_oaipmh_reader_no_records_match(app, httpserver):
         writers_config=ds_config["writers"],
     )
     stream_iter = datastream.process()
-    try:
-        _ = next(stream_iter)
-        assert False
-    except ReaderError:
-        assert True
+    with pytest.raises(ReaderError):
+        next(stream_iter)
