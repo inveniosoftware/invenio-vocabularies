@@ -270,8 +270,9 @@ class OAIPMHReader(BaseReader):
     def read(self, item=None, *args, **kwargs):
         """Reads from item or opens the file descriptor from origin."""
         if item:
-            pass
-            # this will never be called!
+            raise NotImplementedError(
+                "OAIPMHReader does not support being chained after another reader"
+            )
         else:
             with Scythe(self._base_url) as scythe:
                 yield from self._iter(scythe=scythe, *args, **kwargs)
