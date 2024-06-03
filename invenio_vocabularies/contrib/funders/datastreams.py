@@ -48,7 +48,13 @@ class RORTransformer(BaseTransformer):
         aliases = []
         acronym = None
         for name in record.get("names"):
-            lang = name.get("lang", "en")
+            # Some name entries have a `lang` key with a `None` value.
+            # Therefore, providing a default value to `name.get("lang")` is not enough,
+            # and we need instead to check if the result of `get` is None.
+            lang = name.get("lang")
+            if lang is None:
+                lang = "en"
+
             if "ror_display" in name["types"]:
                 funder["name"] = name["value"]
             if "label" in name["types"]:
