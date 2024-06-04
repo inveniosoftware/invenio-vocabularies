@@ -16,21 +16,9 @@ import Overridable from "react-overridable";
 
 function CustomAwardForm({ deserializeFunder, selectedFunding }) {
   function deserializeFunderToDropdown(funderItem) {
-    let funderName = null;
-    let funderPID = null;
-    let funderCountry = null;
-
-    if (funderItem.name) {
-      funderName = funderItem.name;
-    }
-
-    if (funderItem.id) {
-      funderPID = funderItem.id;
-    }
-
-    if (funderItem.country_name) {
-      funderCountry = funderItem.country_name;
-    }
+    const funderName = funderItem?.name;
+    const funderPID = funderItem?.id;
+    const funderCountry = funderItem?.country_name;
 
     if (!funderName && !funderPID) {
       return {};
