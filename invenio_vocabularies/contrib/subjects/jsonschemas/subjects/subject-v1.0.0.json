@@ -20,8 +20,22 @@
       "$ref": "local://definitions-v1.0.0.json#/identifier"
     },
     "subject": {
-      "description": "Human readable label.",
-      "type": "string"
+      "description": "Human readable label in different languages.",
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
+    },
+    "synonyms": {
+      "description": "Synonyms of the subject label.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "identifiers": {
+      "description": "Alternate (schemed) identifiers for the record.",
+      "type": "array",
+      "items": {"$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"},
+      "uniqueItems": true
     }
   }
 }

@@ -1,5 +1,16 @@
 {
   "mappings": {
+    "dynamic_templates": [
+      {
+        "i18n_subject": {
+          "path_match": "subject.*",
+          "match_mapping_type": "text",
+          "mapping": {
+            "type": "search_as_you_type"
+          }
+        }
+      }
+    ],
     "dynamic": "strict",
     "properties": {
       "$schema": {
@@ -28,16 +39,8 @@
         "type": "keyword"
       },
       "subject": {
-        "type": "text",
-        "copy_to": "subject_sort",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type"
-          }
-        }
-      },
-      "subject_sort": {
-        "type": "keyword"
+        "type": "object",
+        "dynamic": "true"
       },
       "pid": {
         "type": "object",
@@ -55,6 +58,19 @@
             "type": "keyword"
           }
         }
+      },
+      "identifiers": {
+        "properties": {
+          "identifier": {
+            "type": "keyword"
+          },
+          "scheme": {
+            "type": "keyword"
+          }
+        }
+      },
+      "synonyms": {
+        "type": "text"
       }
     }
   }
