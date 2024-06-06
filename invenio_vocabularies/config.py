@@ -102,6 +102,11 @@ VOCABULARIES_NAMES_SCHEMES = {
 }
 """Names allowed identifier schemes."""
 
+VOCABULARIES_SUBJECTS_SCHEMES = {
+    "gnd": {"label": _("GND"), "validator": idutils.is_gnd, "datacite": "GND"},
+}
+"""Subjects allowed identifier schemes."""
+
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
     "json": JsonReader,

@@ -9,12 +9,18 @@
 
 """Subjects configuration."""
 
+from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
+from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
 from ...services.querystr import FilteredSuggestQueryParser
+
+subject_schemes = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_SUBJECTS_SCHEMES"]
+)
 
 
 class SubjectsSearchOptions(SearchOptions):
@@ -24,8 +30,7 @@ class SubjectsSearchOptions(SearchOptions):
         filter_field="scheme",
         fields=[  # suggest fields
             "subject^100",
-            "subject._2gram",
-            "subject._3gram",
+            "synonyms^20",
         ],
     )
 
