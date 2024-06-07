@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2022 CERN.
+# Copyright (C) 2024 University of Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -88,7 +89,7 @@ VOCABULARIES_DATASTREAM_TRANSFORMERS = {
 VOCABULARIES_DATASTREAM_WRITERS = {
     "subjects-service": SubjectsServiceWriter,
 }
-"""Subjects Data Streams transformers."""
+"""Subjects Data Streams writers."""
 
 
 DATASTREAM_CONFIG = {
