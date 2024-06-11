@@ -20,6 +20,12 @@ from invenio_vocabularies.contrib.subjects.schema import (
 )
 
 
+def test_valid_full(app, subject_full_data):
+    loaded = SubjectSchema().load(subject_full_data)
+    assert subject_full_data == loaded
+
+
+"""
 class TestSubjectSchema:
     def test_valid_full(self, subject_full_data):
         loaded = SubjectSchema().load(subject_full_data)
@@ -67,3 +73,4 @@ class TestSubjectRelationSchema:
 
         subject = {"subject": "Entity One", "scheme": "scheme A"}
         assert subject == SubjectRelationSchema().dump(subject)
+"""

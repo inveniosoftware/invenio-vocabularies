@@ -70,7 +70,7 @@
         }
       },
       "synonyms": {
-        "type": "text"
+        "type": "array"
       }
     }
   }

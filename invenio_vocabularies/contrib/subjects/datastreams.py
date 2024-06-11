@@ -12,10 +12,8 @@
 import idutils
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
-from invenio_records.dictutils import dict_lookup
 
 from ...datastreams.errors import TransformerError
-from ...datastreams.readers import BaseReader, SimpleHTTPReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from .config import subject_schemes

@@ -20,10 +20,25 @@ from invenio_records_resources.proxies import current_service_registry
 @pytest.fixture(scope="function")
 def subject_full_data():
     """Controlled vocabulary backed subject data."""
+    """
     return {
         "id": "https://id.nlm.nih.gov/mesh/D000001",
         "scheme": "MeSH",
         "subject": "Calcimycin",
+    }
+    """
+    return {
+        "subject": {
+            "en": "Dark Web",
+            "de": "Darknet",
+            "fr": "Réseaux anonymes (informatique)",
+        },
+        "id": "1062531973",
+        "scheme": "GND",
+        "synonyms": ["Deep Web"],
+        "identifiers": [
+            {"identifier": "http://d-nb.info/gnd/1062531973", "scheme": "gnd"}
+        ],
     }
 
 
