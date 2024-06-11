@@ -8,6 +8,9 @@
     "$schema": {
       "$ref": "local://definitions-v1.0.0.json#/$schema"
     },
+    "tags": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/tags"
+    },
     "id": {
       "description": "URI or classification code as identifier - globally unique among all subject schemes.",
       "$ref": "local://definitions-v1.0.0.json#/identifier"

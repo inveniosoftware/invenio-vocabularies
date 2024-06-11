@@ -71,6 +71,8 @@
       },
       "synonyms": {
         "type": "text"
+      "tags": {
+        "type": "keyword"
       }
     }
   }

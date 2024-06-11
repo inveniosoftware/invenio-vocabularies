@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2024 CERN.
+# Copyright (C)      2024 University of Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -19,7 +20,11 @@ from json.decoder import JSONDecodeError
 
 import requests
 import yaml
+from lxml import etree
 from lxml.html import parse as html_parse
+from oaipmh_scythe import Scythe
+from oaipmh_scythe.exceptions import NoRecordsMatch
+from oaipmh_scythe.models import Record
 
 from .errors import ReaderError
 from .xml import etree_to_dict
@@ -226,3 +231,81 @@ class XMLReader(BaseReader):
             raise ReaderError(f"Record not found in XML entry.")
 
         yield record
+
+
+class OAIPMHReader(BaseReader):
+    """OAIPMH reader."""
+
+    def __init__(
+        self,
+        *args,
+        base_url=None,
+        metadata_prefix=None,
+        set=None,
+        from_date=None,
+        until_date=None,
+        verb=None,
+        **kwargs,
+    ):
+        """Constructor."""
+        self._base_url = base_url
+        self._metadata_prefix = metadata_prefix if not None else "oai_dc"
+        self._set = set
+        self._until = until_date
+        self._from = from_date
+        self._verb = verb if not None else "ListRecords"
+        super().__init__(*args, **kwargs)
+
+    def _iter(self, scythe, *args, **kwargs):
+        """Read and parse an OAIPMH stream to dict."""
+        scythe.class_mapping["ListRecords"] = self.OAIRecord
+        try:
+            records = scythe.list_records(
+                from_=self._from,
+                until=self._until,
+                metadata_prefix=self._metadata_prefix,
+                set_=self._set,
+                ignore_deleted=True,
+            )
+            for record in records:
+                yield {"record": record}
+        except NoRecordsMatch:
+            raise ReaderError(f"No records found in OAI-PMH request.")
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads from item or opens the file descriptor from origin."""
+        if item:
+            raise NotImplementedError(
+                "OAIPMHReader does not support being chained after another reader"
+            )
+        else:
+            with Scythe(self._base_url) as scythe:
+                yield from self._iter(scythe=scythe, *args, **kwargs)
+
+    class OAIRecord(Record):
+        """An XML unpacking implementation for more complicated formats."""
+
+        def get_metadata(self):
+            """Extract and return the record's metadata as a dictionary."""
+            return xml_to_dict(
+                self.xml.find(".//" + self._oai_namespace + "metadata").getchildren()[
+                    0
+                ],
+            )
+
+
+def xml_to_dict(tree: etree._Element):
+    """Convert an XML tree to a dictionary.
+
+    This function takes an XML element tree and converts it into a dictionary.
+
+    Args:
+        tree: The root element of the XML tree to be converted.
+
+    Returns:
+        A dictionary with the key "record".
+    """
+    dict_obj = dict()
+    dict_obj["record"] = etree.tostring(tree)
+
+    return dict_obj

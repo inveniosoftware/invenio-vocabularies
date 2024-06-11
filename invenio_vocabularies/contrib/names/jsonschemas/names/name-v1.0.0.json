@@ -8,6 +8,9 @@
     "$schema": {
       "$ref": "local://definitions-v1.0.0.json#/$schema"
     },
+    "tags": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/tags"
+    },
     "scheme": {
       "description": "Identifier of the name scheme.",
       "$ref": "local://definitions-v1.0.0.json#/identifier"
