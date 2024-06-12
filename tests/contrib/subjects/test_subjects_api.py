@@ -64,6 +64,6 @@ def test_subject_pid(app, db, example_subject):
     """Test subject pid creation."""
     subj = example_subject
 
-    assert subj.pid.pid_value == "https://id.nlm.nih.gov/mesh/D000001"
+    assert subj.pid.pid_value == "1062531973"
     assert subj.pid.pid_type == "sub"
-    assert Subject.pid.resolve("https://id.nlm.nih.gov/mesh/D000001")
+    assert Subject.pid.resolve("1062531973")

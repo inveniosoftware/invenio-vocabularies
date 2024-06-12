@@ -39,7 +39,7 @@ def test_get(client, h, prefix, example_subject):
     assert res.json["id"] == id_
     # links are encoded which seems weird
     assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/subjects/https%3A%2F%2Fid.nlm.nih.gov%2Fmesh%2FD000001"  # noqa
+        "self": "https://127.0.0.1:5000/api/subjects/1062531973"  # noqa
     }
     # but they should still resolve
     i = res.json["links"]["self"].find("subjects")
@@ -72,7 +72,7 @@ def test_forbidden_endpoints(client, h, prefix, example_subject, subject_full_da
 
 def test_search(client, h, prefix, example_subject):
     """Test a successful search."""
-    res = client.get(prefix, headers=h)
+    res = client.get(f"{prefix}", headers=h)
 
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
@@ -85,27 +85,37 @@ def example_subjects(app, db, search_clear, identity, service):
         {
             "id": "other-1",
             "scheme": "Other",
-            "subject": "Abdomen",
+            "subject": {
+                "en": "Abdomen",
+            },
         },
         {
             "id": "https://id.nlm.nih.gov/mesh/D000001",
             "scheme": "MeSH",
-            "subject": "Calcimycin",
+            "subject": {
+                "en": "Calcimycin",
+            },
         },
         {
             "id": "https://id.nlm.nih.gov/mesh/D000005",
             "scheme": "MeSH",
-            "subject": "Abdomen",
+            "subject": {
+                "en": "Abdomen",
+            },
         },
         {
             "id": "https://id.nlm.nih.gov/mesh/D000006",
             "scheme": "MeSH",
-            "subject": "Abdomen, Acute",
+            "subject": {
+                "en": "Abdomen, Acute",
+            },
         },
         {
             "id": "yet-another-954514",
             "scheme": "Other2",
-            "subject": "Abdomen",
+            "subject": {
+                "en": "Abdomen",
+            },
         },
     ]
     records = [service.create(identity, s) for s in subjects]

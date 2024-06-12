@@ -20,37 +20,34 @@ from invenio_vocabularies.contrib.subjects.schema import (
 )
 
 
-def test_valid_full(app, subject_full_data):
+def test_valid_full(app, subject_full_data, expected_subject_full_data):
     loaded = SubjectSchema().load(subject_full_data)
-    assert subject_full_data == loaded
+    assert expected_subject_full_data == loaded
+
+
+def test_invalid_missing_field(app, subject_full_data):
+    # no id
+    invalid = copy(subject_full_data)
+    del invalid["id"]
+    with pytest.raises(ValidationError):
+        SubjectSchema().load(invalid)
+
+    # no scheme
+    invalid = copy(subject_full_data)
+    del invalid["scheme"]
+    with pytest.raises(ValidationError):
+        SubjectSchema().load(invalid)
 
 
 """
-class TestSubjectSchema:
-    def test_valid_full(self, subject_full_data):
-        loaded = SubjectSchema().load(subject_full_data)
-        assert subject_full_data == loaded
+    # no subject
+    invalid = copy(subject_full_data)
+    del invalid["subject"]
+    with pytest.raises(ValidationError):
+        SubjectSchema().load(invalid)
+"""
 
-    def test_invalid_missing_field(self, subject_full_data):
-        # no id
-        invalid = copy(subject_full_data)
-        del invalid["id"]
-        with pytest.raises(ValidationError):
-            SubjectSchema().load(invalid)
-
-        # no scheme
-        invalid = copy(subject_full_data)
-        del invalid["scheme"]
-        with pytest.raises(ValidationError):
-            SubjectSchema().load(invalid)
-
-        # no subject
-        invalid = copy(subject_full_data)
-        del invalid["subject"]
-        with pytest.raises(ValidationError):
-            SubjectSchema().load(invalid)
-
-
+"""
 class TestSubjectRelationSchema:
     def test_valid_id(self):
         valid_id = {

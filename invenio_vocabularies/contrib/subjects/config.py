@@ -30,7 +30,7 @@ class SubjectsSearchOptions(SearchOptions):
     suggest_parser_cls = FilteredSuggestQueryParser.factory(
         filter_field="scheme",
         fields=[  # suggest fields
-            "subject^100",
+            "subject.*^100",
             "synonyms^20",
         ],
     )
@@ -46,7 +46,7 @@ class SubjectsSearchOptions(SearchOptions):
         ),
         "subject": dict(
             title=_("Name"),
-            fields=["subject_sort"],
+            fields=["indexed_at"],
         ),
         "newest": dict(
             title=_("Newest"),

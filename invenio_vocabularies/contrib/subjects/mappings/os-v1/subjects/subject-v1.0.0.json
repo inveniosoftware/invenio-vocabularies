@@ -4,7 +4,7 @@
       {
         "i18n_subject": {
           "path_match": "subject.*",
-          "match_mapping_type": "text",
+          "match_mapping_type": "string",
           "mapping": {
             "type": "search_as_you_type"
           }
@@ -70,7 +70,7 @@
         }
       },
       "synonyms": {
-        "type": "array"
+        "type": "text"
       },
       "tags": {
         "type": "keyword"
