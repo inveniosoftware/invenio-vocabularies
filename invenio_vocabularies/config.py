@@ -26,7 +26,7 @@ from .datastreams.readers import (
 from .datastreams.transformers import XMLTransformer
 from .datastreams.writers import ServiceWriter, YamlWriter
 from .resources import VocabulariesResourceConfig
-from .services.service import VocabulariesServiceConfig
+from .services.config import VocabulariesServiceConfig
 
 VOCABULARIES_RESOURCE_CONFIG = VocabulariesResourceConfig
 """Configure the resource."""

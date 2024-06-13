@@ -38,10 +38,9 @@ from invenio_records_resources.resources.records.resource import (
 from invenio_records_resources.resources.records.utils import search_preference
 from marshmallow import fields
 
-from invenio_vocabularies.proxies import current_service
-from invenio_vocabularies.services.service import VocabularyTypeService
-
 from .serializer import VocabularyL10NItemSchema
+
+# from invenio_vocabularies.proxies import current_service
 
 
 #
@@ -155,10 +154,8 @@ class VocabulariesAdminResource(RecordResource):
     @response_handler(many=True)
     def get_all_vocabulary_types(self):
         """Return information about _all_ vocabularies."""
-        config = current_service.config
-        vocabtypeservice = VocabularyTypeService(config)
         identity = g.identity
-        hits = vocabtypeservice.search(identity, params=resource_requestctx.args)
+        hits = self.service.search(identity, params=resource_requestctx.args)
 
         return hits.to_dict(), 200
 
