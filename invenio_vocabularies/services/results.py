@@ -14,7 +14,7 @@ from invenio_records_resources.services import RecordServiceConfig
 from invenio_records_resources.services.records.results import RecordList
 from invenio_search import current_search_client
 
-from invenio_vocabularies.proxies import current_service
+from ..proxies import current_service
 
 
 class VocabularyMetadataList(RecordList):
