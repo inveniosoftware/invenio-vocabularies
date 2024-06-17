@@ -8,6 +8,16 @@
 Changes
 =======
 
+Version 4.0.0 (released 2024-06-04)
+
+- datastreams: implement factories for generating vocabulary configurations
+- datastreams: added ROR HTTP reader
+- funders: use ROR v2 dump instead of v1
+- datastreams: added celery task for funders using ROR HTTP reader
+- datastreams: add OpenAIRE Project HTTP Reader
+- datastreams: fix OpenAIRE graph dataset parsing
+- installation: upgrade invenio-records-resources
+
 Version 3.4.0 (released 2024-04-19)
 
 - templates: add subject fields UI template (#303)

@@ -43,6 +43,8 @@ from invenio_vocabularies.services.service import VocabularyTypeService
 
 from .serializer import VocabularyL10NItemSchema
 
+# from invenio_vocabularies.proxies import current_service
+
 
 #
 # Resource
@@ -155,10 +157,8 @@ class VocabulariesAdminResource(RecordResource):
     @response_handler(many=True)
     def get_all_vocabulary_types(self):
         """Return information about _all_ vocabularies."""
-        config = current_service.config
-        vocabtypeservice = VocabularyTypeService(config)
         identity = g.identity
-        hits = vocabtypeservice.search(identity, params=resource_requestctx.args)
+        hits = self.service.search(identity, params=resource_requestctx.args)
 
         return hits.to_dict(), 200
 
@@ -171,17 +171,4 @@ class VocabulariesAdminResource(RecordResource):
             resource_requestctx.view_args["pid_value"],
         )
         item = self.service.read(g.identity, pid_value)
-        return item.to_dict(), 200
-
-    @request_headers
-    @request_view_args
-    @request_data
-    @response_handler()
-    def update(self):
-        """Update an item."""
-        item = self.service.update(
-            g.identity,
-            resource_requestctx.view_args["id"],
-            resource_requestctx.data,
-        )
         return item.to_dict(), 200

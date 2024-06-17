@@ -17,6 +17,7 @@ from .datastreams.readers import (
     GzipReader,
     JsonLinesReader,
     JsonReader,
+    OAIPMHReader,
     TarReader,
     XMLReader,
     YamlReader,
@@ -25,7 +26,7 @@ from .datastreams.readers import (
 from .datastreams.transformers import XMLTransformer
 from .datastreams.writers import ServiceWriter, YamlWriter
 from .resources import VocabulariesResourceConfig
-from .services.service import VocabulariesServiceConfig
+from .services.config import VocabulariesServiceConfig
 
 VOCABULARIES_RESOURCE_CONFIG = VocabulariesResourceConfig
 """Configure the resource."""
@@ -120,6 +121,7 @@ VOCABULARIES_DATASTREAM_READERS = {
     "yaml": YamlReader,
     "zip": ZipReader,
     "xml": XMLReader,
+    "oai-pmh": OAIPMHReader,
 }
 """Data Streams readers."""
 
@@ -149,27 +151,5 @@ VOCABULARIES_TYPES_SORT_OPTIONS = {
 VOCABULARIES_TYPES_SEARCH = {
     "facets": [],
     "sort": ["name", "count"],
-}
-"""Vocabulary type search configuration."""
-
-VOCABULARIES_TYPES_ITEMS_SORT_OPTIONS = {
-    "id": dict(
-        title=_("Name"),
-        fields=["id"],
-    ),
-    "name": dict(
-        title=_("Name"),
-        fields=["id"],
-    ),
-    "created": dict(
-        title=_("Created"),
-        fields=["created"],
-    ),
-}
-"""Definitions of available Vocabulary types sort options. """
-
-VOCABULARIES_TYPES_ITEMS_SEARCH = {
-    "facets": [],
-    "sort": ["id", "name", "created"],
 }
 """Vocabulary type search configuration."""

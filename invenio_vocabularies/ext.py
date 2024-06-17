@@ -46,7 +46,8 @@ from .resources import (
     VocabulariesResourceConfig,
     VocabularyTypeResourceConfig,
 )
-from .services.service import VocabulariesService
+from .services.config import VocabularyTypesServiceConfig
+from .services.service import VocabulariesService, VocabularyTypeService
 
 # from .contrib.information import InformationResource, InformationResourceConfig
 
@@ -83,6 +84,7 @@ class InvenioVocabularies(object):
             funders = FundersServiceConfig
             names = NamesServiceConfig
             subjects = SubjectsServiceConfig
+            vocabulary_types = VocabularyTypesServiceConfig
 
         return ServiceConfigs
 
@@ -100,8 +102,11 @@ class InvenioVocabularies(object):
         self.funders_service = FundersService(config=service_configs.funders)
         self.names_service = NamesService(config=service_configs.names)
         self.subjects_service = SubjectsService(config=service_configs.subjects)
-        self.service = VocabulariesService(
+        self.vocabularies_service = VocabulariesService(
             config=app.config["VOCABULARIES_SERVICE_CONFIG"],
+        )
+        self.vocabulary_types_service = VocabularyTypeService(
+            config=service_configs.vocabulary_types
         )
 
     def init_resource(self, app):
@@ -128,11 +133,11 @@ class InvenioVocabularies(object):
             config=SubjectsResourceConfig,
         )
         self.resource = VocabulariesResource(
-            service=self.service,
+            service=self.vocabularies_service,
             config=app.config["VOCABULARIES_RESOURCE_CONFIG"],
         )
         self.vocabulary_admin_resource = VocabulariesAdminResource(
-            service=self.service,
+            service=self.vocabulary_types_service,
             config=VocabularyTypeResourceConfig,
         )
 
@@ -164,7 +169,8 @@ def init(app):
     sregistry.register(ext.funders_service, service_id="funders")
     sregistry.register(ext.names_service, service_id="names")
     sregistry.register(ext.subjects_service, service_id="subjects")
-    sregistry.register(ext.service, service_id="vocabularies")
+    sregistry.register(ext.vocabularies_service, service_id="vocabularies")
+    sregistry.register(ext.vocabulary_types_service, service_id="vocabulary-types")
     # Register indexers
     iregistry = app.extensions["invenio-indexer"].registry
     iregistry.register(ext.affiliations_service.indexer, indexer_id="affiliations")
@@ -172,4 +178,4 @@ def init(app):
     iregistry.register(ext.funders_service.indexer, indexer_id="funders")
     iregistry.register(ext.names_service.indexer, indexer_id="names")
     iregistry.register(ext.subjects_service.indexer, indexer_id="subjects")
-    iregistry.register(ext.service.indexer, indexer_id="vocabularies")
+    iregistry.register(ext.vocabularies_service.indexer, indexer_id="vocabularies")

@@ -28,8 +28,8 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
       funderPID = funderItem.id;
     }
 
-    if (funderItem.country) {
-      funderCountry = funderItem.country;
+    if (funderItem.country_name) {
+      funderCountry = funderItem.country_name;
     }
 
     if (!funderName && !funderPID) {

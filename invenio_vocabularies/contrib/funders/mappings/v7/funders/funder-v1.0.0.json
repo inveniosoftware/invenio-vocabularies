@@ -57,12 +57,33 @@
       "country": {
         "type": "text"
       },
+      "country_name": {
+        "type": "text"
+      },
+      "location_name": {
+        "type": "text"
+      },
+      "acronym": {
+        "type": "text"
+      },
+      "status": {
+        "type": "keyword"
+      },
+      "aliases": {
+        "type": "text"
+      },
+      "types": {
+        "type": "keyword"
+      },
       "id": {
         "type": "keyword"
       },
       "title": {
         "type": "object",
         "dynamic": "true"
+      },
+      "tags": {
+        "type": "keyword"
       }
     }
   }

@@ -7,13 +7,18 @@
     "$schema": {
       "$ref": "local://definitions-v1.0.0.json#/$schema"
     },
+    "tags": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/tags"
+    },
     "acronym": {
       "type": "string"
     },
     "identifiers": {
       "description": "Alternate identifiers for the record.",
       "type": "array",
-      "items": {"$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"},
+      "items": {
+        "$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"
+      },
       "uniqueItems": true
     },
     "name": {
