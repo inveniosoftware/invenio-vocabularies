@@ -79,9 +79,7 @@ class VocabularyScheme(db.Model):
         """Create a new vocabulary subtype."""
         banned = [",", ":"]
         for b in banned:
-            assert (
-                b not in data["id"]
-            ), f"No '{b}' allowed in VocabularyScheme.id"  # noqa
+            assert b not in data["id"], f"No '{b}' allowed in VocabularyScheme.id"
 
         with db.session.begin_nested():
             obj = cls(**data)

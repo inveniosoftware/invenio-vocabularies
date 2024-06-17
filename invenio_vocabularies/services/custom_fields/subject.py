@@ -7,6 +7,7 @@
 
 
 """Custom fields."""
+
 from invenio_i18n import lazy_gettext as _
 
 from ...contrib.subjects.api import Subject
@@ -25,7 +26,7 @@ class SubjectCF(VocabularyCF):
             vocabulary_id="subjects",
             schema=SubjectRelationSchema,
             ui_schema=SubjectRelationSchema,
-            **kwargs
+            **kwargs,
         )
         self.pid_field = Subject.pid
 

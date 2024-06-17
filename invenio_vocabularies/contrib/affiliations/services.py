@@ -8,7 +8,6 @@
 
 """Vocabulary affiliations."""
 
-
 from .affiliations import record_type
 
 AffiliationsServiceConfig = record_type.service_config_cls

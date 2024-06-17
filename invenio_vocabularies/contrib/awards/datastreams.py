@@ -7,6 +7,7 @@
 # details.
 
 """Awards datastreams, transformers, writers and readers."""
+
 import io
 
 import requests

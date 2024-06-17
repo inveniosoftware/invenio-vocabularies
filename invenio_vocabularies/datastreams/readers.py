@@ -270,19 +270,38 @@ class OAIPMHReader(BaseReader):
                     self.xml.find(f".//{self._oai_namespace}metadata").getchildren()[0],
                 )
 
-        scythe.class_mapping["ListRecords"] = OAIRecord
-        try:
-            records = scythe.list_records(
-                from_=self._from,
-                until=self._until,
-                metadata_prefix=self._metadata_prefix,
-                set_=self._set,
-                ignore_deleted=True,
-            )
-            for record in records:
-                yield {"record": record}
-        except oaipmh_scythe.NoRecordsMatch:
-            raise ReaderError(f"No records found in OAI-PMH request.")
+        if self._verb == "ListRecords":
+            scythe.class_mapping["ListRecords"] = OAIRecord
+            try:
+                records = scythe.list_records(
+                    from_=self._from,
+                    until=self._until,
+                    metadata_prefix=self._metadata_prefix,
+                    set_=self._set,
+                    ignore_deleted=True,
+                )
+                for record in records:
+                    yield {"record": record}
+            except oaipmh_scythe.NoRecordsMatch:
+                raise ReaderError("No records found in OAI-PMH request.")
+        else:
+            scythe.class_mapping["GetRecord"] = OAIRecord
+            try:
+                headers = scythe.list_identifiers(
+                    from_=self._from,
+                    until=self._until,
+                    metadata_prefix=self._metadata_prefix,
+                    set_=self._set,
+                    ignore_deleted=True,
+                )
+                for header in headers:
+                    record = scythe.get_record(
+                        identifier=header.identifier,
+                        metadata_prefix=self._metadata_prefix,
+                    )
+                    yield {"record": record}
+            except oaipmh_scythe.NoRecordsMatch:
+                raise ReaderError("No records found in OAI-PMH request.")
 
     def read(self, item=None, *args, **kwargs):
         """Reads from item or opens the file descriptor from origin."""

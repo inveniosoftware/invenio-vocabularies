@@ -8,7 +8,6 @@
 
 """Persistent identifier provider for vocabularies."""
 
-
 from invenio_pidstore.models import PIDStatus
 from invenio_pidstore.providers.base import BaseProvider
 

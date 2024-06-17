@@ -8,6 +8,7 @@
 # details.
 
 """Vocabulary resource schema."""
+
 from marshmallow import Schema, fields
 
 from invenio_vocabularies.resources.serializer import L10NString
