@@ -258,19 +258,38 @@ class OAIPMHReader(BaseReader):
 
     def _iter(self, scythe, *args, **kwargs):
         """Read and parse an OAIPMH stream to dict."""
-        scythe.class_mapping["ListRecords"] = self.OAIRecord
-        try:
-            records = scythe.list_records(
-                from_=self._from,
-                until=self._until,
-                metadata_prefix=self._metadata_prefix,
-                set_=self._set,
-                ignore_deleted=True,
-            )
-            for record in records:
-                yield {"record": record}
-        except NoRecordsMatch:
-            raise ReaderError(f"No records found in OAI-PMH request.")
+        if self._verb == "ListRecords":
+            scythe.class_mapping["ListRecords"] = self.OAIRecord
+            try:
+                records = scythe.list_records(
+                    from_=self._from,
+                    until=self._until,
+                    metadata_prefix=self._metadata_prefix,
+                    set_=self._set,
+                    ignore_deleted=True,
+                )
+                for record in records:
+                    yield {"record": record}
+            except NoRecordsMatch:
+                raise ReaderError(f"No records found in OAI-PMH request.")
+        else:
+            scythe.class_mapping["GetRecord"] = self.OAIRecord
+            try:
+                headers = scythe.list_identifiers(
+                    from_=self._from,
+                    until=self._until,
+                    metadata_prefix=self._metadata_prefix,
+                    set_=self._set,
+                    ignore_deleted=True,
+                )
+                for header in headers:
+                    record = scythe.get_record(
+                        identifier=header.identifier,
+                        metadata_prefix=self._metadata_prefix,
+                    )
+                    yield {"record": record}
+            except NoRecordsMatch:
+                raise ReaderError(f"No records found in OAI-PMH request.")
 
     def read(self, item=None, *args, **kwargs):
         """Reads from item or opens the file descriptor from origin."""
