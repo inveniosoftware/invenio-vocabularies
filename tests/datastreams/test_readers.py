@@ -269,7 +269,113 @@ def oai_response_match():
                         </record>
                     </metadata>
                 </record>
-            </ ListRecords>
+            </ListRecords>
+        </OAI-PMH>
+    """
+    return response_data
+
+
+@pytest.fixture(scope="module")
+def oai_response_match_list_identifiers():
+    response_data = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd" xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <responseDate>2024-06-14T11:04:19Z</responseDate>
+            <request metadataPrefix="MARC21plus-1-xml" set="authorities:sachbegriff" verb="ListIdentifiers" from="2024-01-31T13:31:40Z" until="2024-01-31T13:35:00Z">https://services.dnb.de/oai/repository</request>
+            <ListIdentifiers xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+                <header>
+                    <identifier>oai:dnb.de/authorities:sachbegriff/1074025261</identifier>
+                    <datestamp>2024-01-31T13:33:40Z</datestamp>
+                    <setSpec>authorities:sachbegriff</setSpec>
+                </header>
+            </ListIdentifiers>
+        </OAI-PMH>
+    """
+    return response_data
+
+
+@pytest.fixture(scope="module")
+def oai_response_match_get_record():
+    response_data = """
+        <?xml version = "1.0" encoding = "UTF-8"?>
+        <OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd" xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <responseDate>2024-05-29T13:20:04Z</responseDate>
+            <request metadataPrefix="MARC21plus-1-xml" set="authorities:sachbegriff" verb="ListRecords" from="2024-01-01T09:00:00Z" until="2024-01-01T17:00:00Z">https://services.dnb.de/oai/repository</request>
+            <GetRecord xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+                <record>
+                    <header>
+                        <identifier>oai:dnb.de/authorities:sachbegriff/1074025261</identifier>
+                        <datestamp>2024-01-01T16:51:21Z</datestamp>
+                        <setSpec>authorities:sachbegriff</setSpec>
+                    </header>
+                    <metadata>
+                        <record type="Authority" xmlns="http://www.loc.gov/MARC21/slim">
+                            <leader>00000nz  a2200000nc 4500</leader>
+                            <controlfield tag="001">1074025261</controlfield>
+                            <controlfield tag="003">DE-101</controlfield>
+                            <controlfield tag="005">20240101175121.0</controlfield>
+                            <controlfield tag="008">150717n||azznnbabn           | ana    |c</controlfield>
+                            <datafield tag="024" ind1="7" ind2=" ">
+                                <subfield code="a">1074025261</subfield>
+                                <subfield code="0">http://d-nb.info/gnd/1074025261</subfield>
+                                <subfield code="2">gnd</subfield>
+                            </datafield>
+                            <datafield tag="035" ind1=" " ind2=" ">
+                                <subfield code="a">(DE-101)1074025261</subfield>
+                            </datafield>
+                            <datafield tag="035" ind1=" " ind2=" ">
+                                <subfield code="a">(DE-588)1074025261</subfield>
+                            </datafield>
+                            <datafield tag="040" ind1=" " ind2=" ">
+                                <subfield code="a">DE-12</subfield>
+                                <subfield code="c">DE-12</subfield>
+                                <subfield code="9">r:DE-384</subfield>
+                                <subfield code="b">ger</subfield>
+                                <subfield code="d">1210</subfield>
+                                <subfield code="f">rswk</subfield>
+                            </datafield>
+                            <datafield tag="042" ind1=" " ind2=" ">
+                                <subfield code="a">gnd1</subfield>
+                            </datafield>
+                            <datafield tag="065" ind1=" " ind2=" ">
+                                <subfield code="a">31.3b</subfield>
+                                <subfield code="2">sswd</subfield>
+                            </datafield>
+                            <datafield tag="075" ind1=" " ind2=" ">
+                                <subfield code="b">s</subfield>
+                                <subfield code="2">gndgen</subfield>
+                            </datafield>
+                            <datafield tag="075" ind1=" " ind2=" ">
+                                <subfield code="b">saz</subfield>
+                                <subfield code="2">gndspec</subfield>
+                            </datafield>
+                            <datafield tag="079" ind1=" " ind2=" ">
+                                <subfield code="a">g</subfield>
+                                <subfield code="q">s</subfield>
+                            </datafield>
+                            <datafield tag="150" ind1=" " ind2=" ">
+                                <subfield code="a">Rundbogenhalle</subfield>
+                            </datafield>
+                            <datafield tag="450" ind1=" " ind2=" ">
+                                <subfield code="a">Bogenhalle</subfield>
+                            </datafield>
+                            <datafield tag="550" ind1=" " ind2=" ">
+                                <subfield code="0">(DE-101)040230236</subfield>
+                                <subfield code="0">(DE-588)4023023-5</subfield>
+                                <subfield code="0">https://d-nb.info/gnd/4023023-5</subfield>
+                                <subfield code="a">Halle</subfield>
+                                <subfield code="4">obge</subfield>
+                                <subfield code="4">https://d-nb.info/standards/elementset/gnd#broaderTermGeneric</subfield>
+                                <subfield code="w">r</subfield>
+                                <subfield code="i">Oberbegriff generisch</subfield>
+                            </datafield>
+                            <datafield tag="670" ind1=" " ind2=" ">
+                                <subfield code="a">Stahlbetonbauwerke mit großer Spannweite, eingesetzt im Industriebau, z.b.Paketposthalle München; teilweise heute unter Denkmalschutz</subfield>
+                            </datafield>
+                        </record>
+                    </metadata>
+                </record>
+            </GetRecord>
         </OAI-PMH>
     """
     return response_data
@@ -285,6 +391,43 @@ def test_oaipmh_reader(app, httpserver, oai_response_match):
         set="authorities:sachbegriff",
         from_date="2024-01-01T09:00:00Z",
         until_date="2024-01-31T10:00:00Z",
+    )
+    result = reader.read()
+    assert "record" in next(result)
+
+
+def test_oaipmh_reader_list_identifiers(
+    app, httpserver, oai_response_match_list_identifiers, oai_response_match_get_record
+):
+    httpserver.expect_request(
+        "/oai/repository",
+        query_string={
+            "verb": "ListIdentifiers",
+            "from": "2024-01-01T09:00:00Z",
+            "until": "2024-01-31T10:00:00Z",
+            "metadataPrefix": "MARC21plus-1-xml",
+            "set": "authorities:sachbegriff",
+        },
+    ).respond_with_data(
+        response_data=oai_response_match_list_identifiers, mimetype="application/xml"
+    )
+    httpserver.expect_request(
+        "/oai/repository",
+        query_string={
+            "verb": "GetRecord",
+            "metadataPrefix": "MARC21plus-1-xml",
+            "identifier": "oai:dnb.de/authorities:sachbegriff/1074025261",
+        },
+    ).respond_with_data(
+        response_data=oai_response_match_get_record, mimetype="application/xml"
+    )
+    reader = OAIPMHReader(
+        base_url=httpserver.url_for("/oai/repository"),
+        metadata_prefix="MARC21plus-1-xml",
+        set="authorities:sachbegriff",
+        from_date="2024-01-01T09:00:00Z",
+        until_date="2024-01-31T10:00:00Z",
+        verb="ListIdentifiers",
     )
     result = reader.read()
     assert "record" in next(result)
