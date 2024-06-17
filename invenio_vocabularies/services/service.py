@@ -20,6 +20,10 @@ from invenio_records_resources.services import (
     SearchOptions,
     pagination_links,
 )
+from invenio_records_resources.services.base.results import (
+    ServiceItemResult,
+    ServiceListResult,
+)
 from invenio_records_resources.services.base.utils import map_search_params
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
 from invenio_records_resources.services.uow import unit_of_work

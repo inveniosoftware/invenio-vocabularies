@@ -13,6 +13,7 @@ from invenio_administration.views.base import (
     AdminResourceEditView,
     AdminResourceListView,
 )
+from invenio_i18n import lazy_gettext as _
 
 
 class VocabulariesListView(AdminResourceListView):
@@ -141,7 +142,7 @@ class VocabularyTypesDetailsEditView(AdminResourceEditView):
     form_fields = {
         "ID": {
             "order": 1,
-            "text": _("Set ID"),
+            "text": "Set ID",
             "description": _("Some ID."),
         },
         "created": {"order": 2},
