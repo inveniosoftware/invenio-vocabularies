@@ -114,7 +114,6 @@ class VocabularyTypeSearchOptions(SearchOptions):
 
     sort_default_no_query = "id"
 
-    # TODO: Check if these options are actually necessary
     sort_direction_options = {
         "asc": dict(title=_("Ascending"), fn=asc),
         "desc": dict(title=_("Descending"), fn=desc),
