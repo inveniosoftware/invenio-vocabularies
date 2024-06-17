@@ -108,6 +108,10 @@ class VocabularyTypeSearchOptions(SearchOptions):
             title=_("ID"),
             fields=["id"],
         ),
+        "created": dict(
+            title=_("Created"),
+            fields=["created"],
+        ),
     }
 
     sort_default = "id"
