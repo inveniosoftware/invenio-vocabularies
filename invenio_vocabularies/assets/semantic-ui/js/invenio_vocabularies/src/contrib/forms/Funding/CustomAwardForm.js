@@ -18,7 +18,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
   function deserializeFunderToDropdown(funderItem) {
     const funderName = funderItem?.name;
     const funderPID = funderItem?.id;
-    const funderCountry = funderItem?.country_name;
+    const funderCountry = funderItem?.country_name ?? funderItem?.country;
 
     if (!funderName && !funderPID) {
       return {};
