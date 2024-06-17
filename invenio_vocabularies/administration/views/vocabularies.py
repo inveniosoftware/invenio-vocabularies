@@ -19,6 +19,7 @@ class VocabulariesListView(AdminResourceListView):
 
     api_endpoint = "/vocabularies/"
     name = "vocabulary-types"
+    menu_label = "Vocabulary Types"
     resource_config = "vocabulary_admin_resource"
     search_request_headers = {"Accept": "application/json"}
     title = "Vocabulary Types"
@@ -31,6 +32,7 @@ class VocabulariesListView(AdminResourceListView):
     display_search = True
     display_delete = False
     display_edit = False
+    display_create = False
 
     item_field_list = {
         "id": {"text": "Name", "order": 1},
