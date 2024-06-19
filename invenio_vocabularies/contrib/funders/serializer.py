@@ -29,4 +29,5 @@ class FunderL10NItemSchema(Schema):
     props = fields.Dict(dump_only=True)
     name = fields.String(dump_only=True)
     country = fields.String(dump_only=True)
+    country_name = fields.String(dump_only=True)
     identifiers = fields.List(fields.Nested(IdentifierSchema), dump_only=True)
