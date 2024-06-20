@@ -45,23 +45,6 @@ class YAMLTransformer(BaseTransformer):
         for synonym in record["synonyms"]:
             subject["synonyms"].append(synonym)
 
-        if self.vocab_schemes:
-            valid_schemes = set(self.vocab_schemes.keys())
-        else:
-            valid_schemes = set()
-        subject["identifiers"] = []
-        for identifier in record["identifiers"]:
-            schemes = idutils.detect_identifier_schemes(identifier)
-            for scheme in schemes:
-                if scheme in valid_schemes:
-                    subject["identifiers"].append(
-                        {
-                            "identifier": identifier,
-                            "scheme": scheme,
-                        }
-                    )
-                    break
-
         return subject
 
 

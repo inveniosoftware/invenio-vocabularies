@@ -27,12 +27,9 @@ def subject_full_data():
             "de": "Darknet",
             "fr": "Réseaux anonymes (informatique)",
         },
-        "id": "1062531973",
+        "id": "http://d-nb.info/gnd/1062531973",
         "scheme": "GND",
         "synonyms": ["Deep Web"],
-        "identifiers": [
-            {"identifier": "http://d-nb.info/gnd/1062531973", "scheme": "gnd"}
-        ],
     }
 
 
@@ -45,10 +42,9 @@ def expected_subject_full_data():
             "de": "Darknet",
             "fr": "Réseaux anonymes (informatique)",
         },
-        "id": "1062531973",
+        "id": "http://d-nb.info/gnd/1062531973",
         "scheme": "GND",
         "synonyms": ["Deep Web"],
-        "identifiers": [{"identifier": "gnd:1062531973", "scheme": "gnd"}],
     }
 
 

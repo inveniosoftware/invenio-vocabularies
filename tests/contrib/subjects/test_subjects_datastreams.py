@@ -29,14 +29,10 @@ def subject_as_yaml():
               en: Dark Web
               de: Darknet
               fr: Réseaux anonymes (informatique)
-          id: "1062531973"
+          id: "http://d-nb.info/gnd/1062531973"
           scheme: GND
           synonyms:
           - Deep Web
-          identifiers:
-          - http://d-nb.info/gnd/1062531973
-          - http://id.loc.gov/authorities/subjects/sh2018002121
-          - https://d-nb.info/gnd/1062531973
     """
     return subject
 
@@ -61,14 +57,9 @@ def dict_subject_entry():
                 "de": "Darknet",
                 "fr": "Réseaux anonymes (informatique)",
             },
-            "id": "1062531973",
+            "id": "http://d-nb.info/gnd/1062531973",
             "scheme": "GND",
             "synonyms": ["Deep Web"],
-            "identifiers": [
-                "http://d-nb.info/gnd/1062531973",
-                "http://id.loc.gov/authorities/subjects/sh2018002121",
-                "https://d-nb.info/gnd/1062531973",
-            ],
         },
     )
 
@@ -91,10 +82,7 @@ def test_transformer(dict_subject_entry, yaml_file):
             "de": "Darknet",
             "fr": "Réseaux anonymes (informatique)",
         },
-        "id": "1062531973",
+        "id": "http://d-nb.info/gnd/1062531973",
         "scheme": "GND",
         "synonyms": ["Deep Web"],
-        "identifiers": [
-            {"identifier": "http://d-nb.info/gnd/1062531973", "scheme": "gnd"}
-        ],
     }

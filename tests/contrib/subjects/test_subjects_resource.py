@@ -39,7 +39,7 @@ def test_get(client, h, prefix, example_subject):
     assert res.json["id"] == id_
     # links are encoded which seems weird
     assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/subjects/1062531973"  # noqa
+        "self": "https://127.0.0.1:5000/api/subjects/http%3A%2F%2Fd-nb.info%2Fgnd%2F1062531973"  # noqa
     }
     # but they should still resolve
     i = res.json["links"]["self"].find("subjects")

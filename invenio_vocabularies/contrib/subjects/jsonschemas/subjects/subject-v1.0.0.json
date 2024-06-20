@@ -33,12 +33,6 @@
         "type": "string"
       },
       "uniqueItems": true
-    },
-    "identifiers": {
-      "description": "Alternate (schemed) identifiers for the record.",
-      "type": "array",
-      "items": {"$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"},
-      "uniqueItems": true
     }
   }
 }

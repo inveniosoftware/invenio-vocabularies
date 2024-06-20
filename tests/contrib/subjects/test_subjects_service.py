@@ -34,7 +34,7 @@ def test_subject_simple_flow(
         assert data[k] == v, data
 
     # Read it
-    read_item = service.read(identity, "1062531973")
+    read_item = service.read(identity, "http://d-nb.info/gnd/1062531973")
     assert item.id == read_item.id
     assert item.data == read_item.data
 

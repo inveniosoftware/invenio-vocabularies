@@ -59,16 +59,6 @@
           }
         }
       },
-      "identifiers": {
-        "properties": {
-          "identifier": {
-            "type": "keyword"
-          },
-          "scheme": {
-            "type": "keyword"
-          }
-        }
-      },
       "synonyms": {
         "type": "text"
       },
