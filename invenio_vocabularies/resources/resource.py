@@ -40,8 +40,6 @@ from marshmallow import fields
 
 from .serializer import VocabularyL10NItemSchema
 
-# from invenio_vocabularies.proxies import current_service
-
 
 #
 # Resource

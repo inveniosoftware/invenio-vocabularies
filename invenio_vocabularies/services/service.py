@@ -37,13 +37,6 @@ class VocabularyTypeService(RecordService):
         """Returns the data schema instance."""
         return ServiceSchemaWrapper(self, schema=self.config.schema)
 
-    @property
-    def links_item_tpl(self):
-        """Item links template."""
-        return LinksTemplate(
-            self.config.vocabularies_listing_item,
-        )
-
     def search(self, identity, params=None):
         """Search for vocabulary types entries."""
         self.require_permission(identity, "list_vocabularies")
@@ -70,7 +63,7 @@ class VocabularyTypeService(RecordService):
             )
         )
 
-        return self.config.vocabularies_listing_resultlist_cls(
+        return self.config.result_list_cls(
             self,
             identity,
             vocabulary_types,
