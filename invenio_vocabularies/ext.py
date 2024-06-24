@@ -49,8 +49,6 @@ from .resources import (
 from .services.config import VocabularyTypesServiceConfig
 from .services.service import VocabulariesService, VocabularyTypeService
 
-# from .contrib.information import InformationResource, InformationResourceConfig
-
 
 class InvenioVocabularies(object):
     """Invenio-Vocabularies extension."""

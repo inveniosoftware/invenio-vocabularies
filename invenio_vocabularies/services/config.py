@@ -9,6 +9,7 @@
 
 """Vocabulary services configs."""
 
+import sqlalchemy as sa
 from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import (
@@ -29,9 +30,9 @@ from invenio_records_resources.services.records.params import (
     FilterParam,
     SuggestQueryParser,
 )
-from sqlalchemy import asc, desc
 
 from ..records.api import Vocabulary
+from ..records.models import VocabularyType
 from . import results
 from .components import PIDComponent, VocabularyTypeComponent
 from .permissions import PermissionPolicy
@@ -90,20 +91,6 @@ class VocabularySearchOptions(SearchOptions):
 class VocabularyTypeSearchOptions(SearchOptions):
     """Search options for vocabulary types."""
 
-    # TODO: Is this still necessary here?
-    params_interpreters_cls = [
-        FilterParam.factory(param="tags", field="tags"),
-    ] + SearchOptions.params_interpreters_cls
-
-    # TODO: Is this still necessary here?
-    suggest_parser_cls = SuggestQueryParser.factory(
-        fields=[
-            "id.text^100",
-            "id.text._2gram",
-            "id.text._3gram",
-        ],
-    )
-
     sort_options = {
         "id": dict(
             title=_("ID"),
@@ -116,8 +103,8 @@ class VocabularyTypeSearchOptions(SearchOptions):
     sort_default_no_query = "id"
 
     sort_direction_options = {
-        "asc": dict(title=_("Ascending"), fn=asc),
-        "desc": dict(title=_("Descending"), fn=desc),
+        "asc": dict(title=_("Ascending"), fn=sa.asc),
+        "desc": dict(title=_("Descending"), fn=sa.desc),
     }
 
     sort_direction_default = "asc"
@@ -162,12 +149,11 @@ class VocabularyTypesServiceConfig(RecordServiceConfig):
 
     service_id = "vocabulary_types"
     permission_policy_cls = PermissionPolicy
-    record_cls = Vocabulary  # TODO: Is this correct?
+    record_cls = VocabularyType
     schema = VocabularySchema
-    task_schema = TaskSchema
-    vocabularies_listing_resultlist_cls = results.VocabularyMetadataList
+    result_list_cls = results.VocabularyTypeList
 
-    vocabularies_listing_item = {
+    links_item = {
         "self": ConditionalLink(
             cond=is_custom_vocabulary_type,
             if_=Link(
@@ -189,17 +175,5 @@ class VocabularyTypesServiceConfig(RecordServiceConfig):
         DataComponent,
         PIDComponent,
     ]
-
-    links_item = {
-        "self": Link(
-            "{+api}/vocabularies/{type}/{id}",
-            vars=lambda record, vars: vars.update(
-                {
-                    "id": record.pid.pid_value,
-                    "type": record.type.id,
-                }
-            ),
-        ),
-    }
 
     links_search = pagination_links("{+api}/vocabularies/{type}{?args*}")

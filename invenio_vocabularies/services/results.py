@@ -18,8 +18,8 @@ from invenio_search import current_search_client
 from ..proxies import current_service
 
 
-class VocabularyMetadataList(RecordList):
-    """Ensures that vocabulary metadata is returned in the proper format."""
+class VocabularyTypeList(RecordList):
+    """Ensures that vocabulary type metadata is returned in the proper format."""
 
     @property
     def total(self):
@@ -33,8 +33,6 @@ class VocabularyMetadataList(RecordList):
 
     def to_dict(self):
         """Formats result to a dict of hits."""
-        # hits = list(self._results)
-
         config_vocab_types = current_app.config.get(
             "INVENIO_VOCABULARY_TYPE_METADATA", {}
         )

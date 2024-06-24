@@ -75,7 +75,7 @@ class VocabularyTypeResourceConfig(ResourceConfig, ConfiguratorMixin):
 
     # /vocabulary/vocabulary_id
     # Blueprint configuration
-    blueprint_name = "vocabulary_list"
+    blueprint_name = "vocabulary_types"
     url_prefix = "/vocabularies"
 
     routes = {
