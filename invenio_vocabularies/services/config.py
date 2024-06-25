@@ -91,6 +91,8 @@ class VocabularySearchOptions(SearchOptions):
 class VocabularyTypeSearchOptions(SearchOptions):
     """Search options for vocabulary types."""
 
+    # TODO: Currently one can only search by ID (not the displayed title/name/subject)
+    # TODO: Sorting by anything else leads to an error
     sort_options = {
         "id": dict(
             title=_("ID"),

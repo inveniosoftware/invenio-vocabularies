@@ -100,12 +100,15 @@ class VocabularyDetailsListView(AdminResourceListView):
     display_delete = False
     display_create = False
     display_edit = True
-    display_search = False
+    display_search = True
 
+    # TODO: It would be nicer to choose the correct column depending on the vocabulary
+    # TODO: It would ne nicer to use the title's translation in the currently selected language and fall back to English if this doesn't exist
     item_field_list = {
         "name": {"text": "Name", "order": 0},
         "title['en']": {"text": "Title [en]", "order": 1},
-        "created": {"text": "Created", "order": 2}
+        "subject": {"text": "Subject", "order": 2},
+        "created": {"text": "Created", "order": 3}
     }
 
     search_config_name = "VOCABULARIES_TYPES_ITEMS_SEARCH"
