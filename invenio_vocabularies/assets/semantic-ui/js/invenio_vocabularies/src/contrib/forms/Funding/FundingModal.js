@@ -157,8 +157,8 @@ function FundingModal({
         >
           <Modal.Header as="h2" className="pt-10 pb-10">
             {mode === "standard"
-              ? i18next.t("Add standard award")
-              : i18next.t("Add custom award")}
+              ? i18next.t("Add standard award/grant")
+              : i18next.t("Add custom funding")}
           </Modal.Header>
           <Modal.Content>
             {mode === ModalTypes.STANDARD && (
@@ -172,7 +172,7 @@ function FundingModal({
                   <Grid.Row>
                     <Grid.Column width={11} floated="left" verticalAlign="middle">
                       <SearchBar
-                        placeholder={i18next.t("Search for awards")}
+                        placeholder={i18next.t("Search for awards/grants")}
                         autofocus
                         actionProps={{
                           icon: "search",
@@ -234,9 +234,7 @@ function FundingModal({
               primary
               icon="checkmark"
               content={
-                action === ModalActions.ADD
-                  ? i18next.t("Add award")
-                  : i18next.t("Change award")
+                action === ModalActions.ADD ? i18next.t("Add") : i18next.t("Change")
               }
             />
           </Modal.Actions>
