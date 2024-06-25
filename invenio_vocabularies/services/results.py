@@ -94,7 +94,7 @@ class VocabularyTypeList(RecordList):
         # Opensearch query for generic vocabularies
         config: RecordServiceConfig = (
             current_service.config
-        )  # TODO: Where to get the config from here? current_service is None
+        )
         search_opts = config.search
 
         search = search_opts.search_cls(
