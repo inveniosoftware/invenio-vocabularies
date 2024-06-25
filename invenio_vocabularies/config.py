@@ -155,9 +155,17 @@ VOCABULARIES_TYPES_SEARCH = {
 """Vocabulary type search configuration."""
 
 VOCABULARIES_TYPES_ITEMS_SORT_OPTIONS = {
+    "name": dict(
+        title=_("Name"),
+        fields=["id"],
+    ),
     "title": dict(
         title=_("Title"),
         fields=["title"],
+    ),
+    "subject": dict(
+        title=_("Subject"),
+        fields=["subject"],
     ),
     "created": dict(
         title=_("Created"),
@@ -167,5 +175,5 @@ VOCABULARIES_TYPES_ITEMS_SORT_OPTIONS = {
 
 VOCABULARIES_TYPES_ITEMS_SEARCH = {
     "facets": [],
-    "sort": ["title", "created"],
+    "sort": ["name", "title", "subject", "created"],
 }

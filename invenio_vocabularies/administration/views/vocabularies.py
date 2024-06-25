@@ -103,7 +103,7 @@ class VocabularyDetailsListView(AdminResourceListView):
     display_search = False
 
     item_field_list = {
-        "title": {"text": "Title", "order": 0},
+        "id": {"text": "ID", "order": 0},
         "created": {"text": "Created", "order": 1}
     }
 
