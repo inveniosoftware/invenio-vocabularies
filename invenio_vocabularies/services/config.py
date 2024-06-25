@@ -152,7 +152,7 @@ class VocabularyTypesServiceConfig(RecordServiceConfig):
     service_id = "vocabulary_types"
     permission_policy_cls = PermissionPolicy
     record_cls = VocabularyType
-    schema = VocabularySchema # Works but should be VocabularyTypeSchema if this is defined at some point
+    schema = VocabularySchema  # Works but should be VocabularyTypeSchema if this is defined at some point
     result_list_cls = results.VocabularyTypeList
 
     links_item = {
