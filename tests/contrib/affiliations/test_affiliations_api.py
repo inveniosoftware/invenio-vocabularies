@@ -96,5 +96,5 @@ def test_affiliation_pid(app, db, example_affiliation):
     """Test affiliation pid creation."""
     aff = example_affiliation
 
-    assert aff.pid.pid_value == "cern"
-    assert Affiliation.pid.resolve("cern")
+    assert aff.pid.pid_value == "01ggx4157"
+    assert Affiliation.pid.resolve("01ggx4157")

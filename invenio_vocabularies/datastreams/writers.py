@@ -103,6 +103,6 @@ class YamlWriter(BaseWriter):
         with open(self._filepath, "a") as file:
             # made into array for safer append
             # will always read array (good for reader)
-            yaml.safe_dump([stream_entry.entry], file)
+            yaml.safe_dump([stream_entry.entry], file, allow_unicode=True)
 
         return stream_entry

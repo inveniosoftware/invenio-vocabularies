@@ -13,7 +13,10 @@ from unittest.mock import patch
 
 import pytest
 
-from invenio_vocabularies.contrib.common.ror.datastreams import RORHTTPReader
+from invenio_vocabularies.contrib.common.ror.datastreams import (
+    RORHTTPReader,
+    RORTransformer,
+)
 from invenio_vocabularies.datastreams.errors import ReaderError
 
 API_JSON_RESPONSE_CONTENT = {
@@ -63,6 +66,28 @@ API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_ZIP_ITEMS_ERROR = {
 }
 
 DOWNLOAD_FILE_BYTES_CONTENT = b"The content of the file"
+
+
+@pytest.fixture(scope="module")
+def expected_from_ror_json():
+    return {
+        "id": "05dxps055",
+        "name": "California Institute of Technology",
+        "title": {
+            "en": "California Institute of Technology",
+            "es": "Instituto de Tecnología de California",
+        },
+        "acronym": "CIT",
+        "aliases": ["Caltech"],
+        "country": "US",
+        "country_name": "United States",
+        "location_name": "Pasadena",
+        "status": "active",
+        "identifiers": [
+            {"scheme": "ror", "identifier": "05dxps055"},
+        ],
+        "types": ["education", "funder"],
+    }
 
 
 class MockResponse:
@@ -120,3 +145,8 @@ def test_ror_http_reader_iter_not_implemented():
     reader = RORHTTPReader()
     with pytest.raises(NotImplementedError):
         reader._iter("A fake file pointer")
+
+
+def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
+    transformer = RORTransformer()
+    assert expected_from_ror_json == transformer.apply(dict_ror_entry).entry

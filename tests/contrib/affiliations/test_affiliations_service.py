@@ -32,7 +32,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read(identity, "cern")
+    read_item = service.read(identity, "01ggx4157")
     assert item.id == read_item.id
     assert item.data == read_item.data
 

@@ -88,6 +88,24 @@
       },
       "tags": {
         "type": "keyword"
+      },
+      "country": {
+        "type": "text"
+      },
+      "country_name": {
+        "type": "text"
+      },
+      "location_name": {
+        "type": "text"
+      },
+      "status": {
+        "type": "keyword"
+      },
+      "aliases": {
+        "type": "text"
+      },
+      "types": {
+        "type": "keyword"
       }
     }
   }

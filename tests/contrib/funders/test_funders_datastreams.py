@@ -14,114 +14,15 @@ from copy import deepcopy
 import pytest
 from invenio_access.permissions import system_identity
 
+from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.contrib.funders.api import Funder
-from invenio_vocabularies.contrib.funders.datastreams import (
-    FundersServiceWriter,
-    RORTransformer,
+from invenio_vocabularies.contrib.funders.config import (
+    funder_fundref_doi_prefix,
+    funder_schemes,
 )
+from invenio_vocabularies.contrib.funders.datastreams import FundersServiceWriter
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
-
-
-@pytest.fixture(scope="module")
-def dict_ror_entry():
-    return StreamEntry(
-        {
-            "locations": [
-                {
-                    "geonames_id": 5381396,
-                    "geonames_details": {
-                        "country_code": "US",
-                        "country_name": "United States",
-                        "lat": 34.14778,
-                        "lng": -118.14452,
-                        "name": "Pasadena",
-                    },
-                }
-            ],
-            "established": 1891,
-            "external_ids": [
-                {
-                    "type": "fundref",
-                    "all": ["100006961", "100009676"],
-                    "preferred": "100006961",
-                },
-                {
-                    "type": "grid",
-                    "all": ["grid.20861.3d"],
-                    "preferred": "grid.20861.3d",
-                },
-                {"type": "isni", "all": ["0000 0001 0706 8890"], "preferred": None},
-                {"type": "wikidata", "all": ["Q161562"], "preferred": None},
-            ],
-            "id": "https://ror.org/05dxps055",
-            "domains": [],
-            "links": [
-                {"type": "website", "value": "http://www.caltech.edu/"},
-                {
-                    "type": "wikipedia",
-                    "value": "http://en.wikipedia.org/wiki/California_Institute_of_Technology",
-                },
-            ],
-            "names": [
-                {"value": "CIT", "types": ["acronym"], "lang": None},
-                {
-                    "value": "California Institute of Technology",
-                    "types": ["ror_display", "label"],
-                    "lang": "en",
-                },
-                {"value": "Caltech", "types": ["alias"], "lang": None},
-                {
-                    "value": "Instituto de Tecnología de California",
-                    "types": ["label"],
-                    "lang": "es",
-                },
-            ],
-            "relationships": [
-                {
-                    "label": "Caltech Submillimeter Observatory",
-                    "type": "child",
-                    "id": "https://ror.org/01e6j9276",
-                },
-                {
-                    "label": "Infrared Processing and Analysis Center",
-                    "type": "child",
-                    "id": "https://ror.org/05q79g396",
-                },
-                {
-                    "label": "Joint Center for Artificial Photosynthesis",
-                    "type": "child",
-                    "id": "https://ror.org/05jtgpc57",
-                },
-                {
-                    "label": "Keck Institute for Space Studies",
-                    "type": "child",
-                    "id": "https://ror.org/05xkke381",
-                },
-                {
-                    "label": "Jet Propulsion Laboratory",
-                    "type": "child",
-                    "id": "https://ror.org/027k65916",
-                },
-                {
-                    "label": "Institute for Collaborative Biotechnologies",
-                    "type": "child",
-                    "id": "https://ror.org/04kz4p343",
-                },
-                {
-                    "label": "Resnick Sustainability Institute",
-                    "type": "child",
-                    "id": "https://ror.org/04bxjes65",
-                },
-            ],
-            "status": "active",
-            "types": ["education", "funder"],
-            "admin": {
-                "created": {"date": "2018-11-14", "schema_version": "1.0"},
-                "last_modified": {"date": "2024-05-13", "schema_version": "2.0"},
-            },
-        },
-    )
 
 
 @pytest.fixture(scope="module")
@@ -150,7 +51,10 @@ def expected_from_ror_json():
 
 
 def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
-    transformer = RORTransformer()
+    transformer = RORTransformer(
+        vocab_schemes=funder_schemes,
+        funder_fundref_doi_prefix=funder_fundref_doi_prefix,
+    )
     assert expected_from_ror_json == transformer.apply(dict_ror_entry).entry
 
 

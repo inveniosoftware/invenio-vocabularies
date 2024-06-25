@@ -7,22 +7,21 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""Funders datastreams, transformers, writers and readers."""
+"""Affiliations datastreams, transformers, writers and readers."""
 
-from idutils import normalize_ror
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
-from .config import funder_fundref_doi_prefix, funder_schemes
+from .config import affiliation_schemes
 
 
-class FundersServiceWriter(ServiceWriter):
-    """Funders service writer."""
+class AffiliationsServiceWriter(ServiceWriter):
+    """Affiliations service writer."""
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
-        service_or_name = kwargs.pop("service_or_name", "funders")
+        service_or_name = kwargs.pop("service_or_name", "affiliations")
         super().__init__(service_or_name=service_or_name, *args, **kwargs)
 
     def _entry_id(self, entry):
@@ -31,9 +30,8 @@ class FundersServiceWriter(ServiceWriter):
 
 
 VOCABULARIES_DATASTREAM_WRITERS = {
-    "funders-service": FundersServiceWriter,
+    "affiliations-service": AffiliationsServiceWriter,
 }
-"""Funders Data Streams transformers."""
 
 
 DATASTREAM_CONFIG = {
@@ -50,14 +48,13 @@ DATASTREAM_CONFIG = {
         {
             "type": "ror",
             "args": {
-                "vocab_schemes": funder_schemes,
-                "funder_fundref_doi_prefix": funder_fundref_doi_prefix,
+                "vocab_schemes": affiliation_schemes,
             },
         },
     ],
     "writers": [
         {
-            "type": "funders-service",
+            "type": "affiliations-service",
             "args": {
                 "identity": system_identity,
             },
