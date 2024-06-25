@@ -90,7 +90,8 @@ class RORTransformer(BaseTransformer):
         if not ror["id"]:
             raise TransformerError(_("Id not found in ROR entry."))
 
-        aliases = []
+        # Using set so aliases are unique
+        aliases = set()
         acronym = None
         for name in record.get("names"):
             lang = name.get("lang", "en")
@@ -101,18 +102,18 @@ class RORTransformer(BaseTransformer):
             if "label" in name["types"]:
                 ror["title"][lang] = name["value"]
             if "alias" in name["types"]:
-                aliases.append(name["value"])
+                aliases.add(name["value"])
             if "acronym" in name["types"]:
                 # The first acronyn goes in acronym field to maintain
                 # compatability with existing data structure
                 if not acronym:
                     acronym = name["value"]
                 else:
-                    aliases.append(name["value"])
+                    aliases.add(name["value"])
         if acronym:
             ror["acronym"] = acronym
         if aliases:
-            ror["aliases"] = aliases
+            ror["aliases"] = list(aliases)
 
         # ror_display is required and should be in every entry
         if not ror["name"]:
