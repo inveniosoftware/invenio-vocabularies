@@ -60,7 +60,7 @@ class VocabularyDetailsListView(AdminResourceListView):
         pid_value = kwargs.get("pid_value", "")
         return {
             "search_config": search_conf,
-            "title": f"{pid_value} vocabulary items",
+            "title": f"{pid_value.capitalize()} vocabulary items",
             "name": self.name,
             "resource_schema": serialized_schema,
             "fields": self.item_field_list,
