@@ -123,7 +123,7 @@ function FundingFieldForm(props) {
                 className="mb-5"
               >
                 <Icon name="add" />
-                {i18next.t("Add award")}
+                {i18next.t("Add")}
               </Button>
             }
             onAwardChange={(selectedFunding) => {

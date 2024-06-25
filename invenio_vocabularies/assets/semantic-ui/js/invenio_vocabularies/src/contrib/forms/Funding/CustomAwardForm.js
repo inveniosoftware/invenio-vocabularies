@@ -88,7 +88,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
       </Overridable>
       <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformationHeader.Container">
         <Header as="h3" size="small">
-          {i18next.t("Award information")} ({i18next.t("optional")})
+          {i18next.t("Additional information")} ({i18next.t("optional")})
         </Header>
       </Overridable>
       <Form.Group widths="equal">
@@ -98,7 +98,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
         >
           <TextField
             label={i18next.t("Number")}
-            placeholder={i18next.t("Award number")}
+            placeholder={i18next.t("Award/Grant number")}
             fieldPath="selectedFunding.award.number"
           />
         </Overridable>
@@ -108,7 +108,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
         >
           <TextField
             label={i18next.t("Title")}
-            placeholder={i18next.t("Award Title")}
+            placeholder={i18next.t("Award/Grant Title")}
             fieldPath="selectedFunding.award.title"
           />
         </Overridable>
@@ -118,7 +118,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
         >
           <TextField
             label={i18next.t("URL")}
-            placeholder={i18next.t("Award URL")}
+            placeholder={i18next.t("Award/Grant URL")}
             fieldPath="selectedFunding.award.url"
           />
         </Overridable>
