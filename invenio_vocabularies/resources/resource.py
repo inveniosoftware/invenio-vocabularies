@@ -157,13 +157,3 @@ class VocabulariesAdminResource(RecordResource):
 
         return hits.to_dict(), 200
 
-    @request_view_args
-    @response_handler()
-    def read(self):
-        """Read an item."""
-        pid_value = (
-            resource_requestctx.view_args["type"],
-            resource_requestctx.view_args["pid_value"],
-        )
-        item = self.service.read(g.identity, pid_value)
-        return item.to_dict(), 200
