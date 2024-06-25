@@ -141,19 +141,16 @@ class VocabulariesAdminResource(RecordResource):
     def create_url_rules(self):
         """Create the URL rules for the record resource."""
         routes = self.config.routes
-        rules = super().create_url_rules()
 
-        rules.append(
-            route("GET", routes["all"], self.get_all_vocabulary_types),
-        )
+        rules = [route("GET", routes["list"], self.search)]
+
         return rules
 
     @request_search_args
     @response_handler(many=True)
-    def get_all_vocabulary_types(self):
+    def search(self):
         """Return information about _all_ vocabularies."""
         identity = g.identity
         hits = self.service.search(identity, params=resource_requestctx.args)
 
         return hits.to_dict(), 200
-

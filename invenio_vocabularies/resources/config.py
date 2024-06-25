@@ -78,11 +78,7 @@ class VocabularyTypeResourceConfig(ResourceConfig, ConfiguratorMixin):
     blueprint_name = "vocabulary_types"
     url_prefix = "/vocabularies"
 
-    routes = {
-        "all": "/",
-        "list": "/vocabularies/<pid_value>",
-        "item": "/vocabularies/<pid_value>/<vocabulary_type_id>",
-    }
+    routes = {"list": "/"}
 
     # Request parsing
     request_read_args = {}
