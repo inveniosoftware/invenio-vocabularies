@@ -44,3 +44,10 @@ def create_names_blueprint_from_app(app):
 def create_subjects_blueprint_from_app(app):
     """Create app blueprint."""
     return app.extensions["invenio-vocabularies"].subjects_resource.as_blueprint()
+
+
+def create_list_blueprint_from_app(app):
+    """Create app blueprint."""
+    return app.extensions[
+        "invenio-vocabularies"
+    ].vocabulary_admin_resource.as_blueprint()
