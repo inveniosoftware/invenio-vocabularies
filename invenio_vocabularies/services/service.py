@@ -32,11 +32,6 @@ from .tasks import process_datastream
 class VocabularyTypeService(RecordService):
     """Vocabulary type service."""
 
-    @property
-    def schema(self):
-        """Returns the data schema instance."""
-        return ServiceSchemaWrapper(self, schema=self.config.schema)
-
     def search(self, identity, params=None):
         """Search for vocabulary types entries."""
         self.require_permission(identity, "list_vocabularies")
