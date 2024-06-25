@@ -103,8 +103,9 @@ class VocabularyDetailsListView(AdminResourceListView):
     display_search = False
 
     item_field_list = {
-        "id": {"text": "ID", "order": 0},
-        "created": {"text": "Created", "order": 1}
+        "name": {"text": "Name", "order": 0},
+        "title['en']": {"text": "Title [en]", "order": 1},
+        "created": {"text": "Created", "order": 2}
     }
 
     search_config_name = "VOCABULARIES_TYPES_ITEMS_SEARCH"
