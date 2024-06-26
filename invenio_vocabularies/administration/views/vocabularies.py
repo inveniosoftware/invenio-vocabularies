@@ -8,8 +8,8 @@
 # details.
 
 """Vocabularies admin interface."""
-from invenio_administration.views.base import AdminResourceListView
 from flask import current_app
+from invenio_administration.views.base import AdminResourceListView
 
 
 class VocabulariesListView(AdminResourceListView):
@@ -41,13 +41,15 @@ class VocabulariesListView(AdminResourceListView):
     search_facets_config_name = "VOCABULARIES_TYPES_FACETS"
     search_sort_config_name = "VOCABULARIES_TYPES_SORT_OPTIONS"
 
+
 class VocabularyDetailsListView(AdminResourceListView):
     """Configuration for vocabularies list view."""
 
     def get_api_endpoint(self, pid_value=None):
-        """overwrite get_api_endpoint to accept pid_value"""
-
-        if pid_value in current_app.config.get("VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []):
+        """Overwrite get_api_endpoint to accept pid_value."""
+        if pid_value in current_app.config.get(
+            "VOCABULARIES_CUSTOM_VOCABULARY_TYPES", []
+        ):
             return f"/api/{pid_value}"
         else:
             return f"/api/vocabularies/{pid_value}"
@@ -108,7 +110,7 @@ class VocabularyDetailsListView(AdminResourceListView):
         "name": {"text": "Name", "order": 0},
         "title['en']": {"text": "Title [en]", "order": 1},
         "subject": {"text": "Subject", "order": 2},
-        "created": {"text": "Created", "order": 3}
+        "created": {"text": "Created", "order": 3},
     }
 
     search_config_name = "VOCABULARIES_TYPES_ITEMS_SEARCH"

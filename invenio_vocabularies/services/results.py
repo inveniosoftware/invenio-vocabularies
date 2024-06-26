@@ -92,9 +92,7 @@ class VocabularyTypeList(RecordList):
 
     def _generic_vocabulary_statistics(self):
         # Opensearch query for generic vocabularies
-        config: RecordServiceConfig = (
-            current_service.config
-        )
+        config: RecordServiceConfig = current_service.config
         search_opts = config.search
 
         search = search_opts.search_cls(
