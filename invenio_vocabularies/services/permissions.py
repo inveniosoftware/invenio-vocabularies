@@ -21,3 +21,5 @@ class PermissionPolicy(RecordPermissionPolicy):
     can_update = [SystemProcess()]
     can_delete = [SystemProcess()]
     can_manage = [SystemProcess()]
+    # this permission is needed for the /api/vocabularies/ endpoint
+    can_list_vocabularies = [SystemProcess(), AnyUser()]
