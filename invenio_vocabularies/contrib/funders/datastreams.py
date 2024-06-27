@@ -128,6 +128,7 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 
 DATASTREAM_CONFIG = {
     "readers": [
+        {"type": "ror-http"},
         {
             "type": "zip",
             "args": {
