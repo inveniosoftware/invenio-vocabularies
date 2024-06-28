@@ -54,7 +54,7 @@ class SubjectsServiceWriter(ServiceWriter):
     def __init__(self, *args, **kwargs):
         """Constructor."""
         service_or_name = kwargs.pop("service_or_name", "subjects")
-        super().__init__(*args, **kwargs)
+        super().__init__(service_or_name=service_or_name, *args, **kwargs)
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
