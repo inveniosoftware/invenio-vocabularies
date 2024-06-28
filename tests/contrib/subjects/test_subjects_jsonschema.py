@@ -41,7 +41,18 @@ def test_valid_full(appctx, schema):
         "scheme": "MeSH",
         "subject": "Calcimycin",
     }
-
+    data = {
+        "$schema": schema,
+        "subject": {
+            "en": "Dark Web",
+            "de": "Darknet",
+            "fr": "Réseaux anonymes (informatique)",
+        },
+        "id": "http://d-nb.info/gnd/1062531973",
+        "pid": {"pk": 1, "status": "R", "pid_type": "subid", "obj_type": "sub"},
+        "scheme": "GND",
+        "synonyms": ["Deep Web"],
+    }
     assert validates(data)
 
 

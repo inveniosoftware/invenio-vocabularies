@@ -15,6 +15,7 @@ from invenio_records_resources.proxies import current_service_registry
 from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config
 from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
+from .contrib.subjects.datastreams import DATASTREAM_CONFIG as subjects_ds_config
 
 
 class VocabularyConfig:
@@ -57,6 +58,17 @@ class FundersVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for Funders")
 
 
+class SubjectsVocabularyConfig(VocabularyConfig):
+    """Subjects Vocabulary Config."""
+
+    config = subjects_ds_config
+    vocabulary_name = "subjects"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for Subjects")
+
+
 class AwardsVocabularyConfig(VocabularyConfig):
     """Awards Vocabulary Config."""
 
@@ -74,5 +86,6 @@ def get_vocabulary_config(vocabulary):
         "names": NamesVocabularyConfig,
         "funders": FundersVocabularyConfig,
         "awards": AwardsVocabularyConfig,
+        "subjects": SubjectsVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()
