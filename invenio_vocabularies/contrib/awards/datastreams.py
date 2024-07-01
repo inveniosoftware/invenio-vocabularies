@@ -187,6 +187,7 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 
 DATASTREAM_CONFIG = {
     "readers": [
+        {"type": "openaire-project-http"},
         {
             "type": "tar",
             "args": {
