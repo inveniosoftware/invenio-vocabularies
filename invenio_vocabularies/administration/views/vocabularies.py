@@ -54,32 +54,18 @@ class VocabularyDetailsListView(AdminResourceListView):
         else:
             return f"/api/vocabularies/{pid_value}"
 
-    def get_context(self, **kwargs):
-        """Create details view context."""
-        search_conf = self.init_search_config(**kwargs)
-        schema = self.get_service_schema()
-        serialized_schema = self._schema_to_json(schema)
+    def get(self, **kwargs):
+        """GET view method."""
+        parent_context = super().get_context(**kwargs)
+
         pid_value = kwargs.get("pid_value", "")
-        return {
-            "search_config": search_conf,
+
+        parent_context.update({
             "title": f"{pid_value.capitalize()} vocabulary items",
-            "name": self.name,
-            "resource_schema": serialized_schema,
-            "fields": self.item_field_list,
-            "display_search": self.display_search,
-            "display_create": self.display_create,
-            "display_edit": self.display_edit,
-            "display_delete": self.display_delete,
-            "display_read": self.display_read,
-            "actions": self.serialize_actions(),
-            "pid_path": self.pid_path,
             "pid_value": pid_value,
-            "create_ui_endpoint": self.get_create_view_endpoint(),
-            "list_ui_endpoint": self.get_list_view_endpoint(),
-            "resource_name": (
-                self.resource_name if self.resource_name else self.pid_path
-            ),
-        }
+        })
+
+        return self.render(**parent_context)
 
     name = "vocabulary-type-items"
     url = "/vocabulary-types/<pid_value>"
