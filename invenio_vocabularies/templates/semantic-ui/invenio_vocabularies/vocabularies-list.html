@@ -1,0 +1,12 @@
+{#
+    Copyright (C) 2024 Uni Münster.
+
+    Invenio App RDM is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+  #}
+  {% extends "invenio_administration/search.html" %}
+
+  {% block javascript %}
+  {{ super() }}
+  {{ webpack['invenio-vocabularies-search.js'] }}
+{% endblock %}

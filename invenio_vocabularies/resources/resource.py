@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2024 Uni Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
 """Vocabulary resource."""
+
+import json
 
 import marshmallow as ma
 from flask import g
@@ -18,6 +21,7 @@ from flask_resources import (
     resource_requestctx,
     response_handler,
 )
+from invenio_access.permissions import system_identity
 from invenio_records_resources.resources import (
     RecordResource,
     RecordResourceConfig,
@@ -38,54 +42,19 @@ from .serializer import VocabularyL10NItemSchema
 
 
 #
-# Request args
-#
-class VocabularySearchRequestArgsSchema(SearchRequestArgsSchema):
-    """Add parameter to parse tags."""
-
-    tags = fields.Str()
-
-
-#
-# Resource config
-#
-class VocabulariesResourceConfig(RecordResourceConfig):
-    """Vocabulary resource configuration."""
-
-    blueprint_name = "vocabularies"
-    url_prefix = "/vocabularies"
-    routes = {"list": "/<type>", "item": "/<type>/<pid_value>", "tasks": "/tasks"}
-
-    request_view_args = {
-        "pid_value": ma.fields.Str(),
-        "type": ma.fields.Str(required=True),
-    }
-
-    request_search_args = VocabularySearchRequestArgsSchema
-
-    response_handlers = {
-        "application/json": ResponseHandler(JSONSerializer(), headers=etag_headers),
-        "application/vnd.inveniordm.v1+json": ResponseHandler(
-            MarshmallowSerializer(
-                format_serializer_cls=JSONSerializer,
-                object_schema_cls=VocabularyL10NItemSchema,
-                list_schema_cls=BaseListSchema,
-            ),
-            headers=etag_headers,
-        ),
-    }
-
-
-#
 # Resource
 #
 class VocabulariesResource(RecordResource):
-    """Resource for generic vocabularies."""
+    """Resource for generic vocabularies.
+
+    Provide the API /api/vocabularies/
+    """
 
     def create_url_rules(self):
         """Create the URL rules for the record resource."""
         routes = self.config.routes
         rules = super().create_url_rules()
+
         rules.append(
             route("POST", routes["tasks"], self.launch),
         )
@@ -164,3 +133,24 @@ class VocabulariesResource(RecordResource):
         """Create a task."""
         self.service.launch(g.identity, resource_requestctx.data or {})
         return "", 202
+
+
+class VocabulariesAdminResource(RecordResource):
+    """Resource for vocabularies admin interface."""
+
+    def create_url_rules(self):
+        """Create the URL rules for the record resource."""
+        routes = self.config.routes
+
+        rules = [route("GET", routes["list"], self.search)]
+
+        return rules
+
+    @request_search_args
+    @response_handler(many=True)
+    def search(self):
+        """Return information about _all_ vocabularies."""
+        identity = g.identity
+        hits = self.service.search(identity, params=resource_requestctx.args)
+
+        return hits.to_dict(), 200

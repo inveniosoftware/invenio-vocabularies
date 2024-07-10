@@ -8,9 +8,12 @@
 
 """Services module."""
 
-from .service import VocabulariesService, VocabulariesServiceConfig
+from .config import VocabulariesServiceConfig, VocabularyTypesServiceConfig
+from .service import VocabulariesService, VocabularyTypeService
 
 __all__ = (
     "VocabulariesService",
+    "VocabularyTypeService",
     "VocabulariesServiceConfig",
+    "VocabularyTypesServiceConfig",
 )
