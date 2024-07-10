@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 3.4.1 (released 2024-04-19)
+
+- funders: exclude ROR schema v2 json (#309)
+
+
 Version 3.4.0 (released 2024-04-19)
 
 - templates: add subject fields UI template (#303)
