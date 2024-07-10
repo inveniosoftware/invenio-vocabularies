@@ -76,6 +76,7 @@ VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
     "fwf_________": "013tf3c58",
     "inca________": "03m8vkq32",
     "irb_hr______": "03n51vw80",
+    "lcs_________": "02ar66p97",
     "mestd_______": "01znas443",
     "nhmrc_______": "011kf5r70",
     "nih_________": "01cwqze88",
