@@ -25,6 +25,18 @@
     "subject": {
       "description": "Human readable label.",
       "type": "string"
+    },
+    "title": {
+      "description": "Human readable label in different languages.",
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
+    },
+    "synonyms": {
+      "description": "Synonyms of the subject label.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
     }
   }
 }

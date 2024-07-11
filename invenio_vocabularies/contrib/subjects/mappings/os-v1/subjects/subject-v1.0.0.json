@@ -1,5 +1,16 @@
 {
   "mappings": {
+    "dynamic_templates": [
+      {
+        "i18n_title": {
+          "path_match": "title.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "search_as_you_type"
+          }
+        }
+      }
+    ],
     "dynamic": "strict",
     "properties": {
       "$schema": {
@@ -55,6 +66,13 @@
             "type": "keyword"
           }
         }
+      },
+      "title": {
+        "type": "object",
+        "dynamic": "true"
+      },
+      "synonyms": {
+        "type": "text"
       },
       "tags": {
         "type": "keyword"
