@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2024 University of Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -104,7 +105,11 @@ VOCABULARIES_NAMES_SCHEMES = {
 }
 """Names allowed identifier schemes."""
 
-# configure CUSTOM_VOCABULARY_TYPES to differentiate output. Is used in VocabulariesServiceConfig
+VOCABULARIES_SUBJECTS_SCHEMES = {
+    "gnd": {"label": _("GND"), "validator": idutils.is_gnd, "datacite": "GND"},
+}
+"""Subjects allowed identifier schemes."""
+
 VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
     "names",
     "affiliations",
@@ -112,6 +117,7 @@ VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
     "funders",
     "subjects",
 ]
+"""Configure CUSTOM_VOCABULARY_TYPES to differentiate output. Is used in VocabulariesServiceConfig."""
 
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
