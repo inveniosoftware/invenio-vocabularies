@@ -35,6 +35,9 @@ class BaseVocabularyRelationSchema(Schema):
 
     id = SanitizedUnicode(required=True)
 
+    # Nested field type for administration UI form generation
+    administration_schema_type = "vocabulary"
+
 
 class VocabularyRelationSchema(BaseVocabularyRelationSchema):
     """Vocabulary relation schema."""
@@ -63,6 +66,9 @@ class ContribVocabularyRelationSchema(Schema):
     ftf_name = None  # free text field name
     parent_field_name = None
 
+    # Nested field type for administration UI form generation
+    administration_schema_type = "vocabulary"
+
     @validates_schema
     def validate_relation_schema(self, data, **kwargs):
         """Validates that either id either the free text field are present."""
@@ -90,6 +96,9 @@ class BaseVocabularySchema(BaseRecordSchema):
     title = i18n_strings
     description = i18n_strings
     icon = fields.Str(allow_none=False)
+
+    # Nested field type for administration UI form generation
+    administration_schema_type = "vocabulary"
 
 
 class VocabularySchema(BaseVocabularySchema):
