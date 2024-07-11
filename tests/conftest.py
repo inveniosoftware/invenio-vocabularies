@@ -116,7 +116,7 @@ def identity():
 @pytest.fixture(scope="module")
 def service(app):
     """Vocabularies service object."""
-    return app.extensions["invenio-vocabularies"].service
+    return app.extensions["invenio-vocabularies"].vocabularies_service
 
 
 @pytest.fixture()

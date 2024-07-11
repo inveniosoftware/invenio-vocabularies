@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2024 CERN.
 # Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2024 Uni Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -9,9 +10,8 @@
 
 """Vocabulary service."""
 
+import sqlalchemy as sa
 from invenio_cache import current_cache
-from invenio_db import db
-from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import (
     Link,
     LinksTemplate,
@@ -20,97 +20,52 @@ from invenio_records_resources.services import (
     SearchOptions,
     pagination_links,
 )
-from invenio_records_resources.services.records.components import DataComponent
-from invenio_records_resources.services.records.params import (
-    FilterParam,
-    SuggestQueryParser,
-)
+from invenio_records_resources.services.base.utils import map_search_params
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
 from invenio_records_resources.services.uow import unit_of_work
 from invenio_search.engine import dsl
 
-from ..records.api import Vocabulary
 from ..records.models import VocabularyType
-from .components import PIDComponent, VocabularyTypeComponent
-from .permissions import PermissionPolicy
-from .schema import TaskSchema, VocabularySchema
 from .tasks import process_datastream
 
 
-class VocabularySearchOptions(SearchOptions):
-    """Search options."""
+class VocabularyTypeService(RecordService):
+    """Vocabulary type service."""
 
-    params_interpreters_cls = [
-        FilterParam.factory(param="tags", field="tags"),
-    ] + SearchOptions.params_interpreters_cls
+    def search(self, identity, params=None):
+        """Search for vocabulary types entries."""
+        self.require_permission(identity, "list_vocabularies")
 
-    suggest_parser_cls = SuggestQueryParser.factory(
-        fields=[
-            "id.text^100",
-            "id.text._2gram",
-            "id.text._3gram",
-            "title.en^5",
-            "title.en._2gram",
-            "title.en._3gram",
-        ],
-    )
+        search_params = map_search_params(self.config.search, params)
 
-    sort_default = "bestmatch"
+        query_param = search_params["q"]
 
-    sort_default_no_query = "title"
+        filters = []
+        if query_param:
+            filters.extend([VocabularyType.id.ilike(f"%{query_param}%")])
 
-    sort_options = {
-        "bestmatch": dict(
-            title=_("Best match"),
-            fields=["_score"],  # ES defaults to desc on `_score` field
-        ),
-        "title": dict(
-            title=_("Title"),
-            fields=["title_sort"],
-        ),
-        "newest": dict(
-            title=_("Newest"),
-            fields=["-created"],
-        ),
-        "oldest": dict(
-            title=_("Oldest"),
-            fields=["created"],
-        ),
-    }
+        vocabulary_types = (
+            VocabularyType.query.filter(sa.or_(*filters))
+            .order_by(
+                search_params["sort_direction"](
+                    sa.text(",".join(search_params["sort"]))
+                )
+            )
+            .paginate(
+                page=search_params["page"],
+                per_page=search_params["size"],
+                error_out=False,
+            )
+        )
 
-
-class VocabulariesServiceConfig(RecordServiceConfig):
-    """Vocabulary service configuration."""
-
-    service_id = "vocabularies"
-    indexer_queue_name = "vocabularies"
-    permission_policy_cls = PermissionPolicy
-    record_cls = Vocabulary
-    schema = VocabularySchema
-    task_schema = TaskSchema
-
-    search = VocabularySearchOptions
-
-    components = [
-        # Order of components are important!
-        VocabularyTypeComponent,
-        DataComponent,
-        PIDComponent,
-    ]
-
-    links_item = {
-        "self": Link(
-            "{+api}/vocabularies/{type}/{id}",
-            vars=lambda record, vars: vars.update(
-                {
-                    "id": record.pid.pid_value,
-                    "type": record.type.id,
-                }
-            ),
-        ),
-    }
-
-    links_search = pagination_links("{+api}/vocabularies/{type}{?args*}")
+        return self.config.result_list_cls(
+            self,
+            identity,
+            vocabulary_types,
+            search_params,
+            links_tpl=LinksTemplate(self.config.links_search, context={"args": params}),
+            links_item_tpl=self.links_item_tpl,
+        )
 
 
 class VocabulariesService(RecordService):
@@ -145,7 +100,7 @@ class VocabulariesService(RecordService):
             params,
             search_preference,
             extra_filter=dsl.Q("term", type__id=vocabulary_type.id),
-            **kwargs
+            **kwargs,
         ).execute()
 
         return self.result_list(

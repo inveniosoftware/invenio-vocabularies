@@ -55,4 +55,4 @@ def import_funders():
     for result in ds.process():
         if result.errors:
             for err in result.errors:
-                current_app.logger.error(err)
+                current_app.logger.exception(err)

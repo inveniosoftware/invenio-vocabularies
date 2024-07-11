@@ -25,8 +25,8 @@ from .datastreams.readers import (
 )
 from .datastreams.transformers import XMLTransformer
 from .datastreams.writers import ServiceWriter, YamlWriter
-from .resources.resource import VocabulariesResourceConfig
-from .services.service import VocabulariesServiceConfig
+from .resources import VocabulariesResourceConfig
+from .services.config import VocabulariesServiceConfig
 
 VOCABULARIES_RESOURCE_CONFIG = VocabulariesResourceConfig
 """Configure the resource."""
@@ -76,6 +76,7 @@ VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
     "fwf_________": "013tf3c58",
     "inca________": "03m8vkq32",
     "irb_hr______": "03n51vw80",
+    "lcs_________": "02ar66p97",
     "mestd_______": "01znas443",
     "nhmrc_______": "011kf5r70",
     "nih_________": "01cwqze88",
@@ -103,6 +104,15 @@ VOCABULARIES_NAMES_SCHEMES = {
 }
 """Names allowed identifier schemes."""
 
+# configure CUSTOM_VOCABULARY_TYPES to differentiate output. Is used in VocabulariesServiceConfig
+VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
+    "names",
+    "affiliations",
+    "awards",
+    "funders",
+    "subjects",
+]
+
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
     "json": JsonReader,
@@ -126,3 +136,21 @@ VOCABULARIES_DATASTREAM_WRITERS = {
     "yaml": YamlWriter,
 }
 """Data Streams writers."""
+
+VOCABULARIES_TYPES_SORT_OPTIONS = {
+    "name": dict(
+        title=_("Name"),
+        fields=["id"],
+    ),
+    "count": dict(
+        title=_("Number of entries"),
+        fields=["count"],
+    ),
+}
+"""Definitions of available Vocabulary types sort options. """
+
+VOCABULARIES_TYPES_SEARCH = {
+    "facets": [],
+    "sort": ["name", "count"],
+}
+"""Vocabulary type search configuration."""
