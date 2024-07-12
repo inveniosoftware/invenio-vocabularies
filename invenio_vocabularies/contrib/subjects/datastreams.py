@@ -37,6 +37,12 @@ class YAMLTransformer(BaseTransformer):
         for lang in record["subject"].keys():
             subject["title"][lang] = record["subject"][lang]
 
+        if "en" in record["subject"].keys():
+            lang = "en"
+        else:
+            lang = record["subject"].keys()[0]
+        subject["subject"] = record["subject"][lang]
+
         subject["synonyms"] = []
         for synonym in record["synonyms"]:
             subject["synonyms"].append(synonym)
