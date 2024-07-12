@@ -82,6 +82,7 @@ def test_transformer(dict_subject_entry, yaml_file):
             "de": "Darknet",
             "fr": "Réseaux anonymes (informatique)",
         },
+        "subject": "Dark Web",
         "id": "http://d-nb.info/gnd/1062531973",
         "scheme": "GND",
         "synonyms": ["Deep Web"],
