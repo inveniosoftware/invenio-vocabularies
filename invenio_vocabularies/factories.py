@@ -12,6 +12,9 @@ from copy import deepcopy
 import yaml
 from invenio_records_resources.proxies import current_service_registry
 
+from .contrib.affiliations.datastreams import (
+    DATASTREAM_CONFIG as affiliations_ds_config,
+)
 from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config
 from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
@@ -80,6 +83,17 @@ class AwardsVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for Awards")
 
 
+class AffiliationsVocabularyConfig(VocabularyConfig):
+    """Affiliations Vocabulary Config."""
+
+    config = affiliations_ds_config
+    vocabulary_name = "affiliations"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for Affiliations")
+
+
 def get_vocabulary_config(vocabulary):
     """Factory function to get the appropriate Vocabulary Config."""
     vocab_config = {
@@ -87,5 +101,6 @@ def get_vocabulary_config(vocabulary):
         "funders": FundersVocabularyConfig,
         "awards": AwardsVocabularyConfig,
         "subjects": SubjectsVocabularyConfig,
+        "affiliations": AffiliationsVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()

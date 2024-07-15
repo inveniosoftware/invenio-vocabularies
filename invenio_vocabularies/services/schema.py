@@ -35,6 +35,9 @@ class BaseVocabularyRelationSchema(Schema):
 
     id = SanitizedUnicode(required=True)
 
+    # Nested field type for administration UI form generation
+    administration_schema_type = "vocabulary"
+
 
 class VocabularyRelationSchema(BaseVocabularyRelationSchema):
     """Vocabulary relation schema."""
@@ -62,6 +65,9 @@ class ContribVocabularyRelationSchema(Schema):
     id = SanitizedUnicode()
     ftf_name = None  # free text field name
     parent_field_name = None
+
+    # Nested field type for administration UI form generation
+    administration_schema_type = "vocabulary"
 
     @validates_schema
     def validate_relation_schema(self, data, **kwargs):
@@ -91,6 +97,9 @@ class BaseVocabularySchema(BaseRecordSchema):
     description = i18n_strings
     icon = fields.Str(allow_none=False)
     tags = fields.List(SanitizedUnicode())
+
+    # Nested field type for administration UI form generation
+    administration_schema_type = "vocabulary"
 
 
 class VocabularySchema(BaseVocabularySchema):
