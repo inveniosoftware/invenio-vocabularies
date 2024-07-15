@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v4.1.1 (released 2024-07-15)
+
+- installation: use invenio-oaipmh-scythe from PyPI
+
 Version v4.1.0 (released 2024-07-15)
 
 - readers: make OAI-PMH an optional extra
