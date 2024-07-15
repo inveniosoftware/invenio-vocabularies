@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2022 CERN.
+# Copyright (C) 2022-2024 CERN.
 # Copyright (C) 2024 California Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or

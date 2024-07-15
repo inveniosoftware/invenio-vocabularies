@@ -8,6 +8,22 @@
 Changes
 =======
 
+Version v4.1.0 (released 2024-07-15)
+
+- readers: make OAI-PMH an optional extra
+- schema: add administration UI attributes
+- ror: fix duplicate acronymns and aliases
+- affiliations: fix title search
+- datastreams: have yaml writer output utf8
+- datastreams: add configs for funders and affiliations
+- affiliations: add datastreams
+- datastreams: move ror transformer to common
+- vocabulary-types: services, resources, and administration UI (#310)
+- config: add OpenAIRE mapping for "Latvian Council of Science"
+- funders: fix country name display (#343)
+- Initial implementation of OAIPMHReader (#329)
+- global: add "tags" field to all vocabularies
+
 Version 4.0.0 (released 2024-06-04)
 
 - datastreams: implement factories for generating vocabulary configurations
