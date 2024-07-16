@@ -109,6 +109,7 @@ class VocabularyDetailsListView(AdminResourceListView):
     search_request_headers = {"Accept": "application/json"}
 
     pid_path = "id"
+    resource_name = "title['en']"
 
     # INFO only if disabled() (as a function) it's not in the sidebar, see https://github.com/inveniosoftware/invenio-administration/blob/main/invenio_administration/menu/menu.py#L54
     disabled = lambda _: True

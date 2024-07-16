@@ -221,6 +221,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
+        resource_name="name"
     ),
     "awards": dict(
         title="Awards vocabulary items",
@@ -234,6 +235,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
+        resource_name="name"
     ),
     "funders": dict(
         title="Funders vocabulary items",
@@ -247,6 +249,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
+        resource_name="name"
     ),
     "names": dict(
         title="Names vocabulary items",
@@ -260,6 +263,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
+        resource_name="name"
     ),
     "subjects": dict(
         title="Subjects vocabulary items",
@@ -273,5 +277,6 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
+        resource_name="subject"
     )
 }
