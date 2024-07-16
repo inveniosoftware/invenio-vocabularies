@@ -22,12 +22,14 @@ import requests
 import yaml
 from lxml import etree
 from lxml.html import parse as html_parse
-from oaipmh_scythe import Scythe
-from oaipmh_scythe.exceptions import NoRecordsMatch
-from oaipmh_scythe.models import Record
 
 from .errors import ReaderError
 from .xml import etree_to_dict
+
+try:
+    import oaipmh_scythe
+except ImportError:
+    oaipmh_scythe = None
 
 
 class BaseReader(ABC):
@@ -258,8 +260,18 @@ class OAIPMHReader(BaseReader):
 
     def _iter(self, scythe, *args, **kwargs):
         """Read and parse an OAIPMH stream to dict."""
+
+        class OAIRecord(oaipmh_scythe.models.Record):
+            """An XML unpacking implementation for more complicated formats."""
+
+            def get_metadata(self):
+                """Extract and return the record's metadata as a dictionary."""
+                return xml_to_dict(
+                    self.xml.find(f".//{self._oai_namespace}metadata").getchildren()[0],
+                )
+
         if self._verb == "ListRecords":
-            scythe.class_mapping["ListRecords"] = self.OAIRecord
+            scythe.class_mapping["ListRecords"] = OAIRecord
             try:
                 records = scythe.list_records(
                     from_=self._from,
@@ -270,10 +282,10 @@ class OAIPMHReader(BaseReader):
                 )
                 for record in records:
                     yield {"record": record}
-            except NoRecordsMatch:
+            except oaipmh_scythe.NoRecordsMatch:
                 raise ReaderError(f"No records found in OAI-PMH request.")
         else:
-            scythe.class_mapping["GetRecord"] = self.OAIRecord
+            scythe.class_mapping["GetRecord"] = OAIRecord
             try:
                 headers = scythe.list_identifiers(
                     from_=self._from,
@@ -288,7 +300,7 @@ class OAIPMHReader(BaseReader):
                         metadata_prefix=self._metadata_prefix,
                     )
                     yield {"record": record}
-            except NoRecordsMatch:
+            except oaipmh_scythe.NoRecordsMatch:
                 raise ReaderError(f"No records found in OAI-PMH request.")
 
     def read(self, item=None, *args, **kwargs):
@@ -298,19 +310,8 @@ class OAIPMHReader(BaseReader):
                 "OAIPMHReader does not support being chained after another reader"
             )
         else:
-            with Scythe(self._base_url) as scythe:
+            with oaipmh_scythe.Scythe(self._base_url) as scythe:
                 yield from self._iter(scythe=scythe, *args, **kwargs)
-
-    class OAIRecord(Record):
-        """An XML unpacking implementation for more complicated formats."""
-
-        def get_metadata(self):
-            """Extract and return the record's metadata as a dictionary."""
-            return xml_to_dict(
-                self.xml.find(".//" + self._oai_namespace + "metadata").getchildren()[
-                    0
-                ],
-            )
 
 
 def xml_to_dict(tree: etree._Element):
