@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2024 Uni Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -9,9 +9,12 @@
 
 """Vocabularies admin interface."""
 from flask import current_app
-from invenio_administration.views.base import AdminResourceListView
 from functools import partial
 from invenio_search_ui.searchconfig import search_app_config, SortConfig, FacetsConfig
+from invenio_administration.views.base import (
+    AdminResourceEditView,
+    AdminResourceListView,
+)
 
 
 class VocabulariesListView(AdminResourceListView):

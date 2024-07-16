@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2022 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -103,6 +103,6 @@ class YamlWriter(BaseWriter):
         with open(self._filepath, "a") as file:
             # made into array for safer append
             # will always read array (good for reader)
-            yaml.safe_dump([stream_entry.entry], file)
+            yaml.safe_dump([stream_entry.entry], file, allow_unicode=True)
 
         return stream_entry

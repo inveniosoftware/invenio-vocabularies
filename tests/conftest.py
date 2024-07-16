@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2021 TU Wien.
+# Copyright (C) 2024 California Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -43,6 +44,7 @@ from invenio_accounts.testutils import login_user_via_session
 from invenio_app.factory import create_api as _create_api
 from invenio_cache import current_cache
 
+from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.records.api import Vocabulary
 from invenio_vocabularies.records.models import VocabularyType
 
@@ -216,6 +218,108 @@ def client_with_credentials(db, client, user, role):
     login_user_via_session(client, email=user.email)
 
     return client
+
+
+@pytest.fixture()
+def dict_ror_entry():
+    """An example entry from ROR v2 Data Dump."""
+    return StreamEntry(
+        {
+            "locations": [
+                {
+                    "geonames_id": 5381396,
+                    "geonames_details": {
+                        "country_code": "US",
+                        "country_name": "United States",
+                        "lat": 34.14778,
+                        "lng": -118.14452,
+                        "name": "Pasadena",
+                    },
+                }
+            ],
+            "established": 1891,
+            "external_ids": [
+                {
+                    "type": "fundref",
+                    "all": ["100006961", "100009676"],
+                    "preferred": "100006961",
+                },
+                {
+                    "type": "grid",
+                    "all": ["grid.20861.3d"],
+                    "preferred": "grid.20861.3d",
+                },
+                {"type": "isni", "all": ["0000 0001 0706 8890"], "preferred": None},
+                {"type": "wikidata", "all": ["Q161562"], "preferred": None},
+            ],
+            "id": "https://ror.org/05dxps055",
+            "domains": [],
+            "links": [
+                {"type": "website", "value": "http://www.caltech.edu/"},
+                {
+                    "type": "wikipedia",
+                    "value": "http://en.wikipedia.org/wiki/California_Institute_of_Technology",
+                },
+            ],
+            "names": [
+                {"value": "CIT", "types": ["acronym"], "lang": None},
+                {
+                    "value": "California Institute of Technology",
+                    "types": ["ror_display", "label"],
+                    "lang": "en",
+                },
+                {"value": "Caltech", "types": ["alias"], "lang": None},
+                {
+                    "value": "Instituto de Tecnología de California",
+                    "types": ["label"],
+                    "lang": "es",
+                },
+            ],
+            "relationships": [
+                {
+                    "label": "Caltech Submillimeter Observatory",
+                    "type": "child",
+                    "id": "https://ror.org/01e6j9276",
+                },
+                {
+                    "label": "Infrared Processing and Analysis Center",
+                    "type": "child",
+                    "id": "https://ror.org/05q79g396",
+                },
+                {
+                    "label": "Joint Center for Artificial Photosynthesis",
+                    "type": "child",
+                    "id": "https://ror.org/05jtgpc57",
+                },
+                {
+                    "label": "Keck Institute for Space Studies",
+                    "type": "child",
+                    "id": "https://ror.org/05xkke381",
+                },
+                {
+                    "label": "Jet Propulsion Laboratory",
+                    "type": "child",
+                    "id": "https://ror.org/027k65916",
+                },
+                {
+                    "label": "Institute for Collaborative Biotechnologies",
+                    "type": "child",
+                    "id": "https://ror.org/04kz4p343",
+                },
+                {
+                    "label": "Resnick Sustainability Institute",
+                    "type": "child",
+                    "id": "https://ror.org/04bxjes65",
+                },
+            ],
+            "status": "active",
+            "types": ["education", "funder"],
+            "admin": {
+                "created": {"date": "2018-11-14", "schema_version": "1.0"},
+                "last_modified": {"date": "2024-05-13", "schema_version": "2.0"},
+            },
+        },
+    )
 
 
 # FIXME: https://github.com/inveniosoftware/pytest-invenio/issues/30

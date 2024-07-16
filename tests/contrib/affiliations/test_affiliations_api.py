@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -96,5 +96,5 @@ def test_affiliation_pid(app, db, example_affiliation):
     """Test affiliation pid creation."""
     aff = example_affiliation
 
-    assert aff.pid.pid_value == "cern"
-    assert Affiliation.pid.resolve("cern")
+    assert aff.pid.pid_value == "01ggx4157"
+    assert Affiliation.pid.resolve("01ggx4157")

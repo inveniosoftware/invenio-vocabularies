@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -54,11 +54,11 @@ def test_affiliations_forbidden(
     assert res.status_code == 403
 
     res = client.put(
-        f"{prefix}/cern", headers=h, data=json.dumps(affiliation_full_data)
+        f"{prefix}/01ggx4157", headers=h, data=json.dumps(affiliation_full_data)
     )
     assert res.status_code == 403
 
-    res = client.delete(f"{prefix}/cern")
+    res = client.delete(f"{prefix}/01ggx4157")
     assert res.status_code == 403
 
 
@@ -70,7 +70,9 @@ def test_affiliations_get(client, example_affiliation, h, prefix):
     assert res.status_code == 200
     assert res.json["id"] == id_
     # Test links
-    assert res.json["links"] == {"self": "https://127.0.0.1:5000/api/affiliations/cern"}
+    assert res.json["links"] == {
+        "self": "https://127.0.0.1:5000/api/affiliations/01ggx4157"
+    }
 
 
 def test_affiliations_search(client, example_affiliation, h, prefix):
@@ -128,19 +130,19 @@ def test_affiliations_suggest_sort(
     # Should show 2 results, but id=cern as first due to acronym/name
     res = client.get(f"{prefix}?suggest=CERN", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 1  # was 2 - to fix
+    assert res.json["hits"]["total"] == 2
     assert res.json["hits"]["hits"][0]["id"] == "cern"
-    # assert res.json["hits"]["hits"][1]["id"] == "other" # to uncomment and fix
+    assert res.json["hits"]["hits"][1]["id"] == "other"
 
     # Should show 1 result
     res = client.get(f"{prefix}?suggest=nucléaire", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 0  # to fix
-    # assert res.json["hits"]["hits"][0]["id"] == "cern"
-
-    # Should show 2 results, but id=nu as first due to acronym/name
-    res = client.get(f"{prefix}?suggest=nu", headers=h)
-    assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["id"] == "cern"
+
+    # Should show 2 results, but id=nu as first due to acronym
+    res = client.get(f"{prefix}?suggest=NU", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 2
     assert res.json["hits"]["hits"][0]["id"] == "nu"
-    # assert res.json["hits"]["hits"][1]["id"] == "cern"  # due to nucleaire
+    assert res.json["hits"]["hits"][1]["id"] == "cern"  # due to nucleaire

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -32,7 +32,7 @@ def test_simple_flow(app, db, service, identity, affiliation_full_data):
         assert item.data[k] == v
 
     # Read it
-    read_item = service.read(identity, "cern")
+    read_item = service.read(identity, "01ggx4157")
     assert item.id == read_item.id
     assert item.data == read_item.data
 

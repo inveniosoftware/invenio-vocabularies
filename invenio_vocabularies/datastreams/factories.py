@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2022 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -36,7 +36,6 @@ class Factory:
         try:
             type_ = config["type"]
             args = config.get("args", {})
-
             return cls.options()[type_](**args)
         except KeyError:
             raise FactoryError(name=cls.FACTORY_NAME, key=type_)

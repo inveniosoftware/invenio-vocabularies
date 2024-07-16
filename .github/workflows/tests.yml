@@ -45,7 +45,7 @@ jobs:
     env:
       DB: ${{ matrix.db-service }}
       SEARCH: ${{ matrix.search-service }}
-      EXTRAS: tests,${{ matrix.SEARCH_EXTRAS }}
+      EXTRAS: tests,oaipmh,${{ matrix.SEARCH_EXTRAS }}
 
     steps:
       - name: Checkout

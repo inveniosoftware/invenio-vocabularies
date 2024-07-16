@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2021 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -76,6 +76,7 @@ VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
     "fwf_________": "013tf3c58",
     "inca________": "03m8vkq32",
     "irb_hr______": "03n51vw80",
+    "lcs_________": "02ar66p97",
     "mestd_______": "01znas443",
     "nhmrc_______": "011kf5r70",
     "nih_________": "01cwqze88",
