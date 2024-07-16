@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020-2024 CERN.
+# Copyright (C) 2020-2021 CERN.
 # Copyright (C) 2024 Uni Münster.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -8,13 +8,11 @@
 # details.
 
 """Vocabularies admin interface."""
-from flask import current_app
 from functools import partial
-from invenio_search_ui.searchconfig import search_app_config, SortConfig, FacetsConfig
-from invenio_administration.views.base import (
-    AdminResourceEditView,
-    AdminResourceListView,
-)
+
+from flask import current_app
+from invenio_administration.views.base import AdminResourceListView
+from invenio_search_ui.searchconfig import FacetsConfig, SortConfig, search_app_config
 
 
 class VocabulariesListView(AdminResourceListView):
@@ -62,7 +60,9 @@ class VocabularyDetailsListView(AdminResourceListView):
     def init_search_config(self, **kwargs):
         """Build search view config."""
         pid_value = kwargs.get("pid_value", "")
-        custom_search_config = current_app.config[self.search_config_name].get(pid_value)
+        custom_search_config = current_app.config[self.search_config_name].get(
+            pid_value
+        )
 
         if custom_search_config:
             available_sort_options = current_app.config[self.search_sort_config_name]
@@ -75,10 +75,12 @@ class VocabularyDetailsListView(AdminResourceListView):
                 sort_options=available_sort_options,
                 endpoint=self.get_api_endpoint(**kwargs),
                 headers=self.get_search_request_headers(**kwargs),
-                sort=SortConfig(available_sort_options,
-                                custom_search_config["sort"],
-                                custom_search_config["sort_default"],
-                                custom_search_config["sort_default_no_query"]),
+                sort=SortConfig(
+                    available_sort_options,
+                    custom_search_config["sort"],
+                    custom_search_config["sort_default"],
+                    custom_search_config["sort_default_no_query"],
+                ),
                 facets=FacetsConfig(available_facets, custom_search_config["facets"]),
             )
         else:
@@ -96,9 +98,9 @@ class VocabularyDetailsListView(AdminResourceListView):
         if custom_config:
             parent_context.update(custom_config)
         else:
-            parent_context.update({
-                "title": f"{pid_value.capitalize()} vocabulary items"
-            })
+            parent_context.update(
+                {"title": f"{pid_value.capitalize()} vocabulary items"}
+            )
 
         return self.render(**parent_context)
 

@@ -176,36 +176,36 @@ VOCABULARIES_TYPES_ITEMS_SEARCH = {
         "facets": [],
         "sort": ["name"],
         "sort_default": "name",
-        "sort_default_no_query": "name"
+        "sort_default_no_query": "name",
     },
     "awards": {
         "facets": [],
         "sort": ["name"],
         "sort_default": "name",
-        "sort_default_no_query": "name"
+        "sort_default_no_query": "name",
     },
     "funders": {
         "facets": [],
         "sort": ["name"],
         "sort_default": "name",
-        "sort_default_no_query": "name"
+        "sort_default_no_query": "name",
     },
     "names": {
         "facets": [],
         "sort": ["name"],
         "sort_default": "name",
-        "sort_default_no_query": "name"
+        "sort_default_no_query": "name",
     },
     "subjects": {
         "facets": [],
         "sort": ["subject"],
         "sort_default": "subject",
-        "sort_default_no_query": "subject"
+        "sort_default_no_query": "subject",
     },
     "facets": [],
     "sort": ["title"],
     "sort_default": "title",
-    "sort_default_no_query": "title"
+    "sort_default_no_query": "title",
 }
 """Vocabulary type item search configurations per type and for generic vocabularies."""
 
@@ -222,7 +222,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
-        resource_name="name"
+        resource_name="name",
     ),
     "awards": dict(
         title="Awards vocabulary items",
@@ -236,7 +236,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
-        resource_name="name"
+        resource_name="name",
     ),
     "funders": dict(
         title="Funders vocabulary items",
@@ -250,7 +250,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
-        resource_name="name"
+        resource_name="name",
     ),
     "names": dict(
         title="Names vocabulary items",
@@ -264,7 +264,7 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
-        resource_name="name"
+        resource_name="name",
     ),
     "subjects": dict(
         title="Subjects vocabulary items",
@@ -278,6 +278,6 @@ VOCABULARIES_ADMINISTRATION_CONFIG = {
         display_edit=True,
         display_read=True,
         pid_path="id",
-        resource_name="subject"
-    )
+        resource_name="subject",
+    ),
 }
