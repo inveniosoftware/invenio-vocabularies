@@ -10,6 +10,8 @@
 """Vocabularies admin interface."""
 from flask import current_app
 from invenio_administration.views.base import AdminResourceListView
+from functools import partial
+from invenio_search_ui.searchconfig import search_app_config, SortConfig, FacetsConfig
 
 
 class VocabulariesListView(AdminResourceListView):
@@ -54,23 +56,51 @@ class VocabularyDetailsListView(AdminResourceListView):
         else:
             return f"/api/vocabularies/{pid_value}"
 
+    def init_search_config(self, **kwargs):
+        """Build search view config."""
+        pid_value = kwargs.get("pid_value", "")
+        custom_search_config = current_app.config[self.search_config_name].get(pid_value)
+
+        if custom_search_config:
+            available_sort_options = current_app.config[self.search_sort_config_name]
+            available_facets = current_app.config.get(self.search_facets_config_name)
+
+            return partial(
+                search_app_config,
+                config_name=self.get_search_app_name(**kwargs),
+                available_facets=available_facets,
+                sort_options=available_sort_options,
+                endpoint=self.get_api_endpoint(**kwargs),
+                headers=self.get_search_request_headers(**kwargs),
+                sort=SortConfig(available_sort_options,
+                                custom_search_config["sort"],
+                                custom_search_config["sort_default"],
+                                custom_search_config["sort_default_no_query"]),
+                facets=FacetsConfig(available_facets, custom_search_config["facets"]),
+            )
+        else:
+            return super().init_search_config(**kwargs)
+
     def get(self, **kwargs):
         """GET view method."""
         parent_context = super().get_context(**kwargs)
 
         pid_value = kwargs.get("pid_value", "")
+        vocab_admin_cfg = current_app.config["VOCABULARIES_ADMINISTRATION_CONFIG"]
 
-        parent_context.update({
-            "title": f"{pid_value.capitalize()} vocabulary items",
-            "pid_value": pid_value,
-        })
+        custom_config = vocab_admin_cfg.get(pid_value)
+
+        if custom_config:
+            parent_context.update(custom_config)
+        else:
+            parent_context.update({
+                "title": f"{pid_value.capitalize()} vocabulary items"
+            })
 
         return self.render(**parent_context)
 
     name = "vocabulary-type-items"
     url = "/vocabulary-types/<pid_value>"
-
-    api_endpoint = "/vocabularies/"
 
     # INFO name of the resource's list view name, enables navigation between items view and types view.
     list_view_name = "vocabulary-types"
@@ -90,13 +120,10 @@ class VocabularyDetailsListView(AdminResourceListView):
     display_edit = True
     display_search = True
 
-    # TODO: It would be nicer to choose the correct column depending on the vocabulary
     # TODO: It would ne nicer to use the title's translation in the currently selected language and fall back to English if this doesn't exist
     item_field_list = {
-        "name": {"text": "Name", "order": 0},
-        "title['en']": {"text": "Title [en]", "order": 1},
-        "subject": {"text": "Subject", "order": 2},
-        "created": {"text": "Created", "order": 3},
+        "title['en']": {"text": "Title [en]", "order": 0},
+        "created": {"text": "Created", "order": 1},
     }
 
     search_config_name = "VOCABULARIES_TYPES_ITEMS_SEARCH"
