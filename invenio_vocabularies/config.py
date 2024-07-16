@@ -154,3 +154,130 @@ VOCABULARIES_TYPES_SEARCH = {
     "sort": ["name", "count"],
 }
 """Vocabulary type search configuration."""
+
+VOCABULARIES_TYPES_ITEMS_SORT_OPTIONS = {
+    "name": dict(
+        title=_("Name"),
+        fields=["id"],
+    ),
+    "title": dict(
+        title=_("Title"),
+        fields=["title"],
+    ),
+    "subject": dict(
+        title=_("Subject"),
+        fields=["subject"],
+    ),
+}
+"""Definitions of available Vocabulary type items sort options. """
+
+VOCABULARIES_TYPES_ITEMS_SEARCH = {
+    "affiliations": {
+        "facets": [],
+        "sort": ["name"],
+        "sort_default": "name",
+        "sort_default_no_query": "name",
+    },
+    "awards": {
+        "facets": [],
+        "sort": ["name"],
+        "sort_default": "name",
+        "sort_default_no_query": "name",
+    },
+    "funders": {
+        "facets": [],
+        "sort": ["name"],
+        "sort_default": "name",
+        "sort_default_no_query": "name",
+    },
+    "names": {
+        "facets": [],
+        "sort": ["name"],
+        "sort_default": "name",
+        "sort_default_no_query": "name",
+    },
+    "subjects": {
+        "facets": [],
+        "sort": ["subject"],
+        "sort_default": "subject",
+        "sort_default_no_query": "subject",
+    },
+    "facets": [],
+    "sort": ["title"],
+    "sort_default": "title",
+    "sort_default_no_query": "title",
+}
+"""Vocabulary type item search configurations per type and for generic vocabularies."""
+
+VOCABULARIES_ADMINISTRATION_CONFIG = {
+    "affiliations": dict(
+        title="Affiliations vocabulary items",
+        fields={
+            "name": {"text": "Name", "order": 0},
+            "created": {"text": "Created", "order": 1},
+        },
+        display_search=True,
+        display_create=False,
+        display_delete=False,
+        display_edit=True,
+        display_read=True,
+        pid_path="id",
+        resource_name="name",
+    ),
+    "awards": dict(
+        title="Awards vocabulary items",
+        fields={
+            "name": {"text": "Name", "order": 0},
+            "created": {"text": "Created", "order": 1},
+        },
+        display_search=True,
+        display_create=False,
+        display_delete=False,
+        display_edit=True,
+        display_read=True,
+        pid_path="id",
+        resource_name="name",
+    ),
+    "funders": dict(
+        title="Funders vocabulary items",
+        fields={
+            "name": {"text": "Name", "order": 0},
+            "created": {"text": "Created", "order": 1},
+        },
+        display_search=True,
+        display_create=False,
+        display_delete=False,
+        display_edit=True,
+        display_read=True,
+        pid_path="id",
+        resource_name="name",
+    ),
+    "names": dict(
+        title="Names vocabulary items",
+        fields={
+            "name": {"text": "Name", "order": 0},
+            "created": {"text": "Created", "order": 1},
+        },
+        display_search=True,
+        display_create=False,
+        display_delete=False,
+        display_edit=True,
+        display_read=True,
+        pid_path="id",
+        resource_name="name",
+    ),
+    "subjects": dict(
+        title="Subjects vocabulary items",
+        fields={
+            "subject": {"text": "Subject", "order": 0},
+            "created": {"text": "Created", "order": 1},
+        },
+        display_search=True,
+        display_create=False,
+        display_delete=False,
+        display_edit=True,
+        display_read=True,
+        pid_path="id",
+        resource_name="subject",
+    ),
+}

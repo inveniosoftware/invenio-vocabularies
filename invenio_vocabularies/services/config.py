@@ -96,6 +96,10 @@ class VocabularyTypeSearchOptions(SearchOptions):
             title=_("ID"),
             fields=["id"],
         ),
+        "count": dict(
+            title=_("Number of entries"),
+            fields=["count"],
+        ),
     }
 
     sort_default = "id"
