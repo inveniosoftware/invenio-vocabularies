@@ -9,12 +9,11 @@
 
 """Funders datastreams, transformers, writers and readers."""
 
-from idutils import normalize_ror
-from invenio_access.permissions import system_identity
+from flask import current_app
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
-from .config import funder_fundref_doi_prefix, funder_schemes
+from ..common.ror.datastreams import RORTransformer
 
 
 class FundersServiceWriter(ServiceWriter):
@@ -30,10 +29,37 @@ class FundersServiceWriter(ServiceWriter):
         return entry["id"]
 
 
+class FundersRORTransformer(RORTransformer):
+    def __init__(
+        self, *args, vocab_schemes=None, funder_fundref_doi_prefix=None, **kwargs
+    ):
+        if vocab_schemes is None:
+            vocab_schemes = current_app.config.get("VOCABULARIES_FUNDER_SCHEMES")
+        if funder_fundref_doi_prefix is None:
+            funder_fundref_doi_prefix = current_app.config.get(
+                "VOCABULARIES_FUNDER_DOI_PREFIX"
+            )
+        super().__init__(
+            *args,
+            vocab_schemes=vocab_schemes,
+            funder_fundref_doi_prefix=funder_fundref_doi_prefix,
+            **kwargs
+        )
+
+
+VOCABULARIES_DATASTREAM_READERS = {}
+"""Funders datastreams writers."""
+
 VOCABULARIES_DATASTREAM_WRITERS = {
     "funders-service": FundersServiceWriter,
 }
-"""Funders Data Streams transformers."""
+"""Funders datastreams writers."""
+
+
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {
+    "ror-funders": FundersRORTransformer,
+}
+"""Funders datastreams transformers."""
 
 
 DATASTREAM_CONFIG = {
@@ -48,18 +74,16 @@ DATASTREAM_CONFIG = {
     ],
     "transformers": [
         {
-            "type": "ror",
-            "args": {
-                "vocab_schemes": funder_schemes,
-                "funder_fundref_doi_prefix": funder_fundref_doi_prefix,
-            },
+            "type": "ror-funders",
         },
     ],
     "writers": [
         {
-            "type": "funders-service",
+            "type": "async",
             "args": {
-                "identity": system_identity,
+                "writer": {
+                    "type": "funders-service",
+                }
             },
         }
     ],
