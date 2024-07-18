@@ -88,6 +88,7 @@ def example_subjects(app, db, search_clear, identity, service):
             "title": {
                 "en": "Abdomen",
             },
+            "subject": "Abdomen",
         },
         {
             "id": "https://id.nlm.nih.gov/mesh/D000001",
@@ -95,6 +96,7 @@ def example_subjects(app, db, search_clear, identity, service):
             "title": {
                 "en": "Calcimycin",
             },
+            "subject": "Calcimycin",
         },
         {
             "id": "https://id.nlm.nih.gov/mesh/D000005",
@@ -102,6 +104,7 @@ def example_subjects(app, db, search_clear, identity, service):
             "title": {
                 "en": "Abdomen",
             },
+            "subject": "Abdomen",
         },
         {
             "id": "https://id.nlm.nih.gov/mesh/D000006",
@@ -109,6 +112,7 @@ def example_subjects(app, db, search_clear, identity, service):
             "title": {
                 "en": "Abdomen, Acute",
             },
+            "subject": "Abdomen, Acute",
         },
         {
             "id": "yet-another-954514",
@@ -116,6 +120,7 @@ def example_subjects(app, db, search_clear, identity, service):
             "title": {
                 "en": "Abdomen",
             },
+            "subject": "Abdomen",
         },
     ]
     records = [service.create(identity, s) for s in subjects]
