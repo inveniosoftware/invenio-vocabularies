@@ -8,7 +8,6 @@
 
 """Test models."""
 
-
 import pytest
 
 from invenio_vocabularies.records.models import VocabularyScheme

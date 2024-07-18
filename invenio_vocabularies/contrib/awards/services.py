@@ -8,7 +8,6 @@
 
 """Vocabulary awards."""
 
-
 from .awards import record_type
 
 AwardsServiceConfig = record_type.service_config_cls

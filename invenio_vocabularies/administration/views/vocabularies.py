@@ -8,6 +8,7 @@
 # details.
 
 """Vocabularies admin interface."""
+
 from invenio_administration.views.base import (
     AdminResourceEditView,
     AdminResourceListView,

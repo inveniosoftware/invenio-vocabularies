@@ -39,7 +39,7 @@ class VocabularyCF(BaseCF):
         sort_by=None,
         schema=VocabularyRelationSchema,
         ui_schema=VocabularyL10NItemSchema,
-        **kwargs
+        **kwargs,
     ):
         """Constructor."""
         super().__init__(name, **kwargs)

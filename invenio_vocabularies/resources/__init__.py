@@ -7,6 +7,7 @@
 # details.
 
 """Resources module."""
+
 from invenio_vocabularies.resources.schema import L10NString, VocabularyL10Schema
 
 from .config import VocabulariesResourceConfig, VocabularyTypeResourceConfig

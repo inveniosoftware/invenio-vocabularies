@@ -7,6 +7,7 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 """Generate Vocabulary Config."""
+
 from copy import deepcopy
 
 import yaml

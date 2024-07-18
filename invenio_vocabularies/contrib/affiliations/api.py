@@ -8,7 +8,6 @@
 
 """Vocabulary affiliations."""
 
-
 from .affiliations import record_type
 
 Affiliation = record_type.record_cls

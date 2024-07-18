@@ -9,7 +9,6 @@
 
 """Commands to create and manage vocabularies."""
 
-
 import click
 from flask.cli import with_appcontext
 from invenio_access.permissions import system_identity

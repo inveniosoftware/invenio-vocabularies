@@ -7,6 +7,7 @@
 # details.
 
 """Vocabulary funders."""
+
 from flask_resources import (
     BaseListSchema,
     JSONSerializer,
