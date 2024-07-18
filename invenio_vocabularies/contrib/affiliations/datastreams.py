@@ -9,11 +9,11 @@
 
 """Affiliations datastreams, transformers, writers and readers."""
 
-from invenio_access.permissions import system_identity
+from flask import current_app
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
-from .config import affiliation_schemes
+from ..common.ror.datastreams import RORTransformer
 
 
 class AffiliationsServiceWriter(ServiceWriter):
@@ -29,9 +29,32 @@ class AffiliationsServiceWriter(ServiceWriter):
         return entry["id"]
 
 
+class AffiliationsRORTransformer(RORTransformer):
+    def __init__(
+        self, *args, vocab_schemes=None, funder_fundref_doi_prefix=None, **kwargs
+    ):
+        if vocab_schemes is None:
+            vocab_schemes = current_app.config.get("VOCABULARIES_AFFILIATION_SCHEMES")
+        super().__init__(
+            *args,
+            vocab_schemes=vocab_schemes,
+            funder_fundref_doi_prefix=funder_fundref_doi_prefix,
+            **kwargs
+        )
+
+
+VOCABULARIES_DATASTREAM_READERS = {}
+"""Affiliations datastream readers."""
+
 VOCABULARIES_DATASTREAM_WRITERS = {
     "affiliations-service": AffiliationsServiceWriter,
 }
+"""Affiliations datastream writers."""
+
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {
+    "ror-affiliations": AffiliationsRORTransformer,
+}
+"""Affiliations datastream transformers."""
 
 
 DATASTREAM_CONFIG = {
@@ -46,17 +69,16 @@ DATASTREAM_CONFIG = {
     ],
     "transformers": [
         {
-            "type": "ror",
-            "args": {
-                "vocab_schemes": affiliation_schemes,
-            },
+            "type": "ror-affiliations",
         },
     ],
     "writers": [
         {
-            "type": "affiliations-service",
+            "type": "async",
             "args": {
-                "identity": system_identity,
+                "writer": {
+                    "type": "affiliations-service",
+                }
             },
         }
     ],
