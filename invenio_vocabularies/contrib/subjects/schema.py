@@ -33,7 +33,7 @@ class SubjectSchema(BaseVocabularySchema):
     # here.
     id = SanitizedUnicode(required=True)
     scheme = SanitizedUnicode(required=True)
-    subject = SanitizedUnicode(required=False)
+    subject = SanitizedUnicode(required=True)
     title = i18n_strings
     synonyms = fields.List(SanitizedUnicode())
 
