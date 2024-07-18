@@ -164,3 +164,5 @@ class RORTransformer(BaseTransformer):
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "ror": RORTransformer,
 }
+
+VOCABULARIES_DATASTREAM_WRITERS = {}
