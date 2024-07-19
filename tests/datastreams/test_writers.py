@@ -16,8 +16,11 @@ import yaml
 
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
-from invenio_vocabularies.datastreams.writers import AsyncWriter, \
-    ServiceWriter, YamlWriter
+from invenio_vocabularies.datastreams.writers import (
+    AsyncWriter,
+    ServiceWriter,
+    YamlWriter,
+)
 
 ##
 # Service Writer
@@ -72,6 +75,7 @@ def test_service_writer_update_non_existing(lang_type, lang_data, service, ident
 
     assert dict(record, **updated_lang) == record
 
+
 ##
 # YAML Writer
 ##
@@ -90,25 +94,18 @@ def test_yaml_writer():
 
     filepath.unlink()
 
+
 ##
 # Async Writer
 ##
 
 
 def test_async_writer(app):
-    filepath = 'writer_test.yaml'
-    yaml_writer_config = {
-        "type": "yaml",
-        "args": {
-            "filepath": filepath
-        }
-    }
+    filepath = "writer_test.yaml"
+    yaml_writer_config = {"type": "yaml", "args": {"filepath": filepath}}
     async_writer = AsyncWriter(yaml_writer_config)
 
-    test_output = [
-        {"key_one": [{"inner_one": 1}]},
-        {"key_two": [{"inner_two": "two"}]}
-    ]
+    test_output = [{"key_one": [{"inner_one": 1}]}, {"key_two": [{"inner_two": "two"}]}]
     for output in test_output:
         async_writer.write(stream_entry=StreamEntry(output))
 

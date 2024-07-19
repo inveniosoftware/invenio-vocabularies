@@ -12,18 +12,12 @@ from pathlib import Path
 
 import yaml
 
-from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.tasks import write_entry
 
 
 def test_write_entry(app):
-    filepath = 'writer_test.yaml'
-    yaml_writer_config = {
-        "type": "yaml",
-        "args": {
-            "filepath": filepath
-        }
-    }
+    filepath = "writer_test.yaml"
+    yaml_writer_config = {"type": "yaml", "args": {"filepath": filepath}}
     entry = {"key_one": [{"inner_one": 1}]}
     write_entry(yaml_writer_config, entry)
 
