@@ -24,7 +24,7 @@ from .datastreams.readers import (
     ZipReader,
 )
 from .datastreams.transformers import XMLTransformer
-from .datastreams.writers import ServiceWriter, YamlWriter
+from .datastreams.writers import AsyncWriter, ServiceWriter, YamlWriter
 from .resources import VocabulariesResourceConfig
 from .services.config import VocabulariesServiceConfig
 
@@ -134,6 +134,7 @@ VOCABULARIES_DATASTREAM_TRANSFORMERS = {
 VOCABULARIES_DATASTREAM_WRITERS = {
     "service": ServiceWriter,
     "yaml": YamlWriter,
+    "async": AsyncWriter,
 }
 """Data Streams writers."""
 

@@ -18,8 +18,11 @@ from pathlib import Path
 
 import pytest
 
-from invenio_vocabularies.config import VOCABULARIES_DATASTREAM_READERS, \
-    VOCABULARIES_DATASTREAM_TRANSFORMERS, VOCABULARIES_DATASTREAM_WRITERS
+from invenio_vocabularies.config import (
+    VOCABULARIES_DATASTREAM_READERS,
+    VOCABULARIES_DATASTREAM_TRANSFORMERS,
+    VOCABULARIES_DATASTREAM_WRITERS,
+)
 from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
 from invenio_vocabularies.datastreams.readers import BaseReader, JsonReader, ZipReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
@@ -82,7 +85,7 @@ def app_config(app_config):
     }
     app_config["VOCABULARIES_DATASTREAM_TRANSFORMERS"] = {
         **VOCABULARIES_DATASTREAM_TRANSFORMERS,
-        "test": TestTransformer
+        "test": TestTransformer,
     }
     app_config["VOCABULARIES_DATASTREAM_WRITERS"] = {
         **VOCABULARIES_DATASTREAM_WRITERS,
