@@ -9,6 +9,7 @@
 
 from celery import shared_task
 from flask import current_app
+from invenio_logging.structlog import LoggerFactory
 
 from ..datastreams.factories import DataStreamFactory
 from ..factories import get_vocabulary_config
@@ -17,22 +18,52 @@ from ..factories import get_vocabulary_config
 @shared_task(ignore_result=True)
 def process_datastream(stream):
     """Process a datastream from config."""
-    vc_config = get_vocabulary_config(stream)
-    config = vc_config.get_config()
+    try:
+        stream_logger = LoggerFactory.get_logger("datastreams-" + stream)
+        stream_logger.info("Starting processing")
+        vc_config = get_vocabulary_config(stream)
+        config = vc_config.get_config()
 
-    if not config:
-        raise ValueError("Invalid stream configuration")
+        if not config:
+            stream_logger.error("Invalid stream configuration")
+            raise ValueError("Invalid stream configuration")
 
-    ds = DataStreamFactory.create(
-        readers_config=config["readers"],
-        transformers_config=config.get("transformers"),
-        writers_config=config["writers"],
-    )
-
-    for result in ds.process():
-        if result.errors:
-            for err in result.errors:
-                current_app.logger.error(err)
+        ds = DataStreamFactory.create(
+            readers_config=config["readers"],
+            transformers_config=config.get("transformers"),
+            writers_config=config["writers"],
+        )
+        stream_logger.info("Datastream created")
+        stream_logger.info("Processing Datastream")
+        success, errored, filtered = 0, 0, 0
+        for result in ds.process(
+            batch_size=config.get("batch_size", 100),
+            write_many=config.get("write_many", False),
+            logger=stream_logger,
+        ):
+            if result.filtered:
+                filtered += 1
+                stream_logger.info(
+                    "Filtered", entry=result.entry, operation=result.op_type
+                )
+            if result.errors:
+                errored += 1
+                stream_logger.error(
+                    "Error",
+                    entry=result.entry,
+                    operation=result.op_type,
+                    errors=result.errors,
+                )
+            else:
+                success += 1
+                stream_logger.info(
+                    "Success", entry=result.entry, operation=result.op_type
+                )
+        stream_logger.info(
+            "Finished processing", success=success, errored=errored, filtered=filtered
+        )
+    except Exception as e:
+        stream_logger.exception("Error processing stream", error=e)
 
 
 @shared_task()

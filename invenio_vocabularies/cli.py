@@ -13,6 +13,7 @@
 import click
 from flask.cli import with_appcontext
 from invenio_access.permissions import system_identity
+from invenio_logging.structlog import LoggerFactory
 from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
 
 from .datastreams import DataStreamFactory
@@ -31,22 +32,38 @@ def _process_vocab(config, num_samples=None):
         transformers_config=config.get("transformers"),
         writers_config=config["writers"],
     )
-
+    cli_logger = LoggerFactory.get_logger("cli")
+    cli_logger.info("Starting processing")
     success, errored, filtered = 0, 0, 0
     left = num_samples or -1
-    for result in ds.process():
+    batch_size = config.get("batch_size", 1000)
+    write_many = config.get("write_many", False)
+
+    for result in ds.process(batch_size=batch_size, write_many=write_many):
         left = left - 1
         if result.filtered:
             filtered += 1
+            cli_logger.info("Filtered", entry=result.entry, operation=result.op_type)
         if result.errors:
             for err in result.errors:
                 click.secho(err, fg="red")
+            cli_logger.error(
+                "Error",
+                entry=result.entry,
+                operation=result.op_type,
+                errors=result.errors,
+            )
             errored += 1
         else:
             success += 1
+            cli_logger.info("Success", entry=result.entry, operation=result.op_type)
         if left == 0:
             click.secho(f"Number of samples reached {num_samples}", fg="green")
             break
+    cli_logger.info(
+        "Finished processing", success=success, errored=errored, filtered=filtered
+    )
+
     return success, errored, filtered
 
 

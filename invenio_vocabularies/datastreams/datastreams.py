@@ -8,6 +8,8 @@
 
 """Base data stream."""
 
+from invenio_logging.structlog import LoggerFactory
+
 from .errors import ReaderError, TransformerError, WriterError
 
 
@@ -65,7 +67,7 @@ class DataStream:
             else:
                 yield from (self.write(entry) for entry in transformed_entries)
 
-    def process(self, batch_size=100, write_many=False, *args, **kwargs):
+    def process(self, batch_size=100, write_many=False, logger=None, *args, **kwargs):
         """Iterates over the entries.
 
         Uses the reader to get the raw entries and transforms them.
@@ -73,8 +75,13 @@ class DataStream:
         the reader, apply the transformations and yield the result of
         writing it.
         """
+        if not logger:
+            logger = LoggerFactory.get_logger("datastreams")
 
         batch = []
+        logger.info(
+            f"Start reading datastream with batch_size={batch_size} and write_many={write_many}"
+        )
         for stream_entry in self.read():
             batch.append(stream_entry)
             if len(batch) >= batch_size:
