@@ -30,9 +30,12 @@ class FundersServiceWriter(ServiceWriter):
 
 
 class FundersRORTransformer(RORTransformer):
+    """Funders ROR Transformer."""
+
     def __init__(
         self, *args, vocab_schemes=None, funder_fundref_doi_prefix=None, **kwargs
     ):
+        """Constructor."""
         if vocab_schemes is None:
             vocab_schemes = current_app.config.get("VOCABULARIES_FUNDER_SCHEMES")
         if funder_fundref_doi_prefix is None:
