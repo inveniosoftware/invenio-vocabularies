@@ -12,6 +12,7 @@
 import click
 from flask.cli import with_appcontext
 from invenio_access.permissions import system_identity
+from invenio_logging.structlog import LoggerFactory
 from invenio_pidstore.errors import PIDDeletedError, PIDDoesNotExistError
 
 from .datastreams import DataStreamFactory
@@ -30,22 +31,38 @@ def _process_vocab(config, num_samples=None):
         transformers_config=config.get("transformers"),
         writers_config=config["writers"],
     )
-
+    cli_logger = LoggerFactory.get_logger("cli")
+    cli_logger.info("Starting processing")
     success, errored, filtered = 0, 0, 0
     left = num_samples or -1
-    for result in ds.process():
+    batch_size = config.get("batch_size", 1000)
+    write_many = config.get("write_many", False)
+
+    for result in ds.process(batch_size=batch_size, write_many=write_many):
         left = left - 1
         if result.filtered:
             filtered += 1
+            cli_logger.info("Filtered", entry=result.entry, operation=result.op_type)
         if result.errors:
             for err in result.errors:
                 click.secho(err, fg="red")
+            cli_logger.error(
+                "Error",
+                entry=result.entry,
+                operation=result.op_type,
+                errors=result.errors,
+            )
             errored += 1
         else:
             success += 1
+            cli_logger.info("Success", entry=result.entry, operation=result.op_type)
         if left == 0:
             click.secho(f"Number of samples reached {num_samples}", fg="green")
             break
+    cli_logger.info(
+        "Finished processing", success=success, errored=errored, filtered=filtered
+    )
+
     return success, errored, filtered
 
 
@@ -100,7 +117,10 @@ def update(vocabulary, filepath=None, origin=None):
     config = vc.get_config(filepath, origin)
 
     for w_conf in config["writers"]:
-        w_conf["args"]["update"] = True
+        if w_conf["type"] == "async":
+            w_conf["args"]["writer"]["args"]["update"] = True
+        else:
+            w_conf["args"]["update"] = True
 
     success, errored, filtered = _process_vocab(config)
 
@@ -139,18 +159,27 @@ def convert(vocabulary, filepath=None, origin=None, target=None, num_samples=Non
     type=click.STRING,
     help="Identifier of the vocabulary item to delete.",
 )
-@click.option("--all", is_flag=True, default=False, help="Not supported yet.")
+@click.option("--all", is_flag=True, default=False)
 @with_appcontext
 def delete(vocabulary, identifier, all):
     """Delete all items or a specific one of the vocabulary."""
-    if not id and not all:
+    if not identifier and not all:
         click.secho("An identifier or the --all flag must be present.", fg="red")
         exit(1)
+
     vc = get_vocabulary_config(vocabulary)
     service = vc.get_service()
     if identifier:
         try:
-            if service.delete(identifier, system_identity):
+            if service.delete(system_identity, identifier):
                 click.secho(f"{identifier} deleted from {vocabulary}.", fg="green")
         except (PIDDeletedError, PIDDoesNotExistError):
             click.secho(f"PID {identifier} not found.")
+    elif all:
+        items = service.scan(system_identity)
+        for item in items.hits:
+            try:
+                if service.delete(system_identity, item["id"]):
+                    click.secho(f"{item['id']} deleted from {vocabulary}.", fg="green")
+            except (PIDDeletedError, PIDDoesNotExistError):
+                click.secho(f"PID {item['id']} not found.")
