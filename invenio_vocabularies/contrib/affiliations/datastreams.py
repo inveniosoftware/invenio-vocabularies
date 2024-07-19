@@ -30,9 +30,12 @@ class AffiliationsServiceWriter(ServiceWriter):
 
 
 class AffiliationsRORTransformer(RORTransformer):
+    """Affiliations ROR Transformer."""
+
     def __init__(
         self, *args, vocab_schemes=None, funder_fundref_doi_prefix=None, **kwargs
     ):
+        """Constructor."""
         if vocab_schemes is None:
             vocab_schemes = current_app.config.get("VOCABULARIES_AFFILIATION_SCHEMES")
         super().__init__(

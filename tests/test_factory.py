@@ -55,7 +55,10 @@ def test_vocabulary_config(conf, ds_config, service_type, app):
     for config_writer, expected_writer in zip(config["writers"], ds_config["writers"]):
         assert config_writer["type"] == expected_writer["type"]
         assert str(config_writer["args"]) == str(expected_writer["args"])
-        assert config["writers"][0]["type"] == service_type
+        if config["writers"][0]["type"] == "async":
+            assert config["writers"][0]["args"]["writer"]["type"] == service_type
+        else:
+            assert config["writers"][0]["type"] == service_type
 
 
 def test_names_service(app):
