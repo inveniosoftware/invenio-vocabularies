@@ -21,7 +21,7 @@ from json.decoder import JSONDecodeError
 import requests
 import yaml
 from lxml import etree
-from lxml.html import parse as html_parse
+from lxml.html import fromstring
 
 from .errors import ReaderError
 from .xml import etree_to_dict
@@ -226,8 +226,8 @@ class XMLReader(BaseReader):
     def _iter(self, fp, *args, **kwargs):
         """Read and parse an XML file to dict."""
         # NOTE: We parse HTML, to skip XML validation and strip XML namespaces
-        xml_tree = html_parse(fp).getroot()
-        record = etree_to_dict(xml_tree)["html"]["body"].get("record")
+        xml_tree = fromstring(fp)
+        record = etree_to_dict(xml_tree).get("record")
 
         if not record:
             raise ReaderError(f"Record not found in XML entry.")

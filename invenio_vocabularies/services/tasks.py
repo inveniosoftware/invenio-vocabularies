@@ -15,8 +15,14 @@ from ..factories import get_vocabulary_config
 
 
 @shared_task(ignore_result=True)
-def process_datastream(config):
+def process_datastream(stream):
     """Process a datastream from config."""
+    vc_config = get_vocabulary_config(stream)
+    config = vc_config.get_config()
+
+    if not config:
+        raise ValueError("Invalid stream configuration")
+
     ds = DataStreamFactory.create(
         readers_config=config["readers"],
         transformers_config=config.get("transformers"),

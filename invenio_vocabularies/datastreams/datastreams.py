@@ -14,11 +14,17 @@ from .errors import ReaderError, TransformerError, WriterError
 class StreamEntry:
     """Object to encapsulate streams processing."""
 
-    def __init__(self, entry, errors=None):
-        """Constructor."""
+    def __init__(self, entry, errors=None, op_type=None):
+        """Constructor for the StreamEntry class.
+
+        :param entry (object): The entry object, usually a record dict.
+        :param errors (list, optional): List of errors. Defaults to None.
+        :param op_type (str, optional): The operation type. Defaults to None.
+        """
         self.entry = entry
         self.filtered = False
         self.errors = errors or []
+        self.op_type = op_type
 
 
 class DataStream:
@@ -39,15 +45,9 @@ class DataStream:
         """Checks if an stream_entry should be filtered out (skipped)."""
         return False
 
-    def process(self, *args, **kwargs):
-        """Iterates over the entries.
-
-        Uses the reader to get the raw entries and transforms them.
-        It will iterate over the `StreamEntry` objects returned by
-        the reader, apply the transformations and yield the result of
-        writing it.
-        """
-        for stream_entry in self.read():
+    def process_batch(self, batch, write_many=False):
+        transformed_entries = []
+        for stream_entry in batch:
             if stream_entry.errors:
                 yield stream_entry  # reading errors
             else:
@@ -58,7 +58,32 @@ class DataStream:
                     transformed_entry.filtered = True
                     yield transformed_entry
                 else:
-                    yield self.write(transformed_entry)
+                    transformed_entries.append(transformed_entry)
+        if transformed_entries:
+            if write_many:
+                yield from self.batch_write(transformed_entries)
+            else:
+                yield from (self.write(entry) for entry in transformed_entries)
+
+    def process(self, batch_size=100, write_many=False, *args, **kwargs):
+        """Iterates over the entries.
+
+        Uses the reader to get the raw entries and transforms them.
+        It will iterate over the `StreamEntry` objects returned by
+        the reader, apply the transformations and yield the result of
+        writing it.
+        """
+
+        batch = []
+        for stream_entry in self.read():
+            batch.append(stream_entry)
+            if len(batch) >= batch_size:
+                yield from self.process_batch(batch, write_many=write_many)
+                batch = []
+
+        # Process any remaining entries in the last batch
+        if batch:
+            yield from self.process_batch(batch, write_many=write_many)
 
     def read(self):
         """Recursively read the entries."""
@@ -106,6 +131,11 @@ class DataStream:
                 stream_entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
 
         return stream_entry
+
+    def batch_write(self, stream_entries, *args, **kwargs):
+        """Apply the transformations to an stream_entry. Errors are handler in the service layer."""
+        for writer in self._writers:
+            yield from writer.write_many(stream_entries)
 
     def total(self, *args, **kwargs):
         """The total of entries obtained from the origin."""
