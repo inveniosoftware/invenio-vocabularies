@@ -20,17 +20,31 @@ from marshmallow import ValidationError
 
 from .datastreams import StreamEntry
 from .errors import WriterError
-from .tasks import write_entry
+from .tasks import write_entry, write_many_entry
 
 
 class BaseWriter(ABC):
     """Base writer."""
+
+    def __init__(self, *args, **kwargs):
+        """Base initialization logic."""
+        # Add any base initialization here if needed
+        pass
 
     @abstractmethod
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input stream entry to the target output.
 
         :returns: A StreamEntry. The result of writing the entry.
+                  Raises WriterException in case of errors.
+
+        """
+        pass
+
+    def write_many(self, stream_entries, *args, **kwargs):
+        """Writes the input streams entry to the target output.
+
+        :returns: A List of StreamEntry. The result of writing the entry.
                   Raises WriterException in case of errors.
 
         """
@@ -86,6 +100,24 @@ class ServiceWriter(BaseWriter):
             # TODO: Check if we can get the error message easier
             raise WriterError([{"InvalidRelationValue": err.args[0]}])
 
+    def write_many(self, stream_entries, *args, **kwargs):
+        """Writes the input entries using a given service."""
+        entries = [entry.entry for entry in stream_entries]
+        entries_with_id = [(self._entry_id(entry), entry) for entry in entries]
+        records = self._service.create_or_update_many(self._identity, entries_with_id)
+        stream_entries_processed = []
+        for op_type, record, errors in records:
+            if errors == []:
+                stream_entries_processed.append(
+                    StreamEntry(entry=record, op_type=op_type)
+                )
+            else:
+                stream_entries_processed.append(
+                    StreamEntry(entry=record, errors=errors, op_type=op_type)
+                )
+
+        return stream_entries_processed
+
 
 class YamlWriter(BaseWriter):
     """Writes the entries to a YAML file."""
@@ -108,6 +140,15 @@ class YamlWriter(BaseWriter):
 
         return stream_entry
 
+    def write_many(self, stream_entries, *args, **kwargs):
+        """Writes the yaml input entries."""
+        with open(self._filepath, "a") as file:
+            yaml.safe_dump(
+                [stream_entry.entry for stream_entry in stream_entries],
+                file,
+                allow_unicode=True,
+            )
+
 
 class AsyncWriter(BaseWriter):
     """Writes the entries asynchronously (celery task)."""
@@ -117,11 +158,19 @@ class AsyncWriter(BaseWriter):
 
         :param writer: writer to use.
         """
-        self._writer = writer
         super().__init__(*args, **kwargs)
+        self._writer = writer
 
     def write(self, stream_entry, *args, **kwargs):
         """Launches a celery task to write an entry."""
         write_entry.delay(self._writer, stream_entry.entry)
 
         return stream_entry
+
+    def write_many(self, stream_entries, *args, **kwargs):
+        """Launches a celery task to write an entry."""
+        write_many_entry.delay(
+            self._writer, [stream_entry.entry for stream_entry in stream_entries]
+        )
+
+        return stream_entries

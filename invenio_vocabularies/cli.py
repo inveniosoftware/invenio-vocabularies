@@ -142,18 +142,27 @@ def convert(vocabulary, filepath=None, origin=None, target=None, num_samples=Non
     type=click.STRING,
     help="Identifier of the vocabulary item to delete.",
 )
-@click.option("--all", is_flag=True, default=False, help="Not supported yet.")
+@click.option("--all", is_flag=True, default=False)
 @with_appcontext
 def delete(vocabulary, identifier, all):
     """Delete all items or a specific one of the vocabulary."""
-    if not id and not all:
+    if not identifier and not all:
         click.secho("An identifier or the --all flag must be present.", fg="red")
         exit(1)
+
     vc = get_vocabulary_config(vocabulary)
     service = vc.get_service()
     if identifier:
         try:
-            if service.delete(identifier, system_identity):
+            if service.delete(system_identity, identifier):
                 click.secho(f"{identifier} deleted from {vocabulary}.", fg="green")
         except (PIDDeletedError, PIDDoesNotExistError):
             click.secho(f"PID {identifier} not found.")
+    elif all:
+        items = service.scan(system_identity)
+        for item in items.hits:
+            try:
+                if service.delete(system_identity, item["id"]):
+                    click.secho(f"{item['id']} deleted from {vocabulary}.", fg="green")
+            except (PIDDeletedError, PIDDoesNotExistError):
+                click.secho(f"PID {item['id']} not found.")

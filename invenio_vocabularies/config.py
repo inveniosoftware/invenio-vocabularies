@@ -155,3 +155,14 @@ VOCABULARIES_TYPES_SEARCH = {
     "sort": ["name", "count"],
 }
 """Vocabulary type search configuration."""
+
+VOCABULARIES_ORCID_ACCESS_KEY = "TODO"
+"""ORCID access key to access the s3 bucket."""
+VOCABULARIES_ORCID_SECRET_KEY = "TODO"
+"""ORCID secret key to access the s3 bucket."""
+VOCABULARIES_ORCID_SUMMARIES_BUCKET = "v3.0-summaries"
+"""ORCID summaries bucket name."""
+VOCABULARIES_ORCID_SYNC_MAX_WORKERS = 32
+"""ORCID max number of simultaneous workers/connections."""
+VOCABULARIES_ORCID_SYNC_DAYS = 1
+"""ORCID number of days to sync."""
