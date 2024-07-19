@@ -40,15 +40,15 @@ def test_base_datastream(app, vocabulary_config):
         transformers_config=vocabulary_config.get("transformers"),
         writers_config=vocabulary_config["writers"],
     )
-
     stream_iter = datastream.process()
-    valid = next(stream_iter)
-    assert valid.entry == 2
-    assert not valid.errors
 
     invalid = next(stream_iter)
     assert invalid.entry == -1
     assert "TestTransformer: Value cannot be negative" in invalid.errors
+
+    valid = next(stream_iter)
+    assert valid.entry == 2
+    assert not valid.errors
 
 
 def test_base_datastream_fail_on_write(app, vocabulary_config):
@@ -67,14 +67,15 @@ def test_base_datastream_fail_on_write(app, vocabulary_config):
     )
 
     stream_iter = datastream.process()
-    invalid_wr = next(stream_iter)
-    assert invalid_wr.entry == 2  # entry got transformed
-    assert "FailingTestWriter: 2 value found." in invalid_wr.errors
 
     # failed on the previous but can process the next
     invalid_tr = next(stream_iter)
     assert invalid_tr.entry == -1
     assert "TestTransformer: Value cannot be negative" in invalid_tr.errors
+
+    invalid_wr = next(stream_iter)
+    assert invalid_wr.entry == 2  # entry got transformed
+    assert "FailingTestWriter: 2 value found." in invalid_wr.errors
 
 
 @pytest.fixture(scope="function")
@@ -136,7 +137,7 @@ def test_piping_readers(app, zip_file, json_element):
 
     iter = datastream.process()
     for count, entry in enumerate(iter, start=1):
-        if count != 3:
+        if count != 1:  # First one is always errored ones
             assert entry.entry == json_element
         else:
             # assert the second file fails
