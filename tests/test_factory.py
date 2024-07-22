@@ -35,7 +35,7 @@ from invenio_vocabularies.factories import (
     "conf, ds_config, service_type",
     [
         (AwardsVocabularyConfig(), awards_ds_config, "awards-service"),
-        (NamesVocabularyConfig(), names_ds_config, "async"),
+        (NamesVocabularyConfig(), names_ds_config, "names-service"),
         (FundersVocabularyConfig(), funders_ds_config, "funders-service"),
         (
             AffiliationsVocabularyConfig(),
