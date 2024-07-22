@@ -8,14 +8,17 @@
 
 """Names datastreams, transformers, writers and readers."""
 
+import csv
 import io
 import tarfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 
-import s3fs
+import arrow
 from flask import current_app
 from invenio_records.dictutils import dict_lookup
+
+from invenio_vocabularies.contrib.names.s3client import S3OrcidClient
 
 from ...datastreams.errors import TransformerError
 from ...datastreams.readers import BaseReader, SimpleHTTPReader
@@ -26,15 +29,22 @@ from ...datastreams.writers import ServiceWriter
 class OrcidDataSyncReader(BaseReader):
     """ORCiD Data Sync Reader."""
 
-    def _fetch_orcid_data(self, orcid_to_sync, fs, bucket):
+    def __init__(self, origin=None, mode="r", *args, **kwargs):
+        """Constructor.
+
+        :param origin: Data source (e.g. filepath).
+                       Can be none in case of piped readers.
+        """
+        super().__init__(origin=origin, mode=mode, *args, **kwargs)
+        self.s3_client = S3OrcidClient()
+
+    def _fetch_orcid_data(self, orcid_to_sync, bucket):
         """Fetches a single ORCiD record from S3."""
         # The ORCiD file key is located in a folder which name corresponds to the last three digits of the ORCiD
         suffix = orcid_to_sync[-3:]
         key = f"{suffix}/{orcid_to_sync}.xml"
         try:
-            with fs.open(f"s3://{bucket}/{key}", "rb") as f:
-                file_response = f.read()
-            return file_response
+            return self.s3_client.read_file(f"s3://{bucket}/{key}")
         except Exception as e:
             # TODO: log
             return None
@@ -48,34 +58,32 @@ class OrcidDataSyncReader(BaseReader):
 
         Yield ORCiDs to sync until the last sync date is reached.
         """
-        date_format = "%Y-%m-%d %H:%M:%S.%f"
-        date_format_no_millis = "%Y-%m-%d %H:%M:%S"
+        date_format = "YYYY-MM-DD HH:mm:ss.SSSSSS"
+        date_format_no_millis = "YYYY-MM-DD HH:mm:ss"
 
-        last_sync = datetime.now() - timedelta(
-            days=current_app.config["VOCABULARIES_ORCID_SYNC_DAYS"]
+        last_sync = arrow.now().shift(
+            days=-current_app.config["VOCABULARIES_ORCID_SYNC_DAYS"]
         )
 
         file_content = fileobj.read().decode("utf-8")
 
-        for line in file_content.splitlines()[1:]:  # Skip the header line
-            elements = line.split(",")
-            orcid = elements[0]
+        csv_reader = csv.DictReader(file_content.splitlines())
+
+        for row in csv_reader:  # Skip the header line
+            orcid = row["orcid"]
 
             # Lambda file is ordered by last modified date
-            last_modified_str = elements[3]
+            last_modified_str = row["last_modified"]
             try:
-                last_modified_date = datetime.strptime(last_modified_str, date_format)
-            except ValueError:
-                last_modified_date = datetime.strptime(
-                    last_modified_str, date_format_no_millis
-                )
+                last_modified_date = arrow.get(last_modified_str, date_format)
+            except arrow.parser.ParserError:
+                last_modified_date = arrow.get(last_modified_str, date_format_no_millis)
 
-            if last_modified_date >= last_sync:
-                yield orcid
-            else:
+            if last_modified_date < last_sync:
                 break
+            yield orcid
 
-    def _iter(self, orcids, fs):
+    def _iter(self, orcids):
         """Iterates over the ORCiD records yielding each one."""
         with ThreadPoolExecutor(
             max_workers=current_app.config["VOCABULARIES_ORCID_SYNC_MAX_WORKERS"]
@@ -84,7 +92,6 @@ class OrcidDataSyncReader(BaseReader):
                 executor.submit(
                     self._fetch_orcid_data,
                     orcid,
-                    fs,
                     current_app.config["VOCABULARIES_ORCID_SUMMARIES_BUCKET"],
                 )
                 for orcid in orcids
@@ -96,13 +103,10 @@ class OrcidDataSyncReader(BaseReader):
 
     def read(self, item=None, *args, **kwargs):
         """Streams the ORCiD lambda file, process it to get the ORCiDS to sync and yields it's data."""
-        fs = s3fs.S3FileSystem(
-            key=current_app.config["VOCABULARIES_ORCID_ACCESS_KEY"],
-            secret=current_app.config["VOCABULARIES_ORCID_SECRET_KEY"],
-        )
         # Read the file from S3
-        with fs.open("s3://orcid-lambda-file/last_modified.csv.tar", "rb") as f:
-            tar_content = f.read()
+        tar_content = self.s3_client.read_file(
+            "s3://orcid-lambda-file/last_modified.csv.tar"
+        )
 
         orcids_to_sync = []
         # Opens tar file and process it
@@ -115,7 +119,7 @@ class OrcidDataSyncReader(BaseReader):
                     # Process the file and get the ORCiDs to sync
                     orcids_to_sync.extend(self._process_lambda_file(extracted_file))
 
-        yield from self._iter(orcids_to_sync, fs)
+        yield from self._iter(orcids_to_sync)
 
 
 class OrcidHTTPReader(SimpleHTTPReader):

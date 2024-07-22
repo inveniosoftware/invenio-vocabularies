@@ -8,23 +8,41 @@
 
 """Base data stream."""
 
+from flask import current_app
+
 from .errors import ReaderError, TransformerError, WriterError
 
 
 class StreamEntry:
     """Object to encapsulate streams processing."""
 
-    def __init__(self, entry, errors=None, op_type=None):
+    def __init__(self, entry, record=None, errors=None, op_type=None, exc=None):
         """Constructor for the StreamEntry class.
 
         :param entry (object): The entry object, usually a record dict.
+        :param record (object): The record object, usually a record class.
         :param errors (list, optional): List of errors. Defaults to None.
         :param op_type (str, optional): The operation type. Defaults to None.
+        :param exc (str, optional): The raised unhandled exception. Defaults to None.
         """
         self.entry = entry
+        self.record = record
         self.filtered = False
         self.errors = errors or []
         self.op_type = op_type
+        self.exc = exc
+
+    def log_errors(self, logger=None):
+        """Log the errors using the provided logger or the default logger.
+
+        :param logger (logging.Logger, optional): Logger instance to use. Defaults to None.
+        """
+        if logger is None:
+            logger = current_app.logger
+        for error in self.errors:
+            logger.error(f"Error in entry {self.entry}: {error}")
+        if self.exc:
+            logger.error(f"Exception in entry {self.entry}: {self.exc}")
 
 
 class DataStream:

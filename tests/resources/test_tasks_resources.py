@@ -47,6 +47,10 @@ class TestWriter(BaseWriter):
         """NOP write."""
         pass
 
+    def write_many(self, stream_entries, *args, **kwargs):
+        """NOP write."""
+        pass
+
 
 @pytest.fixture(scope="module")
 def app_config(app_config):

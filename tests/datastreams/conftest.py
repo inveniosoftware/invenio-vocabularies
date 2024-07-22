@@ -61,6 +61,10 @@ class TestWriter(BaseWriter):
         """NOP write."""
         pass
 
+    def write_many(self, stream_entries, *args, **kwargs):
+        """NOP write."""
+        pass
+
 
 class FailingTestWriter(BaseWriter):
     """Failing test writer."""
@@ -74,6 +78,10 @@ class FailingTestWriter(BaseWriter):
         """Return the entry."""
         if stream_entry.entry == self.fail_on:
             raise WriterError(f"{self.fail_on} value found.")
+
+    def write_many(self, stream_entries, *args, **kwargs):
+        """NOP write."""
+        pass
 
 
 @pytest.fixture(scope="module")

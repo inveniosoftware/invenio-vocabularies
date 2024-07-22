@@ -41,6 +41,7 @@ class BaseWriter(ABC):
         """
         pass
 
+    @abstractmethod
     def write_many(self, stream_entries, *args, **kwargs):
         """Writes the input streams entry to the target output.
 
@@ -104,17 +105,18 @@ class ServiceWriter(BaseWriter):
         """Writes the input entries using a given service."""
         entries = [entry.entry for entry in stream_entries]
         entries_with_id = [(self._entry_id(entry), entry) for entry in entries]
-        records = self._service.create_or_update_many(self._identity, entries_with_id)
+        results = self._service.create_or_update_many(self._identity, entries_with_id)
         stream_entries_processed = []
-        for op_type, record, errors in records:
-            if errors == []:
-                stream_entries_processed.append(
-                    StreamEntry(entry=record, op_type=op_type)
-                )
-            else:
-                stream_entries_processed.append(
-                    StreamEntry(entry=record, errors=errors, op_type=op_type)
-                )
+        for entry, result in zip(entries, results):
+            processed_stream_entry = StreamEntry(
+                entry=entry,
+                record=result.record,
+                errors=result.errors,
+                op_type=result.op_type,
+                exc=result.exc,
+            )
+            processed_stream_entry.log_errors()
+            stream_entries_processed.append(processed_stream_entry)
 
         return stream_entries_processed
 
