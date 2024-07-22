@@ -29,6 +29,36 @@ API_JSON_RESPONSE_CONTENT = {
                     "type": "application/zip",
                 }
             ],
+            "type": "application/zip",
+        },
+        {
+            "anchor": "https://example.com/api/records/11186879",
+            "describes": [
+                {"href": "https://example.com/records/11186879", "type": "text/html"}
+            ],
+            "type": "application/dcat+xml",
+        },
+        {
+            "anchor": "https://example.com/records/12729557",
+            "describes": [
+                {"href": "https://example.com/12729557", "type": "text/html"}
+            ],
+            "type": "application/ld+json",
+        },
+    ]
+}
+
+API_JSON_RESPONSE_CONTENT_WITHOUT_JSON_LD = {
+    "linkset": [
+        {
+            "anchor": "https://example.com/records/11186879",
+            "item": [
+                {
+                    "href": "https://example.com/records/11186879/files/v1.46.1-2024-05-13-ror-data.zip",
+                    "type": "application/zip",
+                }
+            ],
+            "type": "application/zip",
         },
         {
             "anchor": "https://example.com/api/records/11186879",
@@ -63,6 +93,20 @@ API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_ZIP_ITEMS_ERROR = {
             "type": "application/dcat+xml",
         },
     ]
+}
+
+
+API_JSON_RESPONSE_CONTENT_LD_JSON = {
+    "name": "ROR Data",
+    "datePublished": "2024-07-11",
+    "dateModified": "2024-07-11T22:29:25.727626+00:00",
+    "distribution": [
+        {
+            "@type": "DataDownload",
+            "contentUrl": "https://example.com/records/12729557/files/v1.49-2024-07-11-ror-data.zip/content",
+            "encodingFormat": "application/zip",
+        }
+    ],
 }
 
 DOWNLOAD_FILE_BYTES_CONTENT = b"The content of the file"
@@ -103,6 +147,15 @@ class MockResponse:
         pass
 
 
+def side_effect(url, headers=None):
+    if not headers:
+        return MockResponse(API_JSON_RESPONSE_CONTENT)
+    if headers["Accept"] == "application/ld+json":
+        return MockResponse(API_JSON_RESPONSE_CONTENT_LD_JSON)
+    elif headers["Accept"] == "application/linkset+json":
+        return MockResponse(API_JSON_RESPONSE_CONTENT)
+
+
 @pytest.fixture(scope="function")
 def download_file_bytes_content():
     return DOWNLOAD_FILE_BYTES_CONTENT
@@ -110,7 +163,7 @@ def download_file_bytes_content():
 
 @patch(
     "requests.get",
-    side_effect=lambda url, headers=None: MockResponse(API_JSON_RESPONSE_CONTENT),
+    side_effect=side_effect,
 )
 def test_ror_http_reader(_, download_file_bytes_content):
     reader = RORHTTPReader()
@@ -125,12 +178,50 @@ def test_ror_http_reader(_, download_file_bytes_content):
 
 @patch(
     "requests.get",
+    side_effect=side_effect,
+)
+def test_ror_http_reader_last_read_at_before_publish(_, download_file_bytes_content):
+    reader = RORHTTPReader(last_read_at="2024-07-10")
+    results = []
+    for entry in reader.read():
+        results.append(entry)
+
+    assert len(results) == 1
+
+
+@patch(
+    "requests.get",
+    side_effect=side_effect,
+)
+def test_ror_http_reader_last_read_at_after_publish(_, download_file_bytes_content):
+    reader = RORHTTPReader(last_read_at="2024-07-12")
+    results = []
+    for entry in reader.read():
+        results.append(entry)
+
+    assert len(results) == 0
+
+
+@patch(
+    "requests.get",
     side_effect=lambda url, headers=None: MockResponse(
         API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_ZIP_ITEMS_ERROR
     ),
 )
 def test_ror_http_reader_wrong_number_zip_items_error(_):
     reader = RORHTTPReader()
+    with pytest.raises(ReaderError):
+        next(reader.read())
+
+
+@patch(
+    "requests.get",
+    side_effect=lambda url, headers=None: MockResponse(
+        API_JSON_RESPONSE_CONTENT_WITHOUT_JSON_LD
+    ),
+)
+def test_ror_http_reader_no_json_ld(_):
+    reader = RORHTTPReader(last_read_at="12-07-2024")
     with pytest.raises(ReaderError):
         next(reader.read())
 
