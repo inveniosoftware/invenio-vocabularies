@@ -10,6 +10,7 @@
 """ROR-related Datastreams Readers/Writers/Transformers module."""
 
 import io
+from datetime import datetime
 
 import requests
 from idutils import normalize_ror
@@ -21,6 +22,11 @@ from invenio_vocabularies.datastreams.transformers import BaseTransformer
 
 class RORHTTPReader(BaseReader):
     """ROR HTTP Reader returning an in-memory binary stream of the latest ROR data dump ZIP file."""
+
+    def __init__(self, origin=None, mode="r", last_read_at=None, *args, **kwargs):
+        """Constructor."""
+        self._last_read_at = last_read_at
+        super().__init__(origin, mode, *args, **kwargs)
 
     def _iter(self, fp, *args, **kwargs):
         raise NotImplementedError(
@@ -38,11 +44,28 @@ class RORHTTPReader(BaseReader):
         # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
         headers = {"Accept": "application/linkset+json"}
         api_url = "https://zenodo.org/api/records/6347574"
-        api_resp = requests.get(api_url, headers=headers)
-        api_resp.raise_for_status()
+        linkset_response = requests.get(api_url, headers=headers)
+        linkset_response.raise_for_status()
+
+        if self._last_read_at:
+            for links in linkset_response.json()["linkset"]:
+                if links["type"] == "application/ld+json":
+                    headers = {"Accept": links["type"]}
+                    api_url = links["anchor"]
+                    json_ld_reponse = requests.get(api_url, headers=headers)
+                    json_ld_reponse.raise_for_status()
+
+                    last_dump_date = json_ld_reponse.json()["datePublished"]
+                    if datetime.fromisoformat(last_dump_date) < datetime.fromisoformat(
+                        self._last_read_at
+                    ):
+                        return
+                    break
+            else:
+                raise ReaderError("Couldn't find json-ld in publisher's linkset.")
 
         # Extract the Landing page Link Set Object located as the first (index 0) item.
-        landing_page_linkset = api_resp.json()["linkset"][0]
+        landing_page_linkset = linkset_response.json()["linkset"][0]
 
         # Extract the URL of the only ZIP file linked to the record.
         landing_page_zip_items = [
