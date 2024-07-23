@@ -28,9 +28,9 @@ class NamesSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            "name^100",
-            "family_name^100",
-            "given_name^100",
+            "name^80",
+            "family_name^70",
+            "given_name.suggest._index_prefix^100",
             "identifiers.identifier^20",
             "affiliations.name^10",
         ],
