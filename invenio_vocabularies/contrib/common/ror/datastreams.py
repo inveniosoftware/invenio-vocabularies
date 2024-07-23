@@ -10,6 +10,7 @@
 """ROR-related Datastreams Readers/Writers/Transformers module."""
 
 import io
+from datetime import datetime
 
 import requests
 from idutils import normalize_ror
@@ -21,6 +22,11 @@ from invenio_vocabularies.datastreams.transformers import BaseTransformer
 
 class RORHTTPReader(BaseReader):
     """ROR HTTP Reader returning an in-memory binary stream of the latest ROR data dump ZIP file."""
+
+    def __init__(self, origin=None, mode="r", since=None, *args, **kwargs):
+        """Constructor."""
+        self._since = since
+        super().__init__(origin, mode, *args, **kwargs)
 
     def _iter(self, fp, *args, **kwargs):
         raise NotImplementedError(
@@ -34,15 +40,41 @@ class RORHTTPReader(BaseReader):
                 "RORHTTPReader does not support being chained after another reader"
             )
 
+        # Follow the DOI to get the link of the linkset
+        dataset_doi_link = "https://doi.org/10.5281/zenodo.6347574"
+        landing_page = requests.get(dataset_doi_link, allow_redirects=True)
+        landing_page.raise_for_status()
+
         # Call the signposting `linkset+json` endpoint for the Concept DOI (i.e. latest version) of the ROR data dump.
         # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
-        headers = {"Accept": "application/linkset+json"}
-        api_url = "https://zenodo.org/api/records/6347574"
-        api_resp = requests.get(api_url, headers=headers)
-        api_resp.raise_for_status()
+        if "linkset" not in landing_page.links:
+            raise ReaderError("Linkset not found in the ROR dataset record.")
+        linkset_response = requests.get(
+            landing_page.links["linkset"]["url"],
+            headers={"Accept": "application/linkset+json"},
+        )
+        linkset_response.raise_for_status()
+
+        if self._since:
+            for link in linkset_response.json()["linkset"]:
+                if "type" in link and link["type"] == "application/ld+json":
+                    json_ld_reponse = requests.get(
+                        link["anchor"], headers={"Accept": link["type"]}
+                    )
+                    json_ld_reponse.raise_for_status()
+
+                    # TODO Update to use dateCreated once the field is added to InvenioRDM. (https://github.com/inveniosoftware/invenio-rdm-records/issues/1777)
+                    last_dump_date = json_ld_reponse.json()["datePublished"]
+                    if datetime.fromisoformat(last_dump_date) < datetime.fromisoformat(
+                        self._since
+                    ):
+                        return
+                    break
+            else:
+                raise ReaderError("Couldn't find json-ld in publisher's linkset.")
 
         # Extract the Landing page Link Set Object located as the first (index 0) item.
-        landing_page_linkset = api_resp.json()["linkset"][0]
+        landing_page_linkset = linkset_response.json()["linkset"][0]
 
         # Extract the URL of the only ZIP file linked to the record.
         landing_page_zip_items = [
