@@ -28,12 +28,16 @@ class NamesSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            "name^100",
-            "family_name^100",
+            "name.suggest^80",
+            "name^80",
+            "family_name^70",
+            "given_name.suggest^100",
             "given_name^100",
             "identifiers.identifier^20",
             "affiliations.name^10",
-        ],
+        ],  # type has to be bool_prefix to use suggest._index_prefix field during querying
+        operator="AND",
+        fuzziness="AUTO",
     )
 
     sort_default = "bestmatch"

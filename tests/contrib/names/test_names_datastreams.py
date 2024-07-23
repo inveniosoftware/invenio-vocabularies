@@ -32,6 +32,7 @@ def name_full_data():
         "id": "0000-0001-8135-3489",
         "given_name": "Lars Holm",
         "family_name": "Nielsen",
+        "name": "Nielsen, Lars Holm",
         "identifiers": [
             {
                 "scheme": "orcid",
@@ -174,6 +175,7 @@ def test_names_service_writer_update_existing(app, db, search_clear, name_full_d
     updated_name = deepcopy(name_full_data)
     updated_name["given_name"] = "Pablo"
     updated_name["family_name"] = "Panero"
+    updated_name["name"] = "Panero, Pablo"
     # check changes vocabulary
     _ = writer.write(stream_entry=StreamEntry(updated_name))
     service = current_service_registry.get("names")
@@ -193,6 +195,7 @@ def test_names_service_writer_update_non_existing(
     updated_name
     updated_name["given_name"] = "Pablo"
     updated_name["family_name"] = "Panero"
+    updated_name["name"] = "Panero, Pablo"
     # check changes vocabulary
     writer = NamesServiceWriter(update=True)
     name = writer.write(stream_entry=StreamEntry(updated_name))

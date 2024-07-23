@@ -85,3 +85,19 @@ def test_names_resolve(client, example_name, h, prefix):
 
     res = client.get(f"{prefix}/orcid/0000-0002-5082-6404", headers=h)
     assert res.status_code == 404
+
+
+def test_names_suggest_sort(client, example_name, h, prefix):
+    """Test a successful search."""
+
+    # With typo
+    res = client.get(f"{prefix}?suggest=lsrs holm", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Nielsen, Lars Holm"
+
+    # With accent
+    res = client.get(f"{prefix}?suggest=níelsën", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Nielsen, Lars Holm"
