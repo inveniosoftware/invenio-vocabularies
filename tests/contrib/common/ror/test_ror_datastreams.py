@@ -111,6 +111,14 @@ API_JSON_RESPONSE_CONTENT_LD_JSON = {
 
 DOWNLOAD_FILE_BYTES_CONTENT = b"The content of the file"
 
+DOI_LINKSET_INFO = {
+    "linkset": {
+        "url": "https://zenodo.org/api/records/12729557",
+        "rel": "linkset",
+        "type": "application/linkset+json",
+    }
+}
+
 
 @pytest.fixture(scope="module")
 def expected_from_ror_json():
@@ -136,9 +144,13 @@ def expected_from_ror_json():
 
 class MockResponse:
     content = DOWNLOAD_FILE_BYTES_CONTENT
+    links = DOI_LINKSET_INFO
 
-    def __init__(self, api_json_response_content):
+    def __init__(self, api_json_response_content, remove_links=False):
         self.api_json_response_content = api_json_response_content
+        self.links = DOI_LINKSET_INFO
+        if remove_links:
+            self.links = {}
 
     def json(self, **kwargs):
         return self.api_json_response_content
@@ -147,9 +159,9 @@ class MockResponse:
         pass
 
 
-def side_effect(url, headers=None):
+def side_effect(url, headers=None, allow_redirects=False):
     if not headers:
-        return MockResponse(API_JSON_RESPONSE_CONTENT)
+        return MockResponse({})
     if headers["Accept"] == "application/ld+json":
         return MockResponse(API_JSON_RESPONSE_CONTENT_LD_JSON)
     elif headers["Accept"] == "application/linkset+json":
@@ -180,8 +192,8 @@ def test_ror_http_reader(_, download_file_bytes_content):
     "requests.get",
     side_effect=side_effect,
 )
-def test_ror_http_reader_last_read_at_before_publish(_, download_file_bytes_content):
-    reader = RORHTTPReader(last_read_at="2024-07-10")
+def test_ror_http_reader_since_before_publish(_, download_file_bytes_content):
+    reader = RORHTTPReader(since="2024-07-10")
     results = []
     for entry in reader.read():
         results.append(entry)
@@ -193,8 +205,8 @@ def test_ror_http_reader_last_read_at_before_publish(_, download_file_bytes_cont
     "requests.get",
     side_effect=side_effect,
 )
-def test_ror_http_reader_last_read_at_after_publish(_, download_file_bytes_content):
-    reader = RORHTTPReader(last_read_at="2024-07-12")
+def test_ror_http_reader_since_after_publish(_, download_file_bytes_content):
+    reader = RORHTTPReader(since="2024-07-12")
     results = []
     for entry in reader.read():
         results.append(entry)
@@ -204,7 +216,19 @@ def test_ror_http_reader_last_read_at_after_publish(_, download_file_bytes_conte
 
 @patch(
     "requests.get",
-    side_effect=lambda url, headers=None: MockResponse(
+    side_effect=lambda url, headers=None, allow_redirects=False: MockResponse(
+        API_JSON_RESPONSE_CONTENT, remove_links=True
+    ),
+)
+def test_ror_http_reader_wrong_number_zip_items_error(_):
+    reader = RORHTTPReader()
+    with pytest.raises(ReaderError):
+        next(reader.read())
+
+
+@patch(
+    "requests.get",
+    side_effect=lambda url, headers=None, allow_redirects=False: MockResponse(
         API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_ZIP_ITEMS_ERROR
     ),
 )
@@ -216,12 +240,12 @@ def test_ror_http_reader_wrong_number_zip_items_error(_):
 
 @patch(
     "requests.get",
-    side_effect=lambda url, headers=None: MockResponse(
+    side_effect=lambda url, headers=None, allow_redirects=False: MockResponse(
         API_JSON_RESPONSE_CONTENT_WITHOUT_JSON_LD
     ),
 )
 def test_ror_http_reader_no_json_ld(_):
-    reader = RORHTTPReader(last_read_at="12-07-2024")
+    reader = RORHTTPReader(since="12-07-2024")
     with pytest.raises(ReaderError):
         next(reader.read())
 
