@@ -113,15 +113,21 @@ def example_funders(service, identity, indexer):
         db.session.commit()
 
 
+def test_funders_prefix_search(client, h, prefix, example_funders):
+    """Test a successful search."""
+    # Should show 1 result
+    res = client.get(f"{prefix}?q=uni", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+
+
 def test_funders_suggest_sort(client, h, prefix, example_funders):
     """Test a successful search."""
 
     # Should show 3 results, but id=cern as first due to name
     res = client.get(f"{prefix}?suggest=CERN", headers=h)
     assert res.status_code == 200
-    assert (
-        res.json["hits"]["total"] == 1
-    )  # should be 2 , TODO - suggestions were failing due to too many languages
+    assert res.json["hits"]["total"] == 2  # should be 2
     assert res.json["hits"]["hits"][0]["name"] == "CERN"
     # assert res.json["hits"]["hits"][1]["name"] == "OTHER"
 
