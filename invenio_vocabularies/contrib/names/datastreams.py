@@ -12,10 +12,11 @@ import csv
 import io
 import tarfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import arrow
 from flask import current_app
+from invenio_access.permissions import system_identity
 from invenio_records.dictutils import dict_lookup
 
 from invenio_vocabularies.contrib.names.s3client import S3OrcidClient
@@ -29,7 +30,7 @@ from ...datastreams.writers import ServiceWriter
 class OrcidDataSyncReader(BaseReader):
     """ORCiD Data Sync Reader."""
 
-    def __init__(self, origin=None, mode="r", *args, **kwargs):
+    def __init__(self, origin=None, mode="r", since=None, *args, **kwargs):
         """Constructor.
 
         :param origin: Data source (e.g. filepath).
@@ -37,6 +38,7 @@ class OrcidDataSyncReader(BaseReader):
         """
         super().__init__(origin=origin, mode=mode, *args, **kwargs)
         self.s3_client = S3OrcidClient()
+        self.since = since
 
     def _fetch_orcid_data(self, orcid_to_sync, bucket):
         """Fetches a single ORCiD record from S3."""
@@ -60,10 +62,10 @@ class OrcidDataSyncReader(BaseReader):
         """
         date_format = "YYYY-MM-DD HH:mm:ss.SSSSSS"
         date_format_no_millis = "YYYY-MM-DD HH:mm:ss"
-
-        last_sync = arrow.now().shift(
-            days=-current_app.config["VOCABULARIES_ORCID_SYNC_DAYS"]
-        )
+        time_shift = current_app.config["VOCABULARIES_ORCID_SYNC_SINCE"]
+        if self.since:
+            time_shift = self.since
+        last_sync = arrow.now() - timedelta(**time_shift)
 
         file_content = fileobj.read().decode("utf-8")
 
@@ -213,6 +215,32 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 
 
 DATASTREAM_CONFIG = {
+    "readers": [
+        {
+            "type": "tar",
+            "args": {
+                "regex": "\\.xml$",
+            },
+        },
+        {"type": "xml"},
+    ],
+    "transformers": [{"type": "orcid"}],
+    "writers": [
+        {
+            "type": "names-service",
+            "args": {
+                "identity": system_identity,
+            },
+        }
+    ],
+}
+"""ORCiD Data Stream configuration.
+
+An origin is required for the reader.
+"""
+
+# TODO: Used on the jobs and should be set as a "PRESET" (naming to be defined)
+ORCID_PRESET_DATASTREAM_CONFIG = {
     "readers": [
         {
             "type": "orcid-data-sync",
