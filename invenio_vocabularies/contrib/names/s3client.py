@@ -22,10 +22,10 @@ class S3Client:
 
     def __init__(self, access_key, secret_key):
         """Constructor."""
-        try:
-            self.fs = s3fs.S3FileSystem(key=access_key, secret=secret_key)
-        except AttributeError:
+        if s3fs is None:
             raise Exception("s3fs is not installed.")
+
+        self.fs = s3fs.S3FileSystem(key=access_key, secret=secret_key)
 
     def read_file(self, s3_path):
         """Reads a file from S3."""

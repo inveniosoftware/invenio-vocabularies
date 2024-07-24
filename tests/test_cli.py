@@ -11,7 +11,6 @@
 
 import tarfile
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 from invenio_access.permissions import system_identity
@@ -82,7 +81,6 @@ def name_xml():
 @pytest.fixture(scope="function")
 def names_tar_file(name_xml):
     """Creates a Tar file with three files (two yaml) inside.
-
     Each iteration should return the content of one yaml file,
     it should ignore the .other file.
     """
@@ -99,67 +97,25 @@ def names_tar_file(name_xml):
     filename.unlink()  # delete created file
 
 
-@pytest.fixture
-def mock_config(names_tar_file):
-    return {
-        "readers": [
-            {
-                "type": "tar",
-                "args": {
-                    "origin": names_tar_file.absolute(),
-                    "regex": "\\.xml$",
-                },
-            },
-            {"type": "xml"},
-        ],
-        "transformers": [{"type": "orcid"}],
-        "writers": [
-            {
-                "type": "names-service",
-                "args": {
-                    "identity": system_identity,
-                },
-            }
-        ],
-    }
+def test_process(app, names_tar_file):
+    service = current_service_registry.get("names")
+    vocab_factory = get_vocabulary_config("names")
+    config = vocab_factory.get_config(origin=names_tar_file.absolute())
+    _process_vocab(config)
+    Name.index.refresh()
+
+    orcid = "0000-0001-8135-3489"
+    results = service.search(system_identity, q=f"identifiers.identifier:{orcid}")
+
+    assert results.total == 1
+    assert list(results.hits)[0]["identifiers"][0]["identifier"] == orcid
 
 
-def test_process(app, names_tar_file, mock_config):
-    with patch(
-        "invenio_vocabularies.factories.NamesVocabularyConfig"
-    ) as MockNamesVocabularyConfig:
-        # Create an instance of the mock class
-        mock_instance = MockNamesVocabularyConfig.return_value
-
-        # Set the return value of the get_config method to the mock config
-        mock_instance.get_config.return_value = mock_config
-
-        service = current_service_registry.get("names")
-        vocab_factory = get_vocabulary_config("names")
-        config = vocab_factory.get_config(origin=names_tar_file.absolute())
-        _process_vocab(config)
-        Name.index.refresh()
-
-        orcid = "0000-0001-8135-3489"
-        results = service.search(system_identity, q=f"identifiers.identifier:{orcid}")
-        assert results.total == 1
-        assert list(results.hits)[0]["identifiers"][0]["identifier"] == orcid
-
-
-def test_update_cmd(app, names_tar_file, mock_config):
+def test_update_cmd(app, names_tar_file):
     # cli update
-    with patch(
-        "invenio_vocabularies.factories.NamesVocabularyConfig"
-    ) as MockNamesVocabularyConfig:
-        # Create an instance of the mock class
-        mock_instance = MockNamesVocabularyConfig.return_value
-
-        # Set the return value of the get_config method to the mock config
-        mock_instance.get_config.return_value = mock_config
-
-        runner = app.test_cli_runner()
-        result = runner.invoke(
-            vocabularies,
-            ["update", "-v", "names", "--origin", names_tar_file.absolute()],
-        )
-        assert result.exit_code == 0
+    runner = app.test_cli_runner()
+    result = runner.invoke(
+        vocabularies,
+        ["update", "-v", "names", "--origin", names_tar_file.absolute()],
+    )
+    assert result.exit_code == 0

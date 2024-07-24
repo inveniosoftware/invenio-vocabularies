@@ -164,5 +164,7 @@ VOCABULARIES_ORCID_SUMMARIES_BUCKET = "v3.0-summaries"
 """ORCID summaries bucket name."""
 VOCABULARIES_ORCID_SYNC_MAX_WORKERS = 32
 """ORCID max number of simultaneous workers/connections."""
-VOCABULARIES_ORCID_SYNC_DAYS = 1
-"""ORCID number of days to sync."""
+VOCABULARIES_ORCID_SYNC_SINCE = {
+    "days": 1,
+}
+"""ORCID time shift to sync. Parameters accepted are the ones passed to 'datetime.timedelta'."""
