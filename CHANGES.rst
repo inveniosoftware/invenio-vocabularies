@@ -8,6 +8,14 @@
 Changes
 =======
 
+Version v4.2.0 (released 2024-07-24)
+
+- ror: check last update; use ld+json for metadata (#367)
+- tasks: remove import funders task
+- funders: add and export custom transformer
+- affiliations: add and export custom transformer
+- datastreams: implement asynchronous writer
+
 Version v4.1.1 (released 2024-07-15)
 
 - installation: use invenio-oaipmh-scythe from PyPI
