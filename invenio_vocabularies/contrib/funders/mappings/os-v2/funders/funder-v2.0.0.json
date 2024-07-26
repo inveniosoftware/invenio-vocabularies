@@ -1,4 +1,26 @@
 {
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "edge_analyzer": {
+          "tokenizer": "letter",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "edgegrams"
+          ]
+        }
+      },
+      "filter": {
+        "edgegrams": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 20,
+          "preserve_original": true
+        }
+      }
+    }
+  },
   "mappings": {
     "dynamic_templates": [
       {
@@ -32,29 +54,6 @@
       "version_id": {
         "type": "integer"
       },
-      "id": {
-        "type": "keyword"
-      },
-      "name_sort": {
-        "type": "keyword"
-      },
-      "name": {
-        "type": "text",
-        "copy_to": "name_sort",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type"
-          }
-        }
-      },
-      "acronym": {
-        "type": "text",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type"
-          }
-        }
-      },
       "identifiers": {
         "properties": {
           "identifier": {
@@ -65,29 +64,18 @@
           }
         }
       },
-      "pid": {
-        "type": "object",
-        "properties": {
-          "pk": {
-            "type": "integer"
-          },
-          "pid_type": {
-            "type": "keyword"
-          },
-          "obj_type": {
-            "type": "keyword"
-          },
-          "status": {
-            "type": "keyword"
+      "name_sort": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "text",
+        "analyzer": "edge_analyzer",
+        "copy_to": "name_sort",
+        "fields": {
+          "suggest": {
+            "type": "search_as_you_type"
           }
         }
-      },
-      "title": {
-        "type": "object",
-        "dynamic": "true"
-      },
-      "tags": {
-        "type": "keyword"
       },
       "country": {
         "type": "text"
@@ -98,6 +86,9 @@
       "location_name": {
         "type": "text"
       },
+      "acronym": {
+        "type": "text"
+      },
       "status": {
         "type": "keyword"
       },
@@ -105,6 +96,16 @@
         "type": "text"
       },
       "types": {
+        "type": "keyword"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "object",
+        "dynamic": "true"
+      },
+      "tags": {
         "type": "keyword"
       }
     }

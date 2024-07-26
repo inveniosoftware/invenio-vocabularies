@@ -1,26 +1,4 @@
 {
-  "settings": {
-    "analysis": {
-      "analyzer": {
-        "edge_analyzer": {
-          "tokenizer": "letter",
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "edgegrams"
-          ]
-        }
-      },
-      "filter": {
-        "edgegrams": {
-          "type": "edge_ngram",
-          "min_gram": 2,
-          "max_gram": 20,
-          "preserve_original": true
-        }
-      }
-    }
-  },
   "mappings": {
     "dynamic_templates": [
       {
@@ -28,8 +6,7 @@
           "path_match": "title.*",
           "match_mapping_type": "string",
           "mapping": {
-            "type": "search_as_you_type",
-            "analyzer": "edge_analyzer"
+            "type": "search_as_you_type"
           }
         }
       }
@@ -70,7 +47,6 @@
       },
       "name": {
         "type": "text",
-        "analyzer": "edge_analyzer",
         "copy_to": "name_sort",
         "fields": {
           "suggest": {
