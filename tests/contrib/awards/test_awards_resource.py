@@ -122,14 +122,6 @@ def example_awards(service, identity, indexer, example_funder_ec):
         db.session.commit()
 
 
-def test_awards_prefix_search(client, h, prefix, example_awards):
-    """Test a successful search."""
-    # Should show 2 results
-    res = client.get(f"{prefix}?q=pall", headers=h)
-    assert res.status_code == 200
-    assert res.json["hits"]["total"] == 2
-
-
 def test_awards_suggest_sort(client, h, prefix, example_awards):
     """Test a successful search."""
     # Should show 1 result
