@@ -24,10 +24,69 @@ def prefix():
 
 
 @pytest.fixture()
+def names_data():
+    """Full name data."""
+    return [
+        {
+            "id": "0000-0001-8135-3489",
+            "given_name": "Lars Holm",
+            "family_name": "Nielsen",
+            "name": "Nielsen, Lars Holm",
+            "identifiers": [
+                {
+                    "scheme": "orcid",
+                    "identifier": "0000-0001-8135-3489",
+                }
+            ],
+            "affiliations": [{"name": "CERN"}],
+        },
+        {
+            "id": "0000-0002-8438-3752",
+            "given_name": "Säksham",
+            "family_name": "Arœra",
+            "name": "Arœra, Säksham",
+            "identifiers": [
+                {
+                    "scheme": "orcid",
+                    "identifier": "0000-0002-8438-3752",
+                }
+            ],
+            "affiliations": [{"name": "CERN"}],
+        },
+        {
+            "id": "0000-0002-0816-7126",
+            "given_name": "Jose Benito",
+            "family_name": "Gonzalez Lopez",
+            "name": "Gonzalez Lopez, Jose Benito",
+            "identifiers": [
+                {
+                    "scheme": "orcid",
+                    "identifier": "0000-0002-0816-7126",
+                }
+            ],
+            "affiliations": [{"name": "CERN"}],
+        },
+    ]
+
+
+@pytest.fixture()
+def example_multiple_names(
+    app, db, search_clear, identity, service, names_data, example_affiliation
+):
+    """Example multiple names."""
+    names = []
+    for i in range(len(names_data)):
+        names.append(service.create(identity, names_data[i]))
+        Name.index.refresh()  # Refresh the index
+
+    return names
+
+
+@pytest.fixture()
 def example_name(
     app, db, search_clear, identity, service, name_full_data, example_affiliation
 ):
-    """Example affiliation."""
+    """Example name."""
     name = service.create(identity, name_full_data)
     Name.index.refresh()  # Refresh the index
 
@@ -87,17 +146,24 @@ def test_names_resolve(client, example_name, h, prefix):
     assert res.status_code == 404
 
 
-def test_names_suggest_sort(client, example_name, h, prefix):
+def test_names_suggest_sort(client, example_multiple_names, h, prefix):
     """Test a successful search."""
 
     # With typo
-    res = client.get(f"{prefix}?suggest=lsrs holm", headers=h)
+    res = client.get(f"{prefix}?suggest=lsrs%20holm", headers=h)  # lsrs holm
+    print(res.data)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
     assert res.json["hits"]["hits"][0]["name"] == "Nielsen, Lars Holm"
 
     # With accent
-    res = client.get(f"{prefix}?suggest=níelsën", headers=h)
+    res = client.get(f"{prefix}?suggest=saksham", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["name"] == "Nielsen, Lars Holm"
+    assert res.json["hits"]["hits"][0]["name"] == "Arœra, Säksham"
+
+    # With incomplete
+    res = client.get(f"{prefix}?suggest=jos", headers=h)  # jos
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Gonzalez Lopez, Jose Benito"
