@@ -125,6 +125,16 @@
           "char_filter": ["strip_special_chars"],
           "filter": ["lowercase", "asciifolding"]
         }
+      },
+      "filter": {
+        "lowercase": {
+          "type": "lowercase",
+          "preserve_original": true
+        },
+        "asciifolding": {
+          "type": "asciifolding",
+          "preserve_original": true
+        }
       }
     }
   }
