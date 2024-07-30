@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 3.4.2 (released 2024-07-30)
+
+- schema: add administration UI attributes
+- funding: update award label
+
 Version 3.4.1 (released 2024-04-19)
 
 - funders: exclude ROR schema v2 json (#309)
