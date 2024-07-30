@@ -28,9 +28,9 @@ class AffiliationsSearchOptions(SearchOptions):
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
             "name.suggest^100",
-            "name.original^80",
+            "name^80",
             "acronym.suggest^50",
-            "acronym.original^40",
+            "acronym^40",
             "title.*^20",
             "id^20",
             "aliases^20",
