@@ -34,6 +34,10 @@
           "type": "lowercase",
           "preserve_original": true
         },
+        "asciifolding": {
+          "type": "asciifolding",
+          "preserve_original": true
+        },
         "edgegrams": {
           "type": "edge_ngram",
           "min_gram": 2,
@@ -93,9 +97,6 @@
             "type": "search_as_you_type",
             "analyzer": "accent_analyzer",
             "search_analyzer": "accent_analyzer"
-          },
-          "original": {
-            "type": "text"
           }
         }
       },
@@ -108,9 +109,6 @@
             "type": "search_as_you_type",
             "analyzer": "accent_analyzer",
             "search_analyzer": "accent_analyzer"
-          },
-          "original": {
-            "type": "text"
           }
         }
       },
