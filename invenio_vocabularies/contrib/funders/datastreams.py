@@ -46,7 +46,7 @@ class FundersRORTransformer(RORTransformer):
             *args,
             vocab_schemes=vocab_schemes,
             funder_fundref_doi_prefix=funder_fundref_doi_prefix,
-            **kwargs
+            **kwargs,
         )
 
 
