@@ -138,12 +138,25 @@ class OrcidHTTPReader(SimpleHTTPReader):
         super().__init__(origin, *args, **kwargs)
 
 
+DEFAULT_NAMES_EXCLUDE_REGEX = r"[\p{P}\p{S}\p{Nd}\p{No}\p{Emoji}--,.()\-']"
+"""Regex to filter out names with punctuations, symbols, decimal numbers and emojis."""
+
+
 class OrcidTransformer(BaseTransformer):
     """Transforms an ORCiD record into a names record."""
 
+    def __init__(
+        self, *args, names_exclude_regex=DEFAULT_NAMES_EXCLUDE_REGEX, **kwargs
+    ) -> None:
+        """Constructor."""
+        self._names_exclude_regex = names_exclude_regex
+        super().__init__()
+
     def _is_valid_name(self, name):
-        regex = r"[\p{P}\p{S}\p{Nd}\p{No}\p{Emoji}--,.()']"
-        return not bool(re.search(regex, name, re.UNICODE | re.V1))
+        """Check whether the name passes the regex."""
+        if not self._names_exclude_regex:
+            return True
+        return not bool(re.search(self._names_exclude_regex, name, re.UNICODE | re.V1))
 
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""

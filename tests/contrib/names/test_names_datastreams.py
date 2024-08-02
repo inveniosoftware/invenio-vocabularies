@@ -144,7 +144,7 @@ def test_orcid_transformer_different_names(dict_xml_entry, name, is_valid_name):
     transformer = OrcidTransformer()
     val = deepcopy(dict_xml_entry)
     if is_valid_name:
-        transformer.apply(dict_xml_entry).entry
+        assert transformer.apply(val).entry
     else:
         with pytest.raises(TransformerError):
             val.entry["person"]["name"]["given-names"] = name
@@ -154,6 +154,15 @@ def test_orcid_transformer_different_names(dict_xml_entry, name, is_valid_name):
             val.entry["person"]["name"]["given-names"] = ""
             val.entry["person"]["name"]["family-name"] = name
             transformer.apply(val)
+
+
+@pytest.mark.parametrize("name", NAMES_TEST.keys())
+def test_orcid_transformer_different_names_no_regex(dict_xml_entry, name):
+    transformer = OrcidTransformer(names_exclude_regex=None)
+    val = deepcopy(dict_xml_entry)
+    val.entry["person"]["name"]["given-names"] = name
+    val.entry["person"]["name"]["family-name"] = ""
+    assert transformer.apply(val).entry
 
 
 class MockResponse:
