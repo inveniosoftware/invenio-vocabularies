@@ -121,21 +121,34 @@ def _create_affiliations(service, identity):
     Affiliation.index.refresh()  # Refresh the index
 
 
+def test_affiliations_prefix_search(
+    app, db, search_clear, identity, service, client, h, prefix
+):
+    """Test a successful search."""
+    _create_affiliations(service, identity)
+
+    # Should show 1 result
+    res = client.get(f"{prefix}?q=uni", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+
+
 def test_affiliations_suggest_sort(
     app, db, search_clear, identity, service, client, h, prefix
 ):
     """Test a successful search."""
     _create_affiliations(service, identity)
 
-    # Should show 2 results, but id=cern as first due to acronym/name
+    # Should show 3 results, but id=cern as first due to acronym/name, CERT due to fuzziness
     res = client.get(f"{prefix}?suggest=CERN", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 2
+    assert res.json["hits"]["total"] == 3
     assert res.json["hits"]["hits"][0]["id"] == "cern"
-    assert res.json["hits"]["hits"][1]["id"] == "other"
+    assert res.json["hits"]["hits"][1]["id"] == "cert"
+    assert res.json["hits"]["hits"][2]["id"] == "other"
 
-    # Should show 1 result
-    res = client.get(f"{prefix}?suggest=nucléaire", headers=h)
+    # Should show 1 result, accent
+    res = client.get(f"{prefix}?suggest=europeen", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
     assert res.json["hits"]["hits"][0]["id"] == "cern"

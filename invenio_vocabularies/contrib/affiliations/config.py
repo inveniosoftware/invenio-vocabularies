@@ -26,7 +26,16 @@ class AffiliationsSearchOptions(SearchOptions):
     """Search options."""
 
     suggest_parser_cls = SuggestQueryParser.factory(
-        fields=["name^100", "acronym^50", "title.*^20", "id^20", "aliases^20"],
+        fields=[
+            "name.suggest^100",
+            "name^80",
+            "acronym.suggest^50",
+            "acronym^40",
+            "title.*^20",
+            "id^20",
+            "aliases^20",
+        ],
+        fuzziness="AUTO", # https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
     )
 
     sort_default = "bestmatch"
