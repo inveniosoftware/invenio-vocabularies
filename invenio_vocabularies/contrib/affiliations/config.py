@@ -35,7 +35,7 @@ class AffiliationsSearchOptions(SearchOptions):
             "id^20",
             "aliases^20",
         ],
-        fuzziness="AUTO",
+        fuzziness="AUTO", # https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
     )
 
     sort_default = "bestmatch"
