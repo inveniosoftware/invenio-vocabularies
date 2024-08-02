@@ -1,4 +1,33 @@
 {
+  "settings": {
+    "analysis": {
+      "char_filter": {
+        "strip_special_chars": {
+          "type": "pattern_replace",
+          "pattern": "[\\p{Punct}\\p{S}]",
+          "replacement": ""
+        }
+      },
+      "analyzer": {
+        "accent_analyzer": {
+          "tokenizer": "standard",
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": ["lowercase", "asciifolding"]
+        }
+      },
+      "filter": {
+        "lowercase": {
+          "type": "lowercase",
+          "preserve_original": true
+        },
+        "asciifolding": {
+          "type": "asciifolding",
+          "preserve_original": true
+        }
+      }
+    }
+  },
   "mappings": {
     "dynamic": "strict",
     "properties": {
@@ -105,35 +134,6 @@
           "status": {
             "type": "keyword"
           }
-        }
-      }
-    }
-  },
-  "settings": {
-    "analysis": {
-      "char_filter": {
-        "strip_special_chars": {
-          "type": "pattern_replace",
-          "pattern": "[\\p{Punct}\\p{S}]",
-          "replacement": ""
-        }
-      },
-      "analyzer": {
-        "accent_analyzer": {
-          "tokenizer": "standard",
-          "type": "custom",
-          "char_filter": ["strip_special_chars"],
-          "filter": ["lowercase", "asciifolding"]
-        }
-      },
-      "filter": {
-        "lowercase": {
-          "type": "lowercase",
-          "preserve_original": true
-        },
-        "asciifolding": {
-          "type": "asciifolding",
-          "preserve_original": true
         }
       }
     }
