@@ -22,7 +22,7 @@ from invenio_vocabularies.contrib.names.datastreams import (
     OrcidTransformer,
 )
 from invenio_vocabularies.datastreams import StreamEntry
-from invenio_vocabularies.datastreams.errors import WriterError
+from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
 
 
 @pytest.fixture(scope="function")
@@ -90,7 +90,16 @@ def bytes_xml_data():
     return XML_ENTRY_DATA
 
 
-@pytest.fixture(scope="module")
+NAMES_TEST = {
+    "Lars Holm, Nielsen": True,
+    "Lars Nielsen:)": False,
+    "Lars Nielsen-H": True,
+    "Lars Nielsen 👍": False,
+    "Lars Nielsen (CERN)": True,
+}
+
+
+@pytest.fixture(scope="function")
 def dict_xml_entry():
     return StreamEntry(
         {
@@ -128,6 +137,23 @@ def dict_xml_entry():
 def test_orcid_transformer(dict_xml_entry, expected_from_xml):
     transformer = OrcidTransformer()
     assert expected_from_xml == transformer.apply(dict_xml_entry).entry
+
+
+@pytest.mark.parametrize("name,is_valid_name", NAMES_TEST.items())
+def test_orcid_transformer_different_names(dict_xml_entry, name, is_valid_name):
+    transformer = OrcidTransformer()
+    val = deepcopy(dict_xml_entry)
+    if is_valid_name:
+        transformer.apply(dict_xml_entry).entry
+    else:
+        with pytest.raises(TransformerError):
+            val.entry["person"]["name"]["given-names"] = name
+            val.entry["person"]["name"]["family-name"] = ""
+            transformer.apply(val)
+        with pytest.raises(TransformerError):
+            val.entry["person"]["name"]["given-names"] = ""
+            val.entry["person"]["name"]["family-name"] = name
+            transformer.apply(val)
 
 
 class MockResponse:

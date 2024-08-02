@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import timedelta
 
 import arrow
+import regex as re
 from flask import current_app
 from invenio_access.permissions import system_identity
 from invenio_records.dictutils import dict_lookup
@@ -140,6 +141,10 @@ class OrcidHTTPReader(SimpleHTTPReader):
 class OrcidTransformer(BaseTransformer):
     """Transforms an ORCiD record into a names record."""
 
+    def _is_valid_name(self, name):
+        regex = r"[\p{P}\p{S}\p{Nd}\p{No}\p{Emoji}--,.()']"
+        return not bool(re.search(regex, name, re.UNICODE | re.V1))
+
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
         record = stream_entry.entry
@@ -151,6 +156,9 @@ class OrcidTransformer(BaseTransformer):
             raise TransformerError(f"Name not found in ORCiD entry.")
         if name.get("family-name") is None:
             raise TransformerError(f"Family name not found in ORCiD entry.")
+
+        if not self._is_valid_name(name["given-names"] + name["family-name"]):
+            raise TransformerError(f"Invalid characters in name.")
 
         entry = {
             "id": orcid_id,
