@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version v4.3.0 (released 2024-08-05)
+
+- names: make names_exclude_regex configurable
+- names: validate entry full names
+- names: add orcid public data sync
+
 Version v4.2.0 (released 2024-07-24)
 
 - ror: check last update; use ld+json for metadata (#367)
