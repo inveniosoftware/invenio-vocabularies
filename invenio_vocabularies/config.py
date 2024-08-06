@@ -113,6 +113,16 @@ VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
     "subjects",
 ]
 
+VOCABULARIES_SEARCH_ATTRIBUTES = {
+    "subjects": {
+        "search_on_focus": True,
+    },
+    "affiliations": {
+        "search_on_focus": True,
+    },
+}
+"""Extra search UI attributes for vocabularies RemoteSelectField."""
+
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
     "json": JsonReader,
