@@ -12,17 +12,16 @@
 
 from functools import partial
 
+from flask import current_app
 from invenio_i18n import lazy_gettext as _
-from marshmallow import fields
-from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
-from marshmallow_utils.schemas import IdentifierSchema
+from marshmallow import fields, pre_load
+from marshmallow_utils.fields import SanitizedUnicode
 
 from ...services.schema import (
     BaseVocabularySchema,
     ContribVocabularyRelationSchema,
     i18n_strings,
 )
-from .config import subject_schemes
 
 
 class SubjectSchema(BaseVocabularySchema):
@@ -36,6 +35,14 @@ class SubjectSchema(BaseVocabularySchema):
     subject = SanitizedUnicode(required=True)
     title = i18n_strings
     synonyms = fields.List(SanitizedUnicode())
+
+    @pre_load
+    def add_subject_from_title(self, data, **kwargs):
+        """Add subject from title if not present."""
+        locale = current_app.config.get("BABEL_DEFAULT_LOCALE", "en")
+        if "subject" not in data:
+            data["subject"] = data["title"].get(locale) or data["title"].values()[0]
+        return data
 
 
 class SubjectRelationSchema(ContribVocabularyRelationSchema):

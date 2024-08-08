@@ -11,43 +11,7 @@
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
-from ...datastreams.errors import TransformerError
-from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
-from .config import subject_schemes
-
-
-class YAMLTransformer(BaseTransformer):
-    """Transforms a YAML record into a subjects record."""
-
-    def __init__(self, *args, vocab_schemes=None, **kwargs):
-        """Initializes the transformer."""
-        self.vocab_schemes = vocab_schemes
-        super().__init__(*args, **kwargs)
-
-    def apply(self, stream_entry, **kwargs):
-        """Transform the data to the invenio subjects format."""
-        record = stream_entry.entry
-        subject = {"title": {}, "id": record["id"]}
-
-        if not subject["id"]:
-            raise TransformerError(_("Id not found in YAML entry."))
-
-        subject["scheme"] = record["scheme"]
-        for lang in record["subject"].keys():
-            subject["title"][lang] = record["subject"][lang]
-
-        if "en" in record["subject"].keys():
-            lang = "en"
-        else:
-            lang = record["subject"].keys()[0]
-        subject["subject"] = record["subject"][lang]
-
-        subject["synonyms"] = []
-        for synonym in record["synonyms"]:
-            subject["synonyms"].append(synonym)
-
-        return subject
 
 
 class SubjectsServiceWriter(ServiceWriter):
@@ -63,10 +27,11 @@ class SubjectsServiceWriter(ServiceWriter):
         return entry["id"]
 
 
-VOCABULARIES_DATASTREAM_TRANSFORMERS = {
-    "yaml-vocabulary": YAMLTransformer,
-}
-"""Yaml Data Streams transformers."""
+VOCABULARIES_DATASTREAM_READERS = {}
+"""Subjects Data Streams readers."""
+
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {}
+"""Subjects Data Streams transformers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "subjects-service": SubjectsServiceWriter,
@@ -76,14 +41,6 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 DATASTREAM_CONFIG = {
     "readers": [
         {"type": "yaml"},
-    ],
-    "transformers": [
-        {
-            "type": "yaml-vocabulary",
-            "args": {
-                "vocab_schemes": subject_schemes,
-            },
-        },
     ],
     "writers": [
         {

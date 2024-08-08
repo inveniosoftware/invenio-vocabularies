@@ -21,7 +21,7 @@ from ...services.querystr import FilteredSuggestQueryParser
 
 subject_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_SUBJECTS_SCHEMES"]
-)
+)  # TODO Not getting used so probably can remove it?
 
 
 class SubjectsSearchOptions(SearchOptions):
