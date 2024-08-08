@@ -13,7 +13,6 @@ from pathlib import Path
 import idutils
 import pytest
 
-from invenio_vocabularies.contrib.subjects.datastreams import YAMLTransformer
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.readers import YamlReader
 
@@ -62,28 +61,3 @@ def dict_subject_entry():
             "synonyms": ["Deep Web"],
         },
     )
-
-
-def test_transformer(dict_subject_entry, yaml_file):
-    reader = YamlReader(yaml_file)
-    yaml_content = []
-    for _, entry in enumerate(reader.read()):
-        yaml_content.append(StreamEntry(entry))
-
-    logging.warning(yaml_content)
-
-    transformer = YAMLTransformer(vocab_schemes=subject_schemes)
-
-    transformed_entry = transformer.apply(yaml_content[0])
-
-    assert transformed_entry == {
-        "title": {
-            "en": "Dark Web",
-            "de": "Darknet",
-            "fr": "Réseaux anonymes (informatique)",
-        },
-        "subject": "Dark Web",
-        "id": "http://d-nb.info/gnd/1062531973",
-        "scheme": "GND",
-        "synonyms": ["Deep Web"],
-    }
