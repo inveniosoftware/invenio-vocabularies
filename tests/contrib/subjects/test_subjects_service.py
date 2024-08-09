@@ -16,7 +16,9 @@ from invenio_pidstore.errors import PIDDeletedError
 from invenio_vocabularies.contrib.subjects.api import Subject
 
 
-def test_subject_simple_flow(app, db, service, identity, subject_full_data):
+def test_subject_simple_flow(
+    app, db, service, identity, subject_full_data, expected_subject_full_data
+):
     """Test a simple vocabulary service flow."""
     # Service
     assert service.id == "subjects"
@@ -27,12 +29,12 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
     id_ = item.id
     data = item.data
 
-    assert id_ == subject_full_data["id"]
-    for k, v in subject_full_data.items():
+    assert id_ == expected_subject_full_data["id"]
+    for k, v in expected_subject_full_data.items():
         assert data[k] == v, data
 
     # Read it
-    read_item = service.read(identity, "https://id.nlm.nih.gov/mesh/D000001")
+    read_item = service.read(identity, "http://d-nb.info/gnd/1062531973")
     assert item.id == read_item.id
     assert item.data == read_item.data
 
@@ -48,10 +50,10 @@ def test_subject_simple_flow(app, db, service, identity, subject_full_data):
 
     # Update it
     data = read_item.data
-    data["subject"] = "Antibiotics"
+    data["title"]["en"] = "Antibiotics"
     update_item = service.update(identity, id_, data)
     assert item.id == update_item.id
-    assert update_item["subject"] == "Antibiotics"
+    assert update_item["title"]["en"] == "Antibiotics"
 
     # Delete it
     assert service.delete(identity, id_)
