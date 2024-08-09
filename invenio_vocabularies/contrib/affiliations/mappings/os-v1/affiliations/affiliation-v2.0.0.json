@@ -9,15 +9,6 @@
         }
       },
       "analyzer": {
-        "accent_analyzer": {
-          "tokenizer": "standard",
-          "type": "custom",
-          "char_filter": ["strip_special_chars"],
-          "filter": [
-            "lowercase",
-            "asciifolding"
-          ]
-        },
         "accent_edge_analyzer": {
           "tokenizer": "standard",
           "type": "custom",
@@ -26,6 +17,25 @@
             "lowercase",
             "asciifolding",
             "edgegrams"
+          ]
+        },
+        "accent_analyzer": {
+          "tokenizer": "standard",
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      },
+      "normalizer": {
+        "accent_normalizer": {
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": [
+            "lowercase",
+            "asciifolding"
           ]
         }
       },
@@ -53,8 +63,8 @@
           "path_match": "title.*",
           "match_mapping_type": "string",
           "mapping": {
-            "type": "search_as_you_type",
-            "analyzer": "accent_analyzer",
+            "type": "text",
+            "analyzer": "accent_edge_analyzer",
             "search_analyzer": "accent_analyzer"
           }
         }
@@ -90,25 +100,17 @@
       "name": {
         "type": "text",
         "analyzer": "accent_edge_analyzer",
-        "search_analyzer": "accent_edge_analyzer",
-        "copy_to": "name_sort",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type",
-            "analyzer": "accent_analyzer",
-            "search_analyzer": "accent_analyzer"
-          }
-        }
+        "search_analyzer": "accent_analyzer",
+        "copy_to": "name_sort"
       },
       "acronym": {
         "type": "text",
         "analyzer": "accent_edge_analyzer",
-        "search_analyzer": "accent_edge_analyzer",
+        "search_analyzer": "accent_analyzer",
         "fields": {
-          "suggest": {
-            "type": "search_as_you_type",
-            "analyzer": "accent_analyzer",
-            "search_analyzer": "accent_analyzer"
+          "keyword": {
+            "type": "keyword",
+            "normalizer": "accent_normalizer"
           }
         }
       },
