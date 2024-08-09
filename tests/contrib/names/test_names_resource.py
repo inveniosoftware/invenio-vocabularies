@@ -24,10 +24,69 @@ def prefix():
 
 
 @pytest.fixture()
+def names_data():
+    """Full name data."""
+    return [
+        {
+            "id": "0000-0001-8135-3489",
+            "given_name": "Niels John",
+            "family_name": "Davidson",
+            "name": "Davidson, Niels John",
+            "identifiers": [
+                {
+                    "scheme": "orcid",
+                    "identifier": "0000-0001-8135-3489",
+                }
+            ],
+            "affiliations": [{"name": "CERN"}],
+        },
+        {
+            "id": "0000-0002-8438-3752",
+            "given_name": "Dwäyne",
+            "family_name": "Johnsœn",
+            "name": "Johnsœn, Dwäyne",
+            "identifiers": [
+                {
+                    "scheme": "orcid",
+                    "identifier": "0000-0002-8438-3752",
+                }
+            ],
+            "affiliations": [{"name": "CERN"}],
+        },
+        {
+            "id": "0000-0002-0816-7126",
+            "given_name": "John",
+            "family_name": "Cena",
+            "name": "Cena, John",
+            "identifiers": [
+                {
+                    "scheme": "orcid",
+                    "identifier": "0000-0002-0816-7126",
+                }
+            ],
+            "affiliations": [{"name": "WWE"}],
+        },
+    ]
+
+
+@pytest.fixture()
+def example_multiple_names(
+    app, db, search_clear, identity, service, names_data, example_affiliation
+):
+    """Example multiple names."""
+    names = []
+    for i in range(len(names_data)):
+        names.append(service.create(identity, names_data[i]))
+        Name.index.refresh()  # Refresh the index
+
+    return names
+
+
+@pytest.fixture()
 def example_name(
     app, db, search_clear, identity, service, name_full_data, example_affiliation
 ):
-    """Example affiliation."""
+    """Example name."""
     name = service.create(identity, name_full_data)
     Name.index.refresh()  # Refresh the index
 
@@ -85,3 +144,31 @@ def test_names_resolve(client, example_name, h, prefix):
 
     res = client.get(f"{prefix}/orcid/0000-0002-5082-6404", headers=h)
     assert res.status_code == 404
+
+
+def test_names_suggest_sort(client, example_multiple_names, h, prefix):
+    """Test a successful search."""
+
+    # With typo
+    res = client.get(f"{prefix}?suggest=davisson", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Davidson, Niels John"
+
+    # With accent
+    res = client.get(f"{prefix}?suggest=dwayne", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Johnsœn, Dwäyne"
+
+    # With incomplete
+    res = client.get(f"{prefix}?suggest=joh", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 3
+
+    # With affiliation
+    res = client.get(f"{prefix}?suggest=john%20wwe", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 3 # Will find 3 johns but WWE affiliation should be at the top
+    assert res.json["hits"]["hits"][0]["name"] == "Cena, John"
+    assert res.json["hits"]["hits"][0]["affiliations"][0]["name"] == "WWE"

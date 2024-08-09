@@ -49,6 +49,7 @@ record_type = RecordTypeFactory(
     },
     schema_version="1.0.0",
     schema_path="local://names/name-v1.0.0.json",
+    index_name="names-name-v2.0.0",
     record_relations=name_relations,
     record_dumper=SearchDumper(
         model_fields={"pid": ("id", str)},

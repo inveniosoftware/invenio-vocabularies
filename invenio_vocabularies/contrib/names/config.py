@@ -28,12 +28,14 @@ class NamesSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            "name^100",
-            "family_name^100",
             "given_name^100",
+            "name^70",
+            "family_name^50",
             "identifiers.identifier^20",
-            "affiliations.name^10",
+            "affiliations.name^20",
         ],
+        type="most_fields", # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
+        fuzziness="AUTO",
     )
 
     sort_default = "bestmatch"
