@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v4.4.0 (released 2024-08-09)
+
+- services: use and adjust vnd.inveniordm.v1+json http accept header
+
 Version v4.3.0 (released 2024-08-05)
 
 - names: make names_exclude_regex configurable
