@@ -45,9 +45,6 @@ DATASTREAM_CONFIG = {
     "writers": [
         {
             "type": "subjects-service",
-            "args": {
-                "identity": system_identity,
-            },
         }
     ],
 }
