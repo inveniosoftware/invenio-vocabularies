@@ -29,9 +29,9 @@ def names_data():
     return [
         {
             "id": "0000-0001-8135-3489",
-            "given_name": "Lars Holm",
-            "family_name": "Nielsen",
-            "name": "Nielsen, Lars Holm",
+            "given_name": "Niels John",
+            "family_name": "Davidson",
+            "name": "Davidson, Niels John",
             "identifiers": [
                 {
                     "scheme": "orcid",
@@ -42,9 +42,9 @@ def names_data():
         },
         {
             "id": "0000-0002-8438-3752",
-            "given_name": "Säksham",
-            "family_name": "Arœra",
-            "name": "Arœra, Säksham",
+            "given_name": "Dwäyne",
+            "family_name": "Johnsœn",
+            "name": "Johnsœn, Dwäyne",
             "identifiers": [
                 {
                     "scheme": "orcid",
@@ -55,16 +55,16 @@ def names_data():
         },
         {
             "id": "0000-0002-0816-7126",
-            "given_name": "Jose Benito",
-            "family_name": "Gonzalez Lopez",
-            "name": "Gonzalez Lopez, Jose Benito",
+            "given_name": "John",
+            "family_name": "Cena",
+            "name": "Cena, John",
             "identifiers": [
                 {
                     "scheme": "orcid",
                     "identifier": "0000-0002-0816-7126",
                 }
             ],
-            "affiliations": [{"name": "CERN"}],
+            "affiliations": [{"name": "WWE"}],
         },
     ]
 
@@ -150,20 +150,27 @@ def test_names_suggest_sort(client, example_multiple_names, h, prefix):
     """Test a successful search."""
 
     # With typo
-    res = client.get(f"{prefix}?suggest=lsrs%20holm", headers=h)  # lsrs holm
-    print(res.data)
+    res = client.get(f"{prefix}?suggest=davisson", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["name"] == "Nielsen, Lars Holm"
+    assert res.json["hits"]["hits"][0]["name"] == "Davidson, Niels John"
 
     # With accent
-    res = client.get(f"{prefix}?suggest=saksham", headers=h)
+    res = client.get(f"{prefix}?suggest=dwayne", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["name"] == "Arœra, Säksham"
+    assert res.json["hits"]["hits"][0]["name"] == "Johnsœn, Dwäyne"
 
     # With incomplete
-    res = client.get(f"{prefix}?suggest=jos", headers=h)  # jos
+    res = client.get(f"{prefix}?suggest=joh", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 1
-    assert res.json["hits"]["hits"][0]["name"] == "Gonzalez Lopez, Jose Benito"
+    assert res.json["hits"]["total"] == 3
+
+    # With affiliation
+    res = client.get(f"{prefix}?suggest=john%20wwe", headers=h)
+    assert res.status_code == 200
+    assert (
+        res.json["hits"]["total"] == 3
+    )  # Will find 3 johns but WWE affiliation should be at the top
+    assert res.json["hits"]["hits"][0]["name"] == "Cena, John"
+    assert res.json["hits"]["hits"][0]["affiliations"][0]["name"] == "WWE"
