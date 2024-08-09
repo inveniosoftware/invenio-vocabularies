@@ -45,8 +45,9 @@ record_type = RecordTypeFactory(
         # service level when create({}), see records-resources.
         "pid": db.Column(db.String(255), unique=True),
     },
-    schema_version="2.0.0",
+    schema_version="1.0.0",
     schema_path="local://names/name-v1.0.0.json",
+    index_name="names-name-v2.0.0",
     record_relations=name_relations,
     record_dumper=SearchDumper(
         model_fields={"pid": ("id", str)},

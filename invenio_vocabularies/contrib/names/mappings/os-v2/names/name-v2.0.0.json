@@ -9,11 +9,34 @@
         }
       },
       "analyzer": {
+        "accent_edge_analyzer": {
+          "tokenizer": "standard",
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "edgegrams"
+          ]
+        },
         "accent_analyzer": {
           "tokenizer": "standard",
           "type": "custom",
           "char_filter": ["strip_special_chars"],
-          "filter": ["lowercase", "asciifolding"]
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      },
+      "normalizer": {
+        "accent_normalizer": {
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
         }
       },
       "filter": {
@@ -24,6 +47,11 @@
         "asciifolding": {
           "type": "asciifolding",
           "preserve_original": true
+        },
+        "edgegrams": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 20
         }
       }
     }
@@ -61,26 +89,14 @@
       },
       "name": {
         "type": "text",
-        "analyzer": "accent_analyzer",
+        "analyzer": "accent_edge_analyzer",
         "search_analyzer": "accent_analyzer",
-        "copy_to": "name_sort",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type",
-            "analyzer": "accent_analyzer",
-            "search_analyzer": "accent_analyzer"
-          }
-        }
+        "copy_to": "name_sort"
       },
       "given_name": {
         "type": "text",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type",
-            "analyzer": "accent_analyzer",
-            "search_analyzer": "accent_analyzer"
-          }
-        }
+        "analyzer": "accent_edge_analyzer",
+        "search_analyzer": "accent_analyzer"
       },
       "family_name": {
         "type": "text"
@@ -89,11 +105,7 @@
         "properties": {
           "identifier": {
             "type": "keyword",
-            "fields": {
-              "suggest": {
-                "type": "search_as_you_type"
-              }
-            }
+            "normalizer": "accent_normalizer"
           },
           "scheme": {
             "type": "keyword"
@@ -110,12 +122,9 @@
             "type": "keyword"
           },
           "name": {
-            "type": "keyword",
-            "fields": {
-              "suggest": {
-                "type": "search_as_you_type"
-              }
-            }
+            "type": "text",
+            "analyzer": "accent_edge_analyzer",
+            "search_analyzer": "accent_analyzer"
           }
         }
       },
