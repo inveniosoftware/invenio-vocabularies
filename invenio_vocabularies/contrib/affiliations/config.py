@@ -27,14 +27,14 @@ class AffiliationsSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            "name.suggest^100",
-            "name^80",
-            "acronym.suggest^50",
+            "name^100",
+            "acronym.keyword^100",
             "acronym^40",
             "title.*^20",
             "id^20",
             "aliases^20",
         ],
+        type="most_fields", # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
         fuzziness="AUTO", # https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
     )
 
