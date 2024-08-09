@@ -28,15 +28,13 @@ class NamesSearchOptions(SearchOptions):
 
     suggest_parser_cls = SuggestQueryParser.factory(
         fields=[
-            "name.suggest^80",
-            "name^80",
-            "family_name^70",
-            "given_name.suggest^100",
             "given_name^100",
+            "name^70",
+            "family_name^50",
             "identifiers.identifier^20",
-            "affiliations.name^10",
-        ],  # type has to be bool_prefix to use suggest._index_prefix field during querying
-        operator="AND",
+            "affiliations.name^20",
+        ],
+        type="most_fields",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
         fuzziness="AUTO",
     )
 
