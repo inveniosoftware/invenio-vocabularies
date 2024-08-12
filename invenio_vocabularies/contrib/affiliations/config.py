@@ -34,8 +34,8 @@ class AffiliationsSearchOptions(SearchOptions):
             "id^20",
             "aliases^20",
         ],
-        type="most_fields", # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
-        fuzziness="AUTO", # https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
+        type="most_fields",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
+        fuzziness="AUTO",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
     )
 
     sort_default = "bestmatch"
