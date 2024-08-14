@@ -12,6 +12,9 @@ from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
+from .mesh.datastreams import VOCABULARIES_DATASTREAM_READERS as mesh_readers
+from .mesh.datastreams import VOCABULARIES_DATASTREAM_TRANSFORMERS as mesh_transformers
+from .mesh.datastreams import VOCABULARIES_DATASTREAM_WRITERS as mesh_writers
 
 
 class SubjectsServiceWriter(ServiceWriter):
@@ -27,14 +30,15 @@ class SubjectsServiceWriter(ServiceWriter):
         return entry["id"]
 
 
-VOCABULARIES_DATASTREAM_READERS = {}
+VOCABULARIES_DATASTREAM_READERS = {**mesh_readers}
 """Subjects Data Streams readers."""
 
-VOCABULARIES_DATASTREAM_TRANSFORMERS = {}
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {**mesh_transformers}
 """Subjects Data Streams transformers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "subjects-service": SubjectsServiceWriter,
+    **mesh_writers,
 }
 """Subjects Data Streams writers."""
 
