@@ -9,7 +9,7 @@
 """Vocabulary affiliations configuration."""
 
 from flask import current_app
-from invenio_i18n import lazy_gettext as _
+from invenio_i18n import get_locale, lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import SuggestQueryParser
@@ -20,6 +20,7 @@ from ...services.components import PIDComponent
 affiliation_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_AFFILIATION_SCHEMES"]
 )
+localized_title = LocalProxy(lambda: f"title.{get_locale()}^20")
 
 
 class AffiliationsSearchOptions(SearchOptions):
@@ -30,7 +31,7 @@ class AffiliationsSearchOptions(SearchOptions):
             "name^100",
             "acronym.keyword^100",
             "acronym^40",
-            "title.*^20",
+            localized_title,
             "id^20",
             "aliases^20",
         ],
