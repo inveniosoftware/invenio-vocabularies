@@ -1,22 +1,47 @@
 {
   "settings": {
     "analysis": {
+      "char_filter": {
+        "strip_special_chars": {
+          "type": "pattern_replace",
+          "pattern": "[\\p{Punct}\\p{S}]",
+          "replacement": ""
+        }
+      },
       "analyzer": {
-        "edge_analyzer": {
-          "tokenizer": "letter",
+        "accent_edge_analyzer": {
+          "tokenizer": "standard",
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
           "filter": [
             "lowercase",
             "asciifolding",
             "edgegrams"
           ]
+        },
+        "accent_analyzer": {
+          "tokenizer": "standard",
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
         }
       },
       "filter": {
+        "lowercase": {
+          "type": "lowercase",
+          "preserve_original": true
+        },
+        "asciifolding": {
+          "type": "asciifolding",
+          "preserve_original": true
+        },
         "edgegrams": {
           "type": "edge_ngram",
           "min_gram": 2,
-          "max_gram": 20,
-          "preserve_original": true
+          "max_gram": 20
         }
       }
     }
@@ -28,7 +53,9 @@
           "path_match": "title.*",
           "match_mapping_type": "string",
           "mapping": {
-            "type": "search_as_you_type"
+            "type": "text",
+            "analyzer": "accent_edge_analyzer",
+            "search_analyzer": "accent_analyzer"
           }
         }
       }
@@ -69,13 +96,9 @@
       },
       "name": {
         "type": "text",
-        "analyzer": "edge_analyzer",
-        "copy_to": "name_sort",
-        "fields": {
-          "suggest": {
-            "type": "search_as_you_type"
-          }
-        }
+        "analyzer": "accent_edge_analyzer",
+        "search_analyzer": "accent_analyzer",
+        "copy_to": "name_sort"
       },
       "country": {
         "type": "text"
@@ -87,13 +110,17 @@
         "type": "text"
       },
       "acronym": {
-        "type": "text"
+        "type": "text",
+        "analyzer": "accent_edge_analyzer",
+        "search_analyzer": "accent_analyzer"
       },
       "status": {
         "type": "keyword"
       },
       "aliases": {
-        "type": "text"
+        "type": "text",
+        "analyzer": "accent_edge_analyzer",
+        "search_analyzer": "accent_analyzer"
       },
       "types": {
         "type": "keyword"
