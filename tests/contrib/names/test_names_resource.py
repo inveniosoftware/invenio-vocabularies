@@ -161,6 +161,11 @@ def test_names_suggest_sort(client, example_multiple_names, h, prefix):
     assert res.json["hits"]["total"] == 1
     assert res.json["hits"]["hits"][0]["name"] == "Johnsœn, Dwäyne"
 
+    res = client.get(f"{prefix}?suggest=Dw%C3%A4yne", headers=h)  # Dwäyne
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Johnsœn, Dwäyne"
+
     # With incomplete
     res = client.get(f"{prefix}?suggest=joh", headers=h)
     assert res.status_code == 200
