@@ -10,10 +10,8 @@
 
 """Subjects schema."""
 
-from functools import partial
 
-from flask import current_app
-from invenio_i18n import lazy_gettext as _
+from invenio_i18n import get_locale
 from marshmallow import fields, pre_load
 from marshmallow_utils.fields import SanitizedUnicode
 
@@ -39,7 +37,7 @@ class SubjectSchema(BaseVocabularySchema):
     @pre_load
     def add_subject_from_title(self, data, **kwargs):
         """Add subject from title if not present."""
-        locale = current_app.config.get("BABEL_DEFAULT_LOCALE", "en")
+        locale = get_locale().language
         if "subject" not in data:
             data["subject"] = data["title"].get(locale) or data["title"].values()[0]
         return data
