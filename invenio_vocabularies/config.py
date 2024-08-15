@@ -117,7 +117,7 @@ VOCABULARIES_CUSTOM_VOCABULARY_TYPES = [
     "funders",
     "subjects",
 ]
-"""Configure CUSTOM_VOCABULARY_TYPES to differentiate output. Is used in VocabulariesServiceConfig."""
+"""List of custom vocabulary types."""
 
 VOCABULARIES_DATASTREAM_READERS = {
     "csv": CSVReader,
