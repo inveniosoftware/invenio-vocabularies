@@ -46,7 +46,7 @@ class SubjectsSearchOptions(SearchOptions):
         ),
         "subject": dict(
             title=_("Name"),
-            fields=["indexed_at"],
+            fields=["subject_sort"],
         ),
         "newest": dict(
             title=_("Newest"),
