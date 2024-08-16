@@ -33,7 +33,9 @@ class FundersSearchOptions(SearchOptions):
             "identifiers.identifier^10",
             "acronym^10",
             "aliases^10",
-        ]
+        ],
+        type="most_fields",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
+        fuzziness="AUTO",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
     )
 
     sort_default = "bestmatch"

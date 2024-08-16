@@ -124,15 +124,20 @@ def test_funders_prefix_search(client, h, prefix, example_funders):
 def test_funders_suggest_sort(client, h, prefix, example_funders):
     """Test a successful search."""
 
-    # Should show 3 results, but id=cern as first due to name
+    # Should show 2 results, and id=cern as first due to name
     res = client.get(f"{prefix}?suggest=CERN", headers=h)
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2  # should be 2
     assert res.json["hits"]["hits"][0]["name"] == "CERN"
-    # assert res.json["hits"]["hits"][1]["name"] == "OTHER"
+    assert res.json["hits"]["hits"][1]["name"] == "CERT"
+
+    res = client.get(f"{prefix}?suggest=N%C3%B5rthw%C3%AAst", headers=h)  # Nõrthwêst
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "Northwestern University"
 
     # Should show 0 results since scheme is not searchable
-    res = client.get(f"{prefix}?suggest=nucléaire", headers=h)
+    res = client.get(f"{prefix}?suggest=nucl%C3%A9aire", headers=h)  # nucléaire
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 0
 
