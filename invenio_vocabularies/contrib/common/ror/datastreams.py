@@ -10,8 +10,8 @@
 """ROR-related Datastreams Readers/Writers/Transformers module."""
 
 import io
-from datetime import datetime
 
+import arrow
 import requests
 from idutils import normalize_ror
 
@@ -32,6 +32,26 @@ class RORHTTPReader(BaseReader):
         raise NotImplementedError(
             "RORHTTPReader downloads one file and therefore does not iterate through items"
         )
+
+    def _get_last_dump_date(self, linksets):
+        """Get the last dump date."""
+        for linkset in linksets:
+            metadata_formats = linkset.get("describedby", [])
+            for format_link in metadata_formats:
+                if format_link.get("type") == "application/ld+json":
+                    json_ld_reponse = requests.get(
+                        format_link["href"],
+                        headers={"Accept": format_link["type"]},
+                    )
+                    json_ld_reponse.raise_for_status()
+                    json_ld_data = json_ld_reponse.json()
+
+                    last_dump_date = arrow.get(json_ld_data["dateCreated"])
+                    return last_dump_date
+        else:
+            raise ReaderError(
+                "Couldn't find JSON-LD in publisher's linkset to determine last dump date."
+            )
 
     def read(self, item=None, *args, **kwargs):
         """Reads the latest ROR data dump ZIP file from Zenodo and yields an in-memory binary stream of it."""
@@ -54,39 +74,21 @@ class RORHTTPReader(BaseReader):
             headers={"Accept": "application/linkset+json"},
         )
         linkset_response.raise_for_status()
+        linksets = linkset_response.json()["linkset"]
 
         if self._since:
-            for link in linkset_response.json()["linkset"]:
-                if "type" in link and link["type"] == "application/ld+json":
-                    json_ld_reponse = requests.get(
-                        link["anchor"], headers={"Accept": link["type"]}
-                    )
-                    json_ld_reponse.raise_for_status()
+            last_dump_date = self._get_last_dump_date(linksets)
+            if last_dump_date < arrow.get(self._since):
+                return
 
-                    # TODO Update to use dateCreated once the field is added to InvenioRDM. (https://github.com/inveniosoftware/invenio-rdm-records/issues/1777)
-                    last_dump_date = json_ld_reponse.json()["datePublished"]
-                    if datetime.fromisoformat(last_dump_date) < datetime.fromisoformat(
-                        self._since
-                    ):
-                        return
-                    break
-            else:
-                raise ReaderError("Couldn't find json-ld in publisher's linkset.")
-
-        # Extract the Landing page Link Set Object located as the first (index 0) item.
-        landing_page_linkset = linkset_response.json()["linkset"][0]
-
-        # Extract the URL of the only ZIP file linked to the record.
-        landing_page_zip_items = [
-            item
-            for item in landing_page_linkset["item"]
-            if item["type"] == "application/zip"
-        ]
-        if len(landing_page_zip_items) != 1:
-            raise ReaderError(
-                f"Expected 1 ZIP item but got {len(landing_page_zip_items)}"
-            )
-        file_url = landing_page_zip_items[0]["href"]
+        for linkset in linksets:
+            items = linkset.get("item", [])
+            zip_files = [item for item in items if item["type"] == "application/zip"]
+            if len(zip_files) == 1:
+                file_url = zip_files[0]["href"]
+                break
+            if len(zip_files) > 1:
+                raise ReaderError(f"Expected 1 ZIP item but got {len(zip_files)}")
 
         # Download the ZIP file and fully load the response bytes content in memory.
         # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `zipfile.ZipFile`).
