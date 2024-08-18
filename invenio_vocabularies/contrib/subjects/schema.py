@@ -10,7 +10,6 @@
 
 """Subjects schema."""
 
-
 from invenio_i18n import get_locale
 from marshmallow import fields, pre_load
 from marshmallow_utils.fields import SanitizedUnicode

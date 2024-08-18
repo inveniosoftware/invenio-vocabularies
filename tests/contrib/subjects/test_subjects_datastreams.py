@@ -7,6 +7,7 @@
 # details.
 
 """Subject datastream tests."""
+
 from copy import deepcopy
 
 import pytest
