@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version v4.5.0 (released 2024-08-21)
+
+- ror: fix dump modified date comparison
+- subjects: mesh: add mesh subject datastreams
+- change schema of subject: add text and synonyms switch to datastreams
+
 Version v4.4.0 (released 2024-08-09)
 
 - services: use and adjust vnd.inveniordm.v1+json http accept header
