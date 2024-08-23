@@ -21,7 +21,10 @@ from invenio_vocabularies.datastreams.transformers import BaseTransformer
 
 
 class RORHTTPReader(BaseReader):
-    """ROR HTTP Reader returning an in-memory binary stream of the latest ROR data dump ZIP file."""
+    """
+    ROR HTTP Reader returning an in-memory
+    binary stream of the latest ROR data dump ZIP file.
+    """
 
     def __init__(self, origin=None, mode="r", since=None, *args, **kwargs):
         """Constructor."""
@@ -57,7 +60,10 @@ class RORHTTPReader(BaseReader):
             )
 
     def read(self, item=None, *args, **kwargs):
-        """Reads the latest ROR data dump ZIP file from Zenodo and yields an in-memory binary stream of it."""
+        """
+        Reads the latest ROR data dump ZIP file from
+        Zenodo and yields an in-memory binary stream of it.
+        """
         if item:
             raise NotImplementedError(
                 "RORHTTPReader does not support being chained after another reader"
@@ -94,8 +100,10 @@ class RORHTTPReader(BaseReader):
                 raise ReaderError(f"Expected 1 ZIP item but got {len(zip_files)}")
 
         # Download the ZIP file and fully load the response bytes content in memory.
-        # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `zipfile.ZipFile`).
-        # Using directly `file_resp.raw` is not possible since `zipfile.ZipFile` requires the file-like object to be seekable.
+        # The bytes content are then wrapped by a BytesIO to be
+        # file-like object (as required by `zipfile.ZipFile`).
+        # Using directly `file_resp.raw` is not possible since
+        # `zipfile.ZipFile` requires the file-like object to be seekable.
         file_resp = requests.get(file_url)
         file_resp.raise_for_status()
         yield io.BytesIO(file_resp.content)
