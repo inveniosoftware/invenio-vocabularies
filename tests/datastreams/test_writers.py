@@ -76,6 +76,28 @@ def test_service_writer_update_non_existing(lang_type, lang_data, service, ident
     assert dict(record, **updated_lang) == record
 
 
+def test_writer_wrong_config_no_insert_no_update(
+    lang_type, lang_data, service, identity
+):
+    writer = ServiceWriter(service, identity=identity, insert=False, update=False)
+
+    with pytest.raises(WriterError) as err:
+        writer.write(stream_entry=StreamEntry(lang_data))
+
+    expected_error = ["Writer wrongly configured to not insert and to not update"]
+    assert expected_error in err.value.args
+
+
+def test_writer_no_insert(lang_type, lang_data, service, identity):
+    writer = ServiceWriter(service, identity=identity, insert=False, update=True)
+
+    with pytest.raises(WriterError) as err:
+        writer.write(stream_entry=StreamEntry(lang_data))
+
+    expected_error = [f"Vocabulary entry does not exist: {lang_data}"]
+    assert expected_error in err.value.args
+
+
 ##
 # YAML Writer
 ##
