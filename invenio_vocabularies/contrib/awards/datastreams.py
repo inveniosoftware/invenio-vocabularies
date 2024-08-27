@@ -114,17 +114,134 @@ class OpenAIREProjectTransformer(BaseTransformer):
         return stream_entry
 
 
-VOCABULARIES_DATASTREAM_READERS = {}
+class CORDISProjectHTTPReader(BaseReader):
+    """CORDIS Project HTTP Reader returning an in-memory binary stream of the latest CORDIS Horizon Europe project zip file."""
+
+    def _iter(self, fp, *args, **kwargs):
+        raise NotImplementedError(
+            "CORDISProjectHTTPReader downloads one file and therefore does not iterate through items"
+        )
+
+    def read(self, item=None, *args, **kwargs):
+        """Reads the latest CORDIS Horizon Europe project zip file and yields an in-memory binary stream of it."""
+        if item:
+            raise NotImplementedError(
+                "CORDISProjectHTTPReader does not support being chained after another reader"
+            )
+
+        file_url = "https://cordis.europa.eu/data/cordis-HORIZONprojects-xml.zip"
+
+        # Download the ZIP file and fully load the response bytes content in memory.
+        # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `zipfile.ZipFile`).
+        # Using directly `file_resp.raw` is not possible since `zipfile.ZipFile` requires the file-like object to be seekable.
+        file_resp = requests.get(file_url)
+        file_resp.raise_for_status()
+        yield io.BytesIO(file_resp.content)
+
+
+class CORDISProjectTransformer(BaseTransformer):
+    """Transforms a CORDIS project record into an award record."""
+
+    def apply(self, stream_entry, **kwargs):
+        """Applies the transformation to the stream entry."""
+        record = stream_entry.entry
+        award = {}
+
+        # Here `id` is the project ID, which will be used to attach the update to the existing project.
+        award["id"] = f"00k4n6c32::{record['id']}"
+
+        award["subjects"] = [
+            {
+                "scheme": "EuroSciVoc",
+                # TODO: Here lowercase while title cased in the subjects vocabulary.
+                "subject": category["title"],
+            }
+            for category in record["relations"]["categories"]["category"]
+            if category["@classification"] == "euroSciVoc"
+        ]
+
+        organizations = record["relations"]["associations"]["organization"]
+        # Projects with a single organization are not wrapped in a list,
+        # so we do this here to be able to iterate over it.
+        organizations = organizations if isinstance(organizations, list) else [organizations]
+        award["organizations"] = [
+            {
+                # TODO: Here the legal name is uppercase.
+                "organization": organization["legalname"],
+                "scheme": "pic",
+                "id": organization["id"],
+            }
+            for organization in organizations
+        ]
+
+        stream_entry.entry = award
+        return stream_entry
+
+
+class CORDISAwardsServiceWriter(ServiceWriter):
+    """CORDIS Awards service writer."""
+
+    def __init__(self, *args, **kwargs):
+        """Constructor."""
+        service_or_name = kwargs.pop("service_or_name", "awards")
+        # Here we only update and we do not insert, since CORDIS data is used to augment existing awards
+        # (with subjects and organizations information) and is not used to create new awards.
+        super().__init__(service_or_name=service_or_name, insert=False, *args, **kwargs)
+
+    def _entry_id(self, entry):
+        """Get the id from an entry."""
+        return entry["id"]
+
+
+VOCABULARIES_DATASTREAM_READERS = {
+    "cordis-project-http": CORDISProjectHTTPReader,
+}
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "openaire-award": OpenAIREProjectTransformer,
+    "cordis-award": CORDISProjectTransformer,
 }
 """ORCiD Data Streams transformers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "awards-service": AwardsServiceWriter,
+    "cordis-awards-service": CORDISAwardsServiceWriter,
 }
 """ORCiD Data Streams transformers."""
+
+DATASTREAM_CONFIG_CORDIS = {
+    "readers": [
+        # {"type": "cordis-project-http"},
+        # {
+        #     "type": "zip",
+        #     "args": {
+        #         "regex": "\\.xml$",
+        #         "mode": "r",
+        #     },
+        # },
+        {
+            "type": "xml",
+            "args": {
+                "root_element": "project",
+            },
+        },
+    ],
+    "transformers": [
+        {"type": "cordis-award"},
+    ],
+    "writers": [
+        {
+            "type": "cordis-awards-service",
+            "args": {
+                "identity": system_identity,
+            },
+        }
+    ],
+}
+"""Data Stream configuration.
+
+An origin is required for the reader.
+"""
 
 DATASTREAM_CONFIG = {
     "readers": [

@@ -15,13 +15,23 @@ from marshmallow import Schema, ValidationError, fields, validate, validates_sch
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
+from ..subjects.schema import SubjectRelationSchema
 from ...services.schema import (
     BaseVocabularySchema,
     ModePIDFieldVocabularyMixin,
-    i18n_strings,
+    i18n_strings, ContribVocabularyRelationSchema,
 )
 from ..funders.schema import FunderRelationSchema
 from .config import award_schemes
+
+
+class AwardOrganizationRelationSchema(ContribVocabularyRelationSchema):
+    """Schema to define an organization relation in an award."""
+
+    ftf_name = "organization"
+    parent_field_name = "organizations"
+    organization = SanitizedUnicode()
+    scheme = SanitizedUnicode()
 
 
 class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
@@ -45,6 +55,10 @@ class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     acronym = SanitizedUnicode()
 
     program = SanitizedUnicode()
+
+    subjects = fields.List(fields.Nested(SubjectRelationSchema))
+
+    organizations = fields.List(fields.Nested(AwardOrganizationRelationSchema))
 
     id = SanitizedUnicode(
         validate=validate.Length(min=1, error=_("PID cannot be blank."))
