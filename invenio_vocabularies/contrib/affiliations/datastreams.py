@@ -10,8 +10,9 @@
 """Affiliations datastreams, transformers, writers and readers."""
 
 from flask import current_app
-from invenio_i18n import lazy_gettext as _
 
+from ...datastreams.errors import WriterError
+from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from ..common.ror.datastreams import RORTransformer
 
@@ -46,16 +47,77 @@ class AffiliationsRORTransformer(RORTransformer):
         )
 
 
+class OpenAIREOrganizationTransformer(BaseTransformer):
+    """OpenAIRE Organization Transformer."""
+
+    def apply(self, stream_entry, **kwargs):
+        """Applies the transformation to the stream entry."""
+        record = stream_entry.entry
+
+        organization = {"openaire_id": record["id"]}
+
+        for pid in record["pid"]:
+            if pid["scheme"] == "ROR":
+                organization["id"] = pid["value"].removeprefix("https://ror.org/")
+            elif pid["scheme"] == "PIC":
+                organization["identifiers"] = [
+                    {
+                        "scheme": "pic",
+                        "identifier": pid["value"],
+                    }
+                ]
+
+        stream_entry.entry = organization
+        return stream_entry
+
+
+class OpenAIREAffiliationsServiceWriter(ServiceWriter):
+    """OpenAIRE Affiliations service writer."""
+
+    def __init__(self, *args, **kwargs):
+        """Constructor."""
+        service_or_name = kwargs.pop("service_or_name", "affiliations")
+        # Here we only update and we do not insert, since OpenAIRE data is used to augment existing affiliations
+        # (with PIC identifiers) and is not used to create new affiliations.
+        super().__init__(service_or_name=service_or_name, insert=False, *args, **kwargs)
+
+    def _entry_id(self, entry):
+        """Get the id from an entry."""
+        return entry["id"]
+
+    def write(self, stream_entry, *args, **kwargs):
+        """Writes the input entry using a given service."""
+        entry = stream_entry.entry
+
+        if not entry["openaire_id"].startswith("openorgs____::"):
+            raise WriterError([f"Not valid OpenAIRE OpenOrgs id for: {entry}"])
+        del entry["openaire_id"]
+
+        if "id" not in entry:
+            raise WriterError([f"No id for: {entry}"])
+
+        if "identifiers" not in entry:
+            raise WriterError([f"No alternative identifiers for: {entry}"])
+
+        return super().write(stream_entry, *args, **kwargs)
+
+    def write_many(self, stream_entries, *args, **kwargs):
+        """Writes the input entries using a given service."""
+        return super().write_many(stream_entries, *args, **kwargs)
+
+
 VOCABULARIES_DATASTREAM_READERS = {}
 """Affiliations datastream readers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "affiliations-service": AffiliationsServiceWriter,
+    "openaire-affiliations-service": OpenAIREAffiliationsServiceWriter,
 }
 """Affiliations datastream writers."""
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "ror-affiliations": AffiliationsRORTransformer,
+    "openaire-organization": OpenAIREOrganizationTransformer,
 }
 """Affiliations datastream transformers."""
 
@@ -90,3 +152,34 @@ DATASTREAM_CONFIG = {
 
 An origin is required for the reader.
 """
+
+DATASTREAM_CONFIG_OPENAIRE = {
+    "readers": [
+        {"type": "openaire-http", "args": {"tar_href": "/organization.tar"}},
+        {
+            "type": "tar",
+            "args": {
+                "regex": "\\.json.gz$",
+                "mode": "r",
+            },
+        },
+        {"type": "gzip"},
+        {"type": "jsonl"},
+    ],
+    "transformers": [
+        {
+            "type": "openaire-organization",
+        },
+    ],
+    "writers": [
+        {
+            "type": "async",
+            "args": {
+                "writer": {
+                    "type": "openaire-affiliations-service",
+                }
+            },
+        }
+    ],
+}
+"""Alternative Data Stream configuration for OpenAIRE Affiliations."""
