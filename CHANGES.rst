@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v5.0.1 (released 2024-08-27)
+
+- mapping: fix normalizer
+
 Version v5.0.0 (released 2024-08-22)
 
 - affiliations: dd analyzers and filters to improve results when searching affiliations
