@@ -37,4 +37,5 @@ class AwardL10NItemSchema(Schema):
     acronym = fields.String(dump_only=True)
     program = fields.String(dump_only=True)
     funder = fields.Nested(FunderRelationSchema, dump_only=True)
+    # TODO: Add subjects and organizations here?
     identifiers = fields.List(fields.Nested(IdentifierSchema), dump_only=True)
