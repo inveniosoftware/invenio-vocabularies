@@ -224,19 +224,30 @@ class CSVReader(BaseReader):
 class XMLReader(BaseReader):
     """XML reader."""
 
+    def __init__(self, root_element=None, *args, **kwargs):
+        """Constructor."""
+        # TODO: How to make root_element mandatory?
+        self.root_element = root_element
+        super().__init__(*args, **kwargs)
+
+
     def _iter(self, fp, *args, **kwargs):
         """Read and parse an XML file to dict."""
         # NOTE: We parse HTML, to skip XML validation and strip XML namespaces
         record = None
         try:
             xml_tree = fromstring(fp)
-            record = etree_to_dict(xml_tree).get("record")
+            xml_dict = etree_to_dict(xml_tree)
         except Exception as e:
             xml_tree = html_parse(fp).getroot()
-            record = etree_to_dict(xml_tree)["html"]["body"].get("record")
+            xml_dict = etree_to_dict(xml_tree)["html"]["body"]
 
-        if not record:
-            raise ReaderError(f"Record not found in XML entry.")
+        if self.root_element:
+            record = xml_dict.get(self.root_element)
+            if not record:
+                raise ReaderError(f"Root element '{self.root_element}' not found in XML entry.")
+        else:
+            record = xml_dict
 
         yield record
 
