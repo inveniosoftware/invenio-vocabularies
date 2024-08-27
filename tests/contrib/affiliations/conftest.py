@@ -33,6 +33,16 @@ def affiliation_full_data():
     }
 
 
+@pytest.fixture(scope="function")
+def openaire_affiliation_full_data():
+    """Full OpenAIRE affiliation data."""
+    return {
+        "openaire_id": "openorgs____::47efb6602225236c0b207761a8b3a21c",
+        "id": "01ggx4157",
+        "identifiers": [{"identifier": "999988133", "scheme": "pic"}],
+    }
+
+
 @pytest.fixture(scope="module")
 def service():
     """Affiliations service object."""
