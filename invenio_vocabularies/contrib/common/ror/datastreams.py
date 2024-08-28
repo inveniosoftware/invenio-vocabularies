@@ -46,7 +46,10 @@ class RORHTTPReader(BaseReader):
                     json_ld_reponse.raise_for_status()
                     json_ld_data = json_ld_reponse.json()
 
-                    last_dump_date = arrow.get(json_ld_data["dateCreated"])
+                    last_dump_date = arrow.get(
+                        json_ld_data.get("dateCreated")
+                        or json_ld_data.get("datePublished")
+                    )
                     return last_dump_date
         else:
             raise ReaderError(
