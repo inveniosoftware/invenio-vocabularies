@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v5.0.2 (released 2024-08-28)
+
+- ror: use datePublished as fallback date for dataset timestamp
+
 Version v5.0.1 (released 2024-08-27)
 
 - mapping: fix normalizer
