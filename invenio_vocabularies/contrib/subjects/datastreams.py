@@ -12,9 +12,8 @@ from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
-from .mesh.datastreams import VOCABULARIES_DATASTREAM_READERS as mesh_readers
-from .mesh.datastreams import VOCABULARIES_DATASTREAM_TRANSFORMERS as mesh_transformers
-from .mesh.datastreams import VOCABULARIES_DATASTREAM_WRITERS as mesh_writers
+from .euroscivoc import datastreams as euroscivoc_datastreams
+from .mesh import datastreams as mesh_datastreams
 
 
 class SubjectsServiceWriter(ServiceWriter):
@@ -30,15 +29,22 @@ class SubjectsServiceWriter(ServiceWriter):
         return entry["id"]
 
 
-VOCABULARIES_DATASTREAM_READERS = {**mesh_readers}
+VOCABULARIES_DATASTREAM_READERS = {
+    **mesh_datastreams.VOCABULARIES_DATASTREAM_READERS,
+    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_READERS,
+}
 """Subjects Data Streams readers."""
 
-VOCABULARIES_DATASTREAM_TRANSFORMERS = {**mesh_transformers}
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {
+    **mesh_datastreams.VOCABULARIES_DATASTREAM_TRANSFORMERS,
+    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_TRANSFORMERS,
+}
 """Subjects Data Streams transformers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "subjects-service": SubjectsServiceWriter,
-    **mesh_writers,
+    **mesh_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
+    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
 }
 """Subjects Data Streams writers."""
 
