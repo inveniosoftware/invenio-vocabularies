@@ -21,7 +21,8 @@ from invenio_records_resources.records.systemfields import (
 )
 from invenio_records_resources.resources.records.headers import etag_headers
 
-from ...services.permissions import PermissionPolicy
+from invenio_vocabularies.contrib.names.permissions import NamesPermissionPolicy
+
 from ..affiliations.api import Affiliation
 from .config import NamesSearchOptions, service_components
 from .schema import NameSchema
@@ -63,7 +64,7 @@ record_type = RecordTypeFactory(
     service_schema=NameSchema,
     search_options=NamesSearchOptions,
     service_components=service_components,
-    permission_policy_cls=PermissionPolicy,
+    permission_policy_cls=NamesPermissionPolicy,
     # Resource layer
     endpoint_route="/names",
     resource_cls_attrs={
