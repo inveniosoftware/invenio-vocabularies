@@ -24,6 +24,14 @@
       "items": {"$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"},
       "uniqueItems": true
     },
+    "props": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "string"
+        }
+      }
+    },
     "affiliations": {
       "description": "Affiliations of the person.",
       "type": "array",
