@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v5.0.3 (released 2024-09-06)
+
+- services: skip index rebuilding
+
 Version v5.0.2 (released 2024-08-28)
 
 - ror: use datePublished as fallback date for dataset timestamp
