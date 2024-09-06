@@ -12,14 +12,7 @@
 
 import sqlalchemy as sa
 from invenio_cache import current_cache
-from invenio_records_resources.services import (
-    Link,
-    LinksTemplate,
-    RecordService,
-    RecordServiceConfig,
-    SearchOptions,
-    pagination_links,
-)
+from invenio_records_resources.services import LinksTemplate, RecordService
 from invenio_records_resources.services.base.utils import map_search_params
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
 from invenio_records_resources.services.uow import unit_of_work
@@ -31,6 +24,10 @@ from .tasks import process_datastream
 
 class VocabularyTypeService(RecordService):
     """Vocabulary type service."""
+
+    def rebuild_index(self, identity, uow=None):
+        """Raise error since services are not backed by search indices."""
+        raise NotImplementedError()
 
     def search(self, identity, params=None):
         """Search for vocabulary types entries."""
