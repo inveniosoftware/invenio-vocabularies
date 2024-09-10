@@ -10,7 +10,7 @@
 
 import datetime
 
-from invenio_jobs.jobs import RegisteredTask
+from invenio_jobs.jobs import JobType
 
 from invenio_vocabularies.services.tasks import process_datastream
 from marshmallow import Schema, fields
@@ -34,7 +34,7 @@ class ArgsSchema(Schema):
     )
 
 
-class ProcessDataStreamRegisteredTask(RegisteredTask):
+class ProcessDataStreamJob(JobType):
 
     arguments_schema = ArgsSchema
     task = process_datastream
@@ -46,7 +46,7 @@ class ProcessDataStreamRegisteredTask(RegisteredTask):
         raise NotImplemented
 
 
-class ProcessRORAffiliationsRegisteredTask(ProcessDataStreamRegisteredTask):
+class ProcessRORAffiliationsJob(ProcessDataStreamJob):
     """Process ROR affiliations datastream registered task."""
 
     description = "Process ROR affiliations"
