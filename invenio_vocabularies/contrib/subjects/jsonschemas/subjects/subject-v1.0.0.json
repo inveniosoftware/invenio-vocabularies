@@ -30,6 +30,14 @@
       "description": "Human readable label in different languages.",
       "$ref": "local://vocabularies/definitions-v1.0.0.json#/title"
     },
+    "props": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "array"
+        }
+      }
+    },
     "synonyms": {
       "description": "Synonyms of the subject label.",
       "type": "array",

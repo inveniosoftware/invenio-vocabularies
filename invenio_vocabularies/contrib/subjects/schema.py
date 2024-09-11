@@ -31,6 +31,7 @@ class SubjectSchema(BaseVocabularySchema):
     scheme = SanitizedUnicode(required=True)
     subject = SanitizedUnicode(required=True)
     title = i18n_strings
+    props = fields.Dict(keys=SanitizedUnicode(), values=fields.List(SanitizedUnicode())) 
     synonyms = fields.List(SanitizedUnicode())
 
     @pre_load
@@ -50,4 +51,5 @@ class SubjectRelationSchema(ContribVocabularyRelationSchema):
     subject = SanitizedUnicode()
     scheme = SanitizedUnicode()
     title = i18n_strings
+    props =  fields.Dict() 
     synonyms = fields.List(SanitizedUnicode())

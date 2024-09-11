@@ -71,32 +71,73 @@ class EuroSciVocSubjectsHTTPReader(BaseReader):
 
 class EuroSciVocSubjectsTransformer(BaseTransformer):
     """Transformer class to convert EuroSciVoc RDF data to a dictionary format."""
+    SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
+
+    def _get_notation(self, subject, rdf_graph):
+        """Extract the numeric notation for a subject, ignoring UUID-style notations."""
+        for _, _, notation in rdf_graph.triples((subject, self.SKOS_CORE.notation, None)):
+            notation_str = str(notation)
+            if notation_str.isdigit():
+                return notation_str
+        return None
+
+    def _get_labels(self, subject, rdf_graph):
+        """Extract prefLabel and altLabel languages for a subject."""
+        labels = {}
+        for _, _, label in rdf_graph.triples((subject, self.SKOS_CORE.prefLabel, None)):
+            labels[label.language] = label.value
+
+        if "en" not in labels:
+            for _, _, label in rdf_graph.triples((subject, self.SKOS_CORE.altLabel, None)):
+                if label.language not in labels:
+                    labels[label.language] = label.value
+
+        return labels
+
+    def _find_parents(self, subject, rdf_graph):
+        """Find the parent notations of a subject."""
+        parents = []
+        previous_parent = None
+
+        while True:
+            broader_found = False
+            for _, _, parent in rdf_graph.triples((subject, self.SKOS_CORE.broader, None)):
+                if previous_parent is not None:
+                    parents.append(self._get_notation(previous_parent, rdf_graph))
+                previous_parent = parent
+                subject = parent
+                broader_found = True
+                break
+
+            if not broader_found:
+                if previous_parent is not None:
+                    parents.append(self._get_notation(previous_parent, rdf_graph))
+                break
+
+        return parents
 
     def _transform_entry(self, subject, rdf_graph):
         """Transform an entry to the required dictionary format."""
-        SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
         Entry = namedtuple("Entry", ["id", "scheme", "subject", "title", "props"])
-        # Initialize entry fields
-        languages = {}
-        pref_label = None
 
-        for _, _, label in rdf_graph.triples((subject, SKOS_CORE.prefLabel, None)):
-            languages[label.language] = label.value
-            if label.language == "en":
-                pref_label = label.value
+        # Get subject notation with euroscivoc prefix
+        notation = self._get_notation(subject, rdf_graph)
+        id = f"euroscivoc:{notation}" if notation else None
 
-        # Fallback to alternative labels if no preferred label in English
-        if not pref_label:
-            for _, _, label in rdf_graph.triples((subject, SKOS_CORE.altLabel, None)):
-                if label.language not in languages:
-                    languages[label.language] = label.value
-                if label.language == "en":
-                    pref_label = label.value
-                    break
+        # Get labels for the current subject
+        languages = self._get_labels(subject, rdf_graph)
+        pref_label = languages.get("en", "")
 
-        title = languages
-        entry = Entry(str(subject), "EuroSciVoc", pref_label, title, {})
-        return entry
+        # Find parent notations in order from top parent to lowest
+        parent_notations = self._find_parents(subject, rdf_graph)
+        parents = [f"euroscivoc:{notation}" for notation in reversed(parent_notations)]
+
+        # Store parent notations with euroscivoc prefix in props
+        props = {
+            "parents": parents
+        }
+
+        return Entry(id, "EuroSciVoc", pref_label.capitalize(), languages, props)
 
     def _as_dict(self, entry):
         """Convert an entry to a dictionary."""
@@ -105,6 +146,7 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
             "scheme": entry.scheme,
             "subject": entry.subject,
             "title": entry.title,
+            "props": entry.props,
         }
 
     def apply(self, stream_entry, *args, **kwargs):
@@ -117,9 +159,9 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
         entry_data = self._transform_entry(
             stream_entry.entry["subject"], stream_entry.entry["rdf_graph"]
         )
-        entry_data = self._as_dict(entry_data)
-        stream_entry.entry = entry_data  # Update the stream entry with transformed data
+        stream_entry.entry = self._as_dict(entry_data)
         return stream_entry
+
 
 
 # Configuration for datastream readers, transformers, and writers
