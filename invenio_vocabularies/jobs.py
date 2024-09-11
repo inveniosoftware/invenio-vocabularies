@@ -16,6 +16,7 @@ from invenio_vocabularies.services.tasks import process_datastream
 from marshmallow import Schema, fields
 from marshmallow_utils.fields import TZDateTime
 from datetime import timezone
+from invenio_i18n import gettext as _
 
 
 class ArgsSchema(Schema):
@@ -24,13 +25,14 @@ class ArgsSchema(Schema):
         timezone=timezone.utc,
         format="iso",
         metadata={
-            "description": "YYYY-MM-DD HH:mm format. Leave field empty if it should continue since last successful run"
+            "description":
+                _("YYYY-MM-DD HH:mm format. Leave field empty if it should continue since last successful run")
         },
     )
-    type = fields.String(
+    job_arg_schema = fields.String(
         metadata={"type": "hidden"},
-        dump_default="ArgsSchemaAPI",
-        load_default="ArgsSchemaAPI",
+        dump_default="ArgsSchema",
+        load_default="ArgsSchema",
     )
 
 
@@ -38,12 +40,7 @@ class ProcessDataStreamJob(JobType):
 
     arguments_schema = ArgsSchema
     task = process_datastream
-    id = "process_datastream"
-    title = "Generic Process Data Stream task"
-
-    @classmethod
-    def build_task_arguments(cls, job_obj, since=None, custom_args=None, **kwargs):
-        raise NotImplemented
+    id = None
 
 
 class ProcessRORAffiliationsJob(ProcessDataStreamJob):
@@ -51,36 +48,36 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
 
     description = "Process ROR affiliations"
     title = "Load ROR affiliations"
+    id = "process_ror_affiliations"
 
     @classmethod
-    def build_task_arguments(cls, job_obj, since=None, custom_args=None, **kwargs):
-        if custom_args:
-            return custom_args
-
+    def default_args(cls, job_obj, since=None, **kwargs):
         if since is None and job_obj.last_runs["success"]:
             since = job_obj.last_runs["success"].started_at
         else:
             since = datetime.datetime.now()
 
-        return {"config": {
-            "readers": [
-                {
-                    "args": {"since": since},
-                    "type": "ror-http",
-                },
-                {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
-                {"type": "json"},
-            ],
-            "writers": [
-                {
-                    "args": {
-                        "writer": {
-                            "type": "affiliations-service",
-                            "args": {"update": True},
-                        }
+        return {
+            "config": {
+                "readers": [
+                    {
+                        "args": {"since": since},
+                        "type": "ror-http",
                     },
-                    "type": "async",
-                }
-            ],
-            "transformers": [{"type": "ror-affiliations"}],
-        }}
+                    {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
+                    {"type": "json"},
+                ],
+                "writers": [
+                    {
+                        "args": {
+                            "writer": {
+                                "type": "affiliations-service",
+                                "args": {"update": True},
+                            }
+                        },
+                        "type": "async",
+                    }
+                ],
+                "transformers": [{"type": "ror-affiliations"}],
+            }
+        }
