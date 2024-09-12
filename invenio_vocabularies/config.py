@@ -107,6 +107,7 @@ VOCABULARIES_NAMES_SCHEMES = {
 
 VOCABULARIES_SUBJECTS_SCHEMES = {
     "gnd": {"label": _("GND"), "validator": idutils.is_gnd, "datacite": "GND"},
+    "url": {"label": _("URL"), "validator": idutils.is_url},
 }
 """Subjects allowed identifier schemes."""
 

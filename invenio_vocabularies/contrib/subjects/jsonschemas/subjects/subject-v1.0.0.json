@@ -38,6 +38,14 @@
         }
       }
     },
+    "identifiers": {
+      "description": "Alternate identifiers for the subject.",
+      "type": "array",
+      "items": {
+        "$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"
+      },
+      "uniqueItems": true
+    },
     "synonyms": {
       "description": "Synonyms of the subject label.",
       "type": "array",

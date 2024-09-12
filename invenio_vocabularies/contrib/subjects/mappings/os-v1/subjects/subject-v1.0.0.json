@@ -71,6 +71,20 @@
         "type": "object",
         "dynamic": "true"
       },
+      "props": {
+        "type": "object",
+        "dynamic": "true"
+      },
+      "identifiers": {
+        "properties": {
+          "identifier": {
+            "type": "keyword"
+          },
+          "scheme": {
+            "type": "keyword"
+          }
+        }
+      },
       "synonyms": {
         "type": "text"
       },

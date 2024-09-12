@@ -10,15 +10,19 @@
 
 """Subjects schema."""
 
+from functools import partial
+
 from invenio_i18n import get_locale
-from marshmallow import fields, pre_load
-from marshmallow_utils.fields import SanitizedUnicode
+from marshmallow import Schema, fields, pre_load
+from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
+from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import (
     BaseVocabularySchema,
     ContribVocabularyRelationSchema,
     i18n_strings,
 )
+from .config import subject_schemes
 
 
 class SubjectSchema(BaseVocabularySchema):
@@ -31,7 +35,16 @@ class SubjectSchema(BaseVocabularySchema):
     scheme = SanitizedUnicode(required=True)
     subject = SanitizedUnicode(required=True)
     title = i18n_strings
-    props = fields.Dict(keys=SanitizedUnicode(), values=fields.List(SanitizedUnicode())) 
+    props = fields.Dict(keys=SanitizedUnicode(), values=fields.List(SanitizedUnicode()))
+    identifiers = IdentifierSet(
+        fields.Nested(
+            partial(
+                IdentifierSchema,
+                allowed_schemes=subject_schemes,
+                identifier_required=False,
+            )
+        )
+    )
     synonyms = fields.List(SanitizedUnicode())
 
     @pre_load
@@ -51,5 +64,5 @@ class SubjectRelationSchema(ContribVocabularyRelationSchema):
     subject = SanitizedUnicode()
     scheme = SanitizedUnicode()
     title = i18n_strings
-    props =  fields.Dict() 
+    props = fields.Dict()
     synonyms = fields.List(SanitizedUnicode())
