@@ -139,10 +139,17 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
 
         # Find parent notations in order from top parent to lowest
         parent_notations = self._find_parents(subject, rdf_graph)
-        parents = [f"euroscivoc:{notation}" for notation in reversed(parent_notations)]
+
+        parents = [
+            f"euroscivoc:{notation}"
+            for notation in reversed(parent_notations)
+            if notation is not None
+        ]
 
         # Store parent notations with euroscivoc prefix in props
-        props = {"parents": parents}
+        props = {}
+        if parents:
+            props["parents"] = parents
 
         # Create identifiers list
         identifiers = [{"scheme": "url", "identifier": str(subject)}]
