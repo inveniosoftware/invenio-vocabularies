@@ -74,6 +74,20 @@
       "synonyms": {
         "type": "text"
       },
+      "props": {
+        "type": "object",
+        "dynamic": "true"
+      },
+      "identifiers": {
+        "properties": {
+          "identifier": {
+            "type": "keyword"
+          },
+          "scheme": {
+            "type": "keyword"
+          }
+        }
+      },
       "tags": {
         "type": "keyword"
       }
