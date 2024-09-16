@@ -15,13 +15,14 @@ from marshmallow import Schema, ValidationError, fields, validate, validates_sch
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
-from ..subjects.schema import SubjectRelationSchema
 from ...services.schema import (
     BaseVocabularySchema,
+    ContribVocabularyRelationSchema,
     ModePIDFieldVocabularyMixin,
-    i18n_strings, ContribVocabularyRelationSchema,
+    i18n_strings,
 )
 from ..funders.schema import FunderRelationSchema
+from ..subjects.schema import SubjectRelationSchema
 from .config import award_schemes
 
 

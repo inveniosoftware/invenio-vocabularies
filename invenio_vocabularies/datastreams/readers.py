@@ -230,7 +230,6 @@ class XMLReader(BaseReader):
         self.root_element = root_element
         super().__init__(*args, **kwargs)
 
-
     def _iter(self, fp, *args, **kwargs):
         """Read and parse an XML file to dict."""
         # NOTE: We parse HTML, to skip XML validation and strip XML namespaces
@@ -245,7 +244,9 @@ class XMLReader(BaseReader):
         if self.root_element:
             record = xml_dict.get(self.root_element)
             if not record:
-                raise ReaderError(f"Root element '{self.root_element}' not found in XML entry.")
+                raise ReaderError(
+                    f"Root element '{self.root_element}' not found in XML entry."
+                )
         else:
             record = xml_dict
 

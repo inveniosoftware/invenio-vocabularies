@@ -8,10 +8,14 @@
 
 """Awards datastreams, transformers, writers and readers."""
 
+import io
+
+import requests
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.errors import TransformerError
+from ...datastreams.readers import BaseReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from .config import awards_ec_ror_id, awards_openaire_funders_mapping
@@ -151,11 +155,7 @@ class CORDISProjectTransformer(BaseTransformer):
         award["id"] = f"00k4n6c32::{record['id']}"
 
         award["subjects"] = [
-            {
-                "scheme": "EuroSciVoc",
-                # TODO: Here lowercase while title cased in the subjects vocabulary.
-                "subject": category["title"],
-            }
+            {"id": f"euroscivoc:{category['code'].split('/')[-1]}"}
             for category in record["relations"]["categories"]["category"]
             if category["@classification"] == "euroSciVoc"
         ]
@@ -163,7 +163,9 @@ class CORDISProjectTransformer(BaseTransformer):
         organizations = record["relations"]["associations"]["organization"]
         # Projects with a single organization are not wrapped in a list,
         # so we do this here to be able to iterate over it.
-        organizations = organizations if isinstance(organizations, list) else [organizations]
+        organizations = (
+            organizations if isinstance(organizations, list) else [organizations]
+        )
         award["organizations"] = [
             {
                 # TODO: Here the legal name is uppercase.
@@ -211,14 +213,14 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 
 DATASTREAM_CONFIG_CORDIS = {
     "readers": [
-        # {"type": "cordis-project-http"},
-        # {
-        #     "type": "zip",
-        #     "args": {
-        #         "regex": "\\.xml$",
-        #         "mode": "r",
-        #     },
-        # },
+        {"type": "cordis-project-http"},
+        {
+            "type": "zip",
+            "args": {
+                "regex": "\\.xml$",
+                "mode": "r",
+            },
+        },
         {
             "type": "xml",
             "args": {

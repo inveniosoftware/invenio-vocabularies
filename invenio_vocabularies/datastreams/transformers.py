@@ -32,9 +32,7 @@ class BaseTransformer(ABC):
 class XMLTransformer(BaseTransformer):
     """XML transformer."""
 
-    def __init__(
-        self, root_element=None, *args, **kwargs
-    ):
+    def __init__(self, root_element=None, *args, **kwargs):
         """Initializes the transformer."""
         self.root_element = root_element
         super().__init__(*args, **kwargs)
@@ -55,7 +53,9 @@ class XMLTransformer(BaseTransformer):
         if self.root_element:
             record = xml_dict.get(self.root_element)
             if not record:
-                raise TransformerError(f"Root element '{self.root_element}' not found in XML entry.")
+                raise TransformerError(
+                    f"Root element '{self.root_element}' not found in XML entry."
+                )
         else:
             record = xml_dict
 
