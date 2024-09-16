@@ -21,7 +21,8 @@ from invenio_records_resources.records.systemfields import (
 )
 from invenio_records_resources.resources.records.headers import etag_headers
 
-from ...services.permissions import PermissionPolicy
+from invenio_vocabularies.services.permissions import PermissionPolicy
+
 from ..affiliations.api import Affiliation
 from .config import NamesSearchOptions, service_components
 from .schema import NameSchema

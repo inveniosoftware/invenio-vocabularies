@@ -16,7 +16,8 @@ from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import ModelPIDField
 from invenio_records_resources.resources.records.headers import etag_headers
 
-from ...services.permissions import PermissionPolicy
+from invenio_vocabularies.services.permissions import PermissionPolicy
+
 from .config import AffiliationsSearchOptions, service_components
 from .schema import AffiliationSchema
 
