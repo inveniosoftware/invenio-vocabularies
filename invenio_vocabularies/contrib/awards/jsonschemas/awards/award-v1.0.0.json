@@ -46,18 +46,9 @@
     "subjects": {
       "description": "Award's subjects.",
       "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "scheme": {
-            "description": "Identifier of the subject scheme.",
-            "$ref": "local://definitions-v1.0.0.json#/identifier"
-          },
-          "subject": {
-            "description": "Human readable label.",
-            "type": "string"
-          }
+      "properties": {
+        "id": {
+          "$ref": "local://definitions-v1.0.0.json#/identifier"
         }
       },
       "uniqueItems": true
@@ -82,8 +73,7 @@
             "type": "string"
           }
         }
-      },
-      "uniqueItems": true
+      }
     }
   }
 }

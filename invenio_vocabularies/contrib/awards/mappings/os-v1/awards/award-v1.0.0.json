@@ -58,7 +58,7 @@
       "acronym": {
         "type": "keyword",
         "fields": {
-          "text": { "type": "text"}
+          "text": { "type": "text" }
         }
       },
       "program": {
@@ -66,13 +66,7 @@
       },
       "subjects": {
         "properties": {
-          "identifier": {
-            "type": "keyword"
-          },
-          "scheme": {
-            "type": "keyword"
-          },
-          "subject": {
+          "id": {
             "type": "keyword"
           }
         }
