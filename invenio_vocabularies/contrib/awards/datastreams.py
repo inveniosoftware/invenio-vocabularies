@@ -20,6 +20,8 @@ from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from .config import awards_ec_ror_id, awards_openaire_funders_mapping
 
+from invenio_vocabularies.datastreams.errors import ReaderError
+
 
 class AwardsServiceWriter(ServiceWriter):
     """Funders service writer."""
@@ -133,7 +135,16 @@ class CORDISProjectHTTPReader(BaseReader):
                 "CORDISProjectHTTPReader does not support being chained after another reader"
             )
 
-        file_url = "https://cordis.europa.eu/data/cordis-HORIZONprojects-xml.zip"
+        if self._origin == "HE":
+            file_url = "https://cordis.europa.eu/data/cordis-HORIZONprojects-xml.zip"
+        elif self._origin == "H2020":
+            file_url = "https://cordis.europa.eu/data/cordis-h2020projects-xml.zip"
+        elif self._origin == "FP7":
+            file_url = "https://cordis.europa.eu/data/cordis-fp7projects-xml.zip"
+        else:
+            raise ReaderError(
+                "The --origin option should be either 'HE' (for Horizon Europe) or 'H2020' (for Horizon 2020) or 'FP7'"
+            )
 
         # Download the ZIP file and fully load the response bytes content in memory.
         # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `zipfile.ZipFile`).
@@ -166,15 +177,31 @@ class CORDISProjectTransformer(BaseTransformer):
         organizations = (
             organizations if isinstance(organizations, list) else [organizations]
         )
-        award["organizations"] = [
-            {
+        award["organizations"] = []
+        for organization in organizations:
+            # Some organizations in FP7 projects do not have a "legalname" key,
+            # for instance the 14th participant in "SAGE" https://cordis.europa.eu/project/id/999902.
+            # In this case, fully skip the organization entry.
+            if "legalname" not in organization:
+                continue
+
+            organization_data = {
                 # TODO: Here the legal name is uppercase.
                 "organization": organization["legalname"],
-                "scheme": "pic",
-                "id": organization["id"],
             }
-            for organization in organizations
-        ]
+
+            # Some organizations in FP7 projects do not have an "id" key (the PIC identifier),
+            # for instance "AIlGreenVehicles" in "MOTORBRAIN" https://cordis.europa.eu/project/id/270693.
+            # In this case, still store the name but skip the identifier part.
+            if "id" in organization:
+                organization_data.update(
+                    {
+                        "scheme": "pic",
+                        "id": organization["id"],
+                    }
+                )
+
+            award["organizations"].append(organization_data)
 
         stream_entry.entry = award
         return stream_entry
