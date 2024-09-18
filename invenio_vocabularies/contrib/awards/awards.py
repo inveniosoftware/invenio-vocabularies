@@ -18,24 +18,35 @@ from invenio_db import db
 from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.dumpers.relations import RelationDumperExt
-from invenio_records.systemfields import RelationsField
+from invenio_records.systemfields import MultiRelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
-from invenio_records_resources.records.systemfields import ModelPIDField, PIDRelation
+from invenio_records_resources.records.systemfields import (
+    ModelPIDField,
+    PIDListRelation,
+    PIDRelation,
+)
 from invenio_records_resources.resources.records.headers import etag_headers
 
 from ...services.permissions import PermissionPolicy
 from ..funders.api import Funder
+from ..subjects.api import Subject
 from .config import AwardsSearchOptions, service_components
 from .schema import AwardSchema
 from .serializer import AwardL10NItemSchema
 
-award_relations = RelationsField(
+award_relations = MultiRelationsField(
     funders=PIDRelation(
         "funder",
         keys=["name"],
         pid_field=Funder.pid,
         cache_key="funder",
-    )
+    ),
+    subjects=PIDListRelation(
+        "subjects",
+        keys=["subject", "scheme", "props"],
+        pid_field=Subject.pid,
+        cache_key="subjects",
+    ),
 )
 
 record_type = RecordTypeFactory(

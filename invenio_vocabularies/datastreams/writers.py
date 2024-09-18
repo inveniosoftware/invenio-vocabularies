@@ -88,25 +88,9 @@ class ServiceWriter(BaseWriter):
         vocab_id = self._entry_id(entry)
         current = self._resolve(vocab_id)
 
-        # updated = dict(current.to_dict(), **entry)
+        updated = dict(current.to_dict(), **entry)
         # TODO: Try to use _record instead of to_dict()
         # updated = dict(current._record, **entry)
-
-        # Merge the `current` dictionary with new data in the `entry` dictionary
-        # by appending to lists at the top level instead of overwriting the list.
-        updated = current.to_dict()
-        for key, value in entry.items():
-            if (
-                key in updated
-                and isinstance(updated[key], list)
-                and isinstance(value, list)
-            ):
-                for value_item in value:
-                    # TODO: If an identifier was wrong and is then corrected, this will cause duplicated entries.
-                    if value_item not in updated[key]:
-                        updated[key].append(value_item)
-            else:
-                updated[key] = value
 
         return StreamEntry(self._service.update(self._identity, vocab_id, updated))
 
