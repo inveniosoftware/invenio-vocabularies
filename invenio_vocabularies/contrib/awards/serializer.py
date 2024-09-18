@@ -12,6 +12,9 @@ from marshmallow import Schema, fields
 
 from invenio_vocabularies.resources import L10NString
 
+from ..subjects.schema import SubjectRelationSchema
+from .schema import AwardOrganizationRelationSchema
+
 
 class IdentifierSchema(Schema):
     """Identifier scheme."""
@@ -37,5 +40,8 @@ class AwardL10NItemSchema(Schema):
     acronym = fields.String(dump_only=True)
     program = fields.String(dump_only=True)
     funder = fields.Nested(FunderRelationSchema, dump_only=True)
-    # TODO: Add subjects and organizations here?
+    organizations = fields.List(
+        fields.Nested(AwardOrganizationRelationSchema), dump_only=True
+    )
+    subjects = fields.List(fields.Nested(SubjectRelationSchema), dump_only=True)
     identifiers = fields.List(fields.Nested(IdentifierSchema), dump_only=True)
