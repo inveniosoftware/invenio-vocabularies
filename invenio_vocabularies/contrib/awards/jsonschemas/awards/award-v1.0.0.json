@@ -49,6 +49,30 @@
       "properties": {
         "id": {
           "$ref": "local://definitions-v1.0.0.json#/identifier"
+        },
+        "scheme": {
+          "description": "Identifier of the subject scheme.",
+          "$ref": "local://definitions-v1.0.0.json#/identifier"
+        },
+        "subject": {
+          "description": "Human readable label.",
+          "type": "string"
+        },
+        "props": {
+          "type": "object",
+          "patternProperties": {
+            "^.*$": {
+              "type": "string"
+            }
+          }
+        },
+        "identifiers": {
+          "description": "Alternate identifiers for the subject.",
+          "type": "array",
+          "items": {
+            "$ref": "local://definitions-v2.0.0.json#/identifiers_with_scheme"
+          },
+          "uniqueItems": true
         }
       },
       "uniqueItems": true

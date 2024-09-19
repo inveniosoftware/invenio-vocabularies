@@ -14,13 +14,13 @@ import requests
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
+from invenio_vocabularies.datastreams.errors import ReaderError
+
 from ...datastreams.errors import TransformerError
 from ...datastreams.readers import BaseReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from .config import awards_ec_ror_id, awards_openaire_funders_mapping
-
-from invenio_vocabularies.datastreams.errors import ReaderError
 
 
 class AwardsServiceWriter(ServiceWriter):
@@ -165,10 +165,14 @@ class CORDISProjectTransformer(BaseTransformer):
         # Here `id` is the project ID, which will be used to attach the update to the existing project.
         award["id"] = f"00k4n6c32::{record['id']}"
 
+        categories = record["relations"]["categories"]["category"]
+        if isinstance(categories, dict):
+            categories = [categories]
+
         award["subjects"] = [
             {"id": f"euroscivoc:{category['code'].split('/')[-1]}"}
-            for category in record["relations"]["categories"]["category"]
-            if category["@classification"] == "euroSciVoc"
+            for category in categories
+            if category.get("@classification") == "euroSciVoc"
         ]
 
         organizations = record["relations"]["associations"]["organization"]

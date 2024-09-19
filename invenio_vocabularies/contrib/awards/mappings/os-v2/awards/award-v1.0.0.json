@@ -11,7 +11,7 @@
         }
       }
     ],
-    "dynamic": "strict",
+    "dynamic": "true",
     "properties": {
       "$schema": {
         "type": "keyword",
@@ -66,8 +66,25 @@
       },
       "subjects": {
         "properties": {
+          "@v": {
+            "type": "keyword"
+          },
           "id": {
             "type": "keyword"
+          },
+          "props": {
+            "type": "object",
+            "dynamic": "true"
+          },
+          "identifiers": {
+            "properties": {
+              "identifier": {
+                "type": "keyword"
+              },
+              "scheme": {
+                "type": "keyword"
+              }
+            }
           }
         }
       },
