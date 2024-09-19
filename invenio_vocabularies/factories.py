@@ -125,17 +125,6 @@ class AffiliationsOpenAIREVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for OpenAIRE Affiliations")
 
 
-# class ProjectsVocabularyConfig(VocabularyConfig):  # TODO: Delete this config
-#     """Projects Vocabulary Config."""
-
-#     config = projects_ds_config
-#     vocabulary_name = "projects"
-
-#     def get_service(self):
-#         """Get the service for the vocabulary."""
-#         raise NotImplementedError("Service not implemented for Projects")
-
-
 def get_vocabulary_config(vocabulary):
     """Factory function to get the appropriate Vocabulary Config."""
     vocab_config = {
@@ -145,7 +134,6 @@ def get_vocabulary_config(vocabulary):
         "awards:cordis": AwardsCordisVocabularyConfig,
         "affiliations": AffiliationsVocabularyConfig,
         "affiliations:openaire": AffiliationsOpenAIREVocabularyConfig,
-        # "projects": ProjectsVocabularyConfig,
         "subjects": SubjectsVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()

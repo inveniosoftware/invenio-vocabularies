@@ -16,10 +16,12 @@ from invenio_access.permissions import system_identity
 from invenio_vocabularies.contrib.awards.api import Award
 from invenio_vocabularies.contrib.awards.datastreams import (
     AwardsServiceWriter,
+    CORDISProjectTransformer,
     OpenAIREProjectTransformer,
 )
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
+from invenio_vocabularies.datastreams.readers import XMLReader
 
 
 @pytest.fixture(scope="function")
@@ -109,6 +111,72 @@ def expected_from_award_json_ec():
         "funder": {"id": "00k4n6c32"},
         "acronym": "TS",
         "program": "test",
+    }
+
+
+CORDIS_PROJECT_XML = bytes(
+    """      
+<project
+	xmlns="http://cordis.europa.eu">
+	<language>en</language>
+	<availableLanguages readOnly="true">en</availableLanguages>
+	<rcn>264556</rcn>
+	<id>101117736</id>
+	<acronym>Time2SWITCH</acronym>
+	<identifiers>
+		<grantDoi>10.3030/101117736</grantDoi>
+	</identifiers>
+	<relations>
+		<associations>
+			<organization type="coordinator" source="corda" order="1" ecContribution="1496795" terminated="false" sme="false" netEcContribution="1496795" totalCost="1496795">
+				<availableLanguages readOnly="true">en</availableLanguages>
+				<rcn>1908489</rcn>
+				<id>999979888</id>
+				<vatNumber>ATU37675002</vatNumber>
+				<legalName>TECHNISCHE UNIVERSITAET WIEN</legalName>
+				<shortName>TU WIEN</shortName>
+				<departmentName>Institute of Electrodynamics, Microwave and Circuit Engineer</departmentName>
+				<relations>
+					<categories>
+						<category classification="organizationActivityType" type="relatedOrganizationActivityType">
+							<language>en</language>
+							<availableLanguages readOnly="true">de,en,es,fr,it,pl</availableLanguages>
+							<code>HES</code>
+							<title>Higher or Secondary Education Establishments</title>
+							<displayCode readOnly="true">/Higher or Secondary Education Establishments</displayCode>
+						</category>
+					</categories>
+				</relations>
+			</organization>
+		</associations>
+		<categories>
+			<category classification="euroSciVoc" type="isInFieldOfScience">
+				<language>en</language>
+				<availableLanguages readOnly="true">de,en,es,fr,it,pl</availableLanguages>
+				<code>/21/39/225</code>
+				<title>oncology</title>
+				<displayCode readOnly="true">/medical and health sciences/clinical medicine/oncology</displayCode>
+			</category>
+		</categories>
+	</relations>
+</project>
+    """,
+    encoding="utf-8",
+)
+
+
+@pytest.fixture(scope="module")
+def expected_from_cordis_project_xml():
+    return {
+        "id": "00k4n6c32::101117736",
+        "subjects": [{"id": "euroscivoc:225"}],
+        "organizations": [
+            {
+                "id": "999979888",
+                "scheme": "pic",
+                "organization": "TECHNISCHE UNIVERSITAET WIEN",
+            }
+        ],
     }
 
 
@@ -239,3 +307,15 @@ def test_awards_service_writer_update_non_existing(
 
     # not-ideal cleanup
     award_rec._record.delete(force=True)
+
+
+def test_awards_cordis_transformer(
+    expected_from_cordis_project_xml,
+):
+    reader = XMLReader()
+    award = next(reader.read(CORDIS_PROJECT_XML))
+
+    cordis_transformer = CORDISProjectTransformer()
+    transformed_award_data = cordis_transformer.apply(StreamEntry(award["project"]))
+
+    assert transformed_award_data.entry == expected_from_cordis_project_xml

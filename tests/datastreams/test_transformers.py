@@ -18,8 +18,10 @@ from invenio_vocabularies.datastreams.transformers import XMLTransformer
 @pytest.fixture(scope="module")
 def expected_from_xml():
     return {
-        "field_one": "value",
-        "multi_field": {"some": "value", "another": "value too"},
+        "record": {
+            "field_one": "value",
+            "multi_field": {"some": "value", "another": "value too"},
+        }
     }
 
 
@@ -55,6 +57,7 @@ def test_bad_xml_transformer():
         )
     )
 
-    transformer = XMLTransformer()
+    transformer = XMLTransformer(root_element="field_two")
+
     with pytest.raises(TransformerError):
         transformer.apply(bytes_xml_entry)

@@ -43,7 +43,7 @@ award_relations = MultiRelationsField(
     ),
     subjects=PIDListRelation(
         "subjects",
-        keys=["subject", "scheme", "props"],
+        keys=["subject", "scheme", "identifiers", "props"],
         pid_field=Subject.pid,
         cache_key="subjects",
     ),
