@@ -29,6 +29,16 @@
           ]
         }
       },
+      "normalizer": {
+        "accent_normalizer": {
+          "type": "custom",
+          "char_filter": ["strip_special_chars"],
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      },
       "filter": {
         "lowercase": {
           "type": "lowercase",
@@ -112,7 +122,13 @@
       "acronym": {
         "type": "text",
         "analyzer": "accent_edge_analyzer",
-        "search_analyzer": "accent_analyzer"
+        "search_analyzer": "accent_analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "normalizer": "accent_normalizer"
+          }
+        }
       },
       "status": {
         "type": "keyword"

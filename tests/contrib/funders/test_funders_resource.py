@@ -127,9 +127,12 @@ def test_funders_suggest_sort(client, h, prefix, example_funders):
     # Should show 2 results, and id=cern as first due to name
     res = client.get(f"{prefix}?suggest=CERN", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 2  # should be 2
+    assert res.json["hits"]["total"] == 3
     assert res.json["hits"]["hits"][0]["name"] == "CERN"
     assert res.json["hits"]["hits"][1]["name"] == "CERT"
+    # Matches lower, since title is boosted less
+    assert res.json["hits"]["hits"][2]["name"] == "OTHER"
+    assert res.json["hits"]["hits"][2]["title"]["en"] == "CERN"
 
     res = client.get(f"{prefix}?suggest=N%C3%B5rthw%C3%AAst", headers=h)  # Nõrthwêst
     assert res.status_code == 200
