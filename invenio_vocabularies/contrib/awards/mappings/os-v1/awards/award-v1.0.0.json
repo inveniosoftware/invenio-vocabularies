@@ -11,7 +11,7 @@
         }
       }
     ],
-    "dynamic": "true",
+    "dynamic": "strict",
     "properties": {
       "$schema": {
         "type": "keyword",
