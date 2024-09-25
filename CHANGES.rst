@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version v5.1.0 (released 2024-09-25)
+
+- funders: tune search boost for acronyms
+    * Add and `acronym.keyword` field to the funders mapping.
+    * Apply to funders the same field boosting as in affiliations.
+
 Version v5.0.3 (released 2024-09-06)
 
 - services: skip index rebuilding
