@@ -34,7 +34,7 @@
       "type": "object",
       "patternProperties": {
         "^.*$": {
-          "type": "array"
+          "type": "string"
         }
       }
     },
@@ -42,7 +42,7 @@
       "description": "Alternate identifiers for the subject.",
       "type": "array",
       "items": {
-        "$ref": "local://definitions-v1.0.0.json#/identifiers_with_scheme"
+        "$ref": "local://definitions-v2.0.0.json#/identifiers_with_scheme"
       },
       "uniqueItems": true
     },
