@@ -35,7 +35,7 @@ class SubjectSchema(BaseVocabularySchema):
     scheme = SanitizedUnicode(required=True)
     subject = SanitizedUnicode(required=True)
     title = i18n_strings
-    props = fields.Dict(keys=SanitizedUnicode(), values=fields.List(SanitizedUnicode()))
+    props = fields.Dict(keys=SanitizedUnicode(), values=SanitizedUnicode())
     identifiers = IdentifierSet(
         fields.Nested(
             partial(
@@ -62,7 +62,16 @@ class SubjectRelationSchema(ContribVocabularyRelationSchema):
     ftf_name = "subject"
     parent_field_name = "subjects"
     subject = SanitizedUnicode()
-    scheme = SanitizedUnicode()
-    title = i18n_strings
-    props = fields.Dict()
-    synonyms = fields.List(SanitizedUnicode())
+    scheme = SanitizedUnicode(dump_only=True)
+    title = fields.Dict(dump_only=True)
+    props = fields.Dict(dump_only=True)
+    identifiers = IdentifierSet(
+        fields.Nested(
+            partial(
+                IdentifierSchema,
+                allowed_schemes=subject_schemes,
+                identifier_required=False,
+            )
+        )
+    )
+    synonyms = fields.List(SanitizedUnicode(), dump_only=True)

@@ -14,6 +14,7 @@ from collections import namedtuple
 import requests
 from rdflib import OWL, RDF, Graph, Namespace
 
+from invenio_vocabularies.config import SUBJECTS_EUROSCIVOC_FILE_URL
 from invenio_vocabularies.datastreams.readers import BaseReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
 
@@ -27,10 +28,7 @@ class EuroSciVocSubjectsHTTPReader(BaseReader):
         :param origin: The URL from which to fetch the RDF data.
         :param mode: Mode of operation (default is 'r' for reading).
         """
-        self.origin = (
-            origin
-            or "https://op.europa.eu/o/opportal-service/euvoc-download-handler?cellarURI=http%3A%2F%2Fpublications.europa.eu%2Fresource%2Fdistribution%2Feuroscivoc%2F20231115-0%2Frdf%2Fskos_ap_eu%2FEuroSciVoc-skos-ap-eu.rdf&fileName=EuroSciVoc-skos-ap-eu.rdf"
-        )
+        self.origin = origin or SUBJECTS_EUROSCIVOC_FILE_URL
         super().__init__(origin=origin, mode=mode, *args, **kwargs)
 
     def _iter(self, rdf_graph):
@@ -73,99 +71,66 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
     """Transformer class to convert EuroSciVoc RDF data to a dictionary format."""
 
     SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
+    SPLITCHAR = ","
 
     def _get_notation(self, subject, rdf_graph):
-        """Extract the numeric notation for a subject, ignoring UUID-style notations."""
+        """Extract the numeric notation for a subject."""
         for _, _, notation in rdf_graph.triples(
             (subject, self.SKOS_CORE.notation, None)
         ):
-            notation_str = str(notation)
-            if notation_str.isdigit():
-                return notation_str
+            if str(notation).isdigit():
+                return str(notation)
         return None
 
     def _get_labels(self, subject, rdf_graph):
         """Extract prefLabel and altLabel languages for a subject."""
-        labels = {}
-        for _, _, label in rdf_graph.triples((subject, self.SKOS_CORE.prefLabel, None)):
-            labels[label.language] = label.value
-
+        labels = {
+            label.language: label.value
+            for _, _, label in rdf_graph.triples(
+                (subject, self.SKOS_CORE.prefLabel, None)
+            )
+        }
         if "en" not in labels:
             for _, _, label in rdf_graph.triples(
                 (subject, self.SKOS_CORE.altLabel, None)
             ):
-                if label.language not in labels:
-                    labels[label.language] = label.value
-
+                labels.setdefault(label.language, label.value)
         return labels
 
     def _find_parents(self, subject, rdf_graph):
-        """Find the parent notations of a subject."""
+        """Find parent notations."""
         parents = []
-        previous_parent = None
 
-        while True:
-            broader_found = False
-            for _, _, parent in rdf_graph.triples(
-                (subject, self.SKOS_CORE.broader, None)
-            ):
-                if previous_parent is not None:
-                    parents.append(self._get_notation(previous_parent, rdf_graph))
-                previous_parent = parent
-                subject = parent
-                broader_found = True
-                break
-
-            if not broader_found:
-                if previous_parent is not None:
-                    parents.append(self._get_notation(previous_parent, rdf_graph))
-                break
+        # Traverse the broader hierarchy
+        for broader in rdf_graph.transitive_objects(subject, self.SKOS_CORE.broader):
+            if broader != subject:  # Ensure we don't include the current subject
+                parent_notation = self._get_notation(broader, rdf_graph)
+                if parent_notation:
+                    parents.append(parent_notation)
 
         return parents
 
     def _transform_entry(self, subject, rdf_graph):
         """Transform an entry to the required dictionary format."""
-        Entry = namedtuple(
-            "Entry", ["id", "scheme", "subject", "title", "identifiers", "props"]
-        )
-
         # Get subject notation with euroscivoc prefix
         notation = self._get_notation(subject, rdf_graph)
         id = f"euroscivoc:{notation}" if notation else None
-
         # Get labels for the current subject
-        languages = self._get_labels(subject, rdf_graph)
-        pref_label = languages.get("en", "")
-
-        # Find parent notations in order from top parent to lowest
-        parent_notations = self._find_parents(subject, rdf_graph)
-
-        parents = [
-            f"euroscivoc:{notation}"
-            for notation in reversed(parent_notations)
-            if notation is not None
-        ]
-
-        # Store parent notations with euroscivoc prefix in props
-        props = {}
-        if parents:
-            props["parents"] = parents
-
+        labels = self._get_labels(subject, rdf_graph)
+        # Join parent notations with SPLITCHAR separator and add euroscivoc prefix
+        parents = self.SPLITCHAR.join(
+            f"euroscivoc:{n}" for n in reversed(self._find_parents(subject, rdf_graph))
+        )
         # Create identifiers list
         identifiers = [{"scheme": "url", "identifier": str(subject)}]
-        return Entry(
-            id, "EuroSciVoc", pref_label.capitalize(), languages, identifiers, props
-        )
 
-    def _as_dict(self, entry):
-        """Convert an entry to a dictionary."""
         return {
-            "id": entry.id,
-            "scheme": entry.scheme,
-            "subject": entry.subject,
-            "title": entry.title,
-            "props": entry.props,
-            "identifiers": entry.identifiers,
+            "id": id,
+            "scheme": "EuroSciVoc",
+            "subject": labels.get("en", "").capitalize(),
+            "title": labels,
+            "props": {"parents": parents} if parents else {},
+            "identifiers": identifiers,
         }
 
     def apply(self, stream_entry, *args, **kwargs):
@@ -178,7 +143,7 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
         entry_data = self._transform_entry(
             stream_entry.entry["subject"], stream_entry.entry["rdf_graph"]
         )
-        stream_entry.entry = self._as_dict(entry_data)
+        stream_entry.entry = entry_data
         return stream_entry
 
 

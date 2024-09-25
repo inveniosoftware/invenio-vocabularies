@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 import pytest
 from rdflib import RDF, Graph, Namespace, URIRef
 
-from invenio_vocabularies.contrib.subjects.euroscivoc.datastreams import (  # Adjust import based on your module name
+from invenio_vocabularies.contrib.subjects.euroscivoc.datastreams import (
     EuroSciVocSubjectsHTTPReader,
     EuroSciVocSubjectsTransformer,
 )
@@ -115,7 +115,7 @@ def expected_from_rdf_pref_label_with_parent():
                 "de": "Satellitenfunk",
                 "en": "satellite radio",
             },
-            "props": {"parents": ["euroscivoc:1225"]},
+            "props": {"parents": "euroscivoc:1225"},
             "identifiers": [
                 {
                     "scheme": "url",
