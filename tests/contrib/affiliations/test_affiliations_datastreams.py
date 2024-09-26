@@ -18,6 +18,8 @@ from invenio_vocabularies.contrib.affiliations.api import Affiliation
 from invenio_vocabularies.contrib.affiliations.config import affiliation_schemes
 from invenio_vocabularies.contrib.affiliations.datastreams import (
     AffiliationsServiceWriter,
+    OpenAIREAffiliationsServiceWriter,
+    OpenAIREOrganizationTransformer,
 )
 from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.datastreams import StreamEntry
@@ -118,3 +120,134 @@ def test_affiliations_service_writer_update_non_existing(
 
     # not-ideal cleanup
     affiliation_rec._record.delete(force=True)
+
+
+@pytest.fixture()
+def dict_openaire_organization_entry():
+    """An example entry from OpenAIRE organization Data Dump."""
+    return StreamEntry(
+        {
+            "alternativeNames": [
+                "European Organization for Nuclear Research",
+                "Organisation européenne pour la recherche nucléaire",
+                "CERN",
+            ],
+            "country": {"code": "CH", "label": "Switzerland"},
+            "id": "openorgs____::47efb6602225236c0b207761a8b3a21c",
+            "legalName": "European Organization for Nuclear Research",
+            "legalShortName": "CERN",
+            "pid": [
+                {"scheme": "mag_id", "value": "67311998"},
+                {"scheme": "ISNI", "value": "000000012156142X"},
+                {"scheme": "Wikidata", "value": "Q42944"},
+                {"scheme": "PIC", "value": "999988133"},
+                {"scheme": "ROR", "value": "https://ror.org/01ggx4157"},
+                {"scheme": "OrgReg", "value": "INT1011"},
+                {"scheme": "ISNI", "value": "000000012156142X"},
+                {"scheme": "FundRef", "value": "100012470"},
+                {"scheme": "GRID", "value": "grid.9132.9"},
+                {"scheme": "OrgRef", "value": "37351"},
+            ],
+            "websiteUrl": "http://home.web.cern.ch/",
+        }
+    )
+
+
+@pytest.fixture(scope="module")
+def expected_from_openaire_json():
+    return {
+        "openaire_id": "openorgs____::47efb6602225236c0b207761a8b3a21c",
+        "id": "01ggx4157",
+        "identifiers": [{"identifier": "999988133", "scheme": "pic"}],
+    }
+
+
+def test_openaire_organization_transformer(
+    app, dict_openaire_organization_entry, expected_from_openaire_json
+):
+    transformer = OpenAIREOrganizationTransformer()
+    assert (
+        expected_from_openaire_json
+        == transformer.apply(dict_openaire_organization_entry).entry
+    )
+
+
+def test_openaire_affiliations_service_writer(
+    app, search_clear, affiliation_full_data, openaire_affiliation_full_data, service
+):
+    # create vocabulary with original service writer
+    orig_writer = AffiliationsServiceWriter()
+    orig_affiliation_rec = orig_writer.write(StreamEntry(affiliation_full_data))
+    orig_affiliation_dict = orig_affiliation_rec.entry.to_dict()
+    Affiliation.index.refresh()  # refresh index to make changes live
+
+    # update vocabulary and check changes vocabulary with OpenAIRE service writer
+    writer = OpenAIREAffiliationsServiceWriter(update=True)
+    _ = writer.write(StreamEntry(openaire_affiliation_full_data))
+    Affiliation.index.refresh()  # refresh index to make changes live
+    affiliation_rec = service.read(system_identity, orig_affiliation_rec.entry.id)
+    affiliation_dict = affiliation_rec.to_dict()
+
+    assert _.entry.id == orig_affiliation_rec.entry.id
+
+    # updating fields changing from one update to the other
+    orig_affiliation_dict["revision_id"] = affiliation_dict["revision_id"]
+    orig_affiliation_dict["updated"] = affiliation_dict["updated"]
+    # Adding the extra identifier coming from OpenAIRE
+    orig_affiliation_dict["identifiers"].extend(
+        openaire_affiliation_full_data["identifiers"]
+    )
+
+    assert dict(orig_affiliation_dict) == affiliation_dict
+
+    # not-ideal cleanup
+    affiliation_rec._record.delete(force=True)
+
+
+def test_openaire_affiliations_service_writer_non_openorgs(
+    app, openaire_affiliation_full_data
+):
+    writer = OpenAIREAffiliationsServiceWriter()
+
+    updated_openaire_affiliation = deepcopy(openaire_affiliation_full_data)
+    updated_openaire_affiliation["openaire_id"] = (
+        "pending_org_::627931d047132a4e20dbc4a882eb9a35"
+    )
+
+    with pytest.raises(WriterError) as err:
+        writer.write(StreamEntry(updated_openaire_affiliation))
+
+    expected_error = [
+        f"Not valid OpenAIRE OpenOrgs id for: {updated_openaire_affiliation}"
+    ]
+    assert expected_error in err.value.args
+
+
+def test_openaire_affiliations_service_writer_no_id(
+    app, openaire_affiliation_full_data
+):
+    writer = OpenAIREAffiliationsServiceWriter()
+
+    updated_openaire_affiliation = deepcopy(openaire_affiliation_full_data)
+    del updated_openaire_affiliation["id"]
+
+    with pytest.raises(WriterError) as err:
+        writer.write(StreamEntry(updated_openaire_affiliation))
+
+    expected_error = [f"No id for: {updated_openaire_affiliation}"]
+    assert expected_error in err.value.args
+
+
+def test_openaire_affiliations_service_writer_no_alternative_identifiers(
+    app, openaire_affiliation_full_data
+):
+    writer = OpenAIREAffiliationsServiceWriter()
+
+    updated_openaire_affiliation = deepcopy(openaire_affiliation_full_data)
+    del updated_openaire_affiliation["identifiers"]
+
+    with pytest.raises(WriterError) as err:
+        writer.write(StreamEntry(updated_openaire_affiliation))
+
+    expected_error = [f"No alternative identifiers for: {updated_openaire_affiliation}"]
+    assert expected_error in err.value.args

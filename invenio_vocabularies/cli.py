@@ -101,9 +101,14 @@ def update(vocabulary, filepath=None, origin=None):
 
     for w_conf in config["writers"]:
         if w_conf["type"] == "async":
-            w_conf["args"]["writer"]["args"]["update"] = True
+            w_conf_update = w_conf["args"]["writer"]
         else:
-            w_conf["args"]["update"] = True
+            w_conf_update = w_conf
+
+        if "args" in w_conf_update:
+            w_conf_update["args"]["update"] = True
+        else:
+            w_conf_update["args"] = {"update": True}
 
     success, errored, filtered = _process_vocab(config)
 
