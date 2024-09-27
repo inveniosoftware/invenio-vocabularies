@@ -21,8 +21,9 @@ from invenio_vocabularies.datastreams.transformers import BaseTransformer
 
 
 class RORHTTPReader(BaseReader):
-    """
-    ROR HTTP Reader returning an in-memory
+    """ROR HTTP Reader.
+
+    Returning an in-memory
     binary stream of the latest ROR data dump ZIP file.
     """
 
@@ -33,7 +34,8 @@ class RORHTTPReader(BaseReader):
 
     def _iter(self, fp, *args, **kwargs):
         raise NotImplementedError(
-            "RORHTTPReader downloads one file and therefore does not iterate through items"
+            "RORHTTPReader downloads one file "
+            "and therefore does not iterate through items"
         )
 
     def _get_last_dump_date(self, linksets):
@@ -56,12 +58,14 @@ class RORHTTPReader(BaseReader):
                     return last_dump_date
         else:
             raise ReaderError(
-                "Couldn't find JSON-LD in publisher's linkset to determine last dump date."
+                "Couldn't find JSON-LD in publisher's linkset "
+                "to determine last dump date."
             )
 
     def read(self, item=None, *args, **kwargs):
-        """
-        Reads the latest ROR data dump ZIP file from
+        """Reads the latest ROR data dump.
+
+        Read from ZIP file from
         Zenodo and yields an in-memory binary stream of it.
         """
         if item:
@@ -74,7 +78,8 @@ class RORHTTPReader(BaseReader):
         landing_page = requests.get(dataset_doi_link, allow_redirects=True)
         landing_page.raise_for_status()
 
-        # Call the signposting `linkset+json` endpoint for the Concept DOI (i.e. latest version) of the ROR data dump.
+        # Call the signposting `linkset+json` endpoint for
+        # the Concept DOI (i.e. latest version) of the ROR data dump.
         # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
         if "linkset" not in landing_page.links:
             raise ReaderError("Linkset not found in the ROR dataset record.")
