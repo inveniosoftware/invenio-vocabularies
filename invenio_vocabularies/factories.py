@@ -16,10 +16,14 @@ from invenio_records_resources.proxies import current_service_registry
 from .contrib.affiliations.datastreams import (
     DATASTREAM_CONFIG as affiliations_ds_config,
 )
-from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config
+from .contrib.affiliations.datastreams import (
+    DATASTREAM_CONFIG_OPENAIRE as affiliations_openaire_ds_config,
+)
+from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config, DATASTREAM_CONFIG_CORDIS as awards_cordis_ds_config
 from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
 from .contrib.subjects.datastreams import DATASTREAM_CONFIG as subjects_ds_config
+from .contrib.projects.datastreams import DATASTREAM_CONFIG as projects_ds_config
 
 
 class VocabularyConfig:
@@ -84,6 +88,17 @@ class AwardsVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for Awards")
 
 
+class AwardsCordisVocabularyConfig(VocabularyConfig):
+    """Awards Vocabulary Config."""
+
+    config = awards_cordis_ds_config
+    vocabulary_name = "awards:cordis"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for CORDIS Awards")
+
+
 class AffiliationsVocabularyConfig(VocabularyConfig):
     """Affiliations Vocabulary Config."""
 
@@ -95,13 +110,38 @@ class AffiliationsVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for Affiliations")
 
 
+class AffiliationsOpenAIREVocabularyConfig(VocabularyConfig):
+    """OpenAIRE Affiliations Vocabulary Config."""
+
+    config = affiliations_openaire_ds_config
+    vocabulary_name = "affiliations:openaire"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for OpenAIRE Affiliations")
+
+
+class ProjectsVocabularyConfig(VocabularyConfig):  # TODO: Delete this config
+    """Projects Vocabulary Config."""
+
+    config = projects_ds_config
+    vocabulary_name = "projects"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for Projects")
+
+
 def get_vocabulary_config(vocabulary):
     """Factory function to get the appropriate Vocabulary Config."""
     vocab_config = {
         "names": NamesVocabularyConfig,
         "funders": FundersVocabularyConfig,
         "awards": AwardsVocabularyConfig,
+        "awards:cordis": AwardsCordisVocabularyConfig,
         "affiliations": AffiliationsVocabularyConfig,
+        "affiliations:openaire": AffiliationsOpenAIREVocabularyConfig,
+        "projects": ProjectsVocabularyConfig,
         "subjects": SubjectsVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()

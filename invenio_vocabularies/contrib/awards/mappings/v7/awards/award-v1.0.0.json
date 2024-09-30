@@ -64,6 +64,32 @@
       "program": {
         "type": "keyword"
       },
+      "subjects": {
+        "properties": {
+          "identifier": {
+            "type": "keyword"
+          },
+          "scheme": {
+            "type": "keyword"
+          },
+          "subject": {
+            "type": "keyword"
+          }
+        }
+      },
+      "organizations": {
+        "properties": {
+          "scheme": {
+            "type": "keyword"
+          },
+          "id": {
+            "type": "keyword"
+          },
+          "organization": {
+            "type": "keyword"
+          }
+        }
+      },
       "funder": {
         "type": "object",
         "properties": {

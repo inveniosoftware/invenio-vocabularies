@@ -243,7 +243,12 @@ DATASTREAM_CONFIG = {
                 "regex": "\\.xml$",
             },
         },
-        {"type": "xml"},
+        {
+            "type": "xml",
+            "args": {
+                "root_element": "record",
+            },
+        },
     ],
     "transformers": [{"type": "orcid"}],
     "writers": [
@@ -266,7 +271,12 @@ ORCID_PRESET_DATASTREAM_CONFIG = {
         {
             "type": "orcid-data-sync",
         },
-        {"type": "xml"},
+        {
+            "type": "xml",
+            "args": {
+                "root_element": "record",
+            },
+        },
     ],
     "transformers": [{"type": "orcid"}],
     "writers": [

@@ -43,8 +43,17 @@ VOCABULARIES_IDENTIFIER_SCHEMES = {
 }
 """"Generic identifier schemes, usable by other vocabularies."""
 
+
+def is_pic(val):
+    """Test if argument is a Participant Identification Code (PIC)."""
+    if len(val) != 9:
+        return False
+    return val.isdigit()
+
+
 VOCABULARIES_AFFILIATION_SCHEMES = {
     **VOCABULARIES_IDENTIFIER_SCHEMES,
+    "pic": {"label": _("PIC"), "validator": is_pic},
 }
 """Affiliations allowed identifier schemes."""
 

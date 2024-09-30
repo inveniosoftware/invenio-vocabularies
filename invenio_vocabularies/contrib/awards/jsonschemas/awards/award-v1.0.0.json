@@ -42,6 +42,48 @@
     },
     "program": {
       "type": "string"
+    },
+    "subjects": {
+      "description": "Award's subjects.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scheme": {
+            "description": "Identifier of the subject scheme.",
+            "$ref": "local://definitions-v1.0.0.json#/identifier"
+          },
+          "subject": {
+            "description": "Human readable label.",
+            "type": "string"
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "organizations": {
+      "description": "Award's organizations.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scheme": {
+            "description": "Identifier of the organization scheme.",
+            "$ref": "local://definitions-v1.0.0.json#/identifier"
+          },
+          "id": {
+            "description": "Identifier of the organization for the given scheme.",
+            "$ref": "local://definitions-v1.0.0.json#/identifier"
+          },
+          "organization": {
+            "description": "Human readable label.",
+            "type": "string"
+          }
+        }
+      },
+      "uniqueItems": true
     }
   }
 }
