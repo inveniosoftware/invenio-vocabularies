@@ -23,7 +23,7 @@ from invenio_vocabularies.contrib.affiliations.datastreams import (
 )
 from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.datastreams import StreamEntry
-from invenio_vocabularies.datastreams.errors import WriterError
+from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
 
 
 @pytest.fixture(scope="module")
@@ -51,11 +51,13 @@ def expected_from_ror_json():
 
 
 def test_ror_transformer(app, dict_ror_entry, expected_from_ror_json):
+    """Test RORTransformer to ensure it transforms ROR entries correctly."""
     transformer = RORTransformer(vocab_schemes=affiliation_schemes)
     assert expected_from_ror_json == transformer.apply(dict_ror_entry).entry
 
 
 def test_affiliations_service_writer_create(app, search_clear, affiliation_full_data):
+    """Test AffiliationsServiceWriter for creating a new affiliation."""
     writer = AffiliationsServiceWriter()
     affiliation_rec = writer.write(StreamEntry(affiliation_full_data))
     affiliation_dict = affiliation_rec.entry.to_dict()
@@ -68,6 +70,7 @@ def test_affiliations_service_writer_create(app, search_clear, affiliation_full_
 def test_affiliations_service_writer_duplicate(
     app, search_clear, affiliation_full_data
 ):
+    """Test AffiliationsServiceWriter for handling duplicate entries."""
     writer = AffiliationsServiceWriter()
     affiliation_rec = writer.write(stream_entry=StreamEntry(affiliation_full_data))
     Affiliation.index.refresh()  # refresh index to make changes live
@@ -84,6 +87,7 @@ def test_affiliations_service_writer_duplicate(
 def test_affiliations_service_writer_update_existing(
     app, search_clear, affiliation_full_data, service
 ):
+    """Test updating an existing affiliation using AffiliationsServiceWriter."""
     # create vocabulary
     writer = AffiliationsServiceWriter(update=True)
     orig_affiliation_rec = writer.write(stream_entry=StreamEntry(affiliation_full_data))
@@ -91,9 +95,11 @@ def test_affiliations_service_writer_update_existing(
     # update vocabulary
     updated_affiliation = deepcopy(affiliation_full_data)
     updated_affiliation["name"] = "Updated Name"
+
     # check changes vocabulary
     _ = writer.write(stream_entry=StreamEntry(updated_affiliation))
     affiliation_rec = service.read(system_identity, orig_affiliation_rec.entry.id)
+
     affiliation_dict = affiliation_rec.to_dict()
 
     # needed while the writer resolves from ES
@@ -107,6 +113,7 @@ def test_affiliations_service_writer_update_existing(
 def test_affiliations_service_writer_update_non_existing(
     app, search_clear, affiliation_full_data, service
 ):
+    """Test creating a new affiliation when updating a non-existing entry."""
     # vocabulary item not created, call update directly
     updated_affiliation = deepcopy(affiliation_full_data)
     updated_affiliation["name"] = "New name"
@@ -156,7 +163,6 @@ def dict_openaire_organization_entry():
 @pytest.fixture(scope="module")
 def expected_from_openaire_json():
     return {
-        "openaire_id": "openorgs____::47efb6602225236c0b207761a8b3a21c",
         "id": "01ggx4157",
         "identifiers": [{"identifier": "999988133", "scheme": "pic"}],
     }
@@ -165,6 +171,7 @@ def expected_from_openaire_json():
 def test_openaire_organization_transformer(
     app, dict_openaire_organization_entry, expected_from_openaire_json
 ):
+    """Test OpenAIREOrganizationTransformer for transforming OpenAIRE entries."""
     transformer = OpenAIREOrganizationTransformer()
     assert (
         expected_from_openaire_json
@@ -173,16 +180,24 @@ def test_openaire_organization_transformer(
 
 
 def test_openaire_affiliations_service_writer(
-    app, search_clear, affiliation_full_data, openaire_affiliation_full_data, service
+    app,
+    search_clear,
+    affiliation_full_data,
+    openaire_affiliation_full_data,
+    service,
 ):
+    """Test writing and updating an OpenAIRE affiliation entry."""
     # create vocabulary with original service writer
     orig_writer = AffiliationsServiceWriter()
+
     orig_affiliation_rec = orig_writer.write(StreamEntry(affiliation_full_data))
+
     orig_affiliation_dict = orig_affiliation_rec.entry.to_dict()
     Affiliation.index.refresh()  # refresh index to make changes live
 
     # update vocabulary and check changes vocabulary with OpenAIRE service writer
-    writer = OpenAIREAffiliationsServiceWriter(update=True)
+    writer = OpenAIREAffiliationsServiceWriter()
+
     _ = writer.write(StreamEntry(openaire_affiliation_full_data))
     Affiliation.index.refresh()  # refresh index to make changes live
     affiliation_rec = service.read(system_identity, orig_affiliation_rec.entry.id)
@@ -204,50 +219,49 @@ def test_openaire_affiliations_service_writer(
     affiliation_rec._record.delete(force=True)
 
 
-def test_openaire_affiliations_service_writer_non_openorgs(
-    app, openaire_affiliation_full_data
+def test_openaire_affiliations_transformer_non_openorgs(
+    app, dict_openaire_organization_entry
 ):
-    writer = OpenAIREAffiliationsServiceWriter()
+    """Test error handling for non-OpenOrgs ID in OpenAIRE transformer."""
+    transformer = OpenAIREOrganizationTransformer()
 
-    updated_openaire_affiliation = deepcopy(openaire_affiliation_full_data)
-    updated_openaire_affiliation["openaire_id"] = (
-        "pending_org_::627931d047132a4e20dbc4a882eb9a35"
-    )
+    updated_organization_entry = deepcopy(dict_openaire_organization_entry.entry)
+    updated_organization_entry["id"] = "pending_org_::627931d047132a4e20dbc4a882eb9a35"
 
-    with pytest.raises(WriterError) as err:
-        writer.write(StreamEntry(updated_openaire_affiliation))
+    with pytest.raises(TransformerError) as err:
+        transformer.apply(StreamEntry(updated_organization_entry))
 
     expected_error = [
-        f"Not valid OpenAIRE OpenOrgs id for: {updated_openaire_affiliation}"
+        f"Not valid OpenAIRE OpenOrgs id for: {updated_organization_entry}"
     ]
     assert expected_error in err.value.args
 
 
-def test_openaire_affiliations_service_writer_no_id(
-    app, openaire_affiliation_full_data
-):
-    writer = OpenAIREAffiliationsServiceWriter()
+def test_openaire_affiliations_transformer_no_id(app, dict_openaire_organization_entry):
+    """Test error handling when missing ID in OpenAIRE transformer."""
+    transformer = OpenAIREOrganizationTransformer()
 
-    updated_openaire_affiliation = deepcopy(openaire_affiliation_full_data)
-    del updated_openaire_affiliation["id"]
+    updated_organization_entry = deepcopy(dict_openaire_organization_entry.entry)
+    updated_organization_entry.pop("id", None)
 
-    with pytest.raises(WriterError) as err:
-        writer.write(StreamEntry(updated_openaire_affiliation))
+    with pytest.raises(TransformerError) as err:
+        transformer.apply(StreamEntry(updated_organization_entry))
 
-    expected_error = [f"No id for: {updated_openaire_affiliation}"]
+    expected_error = [f"No id for: {updated_organization_entry}"]
     assert expected_error in err.value.args
 
 
-def test_openaire_affiliations_service_writer_no_alternative_identifiers(
-    app, openaire_affiliation_full_data
+def test_openaire_affiliations_transformer_no_alternative_identifiers(
+    app, dict_openaire_organization_entry
 ):
-    writer = OpenAIREAffiliationsServiceWriter()
+    """Test error handling when missing alternative identifiers in OpenAIRE transformer."""
+    transformer = OpenAIREOrganizationTransformer()
 
-    updated_openaire_affiliation = deepcopy(openaire_affiliation_full_data)
-    del updated_openaire_affiliation["identifiers"]
+    updated_organization_entry = deepcopy(dict_openaire_organization_entry.entry)
+    updated_organization_entry.pop("pid", None)
 
-    with pytest.raises(WriterError) as err:
-        writer.write(StreamEntry(updated_openaire_affiliation))
+    with pytest.raises(TransformerError) as err:
+        transformer.apply(StreamEntry(updated_organization_entry))
 
-    expected_error = [f"No alternative identifiers for: {updated_openaire_affiliation}"]
+    expected_error = [f"No alternative identifiers for: {updated_organization_entry}"]
     assert expected_error in err.value.args

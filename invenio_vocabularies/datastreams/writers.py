@@ -87,16 +87,28 @@ class ServiceWriter(BaseWriter):
     def _do_update(self, entry):
         vocab_id = self._entry_id(entry)
         current = self._resolve(vocab_id)
+        combined_dict = current.to_dict()
 
-        updated = dict(current.to_dict(), **entry)
-        # TODO: Try to use _record instead of to_dict()
-        # updated = dict(current._record, **entry)
+        # Update fields from entry
+        for key, value in entry.items():
+            if key in combined_dict:
+                if isinstance(combined_dict[key], list) and isinstance(value, list):
+                    combined_dict[key].extend(
+                        item for item in value if item not in combined_dict[key]
+                    )
+                else:
+                    combined_dict[key] = value
+            else:
+                combined_dict[key] = value
 
-        return StreamEntry(self._service.update(self._identity, vocab_id, updated))
+        return StreamEntry(
+            self._service.update(self._identity, vocab_id, combined_dict)
+        )
 
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input entry using a given service."""
         entry = stream_entry.entry
+
         try:
             if self._insert:
                 try:

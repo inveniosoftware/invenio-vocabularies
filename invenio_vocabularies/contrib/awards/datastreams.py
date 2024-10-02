@@ -11,6 +11,7 @@
 import io
 
 import requests
+from flask import current_app
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
@@ -160,49 +161,55 @@ class CORDISProjectTransformer(BaseTransformer):
         award = {}
 
         # Here `id` is the project ID, which will be used to attach the update to the existing project.
-        award["id"] = f"00k4n6c32::{record['id']}"
-
-        categories = record["relations"]["categories"]["category"]
-        if isinstance(categories, dict):
-            categories = [categories]
-
-        award["subjects"] = [
-            {"id": f"euroscivoc:{category['code'].split('/')[-1]}"}
-            for category in categories
-            if category.get("@classification") == "euroSciVoc"
-        ]
-
-        organizations = record["relations"]["associations"]["organization"]
-        # Projects with a single organization are not wrapped in a list,
-        # so we do this here to be able to iterate over it.
-        organizations = (
-            organizations if isinstance(organizations, list) else [organizations]
+        award["id"] = (
+            f"{current_app.config['VOCABULARIES_AWARDS_EC_ROR_ID']}::{record['id']}"
         )
-        award["organizations"] = []
-        for organization in organizations:
-            # Some organizations in FP7 projects do not have a "legalname" key,
-            # for instance the 14th participant in "SAGE" https://cordis.europa.eu/project/id/999902.
-            # In this case, fully skip the organization entry.
-            if "legalname" not in organization:
-                continue
 
-            organization_data = {
-                # TODO: Here the legal name is uppercase.
-                "organization": organization["legalname"],
-            }
+        categories = record.get("relations", {}).get("categories", {}).get("category")
+        if categories:
+            if isinstance(categories, dict):
+                categories = [categories]
 
-            # Some organizations in FP7 projects do not have an "id" key (the PIC identifier),
-            # for instance "AIlGreenVehicles" in "MOTORBRAIN" https://cordis.europa.eu/project/id/270693.
-            # In this case, still store the name but skip the identifier part.
-            if "id" in organization:
-                organization_data.update(
-                    {
-                        "scheme": "pic",
-                        "id": organization["id"],
-                    }
-                )
+            award["subjects"] = [
+                {"id": f"euroscivoc:{vocab_id}"}
+                for category in categories
+                if category.get("@classification") == "euroSciVoc"
+                and (vocab_id := category["code"].split("/")[-1]).isdigit()
+            ]
 
-            award["organizations"].append(organization_data)
+        organizations = (
+            record.get("relations", {}).get("associations", {}).get("organization")
+        )
+        if organizations:
+            # Projects with a single organization are not wrapped in a list,
+            # so we do this here to be able to iterate over it.
+            organizations = (
+                organizations if isinstance(organizations, list) else [organizations]
+            )
+            award["organizations"] = []
+            for organization in organizations:
+                # Some organizations in FP7 projects do not have a "legalname" key,
+                # for instance the 14th participant in "SAGE" https://cordis.europa.eu/project/id/999902.
+                # In this case, fully skip the organization entry.
+                if "legalname" not in organization:
+                    continue
+
+                organization_data = {
+                    "organization": organization["legalname"],
+                }
+
+                # Some organizations in FP7 projects do not have an "id" key (the PIC identifier),
+                # for instance "AIlGreenVehicles" in "MOTORBRAIN" https://cordis.europa.eu/project/id/270693.
+                # In this case, still store the name but skip the identifier part.
+                if "id" in organization:
+                    organization_data.update(
+                        {
+                            "scheme": "pic",
+                            "id": organization["id"],
+                        }
+                    )
+
+                award["organizations"].append(organization_data)
 
         stream_entry.entry = award
         return stream_entry
@@ -216,7 +223,9 @@ class CORDISAwardsServiceWriter(ServiceWriter):
         service_or_name = kwargs.pop("service_or_name", "awards")
         # Here we only update and we do not insert, since CORDIS data is used to augment existing awards
         # (with subjects and organizations information) and is not used to create new awards.
-        super().__init__(service_or_name=service_or_name, insert=False, *args, **kwargs)
+        super().__init__(
+            service_or_name=service_or_name, insert=False, update=True, *args, **kwargs
+        )
 
     def _entry_id(self, entry):
         """Get the id from an entry."""

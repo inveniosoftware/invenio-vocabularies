@@ -226,7 +226,6 @@ class XMLReader(BaseReader):
 
     def __init__(self, root_element=None, *args, **kwargs):
         """Constructor."""
-        # TODO: How to make root_element mandatory?
         self.root_element = root_element
         super().__init__(*args, **kwargs)
 

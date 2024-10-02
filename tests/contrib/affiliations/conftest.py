@@ -34,10 +34,26 @@ def affiliation_full_data():
 
 
 @pytest.fixture(scope="function")
+def affiliation_openaire_data():
+    """Full affiliation data."""
+    return {
+        "acronym": "CERN",
+        "id": "01ggx4157",
+        "identifiers": [{"identifier": "999988133", "scheme": "pic"}],
+        "name": "Test affiliation",
+        "title": {"en": "Test affiliation", "es": "Afiliacion de test"},
+        "country": "CH",
+        "country_name": "Switzerland",
+        "location_name": "Geneva",
+        "status": "active",
+        "types": ["facility", "funder"],
+    }
+
+
+@pytest.fixture(scope="function")
 def openaire_affiliation_full_data():
     """Full OpenAIRE affiliation data."""
     return {
-        "openaire_id": "openorgs____::47efb6602225236c0b207761a8b3a21c",
         "id": "01ggx4157",
         "identifiers": [{"identifier": "999988133", "scheme": "pic"}],
     }
