@@ -33,7 +33,7 @@ def dict_award_entry():
             "enddate": "2010-09-30",
             "funding": [
                 {
-                    "funding_stream": {
+                    "fundingStream": {
                         "description": "Directorate for Geosciences - Division of "
                         "Ocean Sciences",
                         "id": "NSF::GEO/OAD::GEO/OCE",
@@ -65,7 +65,7 @@ def dict_award_entry_ec():
             "enddate": "2025-12-31",
             "funding": [
                 {
-                    "funding_stream": {
+                    "fundingStream": {
                         "description": "Test stream",
                         "id": "TST::test::test",
                     },
@@ -92,10 +92,10 @@ def expected_from_award_json():
         "id": "021nxhr62::0751743",
         "identifiers": [{"identifier": "https://test.com", "scheme": "url"}],
         "number": "0751743",
+        "program": "NSF::GEO/OAD::GEO/OCE",
         "title": {"en": "Test title"},
         "funder": {"id": "021nxhr62"},
         "acronym": "TA",
-        "program": "GEO/OAD",
     }
 
 
@@ -110,7 +110,7 @@ def expected_from_award_json_ec():
         "title": {"en": "Test title"},
         "funder": {"id": "00k4n6c32"},
         "acronym": "TS",
-        "program": "test",
+        "program": "TST::test::test",
     }
 
 
@@ -181,6 +181,7 @@ def expected_from_cordis_project_xml():
 
 
 def test_awards_transformer(app, dict_award_entry, expected_from_award_json):
+    """Test the OpenAIREProjectTransformer's output against expected award data."""
     transformer = OpenAIREProjectTransformer()
     assert expected_from_award_json == transformer.apply(dict_award_entry).entry
 
@@ -188,6 +189,7 @@ def test_awards_transformer(app, dict_award_entry, expected_from_award_json):
 def test_awards_service_writer_create(
     app, search_clear, example_funder_ec, award_full_data
 ):
+    """Verify creation of an award record and match it with expected data."""
     awards_writer = AwardsServiceWriter()
     award_rec = awards_writer.write(StreamEntry(award_full_data))
     award_dict = award_rec.entry.to_dict()
@@ -200,12 +202,9 @@ def test_awards_service_writer_create(
 
 
 def test_awards_funder_id_not_exist(
-    app,
-    search_clear,
-    example_funder,
-    example_funder_ec,
-    award_full_data_invalid_id,
+    app, search_clear, example_funder, example_funder_ec, award_full_data_invalid_id
 ):
+    """Ensure writing an award with an invalid funder ID raises an error."""
     awards_writer = AwardsServiceWriter()
     with pytest.raises(WriterError) as err:
         awards_writer.write(StreamEntry(award_full_data_invalid_id))
@@ -223,6 +222,7 @@ def test_awards_funder_id_not_exist(
 def test_awards_funder_id_not_exist_no_funders(
     app, search_clear, award_full_data_invalid_id
 ):
+    """Check error on writing an award with no valid funders."""
     awards_writer = AwardsServiceWriter()
     with pytest.raises(WriterError) as err:
         awards_writer.write(StreamEntry(award_full_data_invalid_id))
@@ -245,7 +245,9 @@ def test_awards_transformer_ec_functionality(
     expected_from_award_json,
     expected_from_award_json_ec,
 ):
+    """Test transformer output for standard and EC-specific awards."""
     transformer = OpenAIREProjectTransformer()
+
     assert expected_from_award_json == transformer.apply(dict_award_entry).entry
     assert expected_from_award_json_ec == transformer.apply(dict_award_entry_ec).entry
 
@@ -253,6 +255,7 @@ def test_awards_transformer_ec_functionality(
 def test_awards_service_writer_duplicate(
     app, search_clear, example_funder_ec, award_full_data
 ):
+    """Verify error on attempting to create a duplicate award."""
     writer = AwardsServiceWriter()
     award_rec = writer.write(stream_entry=StreamEntry(award_full_data))
     Award.index.refresh()  # refresh index to make changes live
@@ -269,20 +272,17 @@ def test_awards_service_writer_duplicate(
 def test_awards_service_writer_update_existing(
     app, search_clear, example_funder_ec, award_full_data, service
 ):
-    # create vocabulary
+    """Check updating an existing award record with new data."""
     writer = AwardsServiceWriter(update=True)
     orig_award_rec = writer.write(stream_entry=StreamEntry(award_full_data))
     Award.index.refresh()  # refresh index to make changes live
-    # update vocabulary
     updated_award = deepcopy(award_full_data)
     updated_award["title"] = {"en": "New Test title"}
-    # check changes vocabulary
     _ = writer.write(stream_entry=StreamEntry(updated_award))
     award_rec = service.read(system_identity, orig_award_rec.entry.id)
     award_dict = award_rec.to_dict()
 
     updated_award["funder"]["name"] = example_funder_ec["name"]
-    # needed while the writer resolves from ES
     assert _.entry.id == orig_award_rec.entry.id
     assert dict(award_dict, **updated_award) == award_dict
 
@@ -293,10 +293,9 @@ def test_awards_service_writer_update_existing(
 def test_awards_service_writer_update_non_existing(
     app, search_clear, example_funder_ec, award_full_data, service
 ):
-    # vocabulary item not created, call update directly
+    """Test updating a non-existing award, creating a new record."""
     updated_award = deepcopy(award_full_data)
     updated_award["title"] = {"en": "New Test title"}
-    # check changes vocabulary
     writer = AwardsServiceWriter(update=True)
     award_rec = writer.write(stream_entry=StreamEntry(updated_award))
     award_rec = service.read(system_identity, award_rec.entry.id)
@@ -309,9 +308,8 @@ def test_awards_service_writer_update_non_existing(
     award_rec._record.delete(force=True)
 
 
-def test_awards_cordis_transformer(
-    expected_from_cordis_project_xml,
-):
+def test_awards_cordis_transformer(expected_from_cordis_project_xml):
+    """Validate transformation of CORDIS project XML to expected format."""
     reader = XMLReader()
     award = next(reader.read(CORDIS_PROJECT_XML))
 

@@ -27,8 +27,6 @@ from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
 from .contrib.subjects.datastreams import DATASTREAM_CONFIG as subjects_ds_config
 
-# from .contrib.projects.datastreams import DATASTREAM_CONFIG as projects_ds_config
-
 
 class VocabularyConfig:
     """Vocabulary Config Factory."""

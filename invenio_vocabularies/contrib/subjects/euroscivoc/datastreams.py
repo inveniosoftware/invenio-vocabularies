@@ -85,7 +85,7 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
     def _get_labels(self, subject, rdf_graph):
         """Extract prefLabel and altLabel languages for a subject."""
         labels = {
-            label.language: label.value
+            label.language: label.value.capitalize()
             for _, _, label in rdf_graph.triples(
                 (subject, self.SKOS_CORE.prefLabel, None)
             )
@@ -94,7 +94,7 @@ class EuroSciVocSubjectsTransformer(BaseTransformer):
             for _, _, label in rdf_graph.triples(
                 (subject, self.SKOS_CORE.altLabel, None)
             ):
-                labels.setdefault(label.language, label.value)
+                labels.setdefault(label.language, label.value.capitalize())
         return labels
 
     def _find_parents(self, subject, rdf_graph):

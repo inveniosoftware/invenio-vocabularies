@@ -108,12 +108,12 @@ def expected_from_rdf_pref_label_with_parent():
             "scheme": "EuroSciVoc",
             "subject": "Satellite radio",
             "title": {
-                "it": "radio satellitare",
-                "pl": "radio satelitarne",
-                "fr": "radio satellite",
-                "es": "radio por satélite",
+                "it": "Radio satellitare",
+                "pl": "Radio satelitarne",
+                "fr": "Radio satellite",
+                "es": "Radio por satélite",
                 "de": "Satellitenfunk",
-                "en": "satellite radio",
+                "en": "Satellite radio",
             },
             "props": {"parents": "euroscivoc:1225"},
             "identifiers": [
@@ -127,7 +127,7 @@ def expected_from_rdf_pref_label_with_parent():
             "id": "euroscivoc:1225",
             "scheme": "EuroSciVoc",
             "subject": "Radio channel",
-            "title": {"en": "radio channel"},
+            "title": {"en": "Radio channel"},
             "props": {},
             "identifiers": [
                 {
@@ -145,7 +145,7 @@ def expected_from_rdf_alt_label_without_parent():
         "id": "euroscivoc:1717",
         "scheme": "EuroSciVoc",
         "subject": "Broadcastingsatellite service",
-        "title": {"en": "broadcastingsatellite service"},
+        "title": {"en": "Broadcastingsatellite service"},
         "props": {},
         "identifiers": [
             {

@@ -11,7 +11,7 @@
 
 from flask import current_app
 
-from ...datastreams.errors import WriterError
+from ...datastreams.errors import TransformerError, WriterError
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
 from ..common.ror.datastreams import RORTransformer
@@ -54,7 +54,16 @@ class OpenAIREOrganizationTransformer(BaseTransformer):
         """Applies the transformation to the stream entry."""
         record = stream_entry.entry
 
-        organization = {"openaire_id": record["id"]}
+        if "id" not in record:
+            raise TransformerError([f"No id for: {record}"])
+
+        if not record["id"].startswith("openorgs____::"):
+            raise TransformerError([f"Not valid OpenAIRE OpenOrgs id for: {record}"])
+
+        if "pid" not in record:
+            raise TransformerError([f"No alternative identifiers for: {record}"])
+
+        organization = {}
 
         for pid in record["pid"]:
             if pid["scheme"] == "ROR":
@@ -79,7 +88,9 @@ class OpenAIREAffiliationsServiceWriter(ServiceWriter):
         service_or_name = kwargs.pop("service_or_name", "affiliations")
         # Here we only update and we do not insert, since OpenAIRE data is used to augment existing affiliations
         # (with PIC identifiers) and is not used to create new affiliations.
-        super().__init__(service_or_name=service_or_name, insert=False, *args, **kwargs)
+        super().__init__(
+            service_or_name=service_or_name, insert=False, update=True, *args, **kwargs
+        )
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
@@ -88,16 +99,6 @@ class OpenAIREAffiliationsServiceWriter(ServiceWriter):
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input entry using a given service."""
         entry = stream_entry.entry
-
-        if not entry["openaire_id"].startswith("openorgs____::"):
-            raise WriterError([f"Not valid OpenAIRE OpenOrgs id for: {entry}"])
-        del entry["openaire_id"]
-
-        if "id" not in entry:
-            raise WriterError([f"No id for: {entry}"])
-
-        if "identifiers" not in entry:
-            raise WriterError([f"No alternative identifiers for: {entry}"])
 
         return super().write(stream_entry, *args, **kwargs)
 

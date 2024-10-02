@@ -76,6 +76,12 @@
             "type": "object",
             "dynamic": "true"
           },
+          "subject": {
+            "type": "keyword"
+          },
+          "scheme": {
+            "type": "keyword"
+          },
           "identifiers": {
             "properties": {
               "identifier": {
