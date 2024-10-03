@@ -8,6 +8,14 @@
 Changes
 =======
 
+Version v6.0.0 (released 2024-10-03)
+
+- datastreams: writers: add option to not insert
+- subjects: added euroscivoc datastream
+- affiliations: OpenAIRE transformer and writer adding PIC identifier
+- awards: added subjects and participating organizations from CORDIS datastreams
+- names: add permission check to names search
+
 Version v5.1.0 (released 2024-09-25)
 
 - funders: tune search boost for acronyms
