@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,7 +12,6 @@
 from functools import partial
 
 import pytest
-from invenio_db import db
 from invenio_indexer.api import RecordIndexer
 from invenio_search import current_search_client
 
@@ -59,6 +59,4 @@ def example_record(db, example_data, lang_type):
     """Example record."""
     record = Vocabulary.create(example_data, type=lang_type)
     Vocabulary.pid.create(record)
-    record.commit()
-    db.session.commit()
     return record

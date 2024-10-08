@@ -3,6 +3,7 @@
 # Copyright (C) 2024 CERN.
 # Copyright (C) 2021 Northwestern University.
 # Copyright (C) 2024 University of Münster.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -12,6 +13,7 @@
 
 import sqlalchemy as sa
 from invenio_cache import current_cache
+from invenio_db import db
 from invenio_records_resources.services import LinksTemplate, RecordService
 from invenio_records_resources.services.base.utils import map_search_params
 from invenio_records_resources.services.records.schema import ServiceSchemaWrapper
@@ -42,7 +44,8 @@ class VocabularyTypeService(RecordService):
             filters.extend([VocabularyType.id.ilike(f"%{query_param}%")])
 
         vocabulary_types = (
-            VocabularyType.query.filter(sa.or_(*filters))
+            db.session.query(VocabularyType)
+            .filter(sa.or_(*filters))
             .order_by(
                 search_params["sort_direction"](
                     sa.text(",".join(search_params["sort"]))
@@ -87,7 +90,7 @@ class VocabulariesService(RecordService):
         self.require_permission(identity, "search")
 
         # If not found, NoResultFound is raised (caught by the resource).
-        vocabulary_type = VocabularyType.query.filter_by(id=type).one()
+        vocabulary_type = db.session.query(VocabularyType).filter_by(id=type).one()
 
         # Prepare and execute the search
         params = params or {}
@@ -123,7 +126,7 @@ class VocabulariesService(RecordService):
 
         if not results:
             # If not found, NoResultFound is raised (caught by the resource).
-            vocabulary_type = VocabularyType.query.filter_by(id=type).one()
+            vocabulary_type = db.session.query(VocabularyType).filter_by(id=type).one()
             vocab_id_filter = dsl.Q("term", type__id=vocabulary_type.id)
             if extra_filter:
                 vocab_id_filter = vocab_id_filter & extra_filter
@@ -150,7 +153,7 @@ class VocabulariesService(RecordService):
     def read_many(self, identity, type, ids, fields=None, **kwargs):
         """Search for records matching the querystring filtered by ids."""
         search_query = dsl.Q("match_all")
-        vocabulary_type = VocabularyType.query.filter_by(id=type).one()
+        vocabulary_type = db.session.query(VocabularyType).filter_by(id=type).one()
         vocab_id_filter = dsl.Q("term", type__id=vocabulary_type.id)
         filters = []
 
