@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -96,12 +97,13 @@ class ServiceWriter(BaseWriter):
 
         try:
             if self._insert:
-                try:
-                    return StreamEntry(self._service.create(self._identity, entry))
-                except PIDAlreadyExists:
-                    if not self._update:
-                        raise WriterError([f"Vocabulary entry already exists: {entry}"])
-                    return self._do_update(entry)
+                ret = StreamEntry(self._service.create(self._identity, entry))
+
+                # with that state management it is avoidable to check if pid
+                # exists and run into possible rollback problems
+                if self._update:
+                    self._insert = False
+                return ret
             elif self._update:
                 try:
                     return self._do_update(entry)
@@ -112,6 +114,8 @@ class ServiceWriter(BaseWriter):
                     ["Writer wrongly configured to not insert and to not update"]
                 )
 
+        except PIDAlreadyExists:
+            raise WriterError([f"Vocabulary entry already exists: {entry}"])
         except ValidationError as err:
             raise WriterError([{"ValidationError": err.messages}])
         except InvalidRelationValue as err:
