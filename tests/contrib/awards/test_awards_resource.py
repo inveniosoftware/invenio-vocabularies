@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -39,9 +40,15 @@ def test_awards_forbidden(client, h, prefix, example_award, award_full_data):
     res = client.post(f"{prefix}", headers=h, data=json.dumps(award_full_data_too))
     assert res.status_code == 403
 
+
+def test_awards_forbidden_put(client, h, prefix, example_award, award_full_data):
+    """Test invalid type."""
     res = client.put(f"{prefix}/755021", headers=h, data=json.dumps(award_full_data))
     assert res.status_code == 403
 
+
+def test_awards_forbidden_delete(client, h, prefix, example_award, award_full_data):
+    """Test invalid type."""
     res = client.delete(f"{prefix}/755021")
     assert res.status_code == 403
 

@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2021 CERN.
 # Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -60,12 +61,19 @@ def test_forbidden_endpoints(client, h, prefix, example_subject, subject_full_da
     res = client.post(f"{prefix}", headers=h, json=subject_full_data_too)
     assert res.status_code == 403
 
+
+def test_forbidden_endpoints_put(client, h, prefix, example_subject, subject_full_data):
     # PUT
     id_ = example_subject.id
     res = client.put(f"{prefix}/{id_}", headers=h, json=subject_full_data)
     assert res.status_code == 403
 
+
+def test_forbidden_endpoints_delete(
+    client, h, prefix, example_subject, subject_full_data
+):
     # DELETE
+    id_ = example_subject.id
     res = client.delete(f"{prefix}/{id_}")
     assert res.status_code == 403
 

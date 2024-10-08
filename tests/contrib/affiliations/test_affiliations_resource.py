@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -30,7 +31,6 @@ def example_affiliation(
     """Example affiliation."""
     aff = service.create(identity, affiliation_full_data)
     Affiliation.index.refresh()  # Refresh the index
-
     return aff
 
 
@@ -41,7 +41,7 @@ def test_affiliations_invalid(client, h, prefix):
     assert res.status_code == 404
 
 
-def test_affiliations_forbidden(
+def test_affiliations_forbidden_a(
     client, h, prefix, example_affiliation, affiliation_full_data
 ):
     """Test invalid type."""
@@ -53,11 +53,22 @@ def test_affiliations_forbidden(
     )
     assert res.status_code == 403
 
+
+def test_affiliations_forbidden_b(
+    client, h, prefix, example_affiliation, affiliation_full_data
+):
+    """Test put."""
     res = client.put(
         f"{prefix}/01ggx4157", headers=h, data=json.dumps(affiliation_full_data)
     )
+
     assert res.status_code == 403
 
+
+def test_affiliations_forbidden_c(
+    client, h, prefix, example_affiliation, affiliation_full_data
+):
+    """Test delete."""
     res = client.delete(f"{prefix}/01ggx4157")
     assert res.status_code == 403
 
