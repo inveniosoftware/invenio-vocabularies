@@ -120,11 +120,11 @@ def service(app):
     return app.extensions["invenio-vocabularies"].vocabularies_service
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def lang_type(db):
     """Get a language vocabulary type."""
     v = VocabularyType.create(id="languages", pid_type="lng")
-    db.session.commit()
+    db.session.add(v)
     return v
 
 
@@ -159,7 +159,6 @@ def example_record(db, identity, service, example_data):
     vocabulary_type_licenses = VocabularyType(name="licenses")
     db.session.add(vocabulary_type_languages)
     db.session.add(vocabulary_type_licenses)
-    db.session.commit()
 
     record = service.create(
         identity=identity,
@@ -193,7 +192,7 @@ def user(app, db):
             password=hash_password("password"),
             active=True,
         )
-    db.session.commit()
+
     return _user
 
 
@@ -204,7 +203,6 @@ def role(app, db):
         datastore = app.extensions["security"].datastore
         role = datastore.create_role(name="admin", description="admin role")
 
-    db.session.commit()
     return role
 
 
