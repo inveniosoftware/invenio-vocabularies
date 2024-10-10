@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2021 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,6 +9,7 @@
 
 """Vocabulary components."""
 
+from invenio_db import db
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services.records.components import ServiceComponent
 from marshmallow import ValidationError
@@ -23,7 +25,10 @@ class VocabularyTypeComponent(ServiceComponent):
         type_id = data.pop("type", None)
         if type_id:
             try:
-                record.type = VocabularyType.query.filter_by(id=type_id["id"]).one()
+
+                record.type = (
+                    db.session.query(VocabularyType).filter_by(id=type_id["id"]).one()
+                )
             except NoResultFound:
                 raise ValidationError(
                     _("The vocabulary type does not exists."),

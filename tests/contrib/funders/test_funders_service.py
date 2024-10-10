@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,10 +12,12 @@
 
 import arrow
 import pytest
+from invenio_db import db
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
 
 from invenio_vocabularies.contrib.funders.api import Funder
+from invenio_vocabularies.contrib.funders.models import FundersMetadata
 
 
 def test_simple_flow(app, service, identity, funder_full_data):
@@ -78,7 +81,9 @@ def test_simple_flow(app, service, identity, funder_full_data):
     assert res.total == 0
 
     # not-ideal cleanup
-    item._record.delete(force=True)
+    db.session.query(FundersMetadata).filter(
+        FundersMetadata.id == item._record.id
+    ).delete()
 
 
 def test_pid_already_registered(
@@ -97,6 +102,8 @@ def test_extra_fields(app, service, identity, funder_full_data):
 
 def test_indexed_at_query(app, db, service, identity, funder_full_data):
     before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    # the following line should not be necessary but it seems it is!!!!!
+    db.session.query(FundersMetadata).delete()
     _ = service.create(identity, funder_full_data)
     now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
     Funder.index.refresh()

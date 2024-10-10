@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2022-2024 CERN.
 # Copyright (C) 2024 California Institute of Technology.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -13,6 +14,7 @@ from copy import deepcopy
 
 import pytest
 from invenio_access.permissions import system_identity
+from invenio_db import db
 
 from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.contrib.funders.api import Funder
@@ -21,6 +23,7 @@ from invenio_vocabularies.contrib.funders.config import (
     funder_schemes,
 )
 from invenio_vocabularies.contrib.funders.datastreams import FundersServiceWriter
+from invenio_vocabularies.contrib.funders.models import FundersMetadata
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
 
@@ -65,7 +68,10 @@ def test_funders_service_writer_create(app, search_clear, funder_full_data):
     assert dict(funder_dict, **funder_full_data) == funder_dict
 
     # not-ideal cleanup
-    funder_rec.entry._record.delete(force=True)
+
+    db.session.query(FundersMetadata).filter(
+        FundersMetadata.id == funder_rec.entry._record.id
+    ).delete()
 
 
 def test_funders_service_writer_duplicate(app, search_clear, funder_full_data):
@@ -79,7 +85,9 @@ def test_funders_service_writer_duplicate(app, search_clear, funder_full_data):
     assert expected_error in err.value.args
 
     # not-ideal cleanup
-    funder_rec.entry._record.delete(force=True)
+    db.session.query(FundersMetadata).filter(
+        FundersMetadata.id == funder_rec.entry._record.id
+    ).delete()
 
 
 def test_funders_service_writer_update_existing(
@@ -102,7 +110,9 @@ def test_funders_service_writer_update_existing(
     assert dict(funder_dict, **updated_funder) == funder_dict
 
     # not-ideal cleanup
-    funder_rec._record.delete(force=True)
+    db.session.query(FundersMetadata).filter(
+        FundersMetadata.id == funder_rec._record.id
+    ).delete()
 
 
 def test_funders_service_writer_update_non_existing(
@@ -120,4 +130,6 @@ def test_funders_service_writer_update_non_existing(
     assert dict(funder_dict, **updated_funder) == funder_dict
 
     # not-ideal cleanup
-    funder_rec._record.delete(force=True)
+    db.session.query(FundersMetadata).filter(
+        FundersMetadata.id == funder_rec._record.id
+    ).delete()

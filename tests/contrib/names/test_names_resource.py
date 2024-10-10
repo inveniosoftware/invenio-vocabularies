@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -117,17 +118,23 @@ def test_names_invalid(client_with_credentials, h, prefix):
     assert res.status_code == 404
 
 
-def test_names_forbidden(client, h, prefix, example_name, name_full_data):
-    """Test invalid type."""
+def test_names_forbidden_post(client, h, prefix, example_name, name_full_data):
+    """Test names forbidden post."""
     # invalid type
     res = client.post(f"{prefix}", headers=h, data=json.dumps(name_full_data))
     assert res.status_code == 403
 
+
+def test_names_forbidden_put(client, h, prefix, example_name, name_full_data):
+    """Test names forbidden put."""
     res = client.put(
         f"{prefix}/{example_name.id}", headers=h, data=json.dumps(name_full_data)
     )
     assert res.status_code == 403
 
+
+def test_names_forbidden_delete(client, h, prefix, example_name, name_full_data):
+    """Test names forbidden delete."""
     res = client.delete(f"{prefix}/{example_name.id}")
     assert res.status_code == 403
 

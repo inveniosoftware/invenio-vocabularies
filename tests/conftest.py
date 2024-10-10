@@ -3,6 +3,7 @@
 # Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2021 TU Wien.
 # Copyright (C) 2024 California Institute of Technology.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -76,7 +77,7 @@ def extra_entry_points():
 @pytest.fixture(scope="module")
 def app_config(app_config):
     """Mimic an instance's configuration."""
-    app_config["JSONSCHEMAS_HOST"] = "localhost"
+    app_config["JSONSCHEMAS_HOST"] = "not-used"
     app_config["BABEL_DEFAULT_LOCALE"] = "en"
     app_config["I18N_LANGUAGES"] = [("da", "Danish")]
     app_config["RECORDS_REFRESOLVER_CLS"] = (
@@ -119,11 +120,11 @@ def service(app):
     return app.extensions["invenio-vocabularies"].vocabularies_service
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def lang_type(db):
     """Get a language vocabulary type."""
     v = VocabularyType.create(id="languages", pid_type="lng")
-    db.session.commit()
+    db.session.add(v)
     return v
 
 
@@ -158,7 +159,6 @@ def example_record(db, identity, service, example_data):
     vocabulary_type_licenses = VocabularyType(name="licenses")
     db.session.add(vocabulary_type_languages)
     db.session.add(vocabulary_type_licenses)
-    db.session.commit()
 
     record = service.create(
         identity=identity,
@@ -192,7 +192,7 @@ def user(app, db):
             password=hash_password("password"),
             active=True,
         )
-    db.session.commit()
+
     return _user
 
 
@@ -203,7 +203,6 @@ def role(app, db):
         datastore = app.extensions["security"].datastore
         role = datastore.create_role(name="admin", description="admin role")
 
-    db.session.commit()
     return role
 
 
