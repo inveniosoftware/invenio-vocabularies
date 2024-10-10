@@ -62,6 +62,8 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
         else:
             since = datetime.datetime.now()
 
+        # NOTE: Update is set to False for now given we don't have the logic to re-index dependent records yet.
+        # Since jobs support custom args, update true can be passed via that.
         return {
             "config": {
                 "readers": [
@@ -77,12 +79,55 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
                         "args": {
                             "writer": {
                                 "type": "affiliations-service",
-                                "args": {"update": True},
+                                "args": {"update": False},
                             }
                         },
                         "type": "async",
                     }
                 ],
                 "transformers": [{"type": "ror-affiliations"}],
+            }
+        }
+
+
+class ProcessRORFundersJob(ProcessDataStreamJob):
+    """Process ROR funders datastream registered task."""
+
+    description = "Process ROR funders"
+    title = "Load ROR funders"
+    id = "process_ror_funders"
+
+    @classmethod
+    def default_args(cls, job_obj, since=None, **kwargs):
+        """Generate default job arguments here."""
+        if since is None and job_obj.last_runs["success"]:
+            since = job_obj.last_runs["success"].started_at
+        else:
+            since = since or datetime.datetime.now()
+
+        # NOTE: Update is set to False for now given we don't have the logic to re-index dependent records yet.
+        # Since jobs support custom args, update true can be passed via that.
+        return {
+            "config": {
+                "readers": [
+                    {
+                        "args": {"since": since},
+                        "type": "ror-http",
+                    },
+                    {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
+                    {"type": "json"},
+                ],
+                "writers": [
+                    {
+                        "args": {
+                            "writer": {
+                                "type": "funders-service",
+                                "args": {"update": False},
+                            }
+                        },
+                        "type": "async",
+                    }
+                ],
+                "transformers": [{"type": "ror-funders"}],
             }
         }
