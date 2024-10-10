@@ -211,6 +211,56 @@ class CORDISProjectTransformer(BaseTransformer):
 
                 award["organizations"].append(organization_data)
 
+        programmes = (
+            record.get("relations", {}).get("associations", {}).get("programme", {})
+        )
+        if programmes:
+            # Projects with a single programme (this is the case of some projects in FP7) are not wrapped in a list,
+            # so we do this here to be able to iterate over it.
+            programmes = programmes if isinstance(programmes, list) else [programmes]
+
+            programmes_related_legal_basis = [
+                {
+                    "code": programme["code"],
+                    "uniqueprogrammepart": programme.get("@uniqueprogrammepart"),
+                }
+                for programme in programmes
+                if programme.get("@type") == "relatedLegalBasis"
+            ]
+
+            if len(programmes_related_legal_basis) == 0:
+                raise TransformerError(
+                    _(
+                        "No related legal basis programme found for project {project_id}".format(
+                            project_id=record["id"]
+                        )
+                    )
+                )
+            elif len(programmes_related_legal_basis) == 1:
+                # FP7 projects have only one related legal basis programme and do not have a 'uniqueprogrammepart' field.
+                unique_programme_related_legal_basis = programmes_related_legal_basis[0]
+            elif len(programmes_related_legal_basis) >= 1:
+                # The entry with the field 'uniqueprogrammepart' == 'true' is the high level programme code,
+                # while the other entry is a more specific sub-programme.
+                unique_programme_related_legal_basis = [
+                    programme_related_legal_basis
+                    # A few H2020 projects have more than one 'uniqueprogrammepart' == 'true',
+                    # for instance https://cordis.europa.eu/project/id/825673 (showing as "main programme" in the page)
+                    # which has one entry with the code 'H2020-EU.1.2.',
+                    # and one with the code 'H2020-EU.1.2.3.'.
+                    # We sort them from the shortest code to the longest code, and take the first item,
+                    # so that it conforms more with other projects which all have the shortest code as the main one.
+                    for programme_related_legal_basis in sorted(
+                        programmes_related_legal_basis, key=lambda d: len(d["code"])
+                    )
+                    if programme_related_legal_basis["uniqueprogrammepart"] == "true"
+                ][0]
+
+            # Store the code of the programme.
+            # For instance the code "HORIZON.1.2" which means "Marie Skłodowska-Curie Actions (MSCA)"
+            # See https://cordis.europa.eu/programme/id/HORIZON.1.2
+            award["program"] = unique_programme_related_legal_basis["code"]
+
         stream_entry.entry = award
         return stream_entry
 
@@ -222,7 +272,7 @@ class CORDISAwardsServiceWriter(ServiceWriter):
         """Constructor."""
         service_or_name = kwargs.pop("service_or_name", "awards")
         # Here we only update and we do not insert, since CORDIS data is used to augment existing awards
-        # (with subjects and organizations information) and is not used to create new awards.
+        # (with subjects, organizations, and program information) and is not used to create new awards.
         super().__init__(
             service_or_name=service_or_name, insert=False, update=True, *args, **kwargs
         )

@@ -115,7 +115,7 @@ def expected_from_award_json_ec():
 
 
 CORDIS_PROJECT_XML = bytes(
-    """      
+    """
 <project
 	xmlns="http://cordis.europa.eu">
 	<language>en</language>
@@ -148,6 +148,16 @@ CORDIS_PROJECT_XML = bytes(
 					</categories>
 				</relations>
 			</organization>
+			<programme source="corda" uniqueProgrammePart="true" type="relatedLegalBasis">
+				<code>HORIZON.1.1</code>
+			</programme>
+			<programme source="corda" type="relatedLegalBasis">
+				<code>ANOTHER.CODE.WHICH.IS.NOT.THE.UNIQUE.PROGRAMME.PART</code>
+			</programme>
+			<programme source="corda" type="relatedTopic">
+				<code>ERC-2023-STG</code>
+				<frameworkProgramme>HORIZON</frameworkProgramme>
+			</programme>
 		</associations>
 		<categories>
 			<category classification="euroSciVoc" type="isInFieldOfScience">
@@ -169,6 +179,7 @@ CORDIS_PROJECT_XML = bytes(
 def expected_from_cordis_project_xml():
     return {
         "id": "00k4n6c32::101117736",
+        "program": "HORIZON.1.1",
         "subjects": [{"id": "euroscivoc:225"}],
         "organizations": [
             {
