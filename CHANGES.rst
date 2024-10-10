@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v6.2.0 (released 2024-10-10)
+
+- tests: update axios version (needed only for local js tests)
+
 Version v6.1.0 (released 2024-10-10)
 
 - jobs: define invenio job wrapper for ROR affiliation data stream
