@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v6.1.0 (released 2024-10-10)
+
+- jobs: define invenio job wrapper for ROR affiliation data stream
+- awards: remove subj props from jsonschema
+
 Version v6.0.0 (released 2024-10-03)
 
 - datastreams: writers: add option to not insert
