@@ -160,6 +160,8 @@ class RORTransformer(BaseTransformer):
                     acronym = name["value"]
                 else:
                     aliases.add(name["value"])
+        if "en" not in ror["title"]:
+            ror["title"]["en"] = ror["name"]
         if acronym:
             ror["acronym"] = acronym
         if aliases:
