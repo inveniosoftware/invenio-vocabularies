@@ -60,7 +60,7 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
         if since is None and job_obj.last_runs["success"]:
             since = job_obj.last_runs["success"].started_at
         else:
-            since = datetime.datetime.now()
+            since = since or datetime.datetime.now()
 
         # NOTE: Update is set to False for now given we don't have the logic to re-index dependent records yet.
         # Since jobs support custom args, update true can be passed via that.
