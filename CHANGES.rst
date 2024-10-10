@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v6.2.1 (released 2024-10-10)
+
+- webpack: bump react-searchkit due to axios upgrade
+
 Version v6.2.0 (released 2024-10-10)
 
 - tests: update axios version (needed only for local js tests)
