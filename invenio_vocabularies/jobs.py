@@ -68,7 +68,7 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
             "config": {
                 "readers": [
                     {
-                        "args": {"since": since},
+                        "args": {"since": str(since)},
                         "type": "ror-http",
                     },
                     {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
@@ -111,7 +111,7 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
             "config": {
                 "readers": [
                     {
-                        "args": {"since": since},
+                        "args": {"since": str(since)},
                         "type": "ror-http",
                     },
                     {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
