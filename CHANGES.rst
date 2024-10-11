@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version v6.3.0 (released 2024-10-11)
+
+- awards: get program from CORDIS
+- fix: add 'en' title if missing ROR
+- fix: since not passed to args
+- jobs: add process funders job
+
 Version v6.2.1 (released 2024-10-10)
 
 - webpack: bump react-searchkit due to axios upgrade
