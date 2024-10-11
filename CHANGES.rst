@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v6.3.1 (released 2024-10-11)
+
+- jobs: pass since as string to task
+
 Version v6.3.0 (released 2024-10-11)
 
 - awards: get program from CORDIS
