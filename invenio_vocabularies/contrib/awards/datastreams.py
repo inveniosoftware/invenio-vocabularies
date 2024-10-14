@@ -74,7 +74,10 @@ class OpenAIREProjectTransformer(BaseTransformer):
 
         funding = next(iter(record.get("funding", [])), None)
         if funding:
-            program = funding.get("fundingStream", {}).get("id", "")
+            funding_stream_id = funding.get("fundingStream", {}).get("id", "")
+            # Example funding stream ID: `EC::HE::HORIZON-AG-UN`. We need the `HE`
+            # string, i.e. the second "part" of the identifier.
+            program = next(iter(funding_stream_id.split("::")[1:2]), "")
             if program:
                 award["program"] = program
 
