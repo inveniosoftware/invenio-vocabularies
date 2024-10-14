@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -13,12 +14,14 @@ fixtures are available.
 """
 
 import pytest
-from invenio_i18n import lazy_gettext as _
 from invenio_indexer.proxies import current_indexer_registry
 from invenio_records_resources.proxies import current_service_registry
+from sqlalchemy.orm.exc import ObjectDeletedError
 
 from invenio_vocabularies.contrib.awards.api import Award
+from invenio_vocabularies.contrib.awards.models import AwardsMetadata
 from invenio_vocabularies.contrib.funders.api import Funder
+from invenio_vocabularies.contrib.funders.models import FundersMetadata
 
 
 #
@@ -38,10 +41,27 @@ def example_funder(db, identity, funders_service, funder_indexer):
     }
     funder = funders_service.create(identity, funder_data)
     Funder.index.refresh()  # Refresh the index
+
+    funder_id = funder._record.id
+    index = type("index", (), {"_name": funder._record.index._name})
+    funder_dict = type(
+        "",
+        (),
+        {
+            "index": index(),
+            "id": funder._record.id,
+            "revision_id": funder._record.revision_id,
+        },
+    )
+
     yield funder
-    funder._record.delete(force=True)
-    funder_indexer.delete(funder._record, refresh=True)
-    db.session.commit()
+
+    db.session.query(FundersMetadata).filter(FundersMetadata.id == funder_id).delete()
+
+    try:
+        funder_indexer.delete(funder._record, refresh=True)
+    except ObjectDeletedError:
+        funder_indexer.delete(funder_dict(), refresh=True)
 
 
 @pytest.fixture(scope="function")
@@ -55,10 +75,27 @@ def example_funder_ec(db, identity, funders_service, funder_indexer):
     }
     funder = funders_service.create(identity, funder_data)
     Funder.index.refresh()  # Refresh the index
+
+    funder_id = funder._record.id
+    index = type("index", (), {"_name": funder._record.index._name})
+    funder_dict = type(
+        "",
+        (),
+        {
+            "index": index(),
+            "id": funder._record.id,
+            "revision_id": funder._record.revision_id,
+        },
+    )
+
     yield funder
-    funder._record.delete(force=True)
-    funder_indexer.delete(funder._record, refresh=True)
-    db.session.commit()
+
+    db.session.query(FundersMetadata).filter(FundersMetadata.id == funder_id).delete()
+
+    try:
+        funder_indexer.delete(funder._record, refresh=True)
+    except ObjectDeletedError:
+        funder_indexer.delete(funder_dict(), refresh=True)
 
 
 @pytest.fixture(scope="module")
@@ -125,10 +162,31 @@ def example_award(db, example_funder_ec, award_full_data, identity, indexer, ser
     """Creates and hard deletes an award."""
     award = service.create(identity, award_full_data)
     Award.index.refresh()  # Refresh the index
+
+    # necessary step for the clean up part after yield
+    # award._record could be gone if there was a intended rollback
+    # in one of the test functions
+    award_id = award._record.id
+    index = type("index", (), {"_name": award._record.index._name})
+    award_dict = type(
+        "",
+        (),
+        {
+            "index": index(),
+            "id": award._record.id,
+            "revision_id": award._record.revision_id,
+        },
+    )
+
     yield award
-    award._record.delete(force=True)
-    indexer.delete(award._record, refresh=True)
-    db.session.commit()
+
+    # to clean up
+    db.session.query(AwardsMetadata).filter(AwardsMetadata.id == award_id).delete()
+
+    try:
+        indexer.delete(award._record, refresh=True)
+    except ObjectDeletedError:
+        indexer.delete(award_dict(), refresh=True)
 
 
 @pytest.fixture(scope="module")

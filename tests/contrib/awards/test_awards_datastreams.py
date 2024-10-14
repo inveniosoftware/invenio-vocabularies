@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2022-2024 CERN.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -12,6 +13,8 @@ from copy import deepcopy
 
 import pytest
 from invenio_access.permissions import system_identity
+from invenio_db import db
+from sqlalchemy.orm.exc import ObjectDeletedError
 
 from invenio_vocabularies.contrib.awards.api import Award
 from invenio_vocabularies.contrib.awards.datastreams import (
@@ -19,6 +22,7 @@ from invenio_vocabularies.contrib.awards.datastreams import (
     CORDISProjectTransformer,
     OpenAIREProjectTransformer,
 )
+from invenio_vocabularies.contrib.awards.models import AwardsMetadata
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import WriterError
 from invenio_vocabularies.datastreams.readers import XMLReader
@@ -209,7 +213,9 @@ def test_awards_service_writer_create(
     assert dict(award_dict, **award_full_data) == award_dict
 
     # not-ideal cleanup
-    award_rec.entry._record.delete(force=True)
+    db.session.query(AwardsMetadata).filter(
+        AwardsMetadata.id == award_rec.entry._record.id
+    ).delete()
 
 
 def test_awards_funder_id_not_exist(
@@ -277,7 +283,14 @@ def test_awards_service_writer_duplicate(
     assert expected_error in err.value.args
 
     # not-ideal cleanup
-    award_rec.entry._record.delete(force=True)
+    # for sqlalchemy >= 2.0 no cleanup would be necessary because the raise initialise
+    # a rollback in the uow but sqlalchemy < 2.0 needs the cleanup
+    try:
+        db.session.query(AwardsMetadata).filter(
+            AwardsMetadata.id == award_rec.entry._record.id
+        ).delete()
+    except ObjectDeletedError:
+        pass
 
 
 def test_awards_service_writer_update_existing(
@@ -286,6 +299,7 @@ def test_awards_service_writer_update_existing(
     """Check updating an existing award record with new data."""
     writer = AwardsServiceWriter(update=True)
     orig_award_rec = writer.write(stream_entry=StreamEntry(award_full_data))
+    award_rec = service.read(system_identity, orig_award_rec.entry.id)
     Award.index.refresh()  # refresh index to make changes live
     updated_award = deepcopy(award_full_data)
     updated_award["title"] = {"en": "New Test title"}
@@ -298,7 +312,9 @@ def test_awards_service_writer_update_existing(
     assert dict(award_dict, **updated_award) == award_dict
 
     # not-ideal cleanup
-    award_rec._record.delete(force=True)
+    db.session.query(AwardsMetadata).filter(
+        AwardsMetadata.id == award_rec._record.id
+    ).delete()
 
 
 def test_awards_service_writer_update_non_existing(
@@ -316,7 +332,9 @@ def test_awards_service_writer_update_non_existing(
     assert dict(award_dict, **updated_award) == award_dict
 
     # not-ideal cleanup
-    award_rec._record.delete(force=True)
+    db.session.query(AwardsMetadata).filter(
+        AwardsMetadata.id == award_rec._record.id
+    ).delete()
 
 
 def test_awards_cordis_transformer(expected_from_cordis_project_xml):

@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2020-2021 CERN.
 # Copyright (C) 2020 Northwestern University.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Records-Resources is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -100,7 +101,9 @@ class VocabularyPIDFieldContext(BaseVocabularyPIDFieldContext):
     def get_pid_type(self, type_id):
         """Get the PID type for a vocabulary type."""
         # Get type based on name.
-        vocab_type = VocabularyType.query.filter_by(id=type_id).one_or_none()
+        vocab_type = (
+            db.session.query(VocabularyType).filter_by(id=type_id).one_or_none()
+        )
         if vocab_type is None:
             raise PIDDoesNotExistError(None, None)
         return vocab_type.pid_type
