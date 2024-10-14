@@ -131,3 +131,66 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
                 "transformers": [{"type": "ror-funders"}],
             }
         }
+
+
+class ImportAwardsOpenAIREJob(ProcessDataStreamJob):
+    """Import awards from OpenAIRE registered task."""
+
+    description = "Import awards from OpenAIRE"
+    title = "Import Awards OpenAIRE"
+    id = "import_awards_openaire"
+
+    @classmethod
+    def default_args(cls, job_obj, **kwargs):
+        """Generate default job arguments."""
+        return {
+            "config": {
+                "readers": [
+                    {
+                        "type": "openaire-http",
+                        "args": {"origin": "diff", "tar_href": "/project.tar"},
+                    },
+                    {
+                        "type": "tar",
+                        "args": {
+                            "mode": "r",
+                            "regex": "\\.json.gz$",
+                        },
+                    },
+                    {"type": "gzip"},
+                    {"type": "jsonl"},
+                ],
+                "transformers": [{"type": "openaire-award"}],
+                "writers": [
+                    {"args": {"writer": {"type": "awards-service"}}, "type": "async"}
+                ],
+            }
+        }
+
+
+class UpdateAwardsCordisJob(ProcessDataStreamJob):
+    """Update awards from CORDIS registered task."""
+
+    description = "Update awards from CORDIS"
+    title = "Update Awards CORDIS"
+    id = "update_awards_cordis"
+
+    @classmethod
+    def default_args(cls, job_obj, **kwargs):
+        """Generate default job arguments."""
+        return {
+            "config": {
+                "readers": [
+                    {"args": {"origin": "HE"}, "type": "cordis-project-http"},
+                    {"args": {"mode": "r", "regex": "\\.xml$"}, "type": "zip"},
+                    {"args": {"root_element": "project"}, "type": "xml"},
+                ],
+                "transformers": [{"type": "cordis-award"}],
+                "writers": [
+                    {
+                        "args": {"writer": {"type": "cordis-awards-service"}},
+                        "type": "async",
+                    }
+                ],
+            }
+        }
