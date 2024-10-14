@@ -92,7 +92,7 @@ def expected_from_award_json():
         "id": "021nxhr62::0751743",
         "identifiers": [{"identifier": "https://test.com", "scheme": "url"}],
         "number": "0751743",
-        "program": "NSF::GEO/OAD::GEO/OCE",
+        "program": "GEO/OAD",
         "title": {"en": "Test title"},
         "funder": {"id": "021nxhr62"},
         "acronym": "TA",
@@ -110,7 +110,7 @@ def expected_from_award_json_ec():
         "title": {"en": "Test title"},
         "funder": {"id": "00k4n6c32"},
         "acronym": "TS",
-        "program": "TST::test::test",
+        "program": "test",
     }
 
 
