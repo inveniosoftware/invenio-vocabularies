@@ -9,8 +9,11 @@
 
 """Affiliations datastreams, transformers, writers and readers."""
 
+from copy import deepcopy
+
 from flask import current_app
 
+from ...datastreams import StreamEntry
 from ...datastreams.errors import TransformerError, WriterError
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
@@ -96,15 +99,24 @@ class OpenAIREAffiliationsServiceWriter(ServiceWriter):
         """Get the id from an entry."""
         return entry["id"]
 
-    def write(self, stream_entry, *args, **kwargs):
-        """Writes the input entry using a given service."""
-        entry = stream_entry.entry
+    def _do_update(self, entry):
+        vocab_id = self._entry_id(entry)
+        current = self._resolve(vocab_id)
+        updated = deepcopy(current.to_dict())
 
-        return super().write(stream_entry, *args, **kwargs)
+        if "identifiers" in entry:
+            # For each new identifier
+            for new_identifier in entry["identifiers"]:
+                # Either find an existing identifier with the same scheme and update the "identifier" value
+                for existing_identifier in updated["identifiers"]:
+                    if existing_identifier["scheme"] == new_identifier["scheme"]:
+                        existing_identifier["identifier"] = new_identifier["identifier"]
+                        break
+                # Or add the new identifier to the list of identifiers
+                else:
+                    updated["identifiers"].append(new_identifier)
 
-    def write_many(self, stream_entries, *args, **kwargs):
-        """Writes the input entries using a given service."""
-        return super().write_many(stream_entries, *args, **kwargs)
+        return StreamEntry(self._service.update(self._identity, vocab_id, updated))
 
 
 VOCABULARIES_DATASTREAM_READERS = {}
