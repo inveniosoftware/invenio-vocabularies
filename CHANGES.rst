@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v6.4.1 (released 2024-10-15)
+
+- fix: exclude unknown fields when updating awards with subjects
+- fix: revert generic writer and define OpenAIRE awards writer logic
+
 Version v6.4.0 (released 2024-10-15)
 
 - jobs: add import awards OpenAIRE; Update CORDIS
