@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v6.4.0 (released 2024-10-15)
+
+- jobs: add import awards OpenAIRE; Update CORDIS
+- awards: rollback to use the 2nd part of funding stream as program
+
 Version v6.3.1 (released 2024-10-11)
 
 - jobs: pass since as string to task
