@@ -13,7 +13,7 @@
 from functools import partial
 
 from invenio_i18n import get_locale
-from marshmallow import Schema, fields, pre_load
+from marshmallow import EXCLUDE, Schema, fields, pre_load
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -58,6 +58,14 @@ class SubjectSchema(BaseVocabularySchema):
 
 class SubjectRelationSchema(ContribVocabularyRelationSchema):
     """Schema to define an optional subject relation in another schema."""
+
+    # If re-running an OpenAIRE awards update on existing awards which already have subjects,
+    # the subject entries will contains `scheme` and `props`, which are unknown since they are `dump_only`.
+    # This makes the update exclude unknown field and go through with the update.
+    class Meta:
+        """Metadata class."""
+
+        unknown = EXCLUDE
 
     ftf_name = "subject"
     parent_field_name = "subjects"
