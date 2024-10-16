@@ -37,7 +37,12 @@ import pytest
 from flask_principal import Identity, Need, UserNeed
 from flask_security import login_user
 from flask_security.utils import hash_password
-from invenio_access.permissions import ActionUsers, any_user, system_process
+from invenio_access.permissions import (
+    ActionUsers,
+    any_user,
+    superuser_access,
+    system_process,
+)
 from invenio_access.proxies import current_access
 from invenio_accounts.proxies import current_datastore
 from invenio_accounts.testutils import login_user_via_session
@@ -114,6 +119,17 @@ def identity():
 
 
 @pytest.fixture(scope="module")
+def superuser_identity():
+    """Super user identity to interact with the services."""
+    i = Identity(2)
+    i.provides.add(UserNeed(2))
+    i.provides.add(any_user)
+    i.provides.add(system_process)
+    i.provides.add(superuser_access)
+    return i
+
+
+@pytest.fixture(scope="module")
 def service(app):
     """Vocabularies service object."""
     return app.extensions["invenio-vocabularies"].vocabularies_service
@@ -148,6 +164,14 @@ def lang_data2(lang_data):
     """Example data for testing invalid cases."""
     data = dict(lang_data)
     data["id"] = "new"
+    return data
+
+
+@pytest.fixture()
+def non_searchable_lang_data(lang_data):
+    """Example data for testing unlisted cases."""
+    data = dict(lang_data)
+    data["tags"] = ["unlisted", "recommended"]
     return data
 
 

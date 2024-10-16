@@ -13,7 +13,10 @@ fixtures are available.
 """
 
 import pytest
+from invenio_indexer.api import RecordIndexer
 from invenio_records_resources.proxies import current_service_registry
+
+from invenio_vocabularies.contrib.names.api import Name
 
 
 @pytest.fixture(scope="module")
@@ -56,3 +59,29 @@ def name_full_data():
         ],
         "affiliations": [{"id": "cern"}, {"name": "CustomORG"}],
     }
+
+
+@pytest.fixture(scope="function")
+def non_searchable_name_data():
+    """Full name data."""
+    return {
+        "id": "0000-0001-8135-3489",
+        "name": "Doe, John",
+        "given_name": "John",
+        "family_name": "Doe",
+        "identifiers": [
+            {"identifier": "0000-0001-8135-3489", "scheme": "orcid"},
+            {"identifier": "gnd:4079154-3", "scheme": "gnd"},
+        ],
+        "affiliations": [{"id": "cern"}, {"name": "CustomORG"}],
+        "tags": ["unlisted"],
+    }
+
+
+@pytest.fixture(scope="module")
+def indexer():
+    """Indexer instance with correct Record class."""
+    return RecordIndexer(
+        record_cls=Name,
+        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
+    )

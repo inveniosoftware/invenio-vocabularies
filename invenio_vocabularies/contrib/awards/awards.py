@@ -27,7 +27,8 @@ from invenio_records_resources.records.systemfields import (
 )
 from invenio_records_resources.resources.records.headers import etag_headers
 
-from ...services.permissions import PermissionPolicy
+from invenio_vocabularies.services.permissions import PermissionPolicy
+
 from ..funders.api import Funder
 from ..subjects.api import Subject
 from .config import AwardsSearchOptions, service_components

@@ -68,3 +68,23 @@ def test_permissions_readonly(anyuser_idty, lang_type, lang_data, service):
     with pytest.raises(PermissionDenied):
         service.delete(anyuser_idty, ("languages", id_))
     service.delete(system_identity, ("languages", id_))
+
+
+def test_non_searchable_tag(
+    anyuser_idty, lang_type, non_searchable_lang_data, service, superuser_identity
+):
+    """Test that unlisted tags are not returned in search results."""
+    item = service.create(system_identity, non_searchable_lang_data)
+    id_ = item.id
+    # Refresh index to make changes live.
+    Vocabulary.index.refresh()
+
+    # Search - only searchable values should be returned
+    res = service.search(anyuser_idty, type="languages", q=f"id:{id_}", size=25, page=1)
+    assert res.total == 0
+
+    # Admins should be able to see the unlisted tags
+    res = service.search(
+        superuser_identity, type="languages", q=f"id:{id_}", size=25, page=1
+    )
+    assert res.total == 1
