@@ -14,8 +14,8 @@
           "type": "custom",
           "char_filter": ["strip_special_chars"],
           "filter": [
-            "lowercase",
-            "asciifolding",
+            "lowercasepreserveoriginal",
+            "asciifoldingpreserveoriginal",
             "edgegrams"
           ]
         },
@@ -24,8 +24,8 @@
           "type": "custom",
           "char_filter": ["strip_special_chars"],
           "filter": [
-            "lowercase",
-            "asciifolding"
+            "lowercasepreserveoriginal",
+            "asciifoldingpreserveoriginal"
           ]
         }
       },
@@ -40,11 +40,11 @@
         }
       },
       "filter": {
-        "lowercase": {
+        "lowercasepreserveoriginal": {
           "type": "lowercase",
           "preserve_original": true
         },
-        "asciifolding": {
+        "asciifoldingpreserveoriginal": {
           "type": "asciifolding",
           "preserve_original": true
         },
