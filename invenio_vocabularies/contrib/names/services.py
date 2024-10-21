@@ -19,11 +19,12 @@ NamesServiceConfig = record_type.service_config_cls
 class NamesService(record_type.service_cls):
     """Name service."""
 
-    def resolve(self, identity, id_, id_type):
+    def resolve(self, identity, id_, id_type, many=False):
         """Get the record with a given identifier.
 
-        This method assumes that the are no duplicates in the system
-        (i.e. only one name record can have a pair of identifier:scheme).
+        param id_: The identifier value.
+        param id_type: The identifier type.
+        param many: If True, return a list of records.
         """
         search_query = dsl.Q(
             "bool",
@@ -36,20 +37,28 @@ class NamesService(record_type.service_cls):
 
         # max_records = 1, we assume there cannot be duplicates
         # the loading process needs to make sure of that
-        results = self._read_many(identity, search_query, max_records=1)
+        if many:
+            results = self._read_many(identity, search_query)
+        else:
+            results = self._read_many(identity, search_query, max_records=1)
+
         # cant use the results_item because it returns dicts intead of records
         total = results.hits.total["value"]
         if total == 0:
             # Not a PID but trated as such
             raise PIDDoesNotExistError(pid_type=id_type, pid_value=id_)
+        if many:
+            for result in results:
+                record = self.record_cls.loads(result.to_dict())
+                self.require_permission(identity, "read", record=record)
+            return self.result_list(self, identity, results)
+        else:
+            record = self.record_cls.loads(results[0].to_dict())
+            self.require_permission(identity, "read", record=record)
 
-        # (0 < #hits <= max_records) = 1
-        record = self.record_cls.loads(results[0].to_dict())
-        self.require_permission(identity, "read", record=record)
-
-        return self.result_item(
-            self,
-            identity,
-            record,
-            links_tpl=self.links_item_tpl,
-        )
+            return self.result_item(
+                self,
+                identity,
+                record,
+                links_tpl=self.links_item_tpl,
+            )

@@ -9,7 +9,7 @@
 """Vocabulary permissions."""
 
 from invenio_records_permissions import RecordPermissionPolicy
-from invenio_records_permissions.generators import SystemProcess
+from invenio_records_permissions.generators import AnyUser, SystemProcess
 
 from invenio_vocabularies.services.generators import IfTags
 
@@ -17,11 +17,14 @@ from invenio_vocabularies.services.generators import IfTags
 class PermissionPolicy(RecordPermissionPolicy):
     """Permission policy."""
 
-    can_search = [SystemProcess(), IfTags(exclude=["unlisted"])]
-    can_read = [SystemProcess(), IfTags(exclude=["unlisted"])]
+    can_search = [SystemProcess(), AnyUser()]
+    can_read = [
+        SystemProcess(),
+        IfTags(["unlisted"], then_=[SystemProcess()], else_=[AnyUser()]),
+    ]
     can_create = [SystemProcess()]
     can_update = [SystemProcess()]
     can_delete = [SystemProcess()]
     can_manage = [SystemProcess()]
     # this permission is needed for the /api/vocabularies/ endpoint
-    can_list_vocabularies = [SystemProcess(), IfTags(exclude=["unlisted"])]
+    can_list_vocabularies = [SystemProcess(), AnyUser()]

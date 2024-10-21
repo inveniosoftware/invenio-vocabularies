@@ -22,11 +22,9 @@ class NamesPermissionPolicy(PermissionPolicy):
 
     can_search = [
         SystemProcess(),
-        IfTags(exclude=["unlisted"], only_authenticated=True),
+        AuthenticatedUser(),
     ]
-    can_read = [SystemProcess(), IfTags(exclude=["unlisted"], only_authenticated=True)]
-    # this permission is needed for the /api/vocabularies/ endpoint
-    can_list_vocabularies = [
+    can_read = [
         SystemProcess(),
-        IfTags(exclude=["unlisted"], only_authenticated=True),
+        IfTags(["unlisted"], then_=[SystemProcess()], else_=[AuthenticatedUser()]),
     ]

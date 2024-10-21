@@ -10,40 +10,29 @@
 """Vocabulary generators."""
 
 from invenio_access import any_user, authenticated_user
-from invenio_records_permissions.generators import Generator
+from invenio_records_permissions.generators import ConditionalGenerator
 from invenio_search.engine import dsl
 
 
-class IfTags(Generator):
+class IfTags(ConditionalGenerator):
     """Generator to filter based on tags.
 
-    This generator will filter records based on the tags field.
-    Optionally, it can be configured to only allow authenticated users.
+    This generator will filter out records based on the tags field.
     """
 
-    def __init__(self, include=None, exclude=None, only_authenticated=False):
+    def __init__(self, tags, then_, else_):
         """Constructor."""
-        self.include = include or []
-        self.exclude = exclude or []
-        self.only_authenticated = only_authenticated
+        self.tags = tags or []
+        super().__init__(then_, else_)
 
-    def needs(self, **kwargs):
-        """Enabling Needs."""
-        return [authenticated_user] if self.only_authenticated else [any_user]
+    def _condition(self, record=None, **kwargs):
+        """Check if the record has the tags."""
+        return any(tag in record.get("tags", []) for tag in self.tags)
 
     def query_filter(self, **kwargs):
         """Search based on configured tags."""
-        must_clauses = []
-        must_not_clauses = []
-
-        if self.include:
-            must_clauses.append(dsl.Q("terms", tags=self.include))
-
-        if self.exclude:
-            must_not_clauses.append(dsl.Q("terms", tags=self.exclude))
-
+        must_not_clauses = [dsl.Q("terms", tags=self.tags)]
         return dsl.Q(
             "bool",
-            must=must_clauses,
             must_not=must_not_clauses,
         )

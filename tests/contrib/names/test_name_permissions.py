@@ -12,7 +12,10 @@
 import pytest
 from flask_principal import Identity
 from invenio_access.permissions import any_user, authenticated_user
-from invenio_records_resources.services.errors import PermissionDeniedError
+from invenio_records_resources.services.errors import (
+    PermissionDeniedError,
+    RecordPermissionDeniedError,
+)
 
 
 #
@@ -57,7 +60,6 @@ def test_non_searchable_tag(
     assert indexer.refresh()
 
     with pytest.raises(PermissionDeniedError):
-        # Read - only searchable values should be returned
         res = service.search(anyuser_idty, type="names", q=f"id:{id_}", size=25, page=1)
 
     # Search - only searchable values should be returned
@@ -65,9 +67,20 @@ def test_non_searchable_tag(
         authenticated_user_idty, type="names", q=f"id:{id_}", size=25, page=1
     )
     assert res.total == 0
+    # Anyuser should not be able to read the record
+    with pytest.raises(RecordPermissionDeniedError):
+        service.read(anyuser_idty, id_)
+
+    # Authenticated user should not be able to read the record
+    with pytest.raises(RecordPermissionDeniedError):
+        test = service.read(authenticated_user_idty, id_)
 
     # Admins should be able to see the unlisted tags
     res = service.search(
         superuser_identity, type="names", q=f"id:{id_}", size=25, page=1
     )
     assert res.total == 1
+
+    item = service.read(superuser_identity, id_)
+
+    assert item["id"] == id_
