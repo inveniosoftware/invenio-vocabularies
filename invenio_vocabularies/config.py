@@ -172,7 +172,7 @@ VOCABULARIES_TYPES_SEARCH = {
 }
 """Vocabulary type search configuration."""
 
-SUBJECTS_EUROSCIVOC_FILE_URL = "https://op.europa.eu/o/opportal-service/euvoc-download-handler?cellarURI=http%3A%2F%2Fpublications.europa.eu%2Fresource%2Fdistribution%2Feuroscivoc%2F20231115-0%2Frdf%2Fskos_ap_eu%2FEuroSciVoc-skos-ap-eu.rdf&fileName=EuroSciVoc-skos-ap-eu.rdf"
+SUBJECTS_EUROSCIVOC_FILE_URL = "https://publications.europa.eu/resource/distribution/euroscivoc/rdf/skos_ap_eu/EuroSciVoc-skos-ap-eu.rdf"
 """Subject EuroSciVoc file download link."""
 
 VOCABULARIES_ORCID_ACCESS_KEY = "TODO"
