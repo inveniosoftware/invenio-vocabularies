@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version v6.5.0 (released 2024-10-31)
+
+- subjects: euroscivoc: change default to latest version-less URL
+- Rename patched filters so the normalizer uses the default ones (#409)
+    * rename patched filters so the normalizer uses the default ones
+
 Version v6.4.1 (released 2024-10-15)
 
 - fix: exclude unknown fields when updating awards with subjects
