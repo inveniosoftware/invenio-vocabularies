@@ -91,21 +91,12 @@ class AwardRelationSchema(Schema):
         id_ = data.get("id")
         number = data.get("number")
         title = data.get("title")
-        try:
-            ALTERNATE_FUNDING_SCHEMA = current_app.config["ALTERNATE_FUNDING_SCHEMA"]
-        except KeyError:
-            ALTERNATE_FUNDING_SCHEMA = None
-        if ALTERNATE_FUNDING_SCHEMA:
-            if not id_ and not (number or title):
-                raise ValidationError(
-                    _("An existing id or either number or title must be present."),
-                    "award",
-                )
-        else:
-            if not id_ and not (number and title):
-                raise ValidationError(
-                    _("An existing id or number/title must be present."), "award"
-                )
+
+        if not id_ and not (number or title):
+            raise ValidationError(
+                _("An existing id or either number or title must be present."),
+                "award",
+            )
 
 
 class FundingRelationSchema(Schema):
