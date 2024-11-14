@@ -18,6 +18,8 @@ from marshmallow_utils.fields import TZDateTime
 
 from invenio_vocabularies.services.tasks import process_datastream
 
+from .contrib.names.datastreams import ORCID_PRESET_DATASTREAM_CONFIG
+
 
 class ArgsSchema(Schema):
     """Schema of task input arguments."""
@@ -194,3 +196,16 @@ class UpdateAwardsCordisJob(ProcessDataStreamJob):
                 ],
             }
         }
+
+
+class ImportORCIDJob(ProcessDataStreamJob):
+    """Import ORCID data registered task."""
+
+    description = "Import ORCID data"
+    title = "Import ORCID data"
+    id = "import_orcid"
+
+    @classmethod
+    def default_args(cls, job_obj, **kwargs):
+        """Generate default job arguments."""
+        return {"config": {**ORCID_PRESET_DATASTREAM_CONFIG}}
