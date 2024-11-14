@@ -144,6 +144,10 @@
             "type": "keyword"
           }
         }
+      },
+      "props": {
+        "type": "object",
+        "dynamic": "true"
       }
     }
   }
