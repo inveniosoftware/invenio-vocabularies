@@ -11,6 +11,7 @@
 """Subjects configuration."""
 
 from flask import current_app
+from invenio_i18n import get_locale
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
@@ -22,6 +23,7 @@ from ...services.querystr import FilteredSuggestQueryParser
 subject_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_SUBJECTS_SCHEMES"]
 )
+localized_title = LocalProxy(lambda: f"title.{get_locale()}^20")
 
 
 class SubjectsSearchOptions(SearchOptions):
@@ -30,7 +32,8 @@ class SubjectsSearchOptions(SearchOptions):
     suggest_parser_cls = FilteredSuggestQueryParser.factory(
         filter_field="scheme",
         fields=[  # suggest fields
-            "title.*^100",
+            "subject^100",
+            localized_title,
             "synonyms^20",
         ],
     )

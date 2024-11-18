@@ -10,11 +10,21 @@
 
 from invenio_records_permissions.generators import AuthenticatedUser, SystemProcess
 
-from ...services.permissions import PermissionPolicy
+from invenio_vocabularies.services.generators import IfTags
+from invenio_vocabularies.services.permissions import PermissionPolicy
 
 
 class NamesPermissionPolicy(PermissionPolicy):
-    """Permission policy."""
+    """Names permission policy.
 
-    can_search = [SystemProcess(), AuthenticatedUser()]
-    can_read = [SystemProcess(), AuthenticatedUser()]
+    Names endpoints are protected, only authenticated users can access them.
+    """
+
+    can_search = [
+        SystemProcess(),
+        AuthenticatedUser(),
+    ]
+    can_read = [
+        SystemProcess(),
+        IfTags(["unlisted"], then_=[SystemProcess()], else_=[AuthenticatedUser()]),
+    ]

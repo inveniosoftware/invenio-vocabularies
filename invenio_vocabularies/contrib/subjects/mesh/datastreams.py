@@ -22,14 +22,19 @@ class MeshSubjectsTransformer(BaseTransformer):
         """Apply transformation on steam entry."""
         entry_data = stream_entry.entry
 
-        # ID in MeSH data is the URL, ex. https://id.nlm.nih.gov/mesh/D000001
+        # ID in MeSH data is in the URL, ex. https://id.nlm.nih.gov/mesh/D000001
         # We just want to use the ID prefixed by "mesh:""
         try:
             mesh_id = entry_data["id"].split("/")[-1]
+            entry_data["id"] = "mesh:" + mesh_id
         except Exception:
             raise TransformerError("Not a valid MeSH ID.")
 
-        entry_data["id"] = "mesh:" + mesh_id
+        entry_data["title"] = title = entry_data.get("title", {})
+        # NOTE: MeSH import file comes with an English subject by default
+        if "en" not in title:
+            title["en"] = entry_data["subject"]
+
         return stream_entry
 
 

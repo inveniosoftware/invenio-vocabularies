@@ -12,7 +12,6 @@ from copy import deepcopy
 from functools import partial
 
 import pytest
-from invenio_indexer.api import RecordIndexer
 from invenio_records.systemfields.relations.errors import InvalidRelationValue
 from invenio_search import current_search_client
 from jsonschema import ValidationError as SchemaValidationError
@@ -24,15 +23,6 @@ from invenio_vocabularies.contrib.names.api import Name
 def search_get():
     """Get a document from an index."""
     return partial(current_search_client.get, Name.index._name)
-
-
-@pytest.fixture()
-def indexer():
-    """Indexer instance with correct Record class."""
-    return RecordIndexer(
-        record_cls=Name,
-        record_to_index=lambda r: (r.__class__.index._name, "_doc"),
-    )
 
 
 @pytest.fixture()

@@ -42,6 +42,7 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
         )
     )
     affiliations = fields.List(fields.Nested(AffiliationRelationSchema))
+    props = fields.Dict(keys=fields.Str(), values=fields.Raw())
 
     @validates_schema
     def validate_names(self, data, **kwargs):

@@ -8,6 +8,17 @@
 Changes
 =======
 
+Version v6.6.0 (released 2024-11-15)
+
+- mesh: add title en if not present
+- subjects: add subject to search fields
+- jobs: add ORCID job
+- global: Add unlisted tag
+    * This adds a new tag to the vocabularies to allow for unlisted
+      vocabularies. This is useful for vocabularies that are not meant to be
+      displayed in the UI.
+    * This requires to update the names mapping to add the props.
+
 Version v6.5.0 (released 2024-10-31)
 
 - subjects: euroscivoc: change default to latest version-less URL
