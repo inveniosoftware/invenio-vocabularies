@@ -8,7 +8,6 @@
 
 """Awards schema."""
 
-from flask import current_app
 from functools import partial
 
 from invenio_i18n import lazy_gettext as _
