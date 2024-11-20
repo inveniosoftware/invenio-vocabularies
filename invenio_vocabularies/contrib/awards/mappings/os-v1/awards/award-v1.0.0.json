@@ -58,8 +58,19 @@
       "acronym": {
         "type": "keyword",
         "fields": {
-          "text": { "type": "text" }
+          "text": {
+            "type": "text"
+          }
         }
+      },
+      "start_date": {
+        "type": "date"
+      },
+      "end_date": {
+        "type": "date"
+      },
+      "description": {
+        "type": "text"
       },
       "program": {
         "type": "keyword"
