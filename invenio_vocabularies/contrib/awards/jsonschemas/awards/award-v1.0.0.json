@@ -43,6 +43,15 @@
     "program": {
       "type": "string"
     },
+    "start_date": {
+      "type": "string"
+    },
+    "end_date": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
     "subjects": {
       "description": "Award's subjects.",
       "type": "array",

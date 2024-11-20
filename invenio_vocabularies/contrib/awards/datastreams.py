@@ -117,6 +117,13 @@ class OpenAIREProjectTransformer(BaseTransformer):
         if acronym:
             award["acronym"] = acronym
 
+        if "startDate" in record:
+            award["start_date"] = record["startDate"]
+        if "endDate" in record:
+            award["end_date"] = record["endDate"]
+        if "summary" in record:
+            award["description"] = record["summary"]
+
         stream_entry.entry = award
         return stream_entry
 

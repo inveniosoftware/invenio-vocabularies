@@ -12,7 +12,7 @@ from functools import partial
 
 from invenio_i18n import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields, validate, validates_schema
-from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
+from marshmallow_utils.fields import IdentifierSet, ISODateString, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import (
@@ -60,6 +60,12 @@ class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     subjects = fields.List(fields.Nested(SubjectRelationSchema))
 
     organizations = fields.List(fields.Nested(AwardOrganizationRelationSchema))
+
+    description = SanitizedUnicode()
+
+    start_date = ISODateString()
+
+    end_date = ISODateString()
 
     id = SanitizedUnicode(
         validate=validate.Length(min=1, error=_("PID cannot be blank."))
