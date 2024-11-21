@@ -30,7 +30,7 @@ from .schema import NameSchema
 name_relations = RelationsField(
     affiliations=PIDListRelation(
         "affiliations",
-        keys=["name"],
+        keys=["name", "acronym"],
         pid_field=Affiliation.pid,
         cache_key="affiliations",
     )

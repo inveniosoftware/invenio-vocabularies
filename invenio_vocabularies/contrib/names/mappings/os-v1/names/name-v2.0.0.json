@@ -125,6 +125,17 @@
             "type": "text",
             "analyzer": "accent_edge_analyzer",
             "search_analyzer": "accent_analyzer"
+          },
+          "acronym": {
+            "type": "text",
+            "analyzer": "accent_edge_analyzer",
+            "search_analyzer": "accent_analyzer",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "normalizer": "accent_normalizer"
+              }
+            }
           }
         }
       },

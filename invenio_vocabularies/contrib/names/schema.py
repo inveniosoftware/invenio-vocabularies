@@ -16,8 +16,16 @@ from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import BaseVocabularySchema, ModePIDFieldVocabularyMixin
-from ..affiliations.schema import AffiliationRelationSchema
+from ..affiliations.schema import (
+    AffiliationRelationSchema as BaseAffiliationRelationSchema,
+)
 from .config import names_schemes
+
+
+class AffiliationRelationSchema(BaseAffiliationRelationSchema):
+    """Affiliation relation schema."""
+
+    acronym = SanitizedUnicode(dump_only=True)
 
 
 class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
