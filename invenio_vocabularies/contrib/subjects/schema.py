@@ -13,8 +13,8 @@
 from functools import partial
 
 from invenio_i18n import get_locale
-from marshmallow import EXCLUDE, Schema, fields, pre_load
-from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
+from marshmallow import EXCLUDE, Schema, ValidationError, fields, pre_load, validate
+from marshmallow_utils.fields import URL, IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import (
@@ -23,6 +23,21 @@ from ...services.schema import (
     i18n_strings,
 )
 from .config import subject_schemes
+
+
+class StringOrListOfStrings(fields.Field):
+    """Custom field to handle both string and list of strings."""
+
+    # TODO: Move this to marshmallow-utils for broader type support.
+    def _deserialize(self, value, attr, data, **kwargs):
+        if isinstance(value, str):
+            return fields.String()._deserialize(value, attr, data, **kwargs)
+        elif isinstance(value, list) and all(isinstance(item, str) for item in value):
+            return [
+                fields.String()._deserialize(item, attr, data, **kwargs)
+                for item in value
+            ]
+        raise ValidationError("Invalid value. Must be a string or a list of strings.")
 
 
 class SubjectSchema(BaseVocabularySchema):
@@ -35,7 +50,7 @@ class SubjectSchema(BaseVocabularySchema):
     scheme = SanitizedUnicode(required=True)
     subject = SanitizedUnicode(required=True)
     title = i18n_strings
-    props = fields.Dict(keys=SanitizedUnicode(), values=SanitizedUnicode())
+    props = fields.Dict(keys=SanitizedUnicode(), values=StringOrListOfStrings())
     identifiers = IdentifierSet(
         fields.Nested(
             partial(

@@ -26,6 +26,15 @@ subject_schemes = LocalProxy(
 localized_title = LocalProxy(lambda: f"title.{get_locale()}^20")
 
 
+gemet_file_url = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_SUBJECTS_GEMET_FILE_URL"]
+)
+
+euroscivoc_file_url = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_SUBJECTS_EUROSCIVOC_FILE_URL"]
+)
+
+
 class SubjectsSearchOptions(SearchOptions):
     """Search options."""
 
