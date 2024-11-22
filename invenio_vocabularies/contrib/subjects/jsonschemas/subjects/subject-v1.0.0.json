@@ -34,9 +34,20 @@
       "type": "object",
       "patternProperties": {
         "^.*$": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "identifiers": {
       "description": "Alternate identifiers for the subject.",

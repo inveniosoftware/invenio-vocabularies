@@ -11,6 +11,7 @@
 
 import csv
 import gzip
+import io
 import json
 import re
 import tarfile
@@ -23,6 +24,7 @@ import yaml
 from lxml import etree
 from lxml.html import fromstring
 from lxml.html import parse as html_parse
+from rdflib import RDF, Graph, Namespace
 
 from .errors import ReaderError
 from .xml import etree_to_dict
@@ -103,8 +105,7 @@ class SimpleHTTPReader(BaseReader):
 
     def __init__(self, origin, id=None, ids=None, content_type=None, *args, **kwargs):
         """Constructor."""
-        assert id or ids
-        self._ids = ids if ids else [id]
+        self._ids = ids if ids else ([id] if id else None)
         self.content_type = content_type
         super().__init__(origin, *args, **kwargs)
 
@@ -113,14 +114,22 @@ class SimpleHTTPReader(BaseReader):
         base_url = url
         headers = {"Accept": self.content_type}
 
-        for id_ in self._ids:
-            url = base_url.format(id=id_)
+        # If there are no IDs, query the base URL
+        if not self._ids:
             resp = requests.get(url, headers=headers)
-            if resp.status_code != 200:
-                # todo add logging/fail
-                pass
+            if resp.status_code == 200:
+                yield resp.content
+            else:
+                print(f"Failed to fetch URL {url}: {resp.status_code}")
+        else:
+            for id_ in self._ids:
+                url = base_url.format(id=id_)
+                resp = requests.get(url, headers=headers)
+                if resp.status_code != 200:
+                    # todo add logging/fail
+                    pass
 
-            yield resp.content
+                yield resp.content
 
     def read(self, item=None, *args, **kwargs):
         """Chooses between item and origin as url."""
@@ -197,6 +206,9 @@ class GzipReader(BaseReader):
     """Gzip reader."""
 
     def _iter(self, fp, *args, **kwargs):
+        if isinstance(fp, bytes):
+            fp = io.BytesIO(fp)
+
         with gzip.open(fp) as gp:
             yield gp
 
@@ -346,3 +358,31 @@ def xml_to_dict(tree: etree._Element):
     dict_obj["record"] = etree.tostring(tree)
 
     return dict_obj
+
+
+class RDFReader(BaseReader):
+    """Base Reader class to fetch and process RDF data."""
+
+    SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
+
+    def _iter(self, rdf_graph):
+        """Iterate over the RDF graph, yielding one subject at a time."""
+        for subject, _, _ in rdf_graph.triples(
+            (None, RDF.type, self.SKOS_CORE.Concept)
+        ):
+            yield {"subject": subject, "rdf_graph": rdf_graph}
+
+    def read(self, item=None, *args, **kwargs):
+        """Fetch and process the RDF data, yielding it one subject at a time."""
+        if isinstance(item, gzip.GzipFile):
+            rdf_content = item.read().decode("utf-8")
+
+        elif isinstance(item, bytes):
+            rdf_content = item.decode("utf-8")
+        else:
+            raise ReaderError("Unsupported content type")
+
+        rdf_graph = Graph()
+        rdf_graph.parse(io.StringIO(rdf_content), format="xml")
+
+        yield from self._iter(rdf_graph)

@@ -1,16 +1,21 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2024 CERN.
+#
+# Invenio-Vocabularies is free software; you can redistribute it and/or
+# modify it under the terms of the MIT License; see LICENSE file for more
+# details.
+
 import io
-import unittest
-from unittest.mock import Mock, patch
 
 import pytest
-from rdflib import RDF, Graph, Namespace, URIRef
+from rdflib import RDF, Graph
 
 from invenio_vocabularies.contrib.subjects.euroscivoc.datastreams import (
-    EuroSciVocSubjectsHTTPReader,
     EuroSciVocSubjectsTransformer,
 )
 from invenio_vocabularies.datastreams.datastreams import StreamEntry
-from invenio_vocabularies.datastreams.errors import ReaderError, TransformerError
+from invenio_vocabularies.datastreams.readers import RDFReader
 
 XML_DATA_PREF_LABEL = bytes(
     """<?xml version="1.0" encoding="UTF-8"?>
@@ -159,7 +164,7 @@ def expected_from_rdf_alt_label_without_parent():
 def test_euroscivoc_subjects_transformer_pref_label(
     expected_from_rdf_pref_label_with_parent,
 ):
-    reader = EuroSciVocSubjectsHTTPReader()
+    reader = RDFReader()
     rdf_data = io.BytesIO(XML_DATA_PREF_LABEL)
     rdf_graph = Graph()
     rdf_graph.parse(rdf_data, format="xml")
@@ -176,7 +181,7 @@ def test_euroscivoc_subjects_transformer_pref_label(
 def test_euroscivoc_subjects_transformer_alt_label(
     expected_from_rdf_alt_label_without_parent,
 ):
-    reader = EuroSciVocSubjectsHTTPReader()
+    reader = RDFReader()
     rdf_data = io.BytesIO(XML_DATA_ALT_LABEL)
     rdf_graph = Graph()
     rdf_graph.parse(rdf_data, format="xml")

@@ -11,6 +11,7 @@
 from abc import ABC, abstractmethod
 
 from lxml import etree
+from rdflib import Namespace
 
 from .errors import TransformerError
 from .xml import etree_to_dict
@@ -60,4 +61,52 @@ class XMLTransformer(BaseTransformer):
             record = xml_dict
 
         stream_entry.entry = record
+        return stream_entry
+
+
+class RDFTransformer(BaseTransformer):
+    """Base Transformer class for RDF data to dictionary format."""
+
+    SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
+    SPLITCHAR = ","
+
+    def _get_labels(self, subject, rdf_graph):
+        """Extract labels (prefLabel or altLabel) for a subject."""
+        labels = {
+            label.language: label.value.capitalize()
+            for _, _, label in rdf_graph.triples(
+                (subject, self.SKOS_CORE.prefLabel, None)
+            )
+            if label.language and "-" not in label.language
+        }
+
+        if "en" not in labels:
+            for _, _, label in rdf_graph.triples(
+                (subject, self.SKOS_CORE.altLabel, None)
+            ):
+                labels.setdefault(label.language, label.value.capitalize())
+
+        return labels
+
+    def _find_parents(self, subject, rdf_graph):
+        """Find parent notations."""
+        return [
+            self._get_parent_notation(broader, rdf_graph)
+            for broader in rdf_graph.transitive_objects(subject, self.SKOS_CORE.broader)
+            if broader != subject
+        ]
+
+    def _get_parent_notation(self, broader, rdf_graph):
+        """Extract notation for a parent."""
+        raise NotImplementedError("This method should be implemented in a subclass.")
+
+    def _transform_entry(self, subject, rdf_graph):
+        """Transform an RDF subject entry into the desired dictionary format."""
+        raise NotImplementedError("This method should be implemented in a subclass.")
+
+    def apply(self, stream_entry, *args, **kwargs):
+        """Apply transformation to a stream entry."""
+        stream_entry.entry = self._transform_entry(
+            stream_entry.entry["subject"], stream_entry.entry["rdf_graph"]
+        )
         return stream_entry

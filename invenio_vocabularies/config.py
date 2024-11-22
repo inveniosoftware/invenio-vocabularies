@@ -19,6 +19,8 @@ from .datastreams.readers import (
     JsonLinesReader,
     JsonReader,
     OAIPMHReader,
+    RDFReader,
+    SimpleHTTPReader,
     TarReader,
     XMLReader,
     YamlReader,
@@ -135,6 +137,8 @@ VOCABULARIES_DATASTREAM_READERS = {
     "jsonl": JsonLinesReader,
     "gzip": GzipReader,
     "tar": TarReader,
+    "http": SimpleHTTPReader,
+    "rdf": RDFReader,
     "yaml": YamlReader,
     "zip": ZipReader,
     "xml": XMLReader,
@@ -172,8 +176,13 @@ VOCABULARIES_TYPES_SEARCH = {
 }
 """Vocabulary type search configuration."""
 
-SUBJECTS_EUROSCIVOC_FILE_URL = "https://publications.europa.eu/resource/distribution/euroscivoc/rdf/skos_ap_eu/EuroSciVoc-skos-ap-eu.rdf"
+VOCABULARIES_SUBJECTS_EUROSCIVOC_FILE_URL = "https://publications.europa.eu/resource/distribution/euroscivoc/rdf/skos_ap_eu/EuroSciVoc-skos-ap-eu.rdf"
 """Subject EuroSciVoc file download link."""
+
+VOCABULARIES_SUBJECTS_GEMET_FILE_URL = (
+    "https://www.eionet.europa.eu/gemet/latest/gemet.rdf.gz"
+)
+"""Subject GEMET file download link."""
 
 VOCABULARIES_ORCID_ACCESS_KEY = "TODO"
 """ORCID access key to access the s3 bucket."""
