@@ -12,6 +12,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 import yaml
+from flask import current_app
 from invenio_access.permissions import system_identity
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDoesNotExistError
 from invenio_records.systemfields.relations.errors import InvalidRelationValue
@@ -120,11 +121,14 @@ class ServiceWriter(BaseWriter):
 
     def write_many(self, stream_entries, *args, **kwargs):
         """Writes the input entries using a given service."""
+        current_app.logger.info(f"Writing {len(stream_entries)} entries")
         entries = [entry.entry for entry in stream_entries]
         entries_with_id = [(self._entry_id(entry), entry) for entry in entries]
-        results = self._service.create_or_update_many(self._identity, entries_with_id)
+        result_list = self._service.create_or_update_many(
+            self._identity, entries_with_id
+        )
         stream_entries_processed = []
-        for entry, result in zip(entries, results):
+        for entry, result in zip(entries, result_list.results):
             processed_stream_entry = StreamEntry(
                 entry=entry,
                 record=result.record,

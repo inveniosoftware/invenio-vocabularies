@@ -13,6 +13,7 @@ import io
 import tarfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import timedelta
+from itertools import islice
 from pathlib import Path
 
 import arrow
@@ -48,6 +49,8 @@ class OrcidDataSyncReader(BaseReader):
         suffix = orcid_to_sync[-3:]
         key = f"{suffix}/{orcid_to_sync}.xml"
         try:
+            # Potential improvement: use the a XML jax parser to avoid loading the whole file in memory
+            # and choose the sections we need to read (probably the summary)
             return self.s3_client.read_file(f"s3://{bucket}/{key}")
         except Exception:
             current_app.logger.exception("Failed to fetch ORCiD record.")
@@ -67,42 +70,54 @@ class OrcidDataSyncReader(BaseReader):
         if self.since:
             time_shift = self.since
         last_sync = arrow.now() - timedelta(**time_shift)
+        try:
+            content = io.TextIOWrapper(fileobj, encoding="utf-8")
+            csv_reader = csv.DictReader(content)
 
-        file_content = fileobj.read().decode("utf-8")
+            for row in csv_reader:  # Skip the header line
+                orcid = row["orcid"]
 
-        csv_reader = csv.DictReader(file_content.splitlines())
+                # Lambda file is ordered by last modified date
+                last_modified_str = row["last_modified"]
+                try:
+                    last_modified_date = arrow.get(last_modified_str, date_format)
+                except arrow.parser.ParserError:
+                    last_modified_date = arrow.get(
+                        last_modified_str, date_format_no_millis
+                    )
 
-        for row in csv_reader:  # Skip the header line
-            orcid = row["orcid"]
-
-            # Lambda file is ordered by last modified date
-            last_modified_str = row["last_modified"]
-            try:
-                last_modified_date = arrow.get(last_modified_str, date_format)
-            except arrow.parser.ParserError:
-                last_modified_date = arrow.get(last_modified_str, date_format_no_millis)
-
-            if last_modified_date < last_sync:
-                break
-            yield orcid
+                if last_modified_date < last_sync:
+                    break
+                yield orcid
+        finally:
+            fileobj.close()
 
     def _iter(self, orcids):
         """Iterates over the ORCiD records yielding each one."""
         with ThreadPoolExecutor(
             max_workers=current_app.config["VOCABULARIES_ORCID_SYNC_MAX_WORKERS"]
         ) as executor:
-            futures = [
-                executor.submit(
+            # futures is a dictionary where the key is the ORCID value and the item is the Future object
+            futures = {
+                orcid: executor.submit(
                     self._fetch_orcid_data,
                     orcid,
                     current_app.config["VOCABULARIES_ORCID_SUMMARIES_BUCKET"],
                 )
                 for orcid in orcids
-            ]
-            for future in as_completed(futures):
-                result = future.result()
-                if result is not None:
-                    yield result
+            }
+
+            for orcid in list(futures.keys()):
+                try:
+                    result = futures[orcid].result()
+                    if result:
+                        yield result
+                finally:
+                    # Explicitly release memory, as we don't need the future anymore.
+                    # This is mostly required because as long as we keep a reference to the future
+                    # (in the above futures dict), the garbage collector won't collect it
+                    # and it will keep the memory allocated.
+                    del futures[orcid]
 
     def read(self, item=None, *args, **kwargs):
         """Streams the ORCiD lambda file, process it to get the ORCiDS to sync and yields it's data."""
@@ -111,7 +126,6 @@ class OrcidDataSyncReader(BaseReader):
             "s3://orcid-lambda-file/last_modified.csv.tar"
         )
 
-        orcids_to_sync = []
         # Opens tar file and process it
         with tarfile.open(fileobj=io.BytesIO(tar_content)) as tar:
             # Iterate over each member (file or directory) in the tar file
@@ -119,10 +133,24 @@ class OrcidDataSyncReader(BaseReader):
                 # Extract the file
                 extracted_file = tar.extractfile(member)
                 if extracted_file:
+                    current_app.logger.info(f"[ORCID Reader] Processing lambda file...")
                     # Process the file and get the ORCiDs to sync
-                    orcids_to_sync.extend(self._process_lambda_file(extracted_file))
+                    orcids_to_sync = set(self._process_lambda_file(extracted_file))
 
-        yield from self._iter(orcids_to_sync)
+                    # Close the file explicitly after processing
+                    extracted_file.close()
+
+                    # Process ORCIDs in smaller batches
+                    for orcid_batch in self._chunked_iter(
+                        orcids_to_sync, batch_size=100
+                    ):
+                        yield from self._iter(orcid_batch)
+
+    def _chunked_iter(self, iterable, batch_size):
+        """Yield successive chunks of a given size."""
+        it = iter(iterable)
+        while chunk := list(islice(it, batch_size)):
+            yield chunk
 
 
 class OrcidHTTPReader(SimpleHTTPReader):

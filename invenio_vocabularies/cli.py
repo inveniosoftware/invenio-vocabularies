@@ -29,6 +29,8 @@ def _process_vocab(config, num_samples=None):
         readers_config=config["readers"],
         transformers_config=config.get("transformers"),
         writers_config=config["writers"],
+        batch_size=config.get("batch_size", 1000),
+        write_many=config.get("write_many", False),
     )
 
     success, errored, filtered = 0, 0, 0

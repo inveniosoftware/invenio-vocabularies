@@ -48,7 +48,16 @@ class StreamEntry:
 class DataStream:
     """Data stream."""
 
-    def __init__(self, readers, writers, transformers=None, *args, **kwargs):
+    def __init__(
+        self,
+        readers,
+        writers,
+        transformers=None,
+        batch_size=100,
+        write_many=False,
+        *args,
+        **kwargs,
+    ):
         """Constructor.
 
         :param readers: an ordered list of readers.
@@ -58,12 +67,14 @@ class DataStream:
         self._readers = readers
         self._transformers = transformers
         self._writers = writers
+        self.batch_size = batch_size
+        self.write_many = write_many
 
     def filter(self, stream_entry, *args, **kwargs):
         """Checks if an stream_entry should be filtered out (skipped)."""
         return False
 
-    def process_batch(self, batch, write_many=False):
+    def process_batch(self, batch):
         """Process a batch of entries."""
         transformed_entries = []
         for stream_entry in batch:
@@ -79,12 +90,12 @@ class DataStream:
                 else:
                     transformed_entries.append(transformed_entry)
         if transformed_entries:
-            if write_many:
+            if self.write_many:
                 yield from self.batch_write(transformed_entries)
             else:
                 yield from (self.write(entry) for entry in transformed_entries)
 
-    def process(self, batch_size=100, write_many=False, *args, **kwargs):
+    def process(self, *args, **kwargs):
         """Iterates over the entries.
 
         Uses the reader to get the raw entries and transforms them.
@@ -95,13 +106,13 @@ class DataStream:
         batch = []
         for stream_entry in self.read():
             batch.append(stream_entry)
-            if len(batch) >= batch_size:
-                yield from self.process_batch(batch, write_many=write_many)
+            if len(batch) >= self.batch_size:
+                yield from self.process_batch(batch)
                 batch = []
 
         # Process any remaining entries in the last batch
         if batch:
-            yield from self.process_batch(batch, write_many=write_many)
+            yield from self.process_batch(batch)
 
     def read(self):
         """Recursively read the entries."""
