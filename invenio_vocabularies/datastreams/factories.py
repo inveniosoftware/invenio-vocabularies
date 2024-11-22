@@ -81,4 +81,6 @@ class DataStreamFactory:
             for t_conf in transformers_config:
                 transformers.append(TransformerFactory.create(t_conf))
 
-        return DataStream(readers=readers, writers=writers, transformers=transformers)
+        return DataStream(
+            readers=readers, writers=writers, transformers=transformers, **kwargs
+        )
