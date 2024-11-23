@@ -61,8 +61,6 @@ class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
 
     organizations = fields.List(fields.Nested(AwardOrganizationRelationSchema))
 
-    description = SanitizedUnicode()
-
     start_date = ISODateString()
 
     end_date = ISODateString()

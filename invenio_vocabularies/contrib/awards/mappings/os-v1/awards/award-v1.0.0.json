@@ -9,6 +9,15 @@
             "type": "search_as_you_type"
           }
         }
+      },
+      {
+        "i18n_description": {
+          "path_match": "description.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text"
+          }
+        }
       }
     ],
     "dynamic": "strict",
@@ -70,7 +79,8 @@
         "type": "date"
       },
       "description": {
-        "type": "text"
+        "type": "object",
+        "dynamic": "true"
       },
       "program": {
         "type": "keyword"
