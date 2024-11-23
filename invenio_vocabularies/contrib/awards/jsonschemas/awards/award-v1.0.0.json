@@ -50,7 +50,7 @@
       "type": "string"
     },
     "description": {
-      "type": "string"
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/description"
     },
     "subjects": {
       "description": "Award's subjects.",

@@ -122,7 +122,7 @@ class OpenAIREProjectTransformer(BaseTransformer):
         if "endDate" in record:
             award["end_date"] = record["endDate"]
         if "summary" in record:
-            award["description"] = record["summary"]
+            award["description"] = {"en": record["summary"]}
 
         stream_entry.entry = award
         return stream_entry
