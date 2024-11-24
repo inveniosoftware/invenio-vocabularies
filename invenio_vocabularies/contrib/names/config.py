@@ -15,7 +15,9 @@ from invenio_records_resources.services.records.components import (
     DataComponent,
     RelationsComponent,
 )
-from invenio_records_resources.services.records.params import SuggestQueryParser
+from invenio_records_resources.services.records.queryparser import (
+    CompositeSuggestQueryParser,
+)
 from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
@@ -26,16 +28,17 @@ names_schemes = LocalProxy(lambda: current_app.config["VOCABULARIES_NAMES_SCHEME
 class NamesSearchOptions(SearchOptions):
     """Search options."""
 
-    suggest_parser_cls = SuggestQueryParser.factory(
+    suggest_parser_cls = CompositeSuggestQueryParser.factory(
         fields=[
-            "given_name^100",
-            "name^70",
-            "family_name^50",
-            "identifiers.identifier^20",
-            "affiliations.name^20",
+            "name^5",
+            # We boost the affiliation acronym fields, since they're short and more
+            # likely to be used in a query.
+            "affiliations.acronym.keyword^3",
+            "affiliations.acronym",
+            "affiliations.name",
+            # Allow to search identifiers directly (e.g. ORCID)
+            "identifiers.identifier",
         ],
-        type="most_fields",  # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types
-        fuzziness="AUTO",
     )
 
     sort_default = "bestmatch"

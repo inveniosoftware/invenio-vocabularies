@@ -14,17 +14,11 @@ from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import (
     Link,
-    LinksTemplate,
-    RecordService,
     RecordServiceConfig,
     SearchOptions,
     pagination_links,
 )
-from invenio_records_resources.services.base import (
-    ConditionalLink,
-    Service,
-    ServiceListResult,
-)
+from invenio_records_resources.services.base import ConditionalLink
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import (
     FilterParam,

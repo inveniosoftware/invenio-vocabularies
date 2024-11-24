@@ -10,7 +10,6 @@
 """Test the name vocabulary resource."""
 
 import json
-from copy import deepcopy
 
 import pytest
 
@@ -193,8 +192,6 @@ def test_names_suggest_sort(client_with_credentials, example_multiple_names, h, 
     # With affiliation
     res = client_with_credentials.get(f"{prefix}?suggest=john%20wwe", headers=h)
     assert res.status_code == 200
-    assert (
-        res.json["hits"]["total"] == 3
-    )  # Will find 3 johns but WWE affiliation should be at the top
+    assert res.json["hits"]["total"] == 1
     assert res.json["hits"]["hits"][0]["name"] == "Cena, John"
     assert res.json["hits"]["hits"][0]["affiliations"][0]["name"] == "WWE"
