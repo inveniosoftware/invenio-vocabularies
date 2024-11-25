@@ -17,6 +17,9 @@ from .contrib.affiliations.datastreams import (
     DATASTREAM_CONFIG as affiliations_ds_config,
 )
 from .contrib.affiliations.datastreams import (
+    DATASTREAM_CONFIG_EDMO as affiliations_edmo_ds_config,
+)
+from .contrib.affiliations.datastreams import (
     DATASTREAM_CONFIG_OPENAIRE as affiliations_openaire_ds_config,
 )
 from .contrib.awards.datastreams import DATASTREAM_CONFIG as awards_ds_config
@@ -123,6 +126,17 @@ class AffiliationsOpenAIREVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for OpenAIRE Affiliations")
 
 
+class AffiliationsEDMOVocabularyConfig(VocabularyConfig):
+    """European Directory of Marine Organisations (EDMO) Affiliations Vocabulary Config."""
+
+    config = affiliations_edmo_ds_config
+    vocabulary_name = "affiliations:edmo"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for EDMO Affiliations")
+
+
 def get_vocabulary_config(vocabulary):
     """Factory function to get the appropriate Vocabulary Config."""
     vocab_config = {
@@ -132,6 +146,7 @@ def get_vocabulary_config(vocabulary):
         "awards:cordis": AwardsCordisVocabularyConfig,
         "affiliations": AffiliationsVocabularyConfig,
         "affiliations:openaire": AffiliationsOpenAIREVocabularyConfig,
+        "affiliations:edmo": AffiliationsEDMOVocabularyConfig,
         "subjects": SubjectsVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()

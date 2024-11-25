@@ -11,12 +11,19 @@
 
 from copy import deepcopy
 
+import pycountry
 from flask import current_app
+from SPARQLWrapper import JSON, SPARQLWrapper
 
 from ...datastreams import StreamEntry
 from ...datastreams.errors import TransformerError, WriterError
+from ...datastreams.readers import BaseReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
+from ..affiliations.config import (
+    affiliation_edmo_country_mappings,
+    affiliation_edmo_sparql_url,
+)
 from ..common.ror.datastreams import RORTransformer
 
 
@@ -119,6 +126,66 @@ class OpenAIREAffiliationsServiceWriter(ServiceWriter):
         return StreamEntry(self._service.update(self._identity, vocab_id, updated))
 
 
+class EDMOOrganizationTransformer(BaseTransformer):
+    """Transformer class to convert EDMO RDF data to a dictionary format."""
+
+    def apply(self, stream_entry, **kwargs):
+        """Applies the transformation to the stream entry."""
+        record = stream_entry.entry
+        edmo_uri = record["org"]["value"]
+        id_ = "edmo:" + edmo_uri.split("/")[-1]
+        name = record["name"]["value"]
+        alt_name = record.get("altName", {}).get("value")
+        country_name = record.get("countryName", {}).get("value")
+        locality = record.get("locality", {}).get("value")
+        deprecated = record["deprecated"]["value"]
+
+        # Fix organizations with the old country name "Cape Verde".
+        # "Cabo Verde" is the new official name also used by ROR, e.g. https://api.ror.org/v2/organizations/001fphc23
+        if country_name in affiliation_edmo_country_mappings:
+            country_name = affiliation_edmo_country_mappings[country_name]
+
+        # Logic to convert a country name to a 2 letters country code.
+        country = None
+        if country_name:
+            country_dict = pycountry.countries.get(name=country_name)
+            if country_dict:
+                country = country_dict.alpha_2
+            else:
+                raise TransformerError([f"No alpha_2 country found for: {record}"])
+
+        # Mandatory fields
+        organization = {
+            "id": id_,
+            "identifiers": [
+                {
+                    "scheme": "edmo",
+                    "identifier": edmo_uri,
+                }
+            ],
+            "name": name,
+            "title": {
+                "en": name,
+            },
+        }
+
+        # Optional fields
+        if alt_name:
+            organization["acronym"] = alt_name
+
+        if country_name:
+            organization["country_name"] = country_name
+
+        if country:
+            organization["country"] = country
+
+        if locality:
+            organization["location_name"] = locality
+
+        stream_entry.entry = organization
+        return stream_entry
+
+
 VOCABULARIES_DATASTREAM_READERS = {}
 """Affiliations datastream readers."""
 
@@ -131,6 +198,7 @@ VOCABULARIES_DATASTREAM_WRITERS = {
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "ror-affiliations": AffiliationsRORTransformer,
     "openaire-organization": OpenAIREOrganizationTransformer,
+    "edmo-organization": EDMOOrganizationTransformer,
 }
 """Affiliations datastream transformers."""
 
@@ -196,3 +264,42 @@ DATASTREAM_CONFIG_OPENAIRE = {
     ],
 }
 """Alternative Data Stream configuration for OpenAIRE Affiliations."""
+
+DATASTREAM_CONFIG_EDMO = {
+    "readers": [
+        {
+            "type": "sparql",
+            "args": {
+                "origin": "https://edmo.seadatanet.org/sparql/sparql",
+                "query": """
+                    SELECT ?org ?name ?altName ?countryName ?locality ?deprecated
+                    WHERE {
+                        ?org a <http://www.w3.org/ns/org#Organization> .
+                        ?org <http://www.w3.org/ns/org#name> ?name .
+                        OPTIONAL { ?org <http://www.w3.org/2004/02/skos/core#altName> ?altName } .
+                        OPTIONAL { ?org <http://www.w3.org/2006/vcard/ns#country-name> ?countryName } .
+                        OPTIONAL { ?org <http://www.w3.org/2006/vcard/ns#locality> ?locality } .
+                        OPTIONAL { ?org <http://www.w3.org/2002/07/owl#deprecated> ?deprecated } .
+                        FILTER (!?deprecated)
+                    }
+                    """,
+            },
+        }
+    ],
+    "transformers": [
+        {
+            "type": "edmo-organization",
+        },
+    ],
+    "writers": [
+        {
+            "type": "async",
+            "args": {
+                "writer": {
+                    "type": "affiliations-service",
+                }
+            },
+        },
+    ],
+}
+"""Alternative Data Stream configuration for EDMO Affiliations."""

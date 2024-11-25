@@ -23,6 +23,14 @@ affiliation_schemes = LocalProxy(
 )
 localized_title = LocalProxy(lambda: f"title.{get_locale()}^20")
 
+affiliation_edmo_sparql_url = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_AFFILIATIONS_EDMO_SPARQL_URL"]
+)
+
+affiliation_edmo_country_mappings = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_AFFILIATIONS_EDMO_COUNTRY_MAPPING"]
+)
+
 
 class AffiliationsSearchOptions(SearchOptions):
     """Search options."""

@@ -10,6 +10,7 @@
 """Affiliations datastreams tests."""
 
 from copy import deepcopy
+from unittest.mock import patch
 
 import pytest
 from invenio_access.permissions import system_identity
@@ -18,12 +19,56 @@ from invenio_vocabularies.contrib.affiliations.api import Affiliation
 from invenio_vocabularies.contrib.affiliations.config import affiliation_schemes
 from invenio_vocabularies.contrib.affiliations.datastreams import (
     AffiliationsServiceWriter,
+    EDMOOrganizationTransformer,
     OpenAIREAffiliationsServiceWriter,
     OpenAIREOrganizationTransformer,
 )
 from invenio_vocabularies.contrib.common.ror.datastreams import RORTransformer
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
+from invenio_vocabularies.datastreams.readers import SPARQLReader
+
+EDMO_SPARQL_JSON_RESPONSE_CONTENT = {
+    "head": {
+        "vars": ["org", "name", "altName", "countryName", "locality", "deprecated"]
+    },
+    "results": {
+        "bindings": [
+            {
+                "org": {"type": "uri", "value": "https://edmo.seadatanet.org/report/1"},
+                "name": {"type": "literal", "value": "Org One Name"},
+                "altName": {"type": "literal", "value": "ONE"},
+                "countryName": {"type": "literal", "value": "United Kingdom"},
+                "locality": {"type": "literal", "value": "Liverpool"},
+                "deprecated": {
+                    "type": "literal",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+                    "value": "false",
+                },
+            },
+            {
+                "org": {"type": "uri", "value": "https://edmo.seadatanet.org/report/2"},
+                "name": {"type": "literal", "value": "Org Two Name"},
+                "altName": {"type": "literal", "value": "TWO"},
+                "countryName": {"type": "literal", "value": "Germany"},
+                "locality": {"type": "literal", "value": "Hamburg"},
+                "deprecated": {
+                    "type": "literal",
+                    "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+                    "value": "false",
+                },
+            },
+        ]
+    },
+}
+
+
+class MockSPARQLWrapperQuery:
+    def __init__(self, sparql_json_response_content):
+        self.sparql_json_response_content = sparql_json_response_content
+
+    def convert(self):
+        return self.sparql_json_response_content
 
 
 @pytest.fixture(scope="module")
@@ -265,3 +310,76 @@ def test_openaire_affiliations_transformer_no_alternative_identifiers(
 
     expected_error = [f"No alternative identifiers for: {updated_organization_entry}"]
     assert expected_error in err.value.args
+
+
+@patch(
+    "SPARQLWrapper.SPARQLWrapper.query",
+    side_effect=lambda: MockSPARQLWrapperQuery(EDMO_SPARQL_JSON_RESPONSE_CONTENT),
+)
+def test_edmo_organization_http_reader(_):
+    reader = SPARQLReader(
+        origin="http://example.com/sparql/sparql",
+        query="""
+                        SELECT ?org ?name ?altName ?countryName ?locality ?deprecated WHERE {
+                        ?org a <http://www.w3.org/ns/org#Organization> .
+                        ?org <http://www.w3.org/ns/org#name> ?name .
+                        OPTIONAL { ?org <http://www.w3.org/2004/02/skos/core#altName> ?altName } .
+                        OPTIONAL { ?org <http://www.w3.org/2006/vcard/ns#country-name> ?countryName } .
+                        OPTIONAL { ?org <http://www.w3.org/2006/vcard/ns#locality> ?locality } .
+                        OPTIONAL { ?org <http://www.w3.org/2002/07/owl#deprecated> ?deprecated } .
+                        FILTER (!?deprecated)}""",
+    )
+    results = []
+    for entry in reader.read():
+        results.append(entry)
+        assert list(entry.keys()) == [
+            "org",
+            "name",
+            "altName",
+            "countryName",
+            "locality",
+            "deprecated",
+        ]
+    assert len(results) == 2
+
+
+@pytest.fixture()
+def expected_from_edmo_json():
+    return {
+        "id": "edmo:1",
+        "identifiers": [{"identifier": "edmo:1", "scheme": "edmo"}],
+        "name": "Org One Name",
+        "title": {"en": "Org One Name"},
+        "acronym": "ONE",
+        "country_name": "United Kingdom",
+        "country": "GB",
+        "location_name": "Liverpool",
+    }
+
+
+@pytest.fixture()
+def dict_edmo_organization_entry():
+    """An example entry from EDMO organization Data Dump."""
+    return StreamEntry(
+        {
+            "org": {"type": "uri", "value": "https://edmo.seadatanet.org/report/1"},
+            "name": {"type": "literal", "value": "Org One Name"},
+            "altName": {"type": "literal", "value": "ONE"},
+            "countryName": {"type": "literal", "value": "United Kingdom"},
+            "locality": {"type": "literal", "value": "Liverpool"},
+            "deprecated": {
+                "type": "literal",
+                "datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+                "value": "false",
+            },
+        }
+    )
+
+
+@pytest.fixture()
+def test_edmo_organization_transformer(
+    dict_edmo_organization_entry, expected_from_edmo_json
+):
+    transformer = EDMOOrganizationTransformer()
+    result = transformer.apply(dict_edmo_organization_entry)
+    assert expected_from_edmo_json == result.entry
