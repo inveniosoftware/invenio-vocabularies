@@ -213,3 +213,16 @@ VOCABULARIES_ORCID_SYNC_SINCE = {
     "days": 1,
 }
 """ORCID time shift to sync. Parameters accepted are the ones passed to 'datetime.timedelta'."""
+
+VOCABULARIES_ORCID_ORG_IDS_MAPPING_PATH = None
+"""Path to the CSV file for mapping ORCiD organization IDs to affiliation IDs.
+
+The path can be specified as either an absolute path or a relative path within the
+Flask app instance folder (i.e. ``current_app.instance_path``).
+
+The CSV file should have the following columns:
+
+- `org_scheme`: The ORCiD organization ID.
+- `org_id`: The ORCiD organization ID.
+- `aff_id`: The affiliation ID to map to.
+"""

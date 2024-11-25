@@ -18,26 +18,51 @@ from invenio_vocabularies.datastreams.transformers import XMLTransformer
 @pytest.fixture(scope="module")
 def expected_from_xml():
     return {
-        "record": {
-            "field_one": "value",
-            "multi_field": {"some": "value", "another": "value too"},
-        }
+        "top_level_field": "top-level single value",
+        "top_level_object_field": {
+            "some": "value",
+            "another": "value too",
+            "nested_array_field": {
+                "@array_attr": "value",
+                "array_element_object": [
+                    {
+                        "@obj_attr": "first",
+                        "element_foo": "value1",
+                        "element_bar": "value1",
+                    },
+                    {
+                        "@obj_attr": "second",
+                        "element_foo": "value2",
+                        "element_bar": "value2",
+                        "element_qux": "value2",
+                    },
+                ],
+            },
+        },
     }
 
 
 def test_xml_transformer(expected_from_xml):
     bytes_xml_entry = StreamEntry(
-        bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
-            "<record:record>\n"
-            "    <field_one:field_one>value</field_one:field_one>\n"
-            "    <multi_field:multi_field>\n"
-            "        <some:some>value</some:some>\n"
-            "        <another:another>value too</another:another>\n"
-            "    </multi_field:multi_field>\n"
-            "</record:record>\n",
-            encoding="raw_unicode_escape",
-        )
+        b"""
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <ns:top_level_field>top-level single value</ns:top_level_field>
+        <ns:top_level_object_field>
+            <ns:some>value</ns:some>
+            <ns:another>value too</ns:another>
+            <ns:nested_array_field array_attr="value">
+                <ns:array_element_object obj_attr="first">
+                    <ns:element_foo>value1</ns:element_foo>
+                    <ns:element_bar>value1</ns:element_bar>
+                </ns:array_element_object>
+                <ns:array_element_object obj_attr="second">
+                    <ns:element_foo>value2</ns:element_foo>
+                    <ns:element_bar>value2</ns:element_bar>
+                    <ns:element_qux>value2</ns:element_qux>
+                </ns:array_element_object>
+            </ns:nested_array_field array_attr="value">
+        </ns:top_level_object_field>
+        """
     )
 
     transformer = XMLTransformer()
@@ -46,15 +71,25 @@ def test_xml_transformer(expected_from_xml):
 
 def test_bad_xml_transformer():
     bytes_xml_entry = StreamEntry(
-        bytes(
-            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
-            "<field_one:field_one>value</field_one:field_one>\n"
-            "<multi_field:multi_field>\n"
-            "    <some:some>value</some:some>\n"
-            "    <another:another>value too</another:another>\n"
-            "</multi_field:multi_field>\n",
-            encoding="raw_unicode_escape",
-        )
+        b"""
+        <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <ns:top_level_field>top-level single value</ns:top_level_field>
+        <ns:top_level_object_field>
+            <ns:some>value</ns:some>
+            <ns:another>value too</ns:another>
+            <ns:nested_array_field array_attr="value">
+                <ns:array_element_object obj_attr="first">
+                    <ns:element_foo>value1</ns:element_foo>
+                    <ns:element_bar>value1</ns:element_bar>
+                </ns:array_element_object>
+                <ns:array_element_object obj_attr="second">
+                    <ns:element_foo>value2</ns:element_foo>
+                    <ns:element_bar>value2</ns:element_bar>
+                    <ns:element_qux>value2</ns:element_qux>
+                </ns:array_element_object>
+            </ns:nested_array_field array_attr="value">
+        </ns:top_level_object_field>
+        """
     )
 
     transformer = XMLTransformer(root_element="field_two")
