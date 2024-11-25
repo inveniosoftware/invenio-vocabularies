@@ -13,11 +13,13 @@ import io
 import tarfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import timedelta
+from pathlib import Path
 
 import arrow
 import regex as re
 from flask import current_app
 from invenio_access.permissions import system_identity
+from werkzeug.utils import cached_property
 
 from invenio_vocabularies.contrib.names.s3client import S3OrcidClient
 
@@ -141,6 +143,52 @@ DEFAULT_NAMES_EXCLUDE_REGEX = r"[\p{P}\p{S}\p{Nd}\p{No}\p{Emoji}--,.()\-']"
 """Regex to filter out names with punctuation, symbols, numbers and emojis."""
 
 
+class OrcidOrgToAffiliationMapper:
+    """Default ORCiD Org ID to affiliation ID mapper."""
+
+    def __init__(self, org_ids_mapping=None, org_ids_mapping_file=None):
+        """Constructor."""
+        self._org_ids_mapping = org_ids_mapping
+        self._org_ids_mapping_file = org_ids_mapping_file
+
+    @cached_property
+    def org_ids_mapping(self):
+        """Mapping of ORCiD org IDs to affiliation IDs."""
+        org_ids_mapping_file = self._org_ids_mapping_file or current_app.config.get(
+            "VOCABULARIES_ORCID_ORG_IDS_MAPPING_PATH"
+        )
+        if org_ids_mapping_file:
+            org_ids_mapping_file = Path(org_ids_mapping_file)
+            # If the path is relative, prepend the instance path
+            if not org_ids_mapping_file.is_absolute():
+                org_ids_mapping_file = (
+                    Path(current_app.instance_path) / org_ids_mapping_file
+                )
+            with open(org_ids_mapping_file) as fin:
+                result = {}
+                reader = csv.reader(fin)
+
+                # Check if the first row is a header
+                org_scheme, org_id, aff_id = next(reader)
+                if org_scheme.lower() != "org_scheme":
+                    result[(org_scheme, org_id)] = aff_id
+
+                for org_scheme, org_id, aff_id in reader:
+                    result[(org_scheme, org_id)] = aff_id
+
+                return result
+
+        return self._org_ids_mapping or {}
+
+    def __call__(self, org_scheme, org_id):
+        """Map an ORCiD org ID to an affiliation ID."""
+        # By default we know that ROR IDs are linkable
+        if org_scheme == "ROR":
+            return org_id.split("/")[-1]
+        # Otherwise see if we have a mapping from other schemes to an affiliation ID
+        return self.org_ids_mapping.get((org_scheme, org_id))
+
+
 class OrcidTransformer(BaseTransformer):
     """Transforms an ORCiD record into a names record."""
 
@@ -148,30 +196,19 @@ class OrcidTransformer(BaseTransformer):
         self,
         *args,
         names_exclude_regex=DEFAULT_NAMES_EXCLUDE_REGEX,
-        affiliation_relation_schemes=None,
-        org_scheme_mappping=None,
+        org_id_to_affiliation_id_func=None,
         **kwargs,
     ) -> None:
         """Constructor."""
         self._names_exclude_regex = names_exclude_regex
-        self._affiliation_relation_schemes = affiliation_relation_schemes
-        self._org_scheme_mappping = org_scheme_mappping
+        self._org_id_to_affiliation_id_func = (
+            org_id_to_affiliation_id_func or OrcidOrgToAffiliationMapper()
+        )
         super().__init__()
 
-    @property
-    def affiliation_relation_schemes(self):
-        """Allowed affiliation schemes."""
-        return self._affiliation_relation_schemes or {"ror"}
-
-    @property
-    def org_scheme_mappping(self):
-        """Mapping of ORCiD org schemes to affiliation schemes."""
-        return self._org_scheme_mappping or {
-            "GRID": "grid",
-            "ROR": "ror",
-            "ISNI": "isni",
-            "FUNDREF": "fundref",
-        }
+    def org_id_to_affiliation_id(self, org_scheme, org_id):
+        """Convert and ORCiD org ID to a linkable affiliation ID."""
+        return self._org_id_to_affiliation_id_func(org_scheme, org_id)
 
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
@@ -212,35 +249,51 @@ class OrcidTransformer(BaseTransformer):
             employments = (
                 record.get("activities-summary", {})
                 .get("employments", {})
-                .get("affiliation-group")
+                .get("affiliation-group", [])
             )
+
+            # If there are single values, the XML to dict, doesn't wrap them in a list
             if isinstance(employments, dict):
                 employments = [employments]
 
+            # Remove the "employment-summary" nesting
+            employments = [
+                employment.get("employment-summary", {}) for employment in employments
+            ]
+
             history = set()
             for employment in employments:
-                terminated = employment["employment-summary"].get("end-date")
-                org = employment["employment-summary"]["organization"]
-                if org["name"] not in history and not terminated:
-                    history.add(org["name"])
-                    aff = {"name": org["name"]}
+                terminated = employment.get("end-date")
+                org = employment["organization"]
 
-                    if org.get("disambiguated-organization"):
-                        dis_org = org["disambiguated-organization"]
-                        org_id = dis_org.get("disambiguated-organization-identifier")
-                        org_scheme = dis_org.get("disambiguation-source")
-                        aff_scheme = self.org_scheme_mappping.get(org_scheme)
+                if terminated or org["name"] in history:
+                    continue
 
-                        if org_id and aff_scheme in self.affiliation_relation_schemes:
-                            if aff_scheme == "ror":
-                                org_id = org_id.split("/")[-1]
+                history.add(org["name"])
+                aff = {"name": org["name"]}
 
-                            aff["id"] = org_id
+                # Extract the org ID, to link to the affiliation vocabulary
+                aff_id = self._extract_affiliation_id(org)
+                if aff_id:
+                    aff["id"] = aff_id
 
-                    result.append(aff)
+                result.append(aff)
         except Exception:
             pass
         return result
+
+    def _extract_affiliation_id(self, org):
+        """Extract the affiliation ID from an ORCiD organization."""
+        dis_org = org.get("disambiguated-organization")
+        if not dis_org:
+            return
+
+        aff_id = None
+        org_id = dis_org.get("disambiguated-organization-identifier")
+        org_scheme = dis_org.get("disambiguation-source")
+        if org_id and org_scheme:
+            aff_id = self.org_id_to_affiliation_id(org_scheme, org_id)
+        return aff_id
 
 
 class NamesServiceWriter(ServiceWriter):
