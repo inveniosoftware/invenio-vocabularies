@@ -94,9 +94,11 @@ class AwardRelationSchema(Schema):
         id_ = data.get("id")
         number = data.get("number")
         title = data.get("title")
-        if not id_ and not (number and title):
+
+        if not id_ and not (number or title):
             raise ValidationError(
-                _("An existing id or number/title must be present."), "award"
+                _("An existing id or either number or title must be present."),
+                "award",
             )
 
 

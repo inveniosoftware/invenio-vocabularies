@@ -52,37 +52,13 @@ const CustomFundingSchema = Yup.object().shape({
       id: Yup.string().required(i18next.t("Funder is required.")),
     }),
     award: Yup.object().shape({
-      title: Yup.string().test({
-        name: "testTitle",
-        message: i18next.t("Title must be set alongside number."),
-        test: function testTitle(value) {
-          const { number } = this.parent;
-
-          if (number && !value) {
-            return false;
-          }
-
-          return true;
-        },
-      }),
-      number: Yup.string().test({
-        name: "testNumber",
-        message: i18next.t("Number must be set alongside title."),
-        test: function testNumber(value) {
-          const { title } = this.parent;
-
-          if (title && !value) {
-            return false;
-          }
-
-          return true;
-        },
-      }),
+      title: Yup.string(),
+      number: Yup.string(),
       url: Yup.string()
         .url(i18next.t("URL must be valid."))
         .test({
           name: "validateUrlDependencies",
-          message: i18next.t("URL must be set alongside title and number."),
+          message: i18next.t("URL must be set alongside title or number."),
           test: function testUrl(value) {
             const { title, number } = this.parent;
 
