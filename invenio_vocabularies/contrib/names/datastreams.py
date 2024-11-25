@@ -18,7 +18,6 @@ import arrow
 import regex as re
 from flask import current_app
 from invenio_access.permissions import system_identity
-from invenio_records.dictutils import dict_lookup
 
 from invenio_vocabularies.contrib.names.s3client import S3OrcidClient
 
@@ -48,7 +47,7 @@ class OrcidDataSyncReader(BaseReader):
         key = f"{suffix}/{orcid_to_sync}.xml"
         try:
             return self.s3_client.read_file(f"s3://{bucket}/{key}")
-        except Exception as e:
+        except Exception:
             # TODO: log
             return None
 
@@ -139,24 +138,40 @@ class OrcidHTTPReader(SimpleHTTPReader):
 
 
 DEFAULT_NAMES_EXCLUDE_REGEX = r"[\p{P}\p{S}\p{Nd}\p{No}\p{Emoji}--,.()\-']"
-"""Regex to filter out names with punctuations, symbols, decimal numbers and emojis."""
+"""Regex to filter out names with punctuation, symbols, numbers and emojis."""
 
 
 class OrcidTransformer(BaseTransformer):
     """Transforms an ORCiD record into a names record."""
 
     def __init__(
-        self, *args, names_exclude_regex=DEFAULT_NAMES_EXCLUDE_REGEX, **kwargs
+        self,
+        *args,
+        names_exclude_regex=DEFAULT_NAMES_EXCLUDE_REGEX,
+        affiliation_relation_schemes=None,
+        org_scheme_mappping=None,
+        **kwargs,
     ) -> None:
         """Constructor."""
         self._names_exclude_regex = names_exclude_regex
+        self._affiliation_relation_schemes = affiliation_relation_schemes
+        self._org_scheme_mappping = org_scheme_mappping
         super().__init__()
 
-    def _is_valid_name(self, name):
-        """Check whether the name passes the regex."""
-        if not self._names_exclude_regex:
-            return True
-        return not bool(re.search(self._names_exclude_regex, name, re.UNICODE | re.V1))
+    @property
+    def affiliation_relation_schemes(self):
+        """Allowed affiliation schemes."""
+        return self._affiliation_relation_schemes or {"ror"}
+
+    @property
+    def org_scheme_mappping(self):
+        """Mapping of ORCiD org schemes to affiliation schemes."""
+        return self._org_scheme_mappping or {
+            "GRID": "grid",
+            "ROR": "ror",
+            "ISNI": "isni",
+            "FUNDREF": "fundref",
+        }
 
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
@@ -166,42 +181,66 @@ class OrcidTransformer(BaseTransformer):
 
         name = person.get("name")
         if name is None:
-            raise TransformerError(f"Name not found in ORCiD entry.")
+            raise TransformerError("Name not found in ORCiD entry.")
         if name.get("family-name") is None:
-            raise TransformerError(f"Family name not found in ORCiD entry.")
+            raise TransformerError("Family name not found in ORCiD entry.")
 
         if not self._is_valid_name(name["given-names"] + name["family-name"]):
-            raise TransformerError(f"Invalid characters in name.")
+            raise TransformerError("Invalid characters in name.")
 
         entry = {
             "id": orcid_id,
             "given_name": name.get("given-names"),
             "family_name": name.get("family-name"),
             "identifiers": [{"scheme": "orcid", "identifier": orcid_id}],
-            "affiliations": [],
+            "affiliations": self._extract_affiliations(record),
         }
-
-        try:
-            employments = dict_lookup(
-                record, "activities-summary.employments.affiliation-group"
-            )
-            if isinstance(employments, dict):
-                employments = [employments]
-            history = set()
-            for employment in employments:
-                terminated = employment["employment-summary"].get("end-date")
-                affiliation = dict_lookup(
-                    employment,
-                    "employment-summary.organization.name",
-                )
-                if affiliation not in history and not terminated:
-                    history.add(affiliation)
-                    entry["affiliations"].append({"name": affiliation})
-        except Exception:
-            pass
 
         stream_entry.entry = entry
         return stream_entry
+
+    def _is_valid_name(self, name):
+        """Check whether the name passes the regex."""
+        if not self._names_exclude_regex:
+            return True
+        return not bool(re.search(self._names_exclude_regex, name, re.UNICODE | re.V1))
+
+    def _extract_affiliations(self, record):
+        """Extract affiliations from the ORCiD record."""
+        result = []
+        try:
+            employments = (
+                record.get("activities-summary", {})
+                .get("employments", {})
+                .get("affiliation-group")
+            )
+            if isinstance(employments, dict):
+                employments = [employments]
+
+            history = set()
+            for employment in employments:
+                terminated = employment["employment-summary"].get("end-date")
+                org = employment["employment-summary"]["organization"]
+                if org["name"] not in history and not terminated:
+                    history.add(org["name"])
+                    aff = {"name": org["name"]}
+
+                    if org.get("disambiguated-organization"):
+                        dis_org = org["disambiguated-organization"]
+                        org_id = dis_org.get("disambiguated-organization-identifier")
+                        org_scheme = dis_org.get("disambiguation-source")
+                        aff_scheme = self.org_scheme_mappping.get(org_scheme)
+
+                        if org_id and aff_scheme in self.affiliation_relation_schemes:
+                            if aff_scheme == "ror":
+                                org_id = org_id.split("/")[-1]
+
+                            aff["id"] = org_id
+
+                    result.append(aff)
+        except Exception:
+            pass
+        return result
 
 
 class NamesServiceWriter(ServiceWriter):

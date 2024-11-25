@@ -50,39 +50,66 @@ def expected_from_xml():
         "given_name": "Lars Holm",
         "family_name": "Nielsen",
         "identifiers": [{"scheme": "orcid", "identifier": "0000-0001-8135-3489"}],
-        "affiliations": [{"name": "CERN"}],
+        "affiliations": [{"id": "01ggx4157", "name": "CERN"}],
     }
 
 
-XML_ENTRY_DATA = bytes(
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
-    '<record:record path="/0000-0001-8135-3489">\n'
-    "    <common:orcid-identifier>\n"
-    "        <common:uri>https://orcid.org/0000-0001-8135-3489</common:uri>\n"  # noqa
-    "        <common:path>0000-0001-8135-3489</common:path>\n"
-    "        <common:host>orcid.org</common:host>\n"
-    "    </common:orcid-identifier>\n"
-    '    <person:person path="/0000-0001-8135-3489/person">\n'
-    '        <person:name visibility="public" path="0000-0001-8135-3489">\n'  # noqa
-    "            <personal-details:given-names>Lars Holm</personal-details:given-names>"  # noqa
-    "            <personal-details:family-name>Nielsen</personal-details:family-name>\n"  # noqa
-    "        </person:name>\n"
-    '        <external-identifier:external-identifiers path="/0000-0001-8135-3489/external-identifiers"/>\n'  # noqa
-    "    </person:person>\n"
-    '    <activities:activities-summary path="/0000-0001-8135-3489/activities">\n'  # noqa
-    '       <activities:employments path="/0000-0001-8135-3489/employments">\n'  # noqa
-    "           <employments:affiliation-group>\n"
-    "               <employments:employment-summary>\n"
-    "                   <employment-summary:organization>\n"
-    "                       <organization:name>CERN</organization:name>\n"
-    "                   </employment-summary:organization>\n"
-    "               </employments:employment-summary>\n"
-    "           </employments:affiliation-group>\n"
-    "       </activities:employments>\n"
-    "    </activities:activities-summary>\n"
-    "</record:record>\n",
-    encoding="raw_unicode_escape",
-)
+XML_ENTRY_DATA = b"""
+<record:record>
+    <common:orcid-identifier>
+        <common:uri>https://orcid.org/0000-0001-8135-3489</common:uri>
+        <common:path>0000-0001-8135-3489</common:path>
+        <common:host>orcid.org</common:host>
+    </common:orcid-identifier>
+    <person:person>
+        <person:name>
+            <personal-details:given-names>Lars Holm</personal-details:given-names>
+            <personal-details:family-name>Nielsen</personal-details:family-name>
+        </person:name>
+        <other-name:other-names>
+    </person:person>
+    <activities:activities-summary>
+        <activities:employments>
+            <activities:affiliation-group>
+                <employment:employment-summary>
+                    <common:start-date>
+                        <common:year>2012</common:year>
+                        <common:month>03</common:month>
+                        <common:day>16</common:day>
+                    </common:start-date>
+                    <common:organization>
+                        <common:name>CERN</common:name>
+                        <common:disambiguated-organization>
+                            <common:disambiguated-organization-identifier>https://ror.org/01ggx4157
+</common:disambiguated-organization-identifier>
+                            <common:disambiguation-source>ROR</common:disambiguation-source>
+                        </common:disambiguated-organization>
+                    </common:organization>
+                </employment:employment-summary>
+            </activities:affiliation-group>
+            <activities:affiliation-group>
+                <employment:employment-summary>
+                    <common:start-date>
+                        <common:year>2007</common:year>
+                        <common:month>08</common:month>
+                    </common:start-date>
+                    <common:end-date>
+                        <common:year>2012</common:year>
+                        <common:month>03</common:month>
+                    </common:end-date>
+                    <common:organization>
+                        <common:name>European Southern Observatory</common:name>
+                        <common:disambiguated-organization>
+                            <common:disambiguated-organization-identifier>54249</common:disambiguated-organization-identifier>
+                            <common:disambiguation-source>RINGGOLD</common:disambiguation-source>
+                        </common:disambiguated-organization>
+                    </common:organization>
+                </employment:employment-summary>
+            </activities:affiliation-group>
+        </activities:employments>
+    </activities:activities-summary>
+<record:record>
+"""
 
 
 @pytest.fixture(scope="function")
@@ -124,7 +151,15 @@ def dict_xml_entry():
             "activities-summary": {
                 "employments": {
                     "affiliation-group": {
-                        "employment-summary": {"organization": {"name": "CERN"}}
+                        "employment-summary": {
+                            "organization": {
+                                "name": "CERN",
+                                "disambiguated-organization": {
+                                    "disambiguated-organization-identifier": "https://ror.org/01ggx4157",
+                                    "disambiguation-source": "ROR",
+                                },
+                            }
+                        }
                     },
                     "@path": "/0000-0001-8135-3489/employments",
                 },
@@ -141,7 +176,7 @@ def test_orcid_transformer(dict_xml_entry, expected_from_xml):
 
 
 @pytest.mark.parametrize("name,is_valid_name", NAMES_TEST.items())
-def test_orcid_transformer_different_names(dict_xml_entry, name, is_valid_name):
+def test_orcid_transformer_name_filtering(dict_xml_entry, name, is_valid_name):
     transformer = OrcidTransformer()
     val = deepcopy(dict_xml_entry)
     if is_valid_name:
