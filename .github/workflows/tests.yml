@@ -34,7 +34,7 @@ jobs:
   Python:
     uses: inveniosoftware/workflows/.github/workflows/tests-python.yml@master
     with:
-      extras: "tests,oaipmh"
+      extras: "tests,oaipmh,rdf,sparql"
 
   JS:
     uses: inveniosoftware/workflows/.github/workflows/tests-js.yml@master

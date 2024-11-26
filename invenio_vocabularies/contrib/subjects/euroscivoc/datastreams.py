@@ -19,7 +19,7 @@ class EuroSciVocSubjectsTransformer(RDFTransformer):
     def _get_notation(self, subject, rdf_graph):
         """Extract the numeric notation for a subject."""
         for _, _, notation in rdf_graph.triples(
-            (subject, self.SKOS_CORE.notation, None)
+            (subject, self.skos_core.notation, None)
         ):
             if str(notation).isdigit():
                 return str(notation)
@@ -33,7 +33,7 @@ class EuroSciVocSubjectsTransformer(RDFTransformer):
         notation = self._get_notation(subject, rdf_graph)
         id = f"euroscivoc:{notation}" if notation else None
         labels = self._get_labels(subject, rdf_graph)
-        parents = self.SPLITCHAR.join(
+        parents = ",".join(
             f"euroscivoc:{n}"
             for n in reversed(self._find_parents(subject, rdf_graph))
             if n

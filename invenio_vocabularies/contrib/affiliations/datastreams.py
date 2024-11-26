@@ -13,17 +13,12 @@ from copy import deepcopy
 
 import pycountry
 from flask import current_app
-from SPARQLWrapper import JSON, SPARQLWrapper
 
 from ...datastreams import StreamEntry
-from ...datastreams.errors import TransformerError, WriterError
-from ...datastreams.readers import BaseReader
+from ...datastreams.errors import TransformerError
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
-from ..affiliations.config import (
-    affiliation_edmo_country_mappings,
-    affiliation_edmo_sparql_url,
-)
+from ..affiliations.config import affiliation_edmo_country_mappings
 from ..common.ror.datastreams import RORTransformer
 
 

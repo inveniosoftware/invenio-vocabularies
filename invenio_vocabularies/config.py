@@ -196,10 +196,6 @@ VOCABULARIES_SUBJECTS_GEMET_FILE_URL = (
 )
 """Subject GEMET file download link."""
 
-VOCABULARIES_AFFILIATIONS_EDMO_SPARQL_URL = "https://edmo.seadatanet.org/sparql/sparql"
-"""Affiliations EDMO SPARQL URL."""
-
-
 VOCABULARIES_AFFILIATIONS_EDMO_COUNTRY_MAPPING = {
     "Cape Verde": "Cabo Verde",
 }

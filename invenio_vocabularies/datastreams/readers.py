@@ -24,16 +24,28 @@ import yaml
 from lxml import etree
 from lxml.html import fromstring
 from lxml.html import parse as html_parse
-from rdflib import RDF, Graph, Namespace
-from SPARQLWrapper import JSON, SPARQLWrapper
 
 from .errors import ReaderError
 from .xml import etree_to_dict
 
+# Extras dependencies
+# "oaipmh"
 try:
     import oaipmh_scythe
 except ImportError:
     oaipmh_scythe = None
+
+# "rdf"
+try:
+    import rdflib
+except ImportError:
+    rdflib = None
+
+# "sparql"
+try:
+    import SPARQLWrapper as sparql
+except ImportError:
+    sparql = None
 
 
 class BaseReader(ABC):
@@ -364,12 +376,15 @@ def xml_to_dict(tree: etree._Element):
 class RDFReader(BaseReader):
     """Base Reader class to fetch and process RDF data."""
 
-    SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
+    @property
+    def skos_core(self):
+        """Return the SKOS Core namespace."""
+        return rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 
     def _iter(self, rdf_graph):
         """Iterate over the RDF graph, yielding one subject at a time."""
         for subject, _, _ in rdf_graph.triples(
-            (None, RDF.type, self.SKOS_CORE.Concept)
+            (None, rdflib.RDF.type, self.skos_core.Concept)
         ):
             yield {"subject": subject, "rdf_graph": rdf_graph}
 
@@ -383,7 +398,7 @@ class RDFReader(BaseReader):
         else:
             raise ReaderError("Unsupported content type")
 
-        rdf_graph = Graph()
+        rdf_graph = rdflib.Graph()
         rdf_graph.parse(io.StringIO(rdf_content), format="xml")
 
         yield from self._iter(rdf_graph)
@@ -415,9 +430,9 @@ class SPARQLReader(BaseReader):
                 "SPARQLReader does not support being chained after another reader"
             )
 
-        sparql = SPARQLWrapper(self._origin)
-        sparql.setQuery(self._query)
-        sparql.setReturnFormat(JSON)
+        sparql_client = sparql.SPARQLWrapper(self._origin)
+        sparql_client.setQuery(self._query)
+        sparql_client.setReturnFormat(sparql.JSON)
 
-        results = sparql.query().convert()
+        results = sparql_client.query().convert()
         yield from results["results"]["bindings"]

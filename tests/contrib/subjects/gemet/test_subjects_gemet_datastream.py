@@ -9,7 +9,7 @@
 import io
 
 import pytest
-from rdflib import RDF, Graph
+from rdflib import Graph
 
 from invenio_vocabularies.contrib.subjects.gemet.datastreams import (
     GEMETSubjectsTransformer,

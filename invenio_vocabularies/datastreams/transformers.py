@@ -11,10 +11,14 @@
 from abc import ABC, abstractmethod
 
 from lxml import etree
-from rdflib import Namespace
 
 from .errors import TransformerError
 from .xml import etree_to_dict
+
+try:
+    import rdflib
+except ImportError:
+    rdflib = None
 
 
 class BaseTransformer(ABC):
@@ -67,22 +71,24 @@ class XMLTransformer(BaseTransformer):
 class RDFTransformer(BaseTransformer):
     """Base Transformer class for RDF data to dictionary format."""
 
-    SKOS_CORE = Namespace("http://www.w3.org/2004/02/skos/core#")
-    SPLITCHAR = ","
+    @property
+    def skos_core(self):
+        """Get the SKOS core namespace."""
+        return rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 
     def _get_labels(self, subject, rdf_graph):
         """Extract labels (prefLabel or altLabel) for a subject."""
         labels = {
             label.language: label.value.capitalize()
             for _, _, label in rdf_graph.triples(
-                (subject, self.SKOS_CORE.prefLabel, None)
+                (subject, self.skos_core.prefLabel, None)
             )
             if label.language and "-" not in label.language
         }
 
         if "en" not in labels:
             for _, _, label in rdf_graph.triples(
-                (subject, self.SKOS_CORE.altLabel, None)
+                (subject, self.skos_core.altLabel, None)
             ):
                 labels.setdefault(label.language, label.value.capitalize())
 
@@ -92,7 +98,7 @@ class RDFTransformer(BaseTransformer):
         """Find parent notations."""
         return [
             self._get_parent_notation(broader, rdf_graph)
-            for broader in rdf_graph.transitive_objects(subject, self.SKOS_CORE.broader)
+            for broader in rdf_graph.transitive_objects(subject, self.skos_core.broader)
             if broader != subject
         ]
 

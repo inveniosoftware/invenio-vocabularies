@@ -21,15 +21,10 @@ from ...services.components import PIDComponent
 affiliation_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_AFFILIATION_SCHEMES"]
 )
-localized_title = LocalProxy(lambda: f"title.{get_locale()}^20")
-
-affiliation_edmo_sparql_url = LocalProxy(
-    lambda: current_app.config["VOCABULARIES_AFFILIATIONS_EDMO_SPARQL_URL"]
-)
-
 affiliation_edmo_country_mappings = LocalProxy(
     lambda: current_app.config["VOCABULARIES_AFFILIATIONS_EDMO_COUNTRY_MAPPING"]
 )
+localized_title = LocalProxy(lambda: f"title.{get_locale()}^20")
 
 
 class AffiliationsSearchOptions(SearchOptions):

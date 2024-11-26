@@ -8,12 +8,15 @@
 
 """GEMET subjects datastreams, readers, transformers, and writers."""
 
-from rdflib.namespace import RDFS
-
-from invenio_vocabularies.datastreams.readers import RDFReader
 from invenio_vocabularies.datastreams.transformers import RDFTransformer
 
 from ..config import gemet_file_url
+
+# Available with the "rdf" extra
+try:
+    import rdflib
+except ImportError:
+    rdflib = None
 
 
 class GEMETSubjectsTransformer(RDFTransformer):
@@ -29,7 +32,7 @@ class GEMETSubjectsTransformer(RDFTransformer):
         themes = []
 
         for relation in rdf_graph.subjects(
-            predicate=self.SKOS_CORE.member, object=subject
+            predicate=self.skos_core.member, object=subject
         ):
             relation_uri = str(relation)
             relation_label = None
@@ -37,7 +40,7 @@ class GEMETSubjectsTransformer(RDFTransformer):
             # If the relation is a group, check for skos:prefLabel
             if "group" in relation_uri:
                 labels = rdf_graph.objects(
-                    subject=relation, predicate=self.SKOS_CORE.prefLabel
+                    subject=relation, predicate=self.skos_core.prefLabel
                 )
                 relation_label = next(
                     (str(label) for label in labels if label.language == "en"), None
@@ -46,7 +49,9 @@ class GEMETSubjectsTransformer(RDFTransformer):
 
             # If the relation is a theme, check for rdfs:label
             elif "theme" in relation_uri:
-                labels = rdf_graph.objects(subject=relation, predicate=RDFS.label)
+                labels = rdf_graph.objects(
+                    subject=relation, predicate=rdflib.RDFS.label
+                )
                 relation_label = next(
                     (str(label) for label in labels if label.language == "en"), None
                 )
@@ -59,7 +64,7 @@ class GEMETSubjectsTransformer(RDFTransformer):
         concept_number = "/".join(subject.split("/")[-2:])
         id = f"gemet:{concept_number}" if concept_number else None
         labels = self._get_labels(subject, rdf_graph)
-        parents = self.SPLITCHAR.join(
+        parents = ",".join(
             f"gemet:{n}" for n in reversed(self._find_parents(subject, rdf_graph)) if n
         )
         identifiers = [{"scheme": "url", "identifier": str(subject)}]
