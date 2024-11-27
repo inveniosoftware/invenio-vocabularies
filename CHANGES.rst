@@ -8,6 +8,20 @@
 Changes
 =======
 
+Version v6.7.0 (released 2024-11-27)
+
+- contrib: improve search accuracy for names, funders, affiliations
+- names: add affiliation acronym in mappings and schema
+    * Dereferences the affiliation `acronym` when indexing names and serving
+      REST API results. This is useful for disambiguating authors in search.
+- affiliations: move RDF and SPARQL as extra dependencies
+    * Moves `rdflib` and `SPARQLWrapper` to extras.
+- affiliation: refactored edmo datastreams
+- subjects: added datastream for GEMET vocabulary
+- awards/schema.py: read app config for alternate funding validation (#429)
+- awards: fix description field and mappings
+- awards: add fields start/end date and description
+
 Version v6.6.0 (released 2024-11-15)
 
 - mesh: add title en if not present
