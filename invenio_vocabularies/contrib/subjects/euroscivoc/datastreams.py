@@ -71,9 +71,5 @@ DATASTREAM_CONFIG = {
         },
     ],
     "transformers": [{"type": "euroscivoc-transformer"}],
-    "writers": [
-        {
-            "type": "subjects-service",
-        }
-    ],
+    "writers": [{"args": {"writer": {"type": "subjects-service"}}, "type": "async"}],
 }

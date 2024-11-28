@@ -28,7 +28,12 @@ from .contrib.awards.datastreams import (
 )
 from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
+from .contrib.subjects.bodc.datastreams import DATASTREAM_CONFIG as bodc_ds_config
 from .contrib.subjects.datastreams import DATASTREAM_CONFIG as subjects_ds_config
+from .contrib.subjects.euroscivoc.datastreams import (
+    DATASTREAM_CONFIG as euroscivoc_ds_config,
+)
+from .contrib.subjects.gemet.datastreams import DATASTREAM_CONFIG as gemet_ds_config
 
 
 class VocabularyConfig:
@@ -137,6 +142,39 @@ class AffiliationsEDMOVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for EDMO Affiliations")
 
 
+class SubjectsEuroSciVocVocabularyConfig(VocabularyConfig):
+    """EuroSciVoc Subjects Vocabulary Config."""
+
+    config = euroscivoc_ds_config
+    vocabulary_name = "subjects:euroscivoc"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for EuroSciVoc Subjects")
+
+
+class SubjectsGEMETVocabularyConfig(VocabularyConfig):
+    """GEMET Subjects Vocabulary Config."""
+
+    config = gemet_ds_config
+    vocabulary_name = "subjects:gemet"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for GEMET Subjects")
+
+
+class SubjectsBODCVocabularyConfig(VocabularyConfig):
+    """BODC Subjects Vocabulary Config."""
+
+    config = bodc_ds_config
+    vocabulary_name = "subjects:bodc"
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        raise NotImplementedError("Service not implemented for BODC Subjects")
+
+
 def get_vocabulary_config(vocabulary):
     """Factory function to get the appropriate Vocabulary Config."""
     vocab_config = {
@@ -148,5 +186,8 @@ def get_vocabulary_config(vocabulary):
         "affiliations:openaire": AffiliationsOpenAIREVocabularyConfig,
         "affiliations:edmo": AffiliationsEDMOVocabularyConfig,
         "subjects": SubjectsVocabularyConfig,
+        "subjects:gemet": SubjectsGEMETVocabularyConfig,
+        "subjects:bodc": SubjectsBODCVocabularyConfig,
+        "subjects:euroscivoc": SubjectsEuroSciVocVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()
