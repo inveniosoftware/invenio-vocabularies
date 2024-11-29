@@ -3,6 +3,7 @@
 # Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2021 TU Wien.
 # Copyright (C) 2024 California Institute of Technology.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -81,7 +82,7 @@ def extra_entry_points():
 @pytest.fixture(scope="module")
 def app_config(app_config):
     """Mimic an instance's configuration."""
-    app_config["JSONSCHEMAS_HOST"] = "localhost"
+    app_config["JSONSCHEMAS_HOST"] = "not-used"
     app_config["BABEL_DEFAULT_LOCALE"] = "en"
     app_config["I18N_LANGUAGES"] = [("da", "Danish")]
     app_config["RECORDS_REFRESOLVER_CLS"] = (

@@ -3,6 +3,7 @@
 # This file is part of Invenio.
 # Copyright (C) 2021 TU Wien.
 # Copyright (C) 2021 Northwestern University.
+# Copyright (C) 2024 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -46,7 +47,12 @@ def test_alembic(app, database):
         raise pytest.skip("Upgrades are not supported on SQLite.")
 
     # Check that this package's SQLAlchemy models have been properly registered
-    tables = [x.name for x in db.get_tables_for_bind()]
+    try:
+        # flask-sqlalchemy < 3.1.0
+        tables = [x.name for x in db.get_tables_for_bind()]
+    except AttributeError:
+        # flask-sqlalchemy >= 3.1.0
+        tables = [x for x in db.metadata.tables]
     assert "vocabularies_metadata" in tables
     assert "vocabularies_types" in tables
     assert "vocabularies_schemes" in tables
