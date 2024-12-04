@@ -33,9 +33,6 @@ class SubjectsServiceWriter(ServiceWriter):
 
 VOCABULARIES_DATASTREAM_READERS = {
     **mesh_datastreams.VOCABULARIES_DATASTREAM_READERS,
-    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_READERS,
-    **gemet_datastreams.VOCABULARIES_DATASTREAM_READERS,
-    **bodc_datastreams.VOCABULARIES_DATASTREAM_READERS,
 }
 """Subjects Data Streams readers."""
 
@@ -50,9 +47,6 @@ VOCABULARIES_DATASTREAM_TRANSFORMERS = {
 VOCABULARIES_DATASTREAM_WRITERS = {
     "subjects-service": SubjectsServiceWriter,
     **mesh_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
-    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
-    **gemet_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
-    **bodc_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
 }
 """Subjects Data Streams writers."""
 

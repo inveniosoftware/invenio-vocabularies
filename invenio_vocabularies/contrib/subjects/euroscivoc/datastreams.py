@@ -14,7 +14,36 @@ from ..config import euroscivoc_file_url
 
 
 class EuroSciVocSubjectsTransformer(RDFTransformer):
-    """Transformer class to convert EuroSciVoc RDF data to a dictionary format."""
+    """
+     Transformer class to convert EuroSciVoc RDF data to a dictionary format.
+
+     Input:
+         - Relevant fields:
+             - `skos:notation`: Primary identifier for the concept.
+             - `skos:prefLabel`: Preferred labels with language codes.
+             - `skos:altLabel`: Alternative labels.
+             - `skos:broader`: Broader concepts that this concept belongs to.
+
+    Output:
+         {
+             "id": "euroscivoc:1717",  # EuroSciVoc-specific concept ID (skos:notation).
+             "scheme": "EuroSciVoc",  # The scheme name indicating this is a EuroSciVoc concept.
+             "subject": "Satellite radio",  # The primary subject label (first preferred label in English, skos:prefLabel).
+             "title": {
+                 "it": "Radio satellitare",  # Italian preferred label (skos:prefLabel).
+                 "en": "Satellite radio",  # English preferred label (skos:prefLabel).
+             },
+             "props": {
+                 "parents": "euroscivoc:1225",  # The broader concept (skos:broader), identified by its EuroSciVoc Concept ID.
+             },
+             "identifiers": [
+                 {
+                     "scheme": "url",  # Type of identifier (URL).
+                     "identifier": "http://data.europa.eu/8mn/euroscivoc/87ff3577-527a-4a40-9c76-2f9d3075e2ba",  # URI of the concept (rdf:about).
+                 }
+             ],
+         }
+    """
 
     def _get_notation(self, subject, rdf_graph):
         """Extract the numeric notation for a subject."""
@@ -38,7 +67,6 @@ class EuroSciVocSubjectsTransformer(RDFTransformer):
             for n in reversed(self._find_parents(subject, rdf_graph))
             if n
         )
-        identifiers = [{"scheme": "url", "identifier": str(subject)}]
 
         return {
             "id": id,
@@ -46,13 +74,11 @@ class EuroSciVocSubjectsTransformer(RDFTransformer):
             "subject": labels.get("en", "").capitalize(),
             "title": labels,
             "props": {"parents": parents} if parents else {},
-            "identifiers": identifiers,
+            "identifiers": self._get_identifiers(subject),
         }
 
 
-# Configuration for datastream transformers, and writers
-VOCABULARIES_DATASTREAM_READERS = {}
-VOCABULARIES_DATASTREAM_WRITERS = {}
+# Configuration for datastream
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "euroscivoc-transformer": EuroSciVocSubjectsTransformer
