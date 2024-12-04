@@ -9,6 +9,7 @@
 """Transformers module."""
 
 from abc import ABC, abstractmethod
+from urllib.parse import urlparse
 
 from lxml import etree
 
@@ -75,6 +76,17 @@ class RDFTransformer(BaseTransformer):
     def skos_core(self):
         """Get the SKOS core namespace."""
         return rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
+
+    def _validate_subject_url(self, subject):
+        """Check if the subject is a valid URL."""
+        parsed = urlparse(str(subject))
+        return bool(parsed.netloc and parsed.scheme)
+
+    def _get_identifiers(self, subject):
+        """Generate identifiers field for a valid subject URL."""
+        if self._validate_subject_url(subject):
+            return [{"scheme": "url", "identifier": str(subject)}]
+        return []
 
     def _get_labels(self, subject, rdf_graph):
         """Extract labels (prefLabel or altLabel) for a subject."""

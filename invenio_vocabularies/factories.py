@@ -168,7 +168,7 @@ class SubjectsBODCVocabularyConfig(VocabularyConfig):
     """BODC Subjects Vocabulary Config."""
 
     config = bodc_ds_config
-    vocabulary_name = "subjects:bodc"
+    vocabulary_name = "subjects:bodc-puv"
 
     def get_service(self):
         """Get the service for the vocabulary."""
