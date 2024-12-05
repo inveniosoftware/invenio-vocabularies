@@ -50,8 +50,7 @@ class OrcidDataSyncReader(BaseReader):
         try:
             return self.s3_client.read_file(f"s3://{bucket}/{key}")
         except Exception:
-            # TODO: log
-            return None
+            current_app.logger.exception("Failed to fetch ORCiD record.")
 
     def _process_lambda_file(self, fileobj):
         """Process the ORCiD lambda file and returns a list of ORCiDs to sync.
