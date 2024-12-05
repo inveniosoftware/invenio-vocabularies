@@ -266,15 +266,23 @@ class OrcidTransformer(BaseTransformer):
                     continue
 
                 org = employment["organization"]
-                aff = {"name": org["name"]}
-
-                # Extract the org ID, to link to the affiliation vocabulary
                 aff_id = self._extract_affiliation_id(org)
+
+                # Skip adding if the ID already exists in result
+                if aff_id and any(aff.get("id") == aff_id for aff in result):
+                    continue
+
+                # Skip adding if the name exists in result with no ID
+                if any(
+                    aff.get("name") == org["name"] and "id" not in aff for aff in result
+                ):
+                    continue
+
+                aff = {"name": org["name"]}
                 if aff_id:
                     aff["id"] = aff_id
 
-                if aff not in result:
-                    result.append(aff)
+                result.append(aff)
         except Exception:
             pass
         return result
