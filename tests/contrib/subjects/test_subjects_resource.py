@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021 CERN.
+# Copyright (C) 2021-2024 CERN.
 # Copyright (C) 2021 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -129,22 +129,28 @@ def example_subjects(app, db, search_clear, identity, service):
 
 
 def test_suggest(client, h, prefix, example_subjects):
-    """Test FilteredSuggestParam."""
-    # No filter
+    """Test the subjects query parser."""
+    # Full word
+    res = client.get(f"{prefix}?suggest=abdomen", headers=h)
+    assert res.json["hits"]["total"] == 4
+    # The less specific text appears at the end of the list
+    assert res.json["hits"]["hits"][3]["subject"] == "Abdomen, Acute"
+
+    # Incomplete word -> finds the same results
     res = client.get(f"{prefix}?suggest=abdo", headers=h)
     assert res.json["hits"]["total"] == 4
 
-    # Single filter
-    res = client.get(f"{prefix}?suggest=MeSH:abdo", headers=h)
-    assert res.status_code == 200
-    assert res.json["hits"]["total"] == 2
+    # Multiple words -> narrows down the results
+    res = client.get(f"{prefix}?suggest=abdomen%20acute", headers=h)
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["subject"] == "Abdomen, Acute"
 
-    # Multiple filters
-    res = client.get(f"{prefix}?suggest=MeSH,Other:abdo", headers=h)
-    assert res.status_code == 200
-    assert res.json["hits"]["total"] == 3
+    # Multiple words with incomplete last word -> still finds the same result
+    res = client.get(f"{prefix}?suggest=abdomen%20acu", headers=h)
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["subject"] == "Abdomen, Acute"
 
-    # Ignore non existing filter
-    res = client.get(f"{prefix}?suggest=MeSH,Foo:abdo", headers=h)
-    assert res.status_code == 200
-    assert res.json["hits"]["total"] == 2
+    # Multiple words with incomplete last word in other order -> still finds the same result
+    res = client.get(f"{prefix}?suggest=acute%20abdo", headers=h)
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["subject"] == "Abdomen, Acute"
