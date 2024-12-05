@@ -260,15 +260,12 @@ class OrcidTransformer(BaseTransformer):
                 employment.get("employment-summary", {}) for employment in employments
             ]
 
-            history = set()
             for employment in employments:
                 terminated = employment.get("end-date")
-                org = employment["organization"]
-
-                if terminated or org["name"] in history:
+                if terminated:
                     continue
 
-                history.add(org["name"])
+                org = employment["organization"]
                 aff = {"name": org["name"]}
 
                 # Extract the org ID, to link to the affiliation vocabulary
@@ -276,7 +273,8 @@ class OrcidTransformer(BaseTransformer):
                 if aff_id:
                     aff["id"] = aff_id
 
-                result.append(aff)
+                if aff not in result:
+                    result.append(aff)
         except Exception:
             pass
         return result
