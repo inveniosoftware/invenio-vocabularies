@@ -240,6 +240,12 @@ def orcid_data():
                     "employments": {"affiliation-group": employments[0]}
                 },
             },
+            "duplicate_affiliations": {
+                **base,
+                "activities-summary": {
+                    "employments": {"affiliation-group": employments + employments},
+                },
+            },
         },
     }
 
@@ -266,6 +272,14 @@ def expected_from_xml():
         "single_employment": {
             **base,
             "affiliations": [{"id": "01ggx4157", "name": "CERN"}],
+        },
+        "duplicate_affiliations": {
+            **base,
+            "affiliations": [
+                # Affiliations are deduplicated
+                {"id": "01ggx4157", "name": "CERN"},
+                {"name": "ACME Inc."},
+            ],
         },
     }
 
