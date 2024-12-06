@@ -20,7 +20,40 @@ except ImportError:
 
 
 class GEMETSubjectsTransformer(RDFTransformer):
-    """Transformer class to convert GEMET RDF data to a dictionary format."""
+    """
+    Transformer class to convert GEMET RDF data to a dictionary format.
+
+    Input:
+        - Relevant fields:
+            - `skos:prefLabel`: Preferred labels with language codes.
+            - `skos:broader`: References to broader concepts (parent concepts).
+            - `skos:memberOf`: References to groups or themes the concept belongs to.
+
+    Output:
+        - A dictionary with the following structure:
+            {
+                "id": "gemet:concept/10008",  # GEMET-specific concept ID (skos:Concept).
+                "scheme": "GEMET",  # The scheme name indicating this is a GEMET concept.
+                "subject": "Consumer product",  # The subject label (first preferred label in English, skos:prefLabel).
+                "title": {
+                    "en": "Consumer product",  # English label for the concept (skos:prefLabel).
+                    "ar": "منتج استهلاكي"  # Arabic label for the concept (skos:prefLabel).
+                },
+                "props": {
+                    "parents": "gemet:concept/6660",  # The parent concept (skos:broader), identified by its GEMET Concept ID.
+                    "groups": ["http://www.eionet.europa.eu/gemet/group/10112"],  # Group the concept belongs to (skos:memberOf)(skos:prefLabel).
+                    "themes": [
+                        "http://www.eionet.europa.eu/gemet/theme/27",  # Theme the concept belongs to (skos:memberOf)(rdfs:label).
+                    ]
+                },
+                "identifiers": [
+                    {
+                        "scheme": "url",  # Type of identifier (URL).
+                        "identifier": "http://www.eionet.europa.eu/gemet/concept/10008"  # URI of the concept (rdf:about).
+                    }
+                ]
+            }
+    """
 
     def _get_parent_notation(self, broader, rdf_graph):
         """Extract parent notation from GEMET URI."""
@@ -83,13 +116,11 @@ class GEMETSubjectsTransformer(RDFTransformer):
             "subject": labels.get("en", "").capitalize(),
             "title": labels,
             "props": props,
-            "identifiers": identifiers,
+            "identifiers": self._get_identifiers(subject),
         }
 
 
-# Configuration for datastream transformers, and writers
-VOCABULARIES_DATASTREAM_READERS = {}
-VOCABULARIES_DATASTREAM_WRITERS = {}
+# Configuration for datastream
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {"gemet-transformer": GEMETSubjectsTransformer}
 

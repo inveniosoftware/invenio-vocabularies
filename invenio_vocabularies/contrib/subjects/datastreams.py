@@ -12,6 +12,7 @@ from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
+from .bodc import datastreams as bodc_datastreams
 from .euroscivoc import datastreams as euroscivoc_datastreams
 from .gemet import datastreams as gemet_datastreams
 from .mesh import datastreams as mesh_datastreams
@@ -32,8 +33,6 @@ class SubjectsServiceWriter(ServiceWriter):
 
 VOCABULARIES_DATASTREAM_READERS = {
     **mesh_datastreams.VOCABULARIES_DATASTREAM_READERS,
-    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_READERS,
-    **gemet_datastreams.VOCABULARIES_DATASTREAM_READERS,
 }
 """Subjects Data Streams readers."""
 
@@ -41,14 +40,13 @@ VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     **mesh_datastreams.VOCABULARIES_DATASTREAM_TRANSFORMERS,
     **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_TRANSFORMERS,
     **gemet_datastreams.VOCABULARIES_DATASTREAM_TRANSFORMERS,
+    **bodc_datastreams.VOCABULARIES_DATASTREAM_TRANSFORMERS,
 }
 """Subjects Data Streams transformers."""
 
 VOCABULARIES_DATASTREAM_WRITERS = {
     "subjects-service": SubjectsServiceWriter,
     **mesh_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
-    **euroscivoc_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
-    **gemet_datastreams.VOCABULARIES_DATASTREAM_WRITERS,
 }
 """Subjects Data Streams writers."""
 

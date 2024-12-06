@@ -34,6 +34,10 @@ euroscivoc_file_url = LocalProxy(
     lambda: current_app.config["VOCABULARIES_SUBJECTS_EUROSCIVOC_FILE_URL"]
 )
 
+bodc_puv_file_url = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_SUBJECTS_BODC_PUV_FILE_URL"]
+)
+
 
 class SubjectsSearchOptions(SearchOptions):
     """Search options."""

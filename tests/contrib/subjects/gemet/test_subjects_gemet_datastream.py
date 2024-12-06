@@ -25,24 +25,24 @@ XML_DATA = bytes(
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
          xml:base="http://www.eionet.europa.eu/gemet/">
-    <skos:Concept rdf:about="concept/10008">
-        <skos:inScheme rdf:resource="http://www.eionet.europa.eu/gemet/gemetThesaurus"/>
-        <skos:prefLabel xml:lang="en">Consumer product</skos:prefLabel>
-        <skos:prefLabel xml:lang="ar">منتج استهلاكي</skos:prefLabel>
-        <skos:broader rdf:resource="concept/6660"/>
-        <skos:memberOf rdf:resource="group/10112"/>
-        <skos:memberOf rdf:resource="theme/27"/>
-        <skos:memberOf rdf:resource="theme/34"/>
-    </skos:Concept>
-    <rdf:Description rdf:about="theme/27">
-        <skos:member rdf:resource="concept/10008"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="theme/34">
-        <skos:member rdf:resource="concept/10008"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="group/10112">
-        <skos:member rdf:resource="concept/10008"/>
-    </rdf:Description>
+        <skos:Concept rdf:about="concept/10008">
+            <skos:inScheme rdf:resource="http://www.eionet.europa.eu/gemet/gemetThesaurus"/>
+            <skos:prefLabel xml:lang="en">Consumer product</skos:prefLabel>
+            <skos:prefLabel xml:lang="ar">منتج استهلاكي</skos:prefLabel>
+            <skos:broader rdf:resource="concept/6660"/>
+            <skos:memberOf rdf:resource="group/10112"/>
+            <skos:memberOf rdf:resource="theme/27"/>
+            <skos:memberOf rdf:resource="theme/34"/>
+        </skos:Concept>
+        <rdf:Description rdf:about="theme/27">
+            <skos:member rdf:resource="concept/10008"/>
+        </rdf:Description>
+        <rdf:Description rdf:about="theme/34">
+            <skos:member rdf:resource="concept/10008"/>
+        </rdf:Description>
+        <rdf:Description rdf:about="group/10112">
+            <skos:member rdf:resource="concept/10008"/>
+        </rdf:Description>
     </rdf:RDF>""",
     encoding="utf-8",
 )
