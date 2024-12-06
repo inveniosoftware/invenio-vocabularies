@@ -59,3 +59,13 @@ class AffiliationRelationSchema(ContribVocabularyRelationSchema):
     ftf_name = "name"
     parent_field_name = "affiliations"
     name = SanitizedUnicode()
+    identifiers = IdentifierSet(
+        fields.Nested(
+            partial(
+                IdentifierSchema,
+                allowed_schemes=affiliation_schemes,
+                identifier_required=False,
+            )
+        ),
+        dump_only=True,
+    )
