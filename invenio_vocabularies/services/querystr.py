@@ -8,6 +8,7 @@
 
 """Querystring parsing."""
 
+import warnings
 from functools import partial
 
 from invenio_records_resources.services.records.params import SuggestQueryParser
@@ -20,6 +21,10 @@ class FilteredSuggestQueryParser(SuggestQueryParser):
     @classmethod
     def factory(cls, filter_field=None, **extra_params):
         """Create a prepared instance of the query parser."""
+        warnings.warn(
+            "FilteredSuggestQueryParser is deprecated, use SuggestQueryParser or CompositeSuggestQueryParser instead",
+            DeprecationWarning,
+        )
         return partial(cls, filter_field=filter_field, extra_params=extra_params)
 
     def __init__(self, identity=None, filter_field=None, extra_params=None):
