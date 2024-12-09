@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version v6.8.0 (released 2024-12-09)
+
+- names: extract affiliation identifiers from employments
+- names: optimize memory usage on ORCID sync
+- subjects: improve search with CompositeSuggestQueryParser
+- subjects: added datastream for bodc
+
 Version v6.7.0 (released 2024-11-27)
 
 - contrib: improve search accuracy for names, funders, affiliations
