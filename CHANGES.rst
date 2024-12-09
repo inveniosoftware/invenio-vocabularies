@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v6.9.0 (released 2024-12-09)
+
+- schema: added identifiers in affiliations relation
+
 Version v6.8.0 (released 2024-12-09)
 
 - names: extract affiliation identifiers from employments
