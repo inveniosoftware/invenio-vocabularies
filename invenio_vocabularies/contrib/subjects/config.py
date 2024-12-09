@@ -15,10 +15,12 @@ from invenio_i18n import get_locale
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
 from invenio_records_resources.services.records.components import DataComponent
+from invenio_records_resources.services.records.queryparser import (
+    CompositeSuggestQueryParser,
+)
 from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
-from ...services.querystr import FilteredSuggestQueryParser
 
 subject_schemes = LocalProxy(
     lambda: current_app.config["VOCABULARIES_SUBJECTS_SCHEMES"]
@@ -38,9 +40,8 @@ euroscivoc_file_url = LocalProxy(
 class SubjectsSearchOptions(SearchOptions):
     """Search options."""
 
-    suggest_parser_cls = FilteredSuggestQueryParser.factory(
-        filter_field="scheme",
-        fields=[  # suggest fields
+    suggest_parser_cls = CompositeSuggestQueryParser.factory(
+        fields=[
             "subject^100",
             localized_title,
             "synonyms^20",
