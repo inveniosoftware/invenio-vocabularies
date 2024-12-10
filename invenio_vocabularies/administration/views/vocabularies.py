@@ -9,10 +9,8 @@
 
 """Vocabularies admin interface."""
 
-from invenio_administration.views.base import (
-    AdminResourceEditView,
-    AdminResourceListView,
-)
+from invenio_administration.views.base import AdminResourceListView
+from invenio_i18n import lazy_gettext as _
 
 
 class VocabulariesListView(AdminResourceListView):
@@ -20,11 +18,11 @@ class VocabulariesListView(AdminResourceListView):
 
     api_endpoint = "/vocabularies/"
     name = "vocabulary-types"
-    menu_label = "Vocabulary Types"
+    menu_label = _("Vocabulary Types")
     resource_config = "vocabulary_admin_resource"
     search_request_headers = {"Accept": "application/json"}
-    title = "Vocabulary Types"
-    category = "Site management"
+    title = _("Vocabulary Types")
+    category = _("Site management")
 
     pid_path = "id"
     icon = "exchange"
@@ -36,8 +34,8 @@ class VocabulariesListView(AdminResourceListView):
     display_create = False
 
     item_field_list = {
-        "id": {"text": "Name", "order": 1},
-        "count": {"text": "Number of entries", "order": 2},
+        "id": {"text": _("Name"), "order": 1},
+        "count": {"text": _("Number of entries"), "order": 2},
     }
 
     search_config_name = "VOCABULARIES_TYPES_SEARCH"
