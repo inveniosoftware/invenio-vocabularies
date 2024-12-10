@@ -19,7 +19,7 @@ from ...services.schema import BaseVocabularySchema, ModePIDFieldVocabularyMixin
 from ..affiliations.schema import (
     AffiliationRelationSchema as BaseAffiliationRelationSchema,
 )
-from .config import names_schemes
+from .config import names_schemes, restricted_names_schemes
 
 
 class AffiliationRelationSchema(BaseAffiliationRelationSchema):
@@ -66,7 +66,7 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
             raise ValidationError({"family_name": messages})
 
     @validates_schema
-    def validate_affiliatons(self, data, **kwargs):
+    def validate_affiliations(self, data, **kwargs):
         """Validate names."""
         affiliations = data.get("affiliations", [])
         seen_names = set()
@@ -103,4 +103,15 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
                 data["name"] = f"{family_name}, {given_name}"
             elif family_name:
                 data["name"] = family_name
+        return data
+
+    @post_dump
+    def filter_exposed_identifiers(self, data, **kwargs):
+        identifiers = data.get("identifiers")
+        filtered_ids = [
+            identifier
+            for identifier in identifiers
+            if identifier["scheme"] not in restricted_names_schemes
+        ]
+        data["identifiers"] = filtered_ids
         return data
