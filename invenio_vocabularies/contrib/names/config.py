@@ -24,6 +24,10 @@ from ...services.components import PIDComponent
 
 names_schemes = LocalProxy(lambda: current_app.config["VOCABULARIES_NAMES_SCHEMES"])
 
+restricted_names_schemes = LocalProxy(
+    lambda: current_app.config["VOCABULARIES_NAMES_RESTRICTED_SCHEMES"]
+)
+
 
 class NamesSearchOptions(SearchOptions):
     """Search options."""

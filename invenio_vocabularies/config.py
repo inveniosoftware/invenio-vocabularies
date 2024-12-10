@@ -127,6 +127,10 @@ VOCABULARIES_NAMES_SCHEMES = {
 }
 """Names allowed identifier schemes."""
 
+
+VOCABULARIES_NAMES_RESTRICTED_SCHEMES = []
+"""Names restricted names schemes [not visible in search endpoint]."""
+
 VOCABULARIES_SUBJECTS_SCHEMES = {
     "gnd": {"label": _("GND"), "validator": idutils.is_gnd, "datacite": "GND"},
     "url": {"label": _("URL"), "validator": idutils.is_url},
