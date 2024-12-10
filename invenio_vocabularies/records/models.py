@@ -9,6 +9,7 @@
 """Vocabulary models."""
 
 from invenio_db import db
+from invenio_i18n import gettext as _
 from invenio_records.models import RecordMetadataBase
 
 
@@ -79,9 +80,9 @@ class VocabularyScheme(db.Model):
         """Create a new vocabulary subtype."""
         banned = [",", ":"]
         for b in banned:
-            assert (
-                b not in data["id"]
-            ), f"No '{b}' allowed in VocabularyScheme.id"  # noqa
+            assert b not in data["id"], _(
+                "No '{banned_char}' allowed in VocabularyScheme.id"
+            ).format(banned_char=b)
 
         with db.session.begin_nested():
             obj = cls(**data)
