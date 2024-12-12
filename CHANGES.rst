@@ -8,9 +8,13 @@
 Changes
 =======
 
-Version v6.10.0 (released 2024-12-09)
+Version v6.10.1 (released 2024-12-12)
 
-names: add internal id column to the name_metadata db
+- names: drop unique id on the internal id
+
+Version v6.10.0 (released 2024-12-12)
+
+- names: add internal id column to the name_metadata db
 
 Version v6.9.0 (released 2024-12-09)
 
