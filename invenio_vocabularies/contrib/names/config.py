@@ -21,6 +21,7 @@ from invenio_records_resources.services.records.queryparser import (
 from werkzeug.local import LocalProxy
 
 from ...services.components import PIDComponent
+from .components import InternalIDComponent
 
 names_schemes = LocalProxy(lambda: current_app.config["VOCABULARIES_NAMES_SCHEMES"])
 
@@ -67,6 +68,7 @@ class NamesSearchOptions(SearchOptions):
 
 service_components = [
     # Order of components are important!
+    InternalIDComponent,
     DataComponent,
     PIDComponent,
     RelationsComponent,
