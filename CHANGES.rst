@@ -1,5 +1,6 @@
 ..
     Copyright (C) 2020-2024 CERN.
+    Copyright (C) 2024 Graz University of Technology.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -7,6 +8,12 @@
 
 Changes
 =======
+
+Version 7.0.0.dev1 (released 2024-12-12)
+
+- comp: make compatible to flask-sqlalchemy>=3.1
+- setup: change to reusable workflows
+- setup: bump major dependencies
 
 Version v6.10.1 (released 2024-12-12)
 
