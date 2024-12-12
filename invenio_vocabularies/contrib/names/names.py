@@ -47,7 +47,7 @@ record_type = RecordTypeFactory(
         # cannot set to nullable=False because it would fail at
         # service level when create({}), see records-resources.
         "pid": db.Column(db.String(255), unique=True),
-        "internal_id": db.Column(db.String(255), unique=True, nullable=True),
+        "internal_id": db.Column(db.String(255), nullable=True, index=True),
     },
     schema_version="1.0.0",
     schema_path="local://names/name-v1.0.0.json",
