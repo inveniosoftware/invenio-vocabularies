@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v6.10.0 (released 2024-12-09)
+
+names: add internal id column to the name_metadata db
+
 Version v6.9.0 (released 2024-12-09)
 
 - schema: added identifiers in affiliations relation
