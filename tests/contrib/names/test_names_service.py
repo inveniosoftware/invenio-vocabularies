@@ -27,6 +27,7 @@ def test_simple_flow(app, service, identity, name_full_data, example_affiliation
 
     # Create it
     item = service.create(identity, name_full_data)
+
     id_ = item.id
 
     # add dereferenced values
@@ -68,7 +69,7 @@ def test_simple_flow(app, service, identity, name_full_data, example_affiliation
     # Fail to retrieve it
     # - db
     # only the metadata is removed from the record, it is still resolvable
-    base_keys = {"created", "updated", "id", "links", "revision_id"}
+    base_keys = {"created", "updated", "id", "links", "revision_id", "internal_id"}
     deleted_rec = service.read(identity, id_).to_dict()
     assert set(deleted_rec.keys()) == base_keys
     # - search
