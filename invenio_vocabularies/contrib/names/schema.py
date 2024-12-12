@@ -35,6 +35,7 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     so it does not inherit from it.
     """
 
+    internal_id = fields.Str(allow_none=True)
     name = SanitizedUnicode()
     given_name = SanitizedUnicode()
     family_name = SanitizedUnicode()
@@ -66,7 +67,7 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
             raise ValidationError({"family_name": messages})
 
     @validates_schema
-    def validate_affiliatons(self, data, **kwargs):
+    def validate_affiliations(self, data, **kwargs):
         """Validate names."""
         affiliations = data.get("affiliations", [])
         seen_names = set()

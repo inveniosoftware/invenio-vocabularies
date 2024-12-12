@@ -13,7 +13,7 @@ from invenio_db import db
 from invenio_records.dumpers import SearchDumper
 from invenio_records.dumpers.indexedat import IndexedAtDumperExt
 from invenio_records.dumpers.relations import RelationDumperExt
-from invenio_records.systemfields import RelationsField
+from invenio_records.systemfields import ModelField, RelationsField
 from invenio_records_resources.factories.factory import RecordTypeFactory
 from invenio_records_resources.records.systemfields import (
     ModelPIDField,
@@ -47,10 +47,12 @@ record_type = RecordTypeFactory(
         # cannot set to nullable=False because it would fail at
         # service level when create({}), see records-resources.
         "pid": db.Column(db.String(255), unique=True),
+        "internal_id": db.Column(db.String(255), unique=True, nullable=True),
     },
     schema_version="1.0.0",
     schema_path="local://names/name-v1.0.0.json",
     index_name="names-name-v2.0.0",
+    record_cls_attrs={"internal_id": ModelField("internal_id", dump=False)},
     record_relations=name_relations,
     record_dumper=SearchDumper(
         model_fields={"pid": ("id", str)},

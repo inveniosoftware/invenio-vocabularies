@@ -42,10 +42,10 @@ class NamesService(record_type.service_cls):
         else:
             results = self._read_many(identity, search_query, max_records=1)
 
-        # cant use the results_item because it returns dicts intead of records
+        # cant use the results_item because it returns dicts instead of records
         total = results.hits.total["value"]
         if total == 0:
-            # Not a PID but trated as such
+            # Not a PID but treated as such
             raise PIDDoesNotExistError(pid_type=id_type, pid_value=id_)
         if many:
             for result in results:
