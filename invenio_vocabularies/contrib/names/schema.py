@@ -11,7 +11,14 @@
 from functools import partial
 
 from invenio_i18n import lazy_gettext as _
-from marshmallow import ValidationError, fields, post_dump, post_load, validates_schema, EXCLUDE
+from marshmallow import (
+    EXCLUDE,
+    ValidationError,
+    fields,
+    post_dump,
+    post_load,
+    validates_schema,
+)
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
