@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v6.11.0 (released 2024-12-13)
+
+- names: fix acronym in marshamllow schema
+
 Version v6.10.1 (released 2024-12-12)
 
 - names: drop unique id on the internal id
