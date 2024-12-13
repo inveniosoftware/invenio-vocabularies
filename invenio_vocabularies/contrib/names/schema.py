@@ -11,7 +11,7 @@
 from functools import partial
 
 from invenio_i18n import lazy_gettext as _
-from marshmallow import ValidationError, fields, post_dump, post_load, validates_schema
+from marshmallow import ValidationError, fields, post_dump, post_load, validates_schema, EXCLUDE
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -26,6 +26,11 @@ class AffiliationRelationSchema(BaseAffiliationRelationSchema):
     """Affiliation relation schema."""
 
     acronym = SanitizedUnicode(dump_only=True)
+
+    class Meta:
+        """Meta class."""
+
+        unknown = EXCLUDE
 
 
 class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
