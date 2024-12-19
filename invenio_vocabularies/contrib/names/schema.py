@@ -47,7 +47,6 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     so it does not inherit from it.
     """
 
-    internal_id = fields.Str(allow_none=True)
     name = SanitizedUnicode()
     given_name = SanitizedUnicode()
     family_name = SanitizedUnicode()
