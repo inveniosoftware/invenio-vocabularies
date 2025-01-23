@@ -9,7 +9,9 @@
 Changes
 =======
 
-Version 7.0.0.dev1 (released 2024-12-12)
+Version v7.0.0.dev2 (released 2025-01-23)
+
+Version v7.0.0.dev1 (released 2024-12-12)
 
 - comp: make compatible to flask-sqlalchemy>=3.1
 - setup: change to reusable workflows
