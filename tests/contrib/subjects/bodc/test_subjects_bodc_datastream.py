@@ -20,45 +20,39 @@ from invenio_vocabularies.datastreams.readers import RDFReader
 
 VALID_XML_DATA = bytes(
     """<?xml version="1.0" encoding="UTF-8"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:dc="http://purl.org/dc/terms/" xmlns:dce="http://purl.org/dc/elements/1.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:grg="http://www.isotc211.org/schemas/grg/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:void="http://rdfs.org/ns/void#" xmlns:pav="http://purl.org/pav/" xmlns:prov="https://www.w3.org/ns/prov#" xmlns:reg="http://purl.org/linked-data/registry#" xmlns:cpm="http://purl.org/voc/cpm#" xmlns:qudt="https://qudt.org/2.1/schema/qudt#" xmlns:semapv="http://w3id.org/semapv/vocab/" xmlns:iop="https://w3id.org/iadopt/ont#" xmlns:sssom="https://w3id.org/sssom/schema/" xmlns:puv="https://w3id.org/env/puv#">
-    <skos:Collection rdf:about="http://vocab.nerc.ac.uk/collection/P01/current/">
-        <skos:prefLabel>BODC Parameter Usage Vocabulary</skos:prefLabel>
-        <dc:title>BODC Parameter Usage Vocabulary</dc:title>
-        <skos:altLabel>BODC PUV</skos:altLabel>
-        <dc:alternative>BODC PUV</dc:alternative>
-        <dc:description>Terms built using the BODC parameter semantic model designed to describe individual measured phenomena. May be used to mark up sets of data such as a NetCDF array or spreadsheet column. Units must be specified when using a P01 code. The P06 unit that is linked to individual P01 in the NVS is the one used in BODC's systems but external users can use any appropriate units.</dc:description>
-        <dc:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
-        <skos:member>
-            <skos:Concept xml:base="http://vocab.nerc.ac.uk/collection/P01/current/SAGEMSFM/" rdf:about="http://vocab.nerc.ac.uk/collection/P01/current/SAGEMSFM/">
-                <dc:identifier>SDN:P01::SAGEMSFM</dc:identifier>
-                <dce:identifier>SDN:P01::SAGEMSFM</dce:identifier>
-                <dc:date>2008-10-16 16:27:06.0</dc:date>
-                <skos:notation>SDN:P01::SAGEMSFM</skos:notation>
-                <skos:prefLabel xml:lang="en">14C age of Foraminiferida (ITIS: 44030: WoRMS 22528) [Subcomponent: tests] in sediment by picking and accelerator mass spectrometry</skos:prefLabel>
-                <skos:altLabel>AMSSedAge</skos:altLabel>
-                <skos:definition xml:lang="en">Accelerated mass spectrometry on picked tests</skos:definition>
-                <owl:versionInfo>1</owl:versionInfo>
-                <pav:hasCurrentVersion rdf:resource="http://vocab.nerc.ac.uk/collection/P01/current/SAGEMSFM/1/"/>
-                <pav:version>1</pav:version>
-                <pav:authoredOn>2008-10-16 16:27:06.0</pav:authoredOn>
-                <skos:note xml:lang="en">accepted</skos:note>
-                <owl:deprecated>false</owl:deprecated>
-                <iop:hasMatrix rdf:resource="http://vocab.nerc.ac.uk/collection/S21/current/S21S022/"/>
-                <skos:related rdf:resource="http://vocab.nerc.ac.uk/collection/P06/current/UYBP/"/>
-                <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/S25/current/BE002325/"/>
-                <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/S26/current/MAT00136/"/>
-                <void:inDataset rdf:resource="http://vocab.nerc.ac.uk/.well-known/void"/>
-            </skos:Concept>
-        </skos:member>    
-    </skos:Collection>
+  <rdf:Description rdf:about="http://vocab.nerc.ac.uk/collection/P02/current/QDMD/">
+    <pav:authoredOn>2008-08-15 10:07:03.0</pav:authoredOn>
+    <pav:hasCurrentVersion rdf:resource="http://vocab.nerc.ac.uk/collection/P02/current/QDMD/1/"/>
+    <dce:identifier>SDN:P02::QDMD</dce:identifier>
+    <pav:version>1</pav:version>
+    <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/C47/current/IN6_1_2/"/>
+    <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/P22/current/19/"/>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Parameters quantifying the amount of liquids (e.g. ship's ballast) or solids (e.g. dredge spoil) deposited into the water column as a result of man's activities</skos:definition>
+    <void:inDataset rdf:resource="http://vocab.nerc.ac.uk/.well-known/void"/>
+    <owl:deprecated>false</owl:deprecated>
+    <skos:note xml:lang="en">accepted</skos:note>
+    <dc:identifier>SDN:P02::QDMD</dc:identifier>
+    <skos:prefLabel xml:lang="en">Quantity of material dumped</skos:prefLabel>
+    <owl:versionInfo>1</owl:versionInfo>
+    <dc:date>2008-08-15 10:07:03.0</dc:date>
+    <skos:altLabel>Amount_dumped</skos:altLabel>
+    <skos:inScheme rdf:resource="http://vocab.nerc.ac.uk/scheme/EDMED_DCAT_THEMES/current/"/>
+    <skos:notation>SDN:P02::QDMD</skos:notation>
+    <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/D01/current/D0100001/"/>
+    <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/L19/current/005/"/>
+    <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/P03/current/H001/"/>
+    <skos:broader rdf:resource="http://vocab.nerc.ac.uk/collection/P05/current/007/"/>
+  </rdf:Description>
 </rdf:RDF>""",
     encoding="utf-8",
 )
 
 INVALID_XML_DATA = bytes(
     """<?xml version="1.0" encoding="UTF-8"?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
-    <skos:Collection rdf:about="http://vocab.nerc.ac.uk/collection/P01/current/">
+    <skos:Collection rdf:about="http://vocab.nerc.ac.uk/collection/P02/current/">
         <skos:member>
-            <skos:Concept rdf:about="http://vocab.nerc.ac.uk/collection/P01/current/SAGEMSFM/">
+            <skos:Concept rdf:about="http://vocab.nerc.ac.uk/collection/P02/current/QDMD/">
                 <skos:prefLabel>Invalid Data</skos:prefLabel>
                 <!-- No skos:notation present -->
             </skos:Concept>
@@ -73,17 +67,19 @@ INVALID_XML_DATA = bytes(
 def expected_from_rdf():
     return [
         {
-            "id": "SDN:P01::SAGEMSFM",
+            "id": "SDN:P02::QDMD",
             "scheme": "BODC-PUV",
-            "subject": "AMSSedAge",
+            "subject": "Quantity of material dumped",
             "title": {
-                "en": "14c age of foraminiferida (itis: 44030: worms 22528) [subcomponent: tests] in sediment by picking and accelerator mass spectrometry",
+                "en": "Quantity of material dumped",
             },
-            "props": {"definition": "Accelerated mass spectrometry on picked tests"},
+            "props": {
+                "definition": "Parameters quantifying the amount of liquids (e.g. ship's ballast) or solids (e.g. dredge spoil) deposited into the water column as a result of man's activities"
+            },
             "identifiers": [
                 {
                     "scheme": "url",
-                    "identifier": "http://vocab.nerc.ac.uk/collection/P01/current/SAGEMSFM/",
+                    "identifier": "http://vocab.nerc.ac.uk/collection/P02/current/QDMD/",
                 }
             ],
         }
