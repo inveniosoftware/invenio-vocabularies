@@ -78,8 +78,11 @@ class BODCPUVSubjectsTransformer(RDFTransformer):
         else:
             raise TransformerError(f"No id found for: {subject}")
 
-        alt_labels = [obj for obj in subject_data.get(str(self.skos_core.altLabel), [])]
-        subject_text = str(alt_labels[0]) if alt_labels else ""
+        pref_labels = [
+            obj for obj in subject_data.get(str(self.skos_core.prefLabel), [])
+        ]
+
+        subject_text = str(pref_labels[0]) if pref_labels else labels["en"]
         definition = str(subject_data.get(str(self.skos_core.definition), [None])[0])
 
         return {
