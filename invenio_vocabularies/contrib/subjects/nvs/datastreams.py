@@ -6,13 +6,13 @@
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
-"""BODC subjects datastreams, readers, transformers, and writers."""
+"""NVS subjects datastreams, readers, transformers, and writers."""
 
 from invenio_vocabularies.datastreams.errors import TransformerError
 from invenio_vocabularies.datastreams.readers import RDFReader
 from invenio_vocabularies.datastreams.transformers import RDFTransformer
 
-from ..config import bodc_puv_file_url
+from ..config import nvs_file_url
 
 # Available with the "rdf" extra
 try:
@@ -21,9 +21,9 @@ except ImportError:
     rdflib = None
 
 
-class BODCPUVSubjectsTransformer(RDFTransformer):
+class NVSSubjectsTransformer(RDFTransformer):
     """
-    Transformer class to convert BODC-PUV RDF data to a dictionary format.
+    Transformer class to convert NVS RDF data to a dictionary format.
 
     Input:
         - Relevant fields:
@@ -36,8 +36,8 @@ class BODCPUVSubjectsTransformer(RDFTransformer):
     Output:
         - A dictionary with the following structure:
             {
-                "id": "SDN:P01::SAGEMSFM",  # BODC-specific parameter ID (skos:notation).
-                "scheme": "BODC-PUV",  # The scheme name indicating this is a BODC Parameter Usage Vocabulary concept.
+                "id": "SDN:P01::SAGEMSFM",  # NVS-specific parameter ID (skos:notation).
+                "scheme": "NVS-P01",  # The scheme name indicating this is a collection P01 from NERC Vocabulary Server (NVS).
                 "subject": "AMSSedAge",  # The alternative label (skos:altLabel), if available, or None.
                 "title": {
                     "en": "14C age of Foraminiferida"  # English preferred label (skos:prefLabel).
@@ -87,7 +87,7 @@ class BODCPUVSubjectsTransformer(RDFTransformer):
 
         return {
             "id": id,
-            "scheme": "BODC-PUV",
+            "scheme": "NVS-P02",
             "subject": subject_text,
             "title": labels,
             "props": {"definition": definition} if definition else {},
@@ -97,18 +97,18 @@ class BODCPUVSubjectsTransformer(RDFTransformer):
 
 # Configuration for datastream
 
-VOCABULARIES_DATASTREAM_TRANSFORMERS = {"bodc-transformer": BODCPUVSubjectsTransformer}
+VOCABULARIES_DATASTREAM_TRANSFORMERS = {"nvs-transformer": NVSSubjectsTransformer}
 
 DATASTREAM_CONFIG = {
     "readers": [
         {
             "type": "http",
             "args": {
-                "origin": bodc_puv_file_url,
+                "origin": nvs_file_url,
             },
         },
         {"type": "rdf"},
     ],
-    "transformers": [{"type": "bodc-transformer"}],
+    "transformers": [{"type": "nvs-transformer"}],
     "writers": [{"args": {"writer": {"type": "subjects-service"}}, "type": "async"}],
 }
