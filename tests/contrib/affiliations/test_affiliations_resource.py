@@ -114,6 +114,14 @@ def _create_affiliations(service, identity):
                 "en": "Northwestern University",
             },
         },
+        {
+            "acronym": "LONG",
+            "id": "LONG",
+            "name": "!!! The Official Global Alliance of the Most Prestigious, Highly-Renowned, and Exceptionally Innovative Solutions for Business, Commerce, Trade, Finance, Investment, Corporate Services, Logistics, and International Market Expansion—Providing Cutting-Edge, World-Class, and State-of-the-Art Consulting, Advisory, and Strategic Development Services for Organizations of All Sizes, Sectors, and Industries Across the Globe, Inc. ???",
+            "title": {
+                "en": "!!! The Official Global Alliance of the Most Prestigious, Highly-Renowned, and Exceptionally Innovative Solutions for Business, Commerce, Trade, Finance, Investment, Corporate Services, Logistics, and International Market Expansion—Providing Cutting-Edge, World-Class, and State-of-the-Art Consulting, Advisory, and Strategic Development Services for Organizations of All Sizes, Sectors, and Industries Across the Globe, Inc. ???"
+            },
+        },
     ]
     for aff in affiliations:
         service.create(identity, aff)
@@ -159,3 +167,12 @@ def test_affiliations_suggest_sort(
     assert res.json["hits"]["total"] == 2
     assert res.json["hits"]["hits"][0]["id"] == "nu"
     assert res.json["hits"]["hits"][1]["id"] == "cern"  # due to nucleaire
+
+    # Should show a result and not error out for longer names
+    res = client.get(
+        f"{prefix}?suggest=The%20Official%20Global%20Alliance%20of%20the%20Most%20Prestigious%2C%20Highly-Renowned%2C%20and%20Exceptionally%20Innovative%20Solutions%20for%20Business%2C%20Commerce%2C%20Trade%2C%20Finance%2C%20Investment%2C%20Corporate%20Services%2C%20Logistics%2C%20and%20International%20Market%20Expansion%E2%80%94Providing%20Cutting-Edge%2C%20World-Class%2C%20and%20State-of-the-Art%20Consulting%2C%20Advisory%2C%20and%20Strategic%20Development%20Services%20for%20Organizations%20of%20All%20Sizes%2C%20Sectors%2C%20and%20Industries%20Across%20the%20Globe",
+        headers=h,
+    )
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["id"] == "LONG"
