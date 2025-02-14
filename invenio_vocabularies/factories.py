@@ -28,12 +28,12 @@ from .contrib.awards.datastreams import (
 )
 from .contrib.funders.datastreams import DATASTREAM_CONFIG as funders_ds_config
 from .contrib.names.datastreams import DATASTREAM_CONFIG as names_ds_config
-from .contrib.subjects.bodc.datastreams import DATASTREAM_CONFIG as bodc_ds_config
 from .contrib.subjects.datastreams import DATASTREAM_CONFIG as subjects_ds_config
 from .contrib.subjects.euroscivoc.datastreams import (
     DATASTREAM_CONFIG as euroscivoc_ds_config,
 )
 from .contrib.subjects.gemet.datastreams import DATASTREAM_CONFIG as gemet_ds_config
+from .contrib.subjects.nvs.datastreams import DATASTREAM_CONFIG as nvs_ds_config
 
 
 class VocabularyConfig:
@@ -164,15 +164,15 @@ class SubjectsGEMETVocabularyConfig(VocabularyConfig):
         raise NotImplementedError("Service not implemented for GEMET Subjects")
 
 
-class SubjectsBODCVocabularyConfig(VocabularyConfig):
-    """BODC Subjects Vocabulary Config."""
+class SubjectsNVSVocabularyConfig(VocabularyConfig):
+    """NVS Subjects Vocabulary Config."""
 
-    config = bodc_ds_config
-    vocabulary_name = "subjects:bodc-puv"
+    config = nvs_ds_config
+    vocabulary_name = "subjects:nvs"
 
     def get_service(self):
         """Get the service for the vocabulary."""
-        raise NotImplementedError("Service not implemented for BODC Subjects")
+        raise NotImplementedError("Service not implemented for NVS Subjects")
 
 
 def get_vocabulary_config(vocabulary):
@@ -187,7 +187,7 @@ def get_vocabulary_config(vocabulary):
         "affiliations:edmo": AffiliationsEDMOVocabularyConfig,
         "subjects": SubjectsVocabularyConfig,
         "subjects:gemet": SubjectsGEMETVocabularyConfig,
-        "subjects:bodc": SubjectsBODCVocabularyConfig,
+        "subjects:nvs": SubjectsNVSVocabularyConfig,
         "subjects:euroscivoc": SubjectsEuroSciVocVocabularyConfig,
     }
     return vocab_config.get(vocabulary, VocabularyConfig)()
