@@ -113,6 +113,16 @@ def _create_affiliations(service, identity):
             "title": {
                 "en": "Northwestern University",
             },
+            "identifiers": [{"identifier": "000e0be47", "scheme": "ror"}],
+        },
+        {
+            "acronym": "NU",
+            "id": "chnu",
+            "name": "Northwestern University",
+            "title": {
+                "en": "Northwestern University",
+            },
+            "country_name": "Switzerland",
         },
         {
             "acronym": "LONG",
@@ -135,10 +145,10 @@ def test_affiliations_prefix_search(
     """Test a successful search."""
     _create_affiliations(service, identity)
 
-    # Should show 1 result
+    # Should show 2 results
     res = client.get(f"{prefix}?q=uni", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["total"] == 2
 
 
 def test_affiliations_suggest_sort(
@@ -164,9 +174,10 @@ def test_affiliations_suggest_sort(
     # Should show 2 results, but id=nu as first due to acronym
     res = client.get(f"{prefix}?suggest=NU", headers=h)
     assert res.status_code == 200
-    assert res.json["hits"]["total"] == 2
+    assert res.json["hits"]["total"] == 3
     assert res.json["hits"]["hits"][0]["id"] == "nu"
-    assert res.json["hits"]["hits"][1]["id"] == "cern"  # due to nucleaire
+    assert res.json["hits"]["hits"][1]["id"] == "chnu"
+    assert res.json["hits"]["hits"][2]["id"] == "cern"  # due to nucleaire
 
     # Should show a result and not error out for longer names
     res = client.get(
@@ -176,3 +187,15 @@ def test_affiliations_suggest_sort(
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
     assert res.json["hits"]["hits"][0]["id"] == "LONG"
+
+    # Search affiliations with ROR ID
+    res = client.get(f"{prefix}?suggest=000e0be47", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["id"] == "nu"
+
+    # Search affiliations with country
+    res = client.get(f"{prefix}?suggest=Switzerland", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["id"] == "chnu"
