@@ -42,12 +42,9 @@ class AffiliationsSearchOptions(SearchOptions):
             # Aliases can sometimes be shorter, so we boost them a bit.
             "aliases^5",
             localized_title,
-            "id^2",
             # Allow to search identifiers directly (e.g. ROR)
             "identifiers.identifier",
-            "country",
             "country_name",
-            "types",
         ],
     )
 

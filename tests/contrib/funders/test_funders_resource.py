@@ -80,6 +80,7 @@ def example_funders(service, identity, indexer):
                 "en": "European Organization for Nuclear Research",
                 "fr": "Conseil Européen pour la Recherche Nucléaire",
             },
+            "identifiers": [{"identifier": "01ggx4157", "scheme": "ror"}],
         },
         {"id": "0aaaaaa11", "name": "OTHER", "country": "CH", "title": {"en": "CERN"}},
         {
@@ -143,6 +144,12 @@ def test_funders_suggest_sort(client, h, prefix, example_funders):
     res = client.get(f"{prefix}?suggest=nucl%C3%A9aire", headers=h)  # nucléaire
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 0
+
+    # Search affiliations with identifier
+    res = client.get(f"{prefix}?suggest=01ggx4157", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 1
+    assert res.json["hits"]["hits"][0]["name"] == "CERN"
 
 
 def test_funders_delete(
