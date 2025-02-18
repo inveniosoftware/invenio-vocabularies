@@ -10,7 +10,7 @@
 
 import datetime
 
-from invenio_i18n import gettext as _
+from invenio_i18n import lazy_gettext as _
 from invenio_jobs.jobs import JobType
 
 from invenio_vocabularies.services.tasks import process_datastream
@@ -27,8 +27,8 @@ class ProcessDataStreamJob(JobType):
 class ProcessRORAffiliationsJob(ProcessDataStreamJob):
     """Process ROR affiliations datastream registered task."""
 
-    description = "Process ROR affiliations"
-    title = "Load ROR affiliations"
+    description = _("Process ROR affiliations")
+    title = _("Load ROR affiliations")
     id = "process_ror_affiliations"
 
     @classmethod
@@ -65,8 +65,8 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
 class ProcessRORFundersJob(ProcessDataStreamJob):
     """Process ROR funders datastream registered task."""
 
-    description = "Process ROR funders"
-    title = "Load ROR funders"
+    description = _("Process ROR funders")
+    title = _("Load ROR funders")
     id = "process_ror_funders"
 
     @classmethod
@@ -103,8 +103,8 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
 class ImportAwardsOpenAIREJob(ProcessDataStreamJob):
     """Import awards from OpenAIRE registered task."""
 
-    description = "Import awards from OpenAIRE"
-    title = "Import Awards OpenAIRE"
+    description = _("Import awards from OpenAIRE")
+    title = _("Import Awards OpenAIRE")
     id = "import_awards_openaire"
 
     @classmethod
@@ -138,8 +138,8 @@ class ImportAwardsOpenAIREJob(ProcessDataStreamJob):
 class UpdateAwardsCordisJob(ProcessDataStreamJob):
     """Update awards from CORDIS registered task."""
 
-    description = "Update awards from CORDIS"
-    title = "Update Awards CORDIS"
+    description = _("Update awards from CORDIS")
+    title = _("Update Awards CORDIS")
     id = "update_awards_cordis"
 
     @classmethod
@@ -166,8 +166,8 @@ class UpdateAwardsCordisJob(ProcessDataStreamJob):
 class ImportORCIDJob(ProcessDataStreamJob):
     """Import ORCID data registered task."""
 
-    description = "Import ORCID data"
-    title = "Import ORCID data"
+    description = _("Import ORCID data")
+    title = _("Import ORCID data")
     id = "import_orcid"
 
     @classmethod
