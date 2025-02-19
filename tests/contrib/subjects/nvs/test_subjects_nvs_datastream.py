@@ -11,9 +11,7 @@ import io
 import pytest
 from rdflib import Graph
 
-from invenio_vocabularies.contrib.subjects.bodc.datastreams import (
-    BODCPUVSubjectsTransformer,
-)
+from invenio_vocabularies.contrib.subjects.nvs.datastreams import NVSSubjectsTransformer
 from invenio_vocabularies.datastreams.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import TransformerError
 from invenio_vocabularies.datastreams.readers import RDFReader
@@ -68,7 +66,7 @@ def expected_from_rdf():
     return [
         {
             "id": "SDN:P02::QDMD",
-            "scheme": "BODC-PUV",
+            "scheme": "NVS-P02",
             "subject": "Quantity of material dumped",
             "title": {
                 "en": "Quantity of material dumped",
@@ -94,21 +92,21 @@ def parse_rdf_data(rdf_data):
     return list(reader._iter(rdf_graph))[0]
 
 
-def test_bodc_puv_transformer_pref_label(expected_from_rdf):
+def test_nvs_transformer_pref_label(expected_from_rdf):
     stream_entry = parse_rdf_data(VALID_XML_DATA)
     assert len(stream_entry) > 0
-    transformer = BODCPUVSubjectsTransformer()
+    transformer = NVSSubjectsTransformer()
     result = []
     entry = transformer.apply(StreamEntry(stream_entry)).entry
     result.append(entry)
     assert expected_from_rdf == result
 
 
-def test_bodc_puv_transformer_missing_id():
+def test_nvs_transformer_missing_id():
     stream_entry = parse_rdf_data(INVALID_XML_DATA)
     assert len(stream_entry) > 0
 
-    transformer = BODCPUVSubjectsTransformer()
+    transformer = NVSSubjectsTransformer()
 
     with pytest.raises(TransformerError) as err:
         transformer.apply(StreamEntry(stream_entry))
