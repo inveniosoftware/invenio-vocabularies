@@ -196,8 +196,8 @@ VOCABULARIES_SUBJECTS_GEMET_FILE_URL = (
 )
 """Subject GEMET file download link."""
 
-VOCABULARIES_SUBJECTS_BODC_PUV_FILE_URL = "http://vocab.nerc.ac.uk/collection/P02/current/?_profile=nvs&_mediatype=application/rdf+xml"
-"""Subject BODC-PUV file download link."""
+VOCABULARIES_SUBJECTS_NVS_FILE_URL = "http://vocab.nerc.ac.uk/collection/P02/current/?_profile=nvs&_mediatype=application/rdf+xml"
+"""Subject NVS-P02 file download link."""
 
 VOCABULARIES_AFFILIATIONS_EDMO_COUNTRY_MAPPING = {
     "Cape Verde": "Cabo Verde",
