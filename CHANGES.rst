@@ -9,6 +9,11 @@
 Changes
 =======
 
+Version v7.1.0 (released 2025-02-20)
+
+- subjects: renamed bodc to nvs
+- bodc: updated file uri & subject label
+
 Version v7.0.0 (released 2025-02-13)
 
 - Promote to stable release
