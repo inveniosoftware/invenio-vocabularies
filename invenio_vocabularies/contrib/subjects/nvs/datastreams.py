@@ -70,7 +70,7 @@ class NVSSubjectsTransformer(RDFTransformer):
         subject_data = self._get_subject_data(rdf_graph, subject)
         deprecated = subject_data.get(str(rdflib.namespace.OWL.deprecated), [False])
         if deprecated and str(deprecated[0]).lower() == "true":
-            return None  # Skip deprecated subjects
+            raise TransformerError(f"Skipping deprecated subject: {subject_data}")
 
         notation = subject_data.get(str(self.skos_core.notation), [])
         if notation:
