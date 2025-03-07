@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { FieldArray, getIn } from "formik";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import { Button, Form, Icon, List } from "semantic-ui-react";
+import { Button, Form, Label, Icon, List } from "semantic-ui-react";
 import { FieldLabel } from "react-invenio-forms";
 
 import { FundingFieldItem } from "./FundingFieldItem";
@@ -25,7 +25,7 @@ function FundingFieldForm(props) {
     label,
     labelIcon,
     fieldPath,
-    form: { values },
+    form: { values, errors, initialErrors, initialValues },
     move: formikArrayMove,
     push: formikArrayPush,
     remove: formikArrayRemove,
@@ -81,12 +81,25 @@ function FundingFieldForm(props) {
 
         return { headerContent, descriptionContent, awardOrFunder };
       };
+
+  const fundingList = getIn(values, fieldPath, []);
+  const formikInitialValues = getIn(initialValues, fieldPath, []);
+
+  const error = getIn(errors, fieldPath, null);
+  const initialError = getIn(initialErrors, fieldPath, null);
+  const fundingError = error || (fundingList === formikInitialValues && initialError);
+
+  // let className = "";
+  // if (fundingError) {
+  //   className = typeof fundingError !== "string" ? fundingError.severity : "error";
+  // }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Form.Field required={required}>
         <FieldLabel htmlFor={fieldPath} icon={labelIcon} label={label} />
         <List>
-          {getIn(values, fieldPath, []).map((value, index) => {
+          {fundingList.map((value, index) => {
             const key = `${fieldPath}.${index}`;
             // if award does not exist or has no id, it's a custom one
             const awardType = value?.award?.id ? "standard" : "custom";
@@ -156,6 +169,12 @@ function FundingFieldForm(props) {
             computeFundingContents={computeFundingContents}
           />
         </Overridable>
+
+        {fundingError && typeof fundingError != "string" && (
+          <Label pointing="left" prompt>
+            {fundingError.message}
+          </Label>
+        )}
       </Form.Field>
     </DndProvider>
   );
