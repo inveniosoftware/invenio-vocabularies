@@ -9,6 +9,12 @@
 Changes
 =======
 
+Version v7.2.0 (released 2025-03-10)
+
+- search: fix too many clauses on affiliation search
+- search: remove redundant fields from affiliation and funders search
+- nvs subjects: fix deprecated subjects skipping (raise skipped)
+
 Version v7.1.0 (released 2025-02-20)
 
 - subjects: renamed bodc to nvs
