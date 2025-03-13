@@ -50,6 +50,11 @@ class SubjectsSearchOptions(SearchOptions):
             localized_title,
             "synonyms^20",
         ],
+        clauses=[
+            {"type": "cross_fields", "boost": 3},
+            {"type": "bool_prefix", "boost": 2, "fuzziness": "AUTO"},
+            {"type": "most_fields", "boost": 1, "fuzziness": "AUTO"},
+        ],
     )
 
     sort_default = "bestmatch"
