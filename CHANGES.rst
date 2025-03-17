@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v7.2.1 (released 2025-03-17)
+
+- subjects: Keep bool_prefix clause for suggest search
+
 Version v7.2.0 (released 2025-03-10)
 
 - search: fix too many clauses on affiliation search
