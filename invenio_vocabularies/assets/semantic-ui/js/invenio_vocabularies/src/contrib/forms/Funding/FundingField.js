@@ -1,5 +1,5 @@
 // This file is part of InvenioVocabularies
-// Copyright (C) 2021-2024 CERN.
+// Copyright (C) 2021-2025 CERN.
 // Copyright (C) 2021 Northwestern University.
 //
 // Invenio is free software; you can redistribute it and/or modify it
@@ -11,7 +11,7 @@ import { FieldArray, getIn } from "formik";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { Button, Form, Icon, List } from "semantic-ui-react";
-import { FieldLabel } from "react-invenio-forms";
+import { FieldLabel, FeedbackLabel } from "react-invenio-forms";
 
 import { FundingFieldItem } from "./FundingFieldItem";
 import FundingModal from "./FundingModal";
@@ -25,7 +25,7 @@ function FundingFieldForm(props) {
     label,
     labelIcon,
     fieldPath,
-    form: { values },
+    form: { values, errors, initialErrors, initialValues },
     move: formikArrayMove,
     push: formikArrayPush,
     remove: formikArrayRemove,
@@ -81,12 +81,25 @@ function FundingFieldForm(props) {
 
         return { headerContent, descriptionContent, awardOrFunder };
       };
+
+  const fundingList = getIn(values, fieldPath, []);
+  const formikInitialValues = getIn(initialValues, fieldPath, []);
+
+  const error = getIn(errors, fieldPath, null);
+  const initialError = getIn(initialErrors, fieldPath, null);
+  const fundingError = error || (fundingList === formikInitialValues && initialError);
+
+  let className = "";
+  if (fundingError) {
+    className = typeof fundingError !== "string" ? fundingError.severity : "error";
+  }
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <Form.Field required={required}>
+      <Form.Field required={required} className={className}>
         <FieldLabel htmlFor={fieldPath} icon={labelIcon} label={label} />
         <List>
-          {getIn(values, fieldPath, []).map((value, index) => {
+          {fundingList.map((value, index) => {
             const key = `${fieldPath}.${index}`;
             // if award does not exist or has no id, it's a custom one
             const awardType = value?.award?.id ? "standard" : "custom";
@@ -120,7 +133,7 @@ function FundingFieldForm(props) {
                 key="custom"
                 icon
                 labelPosition="left"
-                className="mb-5"
+                className={`mb-5 ${className}`}
               >
                 <Icon name="add" />
                 {i18next.t("Add")}
@@ -141,7 +154,13 @@ function FundingFieldForm(props) {
           <FundingModal
             searchConfig={searchConfig}
             trigger={
-              <Button type="button" key="custom" icon labelPosition="left">
+              <Button
+                type="button"
+                key="custom"
+                icon
+                labelPosition="left"
+                className={className}
+              >
                 <Icon name="add" />
                 {i18next.t("Add custom")}
               </Button>
@@ -156,6 +175,8 @@ function FundingFieldForm(props) {
             computeFundingContents={computeFundingContents}
           />
         </Overridable>
+
+        {fundingError && <FeedbackLabel errorMessage={fundingError} />}
       </Form.Field>
     </DndProvider>
   );
