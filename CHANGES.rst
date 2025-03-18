@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v7.3.0 (released 2025-03-18)
+
+- form: funding: use FeedbackLabel and add error styling
+
 Version v7.2.1 (released 2025-03-17)
 
 - subjects: Keep bool_prefix clause for suggest search
