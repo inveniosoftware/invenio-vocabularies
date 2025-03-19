@@ -30,4 +30,4 @@ Invenio module for managing vocabularies, based on Invenio-Records and Invenio-R
 - Helpers for importing vocabularies
 
 Further documentation is available on
-https://invenio-vocabularies.readthedocs.io/
+https://inveniordm.docs.cern.ch/customize/vocabularies/
