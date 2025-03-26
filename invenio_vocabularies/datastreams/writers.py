@@ -87,17 +87,21 @@ class ServiceWriter(BaseWriter):
 
     def _do_update(self, entry):
         vocab_id = self._entry_id(entry)
+        current_app.logger.debug(f"Resolving entry with ID: {vocab_id}")
         current = self._resolve(vocab_id)
         updated = dict(current.to_dict(), **entry)
+        current_app.logger.debug(f"Updating entry with ID: {vocab_id}")
         return StreamEntry(self._service.update(self._identity, vocab_id, updated))
 
     def write(self, stream_entry, *args, **kwargs):
         """Writes the input entry using a given service."""
         entry = stream_entry.entry
+        current_app.logger.debug(f"Writing entry: {entry}")
 
         try:
             if self._insert:
                 try:
+                    current_app.logger.debug("Inserting entry.")
                     return StreamEntry(self._service.create(self._identity, entry))
                 except PIDAlreadyExists:
                     if not self._update:
@@ -105,6 +109,7 @@ class ServiceWriter(BaseWriter):
                     return self._do_update(entry)
             elif self._update:
                 try:
+                    current_app.logger.debug("Attempting to update entry.")
                     return self._do_update(entry)
                 except (NoResultFound, PIDDoesNotExistError):
                     raise WriterError([f"Vocabulary entry does not exist: {entry}"])
@@ -139,6 +144,7 @@ class ServiceWriter(BaseWriter):
             processed_stream_entry.log_errors()
             stream_entries_processed.append(processed_stream_entry)
 
+        current_app.logger.debug(f"Finished writing {len(stream_entries)} entries")
         return stream_entries_processed
 
 

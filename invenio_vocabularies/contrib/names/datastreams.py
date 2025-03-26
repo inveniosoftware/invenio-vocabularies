@@ -12,6 +12,7 @@ import csv
 import io
 import tarfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextvars import copy_context
 from datetime import timedelta
 from itertools import islice
 from pathlib import Path
@@ -43,17 +44,18 @@ class OrcidDataSyncReader(BaseReader):
         self.s3_client = S3OrcidClient()
         self.since = since
 
-    def _fetch_orcid_data(self, orcid_to_sync, bucket):
+    def _fetch_orcid_data(self, app, orcid_to_sync, bucket):
         """Fetches a single ORCiD record from S3."""
         # The ORCiD file key is located in a folder which name corresponds to the last three digits of the ORCiD
         suffix = orcid_to_sync[-3:]
         key = f"{suffix}/{orcid_to_sync}.xml"
+        app.logger.debug(f"Fetching ORCiD record: {key} from bucket: {bucket}")
         try:
             # Potential improvement: use the a XML jax parser to avoid loading the whole file in memory
             # and choose the sections we need to read (probably the summary)
             return self.s3_client.read_file(f"s3://{bucket}/{key}")
         except Exception:
-            current_app.logger.exception("Failed to fetch ORCiD record.")
+            app.logger.exception(f"Failed to fetch ORCiD record: {key}")
 
     def _process_lambda_file(self, fileobj):
         """Process the ORCiD lambda file and returns a list of ORCiDs to sync.
@@ -87,7 +89,11 @@ class OrcidDataSyncReader(BaseReader):
                     )
 
                 if last_modified_date < last_sync:
+                    current_app.logger.debug(
+                        f"Skipping ORCiD {orcid} (last modified: {last_modified_date})"
+                    )
                     break
+                current_app.logger.debug(f"Yielding ORCiD {orcid} for sync.")
                 yield orcid
         finally:
             fileobj.close()
@@ -97,10 +103,15 @@ class OrcidDataSyncReader(BaseReader):
         with ThreadPoolExecutor(
             max_workers=current_app.config["VOCABULARIES_ORCID_SYNC_MAX_WORKERS"]
         ) as executor:
+            app = current_app._get_current_object()
             # futures is a dictionary where the key is the ORCID value and the item is the Future object
+            # Flask does not propagate app/request context to new threads, so `copy_context().run`
+            # ensures the current instantianted contextvars (such as job_context) is preserved in each thread.
             futures = {
                 orcid: executor.submit(
+                    copy_context().run,  # Required to pass the context to the thread
                     self._fetch_orcid_data,
+                    app,  # Pass the Flask app to the thread
                     orcid,
                     current_app.config["VOCABULARIES_ORCID_SUMMARIES_BUCKET"],
                 )
@@ -111,7 +122,14 @@ class OrcidDataSyncReader(BaseReader):
                 try:
                     result = futures[orcid].result()
                     if result:
+                        current_app.logger.debug(
+                            f"Successfully fetched ORCiD record: {orcid}"
+                        )
                         yield result
+                except Exception:
+                    current_app.logger.exception(
+                        f"Error processing ORCiD record: {orcid}"
+                    )
                 finally:
                     # Explicitly release memory, as we don't need the future anymore.
                     # This is mostly required because as long as we keep a reference to the future
@@ -125,7 +143,7 @@ class OrcidDataSyncReader(BaseReader):
         tar_content = self.s3_client.read_file(
             "s3://orcid-lambda-file/last_modified.csv.tar"
         )
-
+        current_app.logger.info("Fetching ORCiD lambda file")
         # Opens tar file and process it
         with tarfile.open(fileobj=io.BytesIO(tar_content)) as tar:
             # Iterate over each member (file or directory) in the tar file
@@ -133,7 +151,7 @@ class OrcidDataSyncReader(BaseReader):
                 # Extract the file
                 extracted_file = tar.extractfile(member)
                 if extracted_file:
-                    current_app.logger.info(f"[ORCID Reader] Processing lambda file...")
+                    current_app.logger.info(f"Processing lambda file: {member.name}")
                     # Process the file and get the ORCiDs to sync
                     orcids_to_sync = set(self._process_lambda_file(extracted_file))
 
@@ -150,6 +168,7 @@ class OrcidDataSyncReader(BaseReader):
         """Yield successive chunks of a given size."""
         it = iter(iterable)
         while chunk := list(islice(it, batch_size)):
+            current_app.logger.debug(f"Processing batch of size {len(chunk)}.")
             yield chunk
 
 
@@ -239,18 +258,25 @@ class OrcidTransformer(BaseTransformer):
 
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
+        current_app.logger.debug("Applying transformation to stream entry.")
         record = stream_entry.entry
         person = record["person"]
         orcid_id = record["orcid-identifier"]["path"]
 
         name = person.get("name")
         if name is None:
-            raise TransformerError("Name not found in ORCiD entry.")
+            raise TransformerError(
+                f"Name not found in ORCiD entry for ORCiD ID: {orcid_id}."
+            )
         if name.get("family-name") is None:
-            raise TransformerError("Family name not found in ORCiD entry.")
+            raise TransformerError(
+                f"Family name not found in ORCiD entry for ORCiD ID: {orcid_id}."
+            )
 
         if not self._is_valid_name(name["given-names"] + name["family-name"]):
-            raise TransformerError("Invalid characters in name.")
+            raise TransformerError(
+                f"Invalid characters in name for ORCiD ID: {orcid_id}."
+            )
 
         entry = {
             "id": orcid_id,
@@ -261,6 +287,7 @@ class OrcidTransformer(BaseTransformer):
         }
 
         stream_entry.entry = entry
+        current_app.logger.debug(f"Transformed entry: {entry}")
         return stream_entry
 
     def _is_valid_name(self, name):
@@ -271,6 +298,7 @@ class OrcidTransformer(BaseTransformer):
 
     def _extract_affiliations(self, record):
         """Extract affiliations from the ORCiD record."""
+        current_app.logger.debug("Extracting affiliations from ORCiD record.")
         result = []
         try:
             employments = (
@@ -312,7 +340,7 @@ class OrcidTransformer(BaseTransformer):
 
                 result.append(aff)
         except Exception:
-            pass
+            current_app.logger.error("Error extracting affiliations.")
         return result
 
     def _extract_affiliation_id(self, org):
