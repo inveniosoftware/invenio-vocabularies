@@ -1,5 +1,5 @@
 ..
-    Copyright (C) 2020-2021 CERN.
+    Copyright (C) 2020-2025 CERN.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -28,6 +28,3 @@ Invenio module for managing vocabularies, based on Invenio-Records and Invenio-R
 
 - Factories for easily generating models, record API classes, services, and resources
 - Helpers for importing vocabularies
-
-Further documentation is available on
-https://invenio-vocabularies.readthedocs.io/
