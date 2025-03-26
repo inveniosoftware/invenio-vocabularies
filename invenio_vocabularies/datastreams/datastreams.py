@@ -72,13 +72,18 @@ class DataStream:
 
     def filter(self, stream_entry, *args, **kwargs):
         """Checks if an stream_entry should be filtered out (skipped)."""
+        current_app.logger.debug(f"Filtering entry: {stream_entry.entry}")
         return False
 
     def process_batch(self, batch):
         """Process a batch of entries."""
+        current_app.logger.info(f"Processing batch of size: {len(batch)}")
         transformed_entries = []
         for stream_entry in batch:
             if stream_entry.errors:
+                current_app.logger.warning(
+                    f"Skipping entry with errors: {stream_entry.errors}"
+                )
                 yield stream_entry  # reading errors
             else:
                 transformed_entry = self.transform(stream_entry)
@@ -103,19 +108,23 @@ class DataStream:
         the reader, apply the transformations and yield the result of
         writing it.
         """
+        current_app.logger.info("Starting data stream processing")
         batch = []
         for stream_entry in self.read():
             batch.append(stream_entry)
             if len(batch) >= self.batch_size:
+                current_app.logger.debug(f"Processing batch of size: {len(batch)}")
                 yield from self.process_batch(batch)
                 batch = []
 
         # Process any remaining entries in the last batch
         if batch:
+            current_app.logger.debug(f"Processing final batch of size: {len(batch)}")
             yield from self.process_batch(batch)
 
     def read(self):
         """Recursively read the entries."""
+        current_app.logger.debug("Reading entries from readers")
 
         def pipe_gen(gen_funcs, piped_item=None):
             _gen_funcs = list(gen_funcs)  # copy to avoid modifying ref list
@@ -130,6 +139,7 @@ class DataStream:
                     else:
                         yield StreamEntry(item)
                 except ReaderError as err:
+                    current_app.logger.error(f"Reader error: {str(err)}")
                     yield StreamEntry(
                         entry=item,
                         errors=[f"{current_gen_func.__qualname__}: {str(err)}"],
@@ -140,6 +150,7 @@ class DataStream:
 
     def transform(self, stream_entry, *args, **kwargs):
         """Apply the transformations to an stream_entry."""
+        current_app.logger.debug(f"Transforming entry: {stream_entry.entry}")
         for transformer in self._transformers:
             try:
                 stream_entry = transformer.apply(stream_entry)
@@ -153,16 +164,19 @@ class DataStream:
 
     def write(self, stream_entry, *args, **kwargs):
         """Apply the transformations to an stream_entry."""
+        current_app.logger.debug(f"Writing entry: {stream_entry.entry}")
         for writer in self._writers:
             try:
                 writer.write(stream_entry)
             except WriterError as err:
+                current_app.logger.error(f"Writer error: {str(err)}")
                 stream_entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
 
         return stream_entry
 
     def batch_write(self, stream_entries, *args, **kwargs):
         """Apply the transformations to an stream_entry. Errors are handler in the service layer."""
+        current_app.logger.debug(f"Batch writing entries: {len(stream_entries)}")
         for writer in self._writers:
             yield from writer.write_many(stream_entries)
 

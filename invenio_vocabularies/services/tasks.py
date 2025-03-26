@@ -9,6 +9,7 @@
 
 from celery import shared_task
 from flask import current_app
+from invenio_jobs.errors import TaskExecutionError
 
 from ..datastreams.factories import DataStreamFactory
 
@@ -23,8 +24,13 @@ def process_datastream(config):
         batch_size=config.get("batch_size", 1000),
         write_many=config.get("write_many", False),
     )
-
+    entries_with_errors = 0
     for result in ds.process():
         if result.errors:
             for err in result.errors:
                 current_app.logger.error(err)
+            entries_with_errors += 1
+    if entries_with_errors:
+        raise TaskExecutionError(
+            message=f"Task execution succeeded with {entries_with_errors} entries with errors."
+        )
