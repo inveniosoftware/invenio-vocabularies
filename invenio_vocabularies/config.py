@@ -12,7 +12,7 @@
 
 import re
 
-import idutils
+from idutils import is_doi, is_gnd, is_isni, is_orcid, is_ror, is_url
 from invenio_i18n import lazy_gettext as _
 
 from .datastreams.readers import (
@@ -42,9 +42,9 @@ VOCABULARIES_SERVICE_CONFIG = VocabulariesServiceConfig
 
 VOCABULARIES_IDENTIFIER_SCHEMES = {
     "grid": {"label": _("GRID"), "validator": lambda x: True},
-    "gnd": {"label": _("GND"), "validator": idutils.is_gnd},
-    "isni": {"label": _("ISNI"), "validator": idutils.is_isni},
-    "ror": {"label": _("ROR"), "validator": idutils.is_ror},
+    "gnd": {"label": _("GND"), "validator": is_gnd},
+    "isni": {"label": _("ISNI"), "validator": is_isni},
+    "ror": {"label": _("ROR"), "validator": is_ror},
 }
 """"Generic identifier schemes, usable by other vocabularies."""
 
@@ -72,7 +72,7 @@ VOCABULARIES_AFFILIATION_SCHEMES = {
 
 VOCABULARIES_FUNDER_SCHEMES = {
     **VOCABULARIES_IDENTIFIER_SCHEMES,
-    "doi": {"label": _("DOI"), "validator": idutils.is_doi},
+    "doi": {"label": _("DOI"), "validator": is_doi},
 }
 """Funders allowed identifier schemes."""
 
@@ -80,8 +80,8 @@ VOCABULARIES_FUNDER_DOI_PREFIX = "10.13039"
 """DOI prefix for the identifier formed with the FundRef id."""
 
 VOCABULARIES_AWARD_SCHEMES = {
-    "url": {"label": _("URL"), "validator": idutils.is_url},
-    "doi": {"label": _("DOI"), "validator": idutils.is_doi},
+    "url": {"label": _("URL"), "validator": is_url},
+    "doi": {"label": _("DOI"), "validator": is_doi},
 }
 """Awards allowed identifier schemes."""
 
@@ -121,15 +121,15 @@ VOCABULARIES_AWARDS_EC_ROR_ID = "00k4n6c32"
 """ROR ID for EC funder."""
 
 VOCABULARIES_NAMES_SCHEMES = {
-    "orcid": {"label": _("ORCID"), "validator": idutils.is_orcid, "datacite": "ORCID"},
-    "isni": {"label": _("ISNI"), "validator": idutils.is_isni, "datacite": "ISNI"},
-    "gnd": {"label": _("GND"), "validator": idutils.is_gnd, "datacite": "GND"},
+    "orcid": {"label": _("ORCID"), "validator": is_orcid, "datacite": "ORCID"},
+    "isni": {"label": _("ISNI"), "validator": is_isni, "datacite": "ISNI"},
+    "gnd": {"label": _("GND"), "validator": is_gnd, "datacite": "GND"},
 }
 """Names allowed identifier schemes."""
 
 VOCABULARIES_SUBJECTS_SCHEMES = {
-    "gnd": {"label": _("GND"), "validator": idutils.is_gnd, "datacite": "GND"},
-    "url": {"label": _("URL"), "validator": idutils.is_url},
+    "gnd": {"label": _("GND"), "validator": is_gnd, "datacite": "GND"},
+    "url": {"label": _("URL"), "validator": is_url},
 }
 """Subjects allowed identifier schemes."""
 
