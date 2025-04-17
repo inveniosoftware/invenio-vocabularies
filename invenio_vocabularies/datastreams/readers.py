@@ -281,15 +281,15 @@ class OAIPMHReader(BaseReader):
     """OAIPMH reader."""
 
     def __init__(
-        self,
-        *args,
-        base_url=None,
-        metadata_prefix=None,
-        set=None,
-        from_date=None,
-        until_date=None,
-        verb=None,
-        **kwargs,
+            self,
+            *args,
+            base_url=None,
+            metadata_prefix=None,
+            set=None,
+            from_date=None,
+            until_date=None,
+            verb=None,
+            **kwargs,
     ):
         """Constructor."""
         self._base_url = base_url
@@ -384,7 +384,7 @@ class RDFReader(BaseReader):
     def _iter(self, rdf_graph):
         """Iterate over the RDF graph, yielding one subject at a time."""
         for subject, _, _ in rdf_graph.triples(
-            (None, rdflib.RDF.type, self.skos_core.Concept)
+                (None, rdflib.RDF.type, self.skos_core.Concept)
         ):
             yield {"subject": subject, "rdf_graph": rdf_graph}
 
@@ -416,6 +416,8 @@ class SPARQLReader(BaseReader):
         """
         self._origin = origin
         self._query = query
+        self._user_agent = kwargs.get("user_agent", "")
+
         super().__init__(origin=origin, mode=mode, *args, **kwargs)
 
     def _iter(self, fp, *args, **kwargs):
@@ -430,7 +432,7 @@ class SPARQLReader(BaseReader):
                 "SPARQLReader does not support being chained after another reader"
             )
 
-        sparql_client = sparql.SPARQLWrapper(self._origin)
+        sparql_client = sparql.SPARQLWrapper(self._origin, agent=self._user_agent)
         sparql_client.setQuery(self._query)
         sparql_client.setReturnFormat(sparql.JSON)
 
