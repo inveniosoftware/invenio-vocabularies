@@ -416,6 +416,8 @@ class SPARQLReader(BaseReader):
         """
         self._origin = origin
         self._query = query
+        self._user_agent = kwargs.get("user_agent", "")
+
         super().__init__(origin=origin, mode=mode, *args, **kwargs)
 
     def _iter(self, fp, *args, **kwargs):
@@ -430,7 +432,7 @@ class SPARQLReader(BaseReader):
                 "SPARQLReader does not support being chained after another reader"
             )
 
-        sparql_client = sparql.SPARQLWrapper(self._origin)
+        sparql_client = sparql.SPARQLWrapper(self._origin, agent=self._user_agent)
         sparql_client.setQuery(self._query)
         sparql_client.setReturnFormat(sparql.JSON)
 
