@@ -9,6 +9,11 @@
 Changes
 =======
 
+Version v7.4.0 (released 2025-04-28)
+
+- i18n: Fix untranslated strings in vocabularies
+- logging: add basic logging for ORCID
+
 Version v7.3.0 (released 2025-03-18)
 
 - form: funding: use FeedbackLabel and add error styling
