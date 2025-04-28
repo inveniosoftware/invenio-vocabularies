@@ -204,9 +204,9 @@ VOCABULARIES_AFFILIATIONS_EDMO_COUNTRY_MAPPING = {
 }
 """Affiliations EDMO Country name remapping dictionary."""
 
-VOCABULARIES_ORCID_ACCESS_KEY = "TODO"
+VOCABULARIES_ORCID_ACCESS_KEY = "CHANGEME"
 """ORCID access key to access the s3 bucket."""
-VOCABULARIES_ORCID_SECRET_KEY = "TODO"
+VOCABULARIES_ORCID_SECRET_KEY = "CHANGEME"
 """ORCID secret key to access the s3 bucket."""
 VOCABULARIES_ORCID_SUMMARIES_BUCKET = "v3.0-summaries"
 """ORCID summaries bucket name."""
