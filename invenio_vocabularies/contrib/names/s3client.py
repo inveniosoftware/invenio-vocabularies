@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2024 CERN.
+# Copyright (C) 2024-2025 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -38,7 +38,13 @@ class S3OrcidClient(S3Client):
 
     def __init__(self):
         """Constructor."""
+        access_key = current_app.config["VOCABULARIES_ORCID_ACCESS_KEY"]
+        secret_key = current_app.config["VOCABULARIES_ORCID_SECRET_KEY"]
+        if access_key == "CHANGEME" or secret_key == "CHANGEME":
+            raise Exception(
+                "VOCABULARIES_ORCID_ACCESS_KEY and VOCABULARIES_ORCID_SECRET_KEY are not configured."
+            )
         super().__init__(
-            access_key=current_app.config["VOCABULARIES_ORCID_ACCESS_KEY"],
-            secret_key=current_app.config["VOCABULARIES_ORCID_SECRET_KEY"],
+            access_key=access_key,
+            secret_key=secret_key,
         )
