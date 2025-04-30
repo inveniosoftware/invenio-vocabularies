@@ -9,6 +9,13 @@
 Changes
 =======
 
+Version 3.5.0 (released 2025-04-30)
+
+- fix: setuptools require underscores instead of dashes
+- ci: use reusable workflows
+- i18n: push translations
+- i18n: pulled translations
+
 Version 3.4.2 (released 2025-03-21)
 
 - i18n: mark missing strings for translations
