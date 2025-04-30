@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2024 CERN.
+# Copyright (C) 2024-2025 CERN.
 # Copyright (C) 2024 California Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -13,6 +13,7 @@ import io
 
 import arrow
 import requests
+from flask import current_app
 from idutils import normalize_ror
 
 from invenio_vocabularies.datastreams.errors import ReaderError, TransformerError
@@ -93,6 +94,9 @@ class RORHTTPReader(BaseReader):
         if self._since:
             last_dump_date = self._get_last_dump_date(linksets)
             if last_dump_date < arrow.get(self._since):
+                current_app.logger.info(
+                    f"Skipping ROR data dump (last dump: {last_dump_date}, since: {self._since})"
+                )
                 return
 
         for linkset in linksets:
@@ -103,6 +107,8 @@ class RORHTTPReader(BaseReader):
                 break
             if len(zip_files) > 1:
                 raise ReaderError(f"Expected 1 ZIP item but got {len(zip_files)}")
+
+        current_app.logger.info(f"Reading ROR data dump (URL: {file_url})")
 
         # Download the ZIP file and fully load the response bytes content in memory.
         # The bytes content are then wrapped by a BytesIO to be
