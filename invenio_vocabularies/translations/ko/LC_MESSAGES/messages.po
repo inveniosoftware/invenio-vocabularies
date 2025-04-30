@@ -5,7 +5,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 # 
 # Translators:
-# Tibor Simko <tibor.simko@cern.ch>, 2021
+# Minjae Kwon, 2023
 # 
 #, fuzzy
 msgid ""
@@ -14,14 +14,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2025-03-26 17:16+0000\n"
 "PO-Revision-Date: 2021-07-13 12:40+0000\n"
-"Last-Translator: Tibor Simko <tibor.simko@cern.ch>, 2021\n"
-"Language-Team: Norwegian (https://app.transifex.com/inveniosoftware/teams/23537/no/)\n"
+"Last-Translator: Minjae Kwon, 2023\n"
+"Language-Team: Korean (https://app.transifex.com/inveniosoftware/teams/23537/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
-"Language: no\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: invenio_vocabularies/config.py:37
 msgid "GRID"
@@ -57,14 +57,14 @@ msgstr ""
 #: invenio_vocabularies/contrib/subjects/config.py:38
 #: invenio_vocabularies/services/service.py:64
 msgid "Best match"
-msgstr ""
+msgstr "가장 적절함"
 
 #: invenio_vocabularies/contrib/affiliations/config.py:42
 #: invenio_vocabularies/contrib/funders/config.py:47
 #: invenio_vocabularies/contrib/names/config.py:49
 #: invenio_vocabularies/contrib/subjects/config.py:42
 msgid "Name"
-msgstr "Navn"
+msgstr "이름"
 
 #: invenio_vocabularies/contrib/affiliations/config.py:46
 #: invenio_vocabularies/contrib/funders/config.py:51
@@ -151,7 +151,7 @@ msgstr ""
 
 #: invenio_vocabularies/services/service.py:68
 msgid "Title"
-msgstr "Tittel"
+msgstr ""
 
 #: invenio_vocabularies/services/custom_fields/subject.py:49
 msgid "Subjects"
