@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2024 CERN.
+# Copyright (C) 2024-2025 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -12,6 +12,7 @@ import io
 from unittest.mock import patch
 
 import pytest
+from flask import Flask
 
 from invenio_vocabularies.contrib.common.ror.datastreams import (
     RORHTTPReader,
@@ -169,8 +170,10 @@ def side_effect(url, headers=None, allow_redirects=False):
 def test_ror_http_reader(_):
     reader = RORHTTPReader()
     results = []
-    for entry in reader.read():
-        results.append(entry)
+    app = Flask("testapp")
+    with app.app_context():
+        for entry in reader.read():
+            results.append(entry)
 
     assert len(results) == 1
     assert isinstance(results[0], io.BytesIO)
@@ -181,8 +184,10 @@ def test_ror_http_reader(_):
 def test_ror_http_reader_since_before_publish(_):
     reader = RORHTTPReader(since="2024-07-10")
     results = []
-    for entry in reader.read():
-        results.append(entry)
+    app = Flask("testapp")
+    with app.app_context():
+        for entry in reader.read():
+            results.append(entry)
 
     assert len(results) == 1
 
@@ -191,8 +196,10 @@ def test_ror_http_reader_since_before_publish(_):
 def test_ror_http_reader_since_after_publish(_):
     reader = RORHTTPReader(since="2024-07-12")
     results = []
-    for entry in reader.read():
-        results.append(entry)
+    app = Flask("testapp")
+    with app.app_context():
+        for entry in reader.read():
+            results.append(entry)
 
     assert len(results) == 0
 
