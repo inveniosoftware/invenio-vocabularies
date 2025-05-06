@@ -67,6 +67,7 @@ VOCABULARIES_DATASTREAM_TRANSFORMERS = {
 
 DATASTREAM_CONFIG = {
     "readers": [
+        {"type": "ror-http"},
         {
             "type": "zip",
             "args": {
