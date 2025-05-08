@@ -3,6 +3,7 @@
 # Copyright (C) 2024 CERN.
 # Copyright (C) 2021 Northwestern University.
 # Copyright (C) 2024 University of Münster.
+# Copyright (C) 2025 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -33,16 +34,21 @@ class VocabularyTypeService(RecordService):
         """Search for vocabulary types entries."""
         self.require_permission(identity, "list_vocabularies")
 
+        filters = []
         search_params = map_search_params(self.config.search, params)
 
         query_param = search_params["q"]
-
-        filters = []
         if query_param:
-            filters.extend([VocabularyType.id.ilike(f"%{query_param}%")])
+            filters.append(
+                # NOTE: Even though we only have one field, we use `or_` to
+                # allow for future expansion where multiple fields might be searched.
+                sa.or_(
+                    VocabularyType.id.ilike(f"%{query_param}%"),
+                )
+            )
 
         vocabulary_types = (
-            VocabularyType.query.filter(sa.or_(*filters))
+            VocabularyType.query.filter(*filters)
             .order_by(
                 search_params["sort_direction"](
                     sa.text(",".join(search_params["sort"]))
