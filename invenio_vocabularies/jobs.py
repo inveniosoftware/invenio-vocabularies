@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2021-2025 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -15,7 +15,10 @@ from invenio_jobs.jobs import JobType
 
 from invenio_vocabularies.services.tasks import process_datastream
 
-from .contrib.names.datastreams import ORCID_PRESET_DATASTREAM_CONFIG
+from .contrib.names.datastreams import (
+    ORCID_IMPORT_PRESET_DATASTREAM_CONFIG,
+    ORCID_UPDATE_PRESET_DATASTREAM_CONFIG,
+)
 
 
 class ProcessDataStreamJob(JobType):
@@ -173,4 +176,17 @@ class ImportORCIDJob(ProcessDataStreamJob):
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Process ORCID data."""
-        return {"config": {**ORCID_PRESET_DATASTREAM_CONFIG}}
+        return {"config": {**ORCID_IMPORT_PRESET_DATASTREAM_CONFIG}}
+
+
+class UpdateORCIDJob(ProcessDataStreamJob):
+    """Update ORCID data registered task."""
+
+    description = _("Update ORCID data")
+    title = _("Update ORCID data")
+    id = "update_orcid"
+
+    @classmethod
+    def build_task_arguments(cls, job_obj, since=None, **kwargs):
+        """Process ORCID data."""
+        return {"config": {**ORCID_UPDATE_PRESET_DATASTREAM_CONFIG}}

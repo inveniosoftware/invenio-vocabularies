@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2021-2025 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -419,7 +419,7 @@ An origin is required for the reader.
 """
 
 # TODO: Used on the jobs and should be set as a "PRESET" (naming to be defined)
-ORCID_PRESET_DATASTREAM_CONFIG = {
+ORCID_IMPORT_PRESET_DATASTREAM_CONFIG = {
     "readers": [
         {
             "type": "orcid-data-sync",
@@ -445,7 +445,40 @@ ORCID_PRESET_DATASTREAM_CONFIG = {
     "batch_size": 1000,
     "write_many": True,
 }
-"""ORCiD Data Stream configuration.
+"""ORCiD Import Data Stream configuration.
+
+An origin is required for the reader.
+"""
+
+
+ORCID_UPDATE_PRESET_DATASTREAM_CONFIG = {
+    "readers": [
+        {
+            "type": "orcid-data-sync",
+        },
+        {
+            "type": "xml",
+            "args": {
+                "root_element": "record",
+            },
+        },
+    ],
+    "transformers": [{"type": "orcid"}],
+    "writers": [
+        {
+            "type": "async",
+            "args": {
+                "writer": {
+                    "type": "names-service",
+                    "args": {"update": True},
+                }
+            },
+        }
+    ],
+    "batch_size": 1000,
+    "write_many": True,
+}
+"""ORCiD Update Data Stream configuration.
 
 An origin is required for the reader.
 """
