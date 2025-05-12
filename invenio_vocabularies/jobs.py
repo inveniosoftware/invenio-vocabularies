@@ -15,10 +15,7 @@ from invenio_jobs.jobs import JobType
 
 from invenio_vocabularies.services.tasks import process_datastream
 
-from .contrib.names.datastreams import (
-    ORCID_IMPORT_PRESET_DATASTREAM_CONFIG,
-    ORCID_UPDATE_PRESET_DATASTREAM_CONFIG,
-)
+from .contrib.names.datastreams import ORCID_PRESET_DATASTREAM_CONFIG
 
 
 class ProcessDataStreamJob(JobType):
@@ -166,19 +163,6 @@ class UpdateAwardsCordisJob(ProcessDataStreamJob):
         }
 
 
-class ImportORCIDJob(ProcessDataStreamJob):
-    """Import ORCID data registered task."""
-
-    description = _("Import ORCID data")
-    title = _("Import ORCID data")
-    id = "import_orcid"
-
-    @classmethod
-    def build_task_arguments(cls, job_obj, since=None, **kwargs):
-        """Process ORCID data."""
-        return {"config": {**ORCID_IMPORT_PRESET_DATASTREAM_CONFIG}}
-
-
 class UpdateORCIDJob(ProcessDataStreamJob):
     """Update ORCID data registered task."""
 
@@ -189,4 +173,4 @@ class UpdateORCIDJob(ProcessDataStreamJob):
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Process ORCID data."""
-        return {"config": {**ORCID_UPDATE_PRESET_DATASTREAM_CONFIG}}
+        return {"config": {**ORCID_PRESET_DATASTREAM_CONFIG}}
