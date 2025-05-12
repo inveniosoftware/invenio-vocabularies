@@ -80,17 +80,19 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
 
     @validates_schema
     def validate_affiliations(self, data, **kwargs):
-        """Validate names."""
+        """Validate and return distinct affiliations."""
         affiliations = data.get("affiliations", [])
         seen_names = set()
         for affiliation in affiliations:
             name = affiliation.get("name")
             if not affiliation.get("id") and name:
                 if name in seen_names:
-                    messages = [_("Duplicated affiliations.")]
-                    raise ValidationError({"affiliations": messages})
+                    affiliations.remove(affiliation)
                 else:
                     seen_names.add(name)
+
+        if affiliations:
+            data["affiliations"] = affiliations
 
     @post_load
     def update_name(self, data, **kwargs):
