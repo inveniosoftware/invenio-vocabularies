@@ -116,7 +116,7 @@ msgstr "معرف Id غير متواجد بمدخلات سجل ROR."
 
 #: invenio_vocabularies/contrib/funders/datastreams.py:48
 msgid "Name not found in ROR entry."
-msgstr "الإسم غير متواجد بمدخلات سجل ROR."
+msgstr "الإسم غير متواجد بمداخل سجل ROR."
 
 #: invenio_vocabularies/contrib/funders/schema.py:35
 #: invenio_vocabularies/contrib/funders/schema.py:43
@@ -135,12 +135,12 @@ msgstr "يجب أن يكون اللّقب أو اسم العائلة موجود�
 
 #: invenio_vocabularies/contrib/names/schema.py:68
 msgid "Duplicated affiliations."
-msgstr ""
+msgstr "الانتماءات المكررة."
 
 #: invenio_vocabularies/records/models.py:84
 #, python-format
 msgid "No '%(banned_char)s' allowed in VocabularyScheme.id"
-msgstr ""
+msgstr "كل '%(banned_char)s' غير مسموحة في VocabularyScheme.id"
 
 #: invenio_vocabularies/services/components.py:29
 msgid "The vocabulary type does not exists."
@@ -161,19 +161,19 @@ msgstr "المواضيع"
 
 #: invenio_vocabularies/services/custom_fields/subject.py:56
 msgid "Keywords and subjects"
-msgstr "كلمات مفاتيح و المواضيع"
+msgstr "كلمات مفتاحية و مواضيع"
 
 #: invenio_vocabularies/services/custom_fields/subject.py:58
 msgid "The subjects related to the community"
-msgstr ""
+msgstr "المواضيع المتعلقة بالمجتمع"
 
 #: invenio_vocabularies/services/custom_fields/subject.py:59
 msgid "Search for a subject by name e.g. Psychology ..."
-msgstr ""
+msgstr "إبحث عن موضوع حسب الاسم مثل: علم النفس ..."
 
 #: invenio_vocabularies/services/custom_fields/subject.py:61
 msgid "Search for subjects..."
-msgstr ""
+msgstr "البحث عن المواضيع..."
 
 #: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:16
 msgid "Search results for "
