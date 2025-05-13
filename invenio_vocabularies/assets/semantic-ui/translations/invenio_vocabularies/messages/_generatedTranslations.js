@@ -1,5 +1,6 @@
-// This is an auto generated file to import and export all available translations.
-// Changes should not be checked into version control.
+// AUTO-GENERATED FILE - DO NOT EDIT MANUALLY
+// This file exports all available translations for i18next
+
 import TRANSLATE_EN from "./en/translations.json";
 
 export const translations = {
