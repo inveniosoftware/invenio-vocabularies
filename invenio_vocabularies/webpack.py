@@ -4,6 +4,7 @@
 # Copyright (C) 2019-2022 Northwestern University.
 # Copyright (C)      2022 TU Wien.
 # Copyright (C)      2022 Graz University of Technology.
+# Copyright (C)      2025 KTH Royal Institute of Technology.
 #
 # Invenio RDM Records is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -20,7 +21,7 @@ theme = WebpackThemeBundle(
         "semantic-ui": dict(
             entry={},
             dependencies={
-                "@babel/runtime": "^7.9.0",
+                "@babel/runtime": "^7.26.10",
                 "@ckeditor/ckeditor5-build-classic": "^16.0.0",
                 "@ckeditor/ckeditor5-react": "^2.1.0",
                 "formik": "^2.1.0",
