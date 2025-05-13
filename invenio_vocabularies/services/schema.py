@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2024 CERN.
+# Copyright (C) 2025 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -121,14 +122,14 @@ class ModePIDFieldVocabularyMixin:
         if not is_create:
             data.pop("id", None)
 
-    @post_load(pass_many=False)
+    @post_load(pass_collection=False)
     def move_id(self, data, **kwargs):
         """Moves id to pid."""
         if "id" in data:
             data["pid"] = data.pop("id")
         return data
 
-    @pre_dump(pass_many=False)
+    @pre_dump(pass_collection=False)
     def extract_pid_value(self, data, **kwargs):
         """Extracts the PID value."""
         data["id"] = data.pid.pid_value
