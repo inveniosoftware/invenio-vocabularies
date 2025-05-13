@@ -281,15 +281,15 @@ class OAIPMHReader(BaseReader):
     """OAIPMH reader."""
 
     def __init__(
-        self,
-        *args,
-        base_url=None,
-        metadata_prefix=None,
-        set=None,
-        from_date=None,
-        until_date=None,
-        verb=None,
-        **kwargs,
+            self,
+            *args,
+            base_url=None,
+            metadata_prefix=None,
+            set=None,
+            from_date=None,
+            until_date=None,
+            verb=None,
+            **kwargs,
     ):
         """Constructor."""
         self._base_url = base_url
@@ -384,7 +384,7 @@ class RDFReader(BaseReader):
     def _iter(self, rdf_graph):
         """Iterate over the RDF graph, yielding one subject at a time."""
         for subject, _, _ in rdf_graph.triples(
-            (None, rdflib.RDF.type, self.skos_core.Concept)
+                (None, rdflib.RDF.type, self.skos_core.Concept)
         ):
             yield {"subject": subject, "rdf_graph": rdf_graph}
 
@@ -407,16 +407,17 @@ class RDFReader(BaseReader):
 class SPARQLReader(BaseReader):
     """Generic reader class to fetch and process RDF data from a SPARQL endpoint."""
 
-    def __init__(self, origin, query, mode="r", *args, **kwargs):
+    def __init__(self, origin, query, client_params, mode="r", *args, **kwargs):
         """Initialize the reader with the data source.
 
         :param origin: The SPARQL endpoint from which to fetch the RDF data.
         :param query: The SPARQL query to execute.
+        :client_params: Additional client parameters to pass to the SPARQL client.
         :param mode: Mode of operation (default is 'r' for reading).
         """
         self._origin = origin
         self._query = query
-        self._user_agent = kwargs.get("user_agent", "")
+        self._client_params = client_params or {}
 
         super().__init__(origin=origin, mode=mode, *args, **kwargs)
 
@@ -432,7 +433,14 @@ class SPARQLReader(BaseReader):
                 "SPARQLReader does not support being chained after another reader"
             )
 
-        sparql_client = sparql.SPARQLWrapper(self._origin, agent=self._user_agent)
+        # Avoid overwriting SPARQLWrapper's default value for the user agent string
+        if self._client_params.get("user_agent"):
+            sparql_client = sparql.SPARQLWrapper(
+                self._origin, agent=self._client_params.get("user_agent")
+            )
+        else:
+            sparql_client = sparql.SPARQLWrapper(self._origin)
+
         sparql_client.setQuery(self._query)
         sparql_client.setReturnFormat(sparql.JSON)
 
