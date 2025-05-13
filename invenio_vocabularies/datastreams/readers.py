@@ -281,15 +281,15 @@ class OAIPMHReader(BaseReader):
     """OAIPMH reader."""
 
     def __init__(
-            self,
-            *args,
-            base_url=None,
-            metadata_prefix=None,
-            set=None,
-            from_date=None,
-            until_date=None,
-            verb=None,
-            **kwargs,
+        self,
+        *args,
+        base_url=None,
+        metadata_prefix=None,
+        set=None,
+        from_date=None,
+        until_date=None,
+        verb=None,
+        **kwargs,
     ):
         """Constructor."""
         self._base_url = base_url
@@ -384,7 +384,7 @@ class RDFReader(BaseReader):
     def _iter(self, rdf_graph):
         """Iterate over the RDF graph, yielding one subject at a time."""
         for subject, _, _ in rdf_graph.triples(
-                (None, rdflib.RDF.type, self.skos_core.Concept)
+            (None, rdflib.RDF.type, self.skos_core.Concept)
         ):
             yield {"subject": subject, "rdf_graph": rdf_graph}
 
@@ -407,7 +407,7 @@ class RDFReader(BaseReader):
 class SPARQLReader(BaseReader):
     """Generic reader class to fetch and process RDF data from a SPARQL endpoint."""
 
-    def __init__(self, origin, query, client_params, mode="r", *args, **kwargs):
+    def __init__(self, origin, query, client_params=None, mode="r", *args, **kwargs):
         """Initialize the reader with the data source.
 
         :param origin: The SPARQL endpoint from which to fetch the RDF data.
