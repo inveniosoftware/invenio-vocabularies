@@ -407,15 +407,18 @@ class RDFReader(BaseReader):
 class SPARQLReader(BaseReader):
     """Generic reader class to fetch and process RDF data from a SPARQL endpoint."""
 
-    def __init__(self, origin, query, mode="r", *args, **kwargs):
+    def __init__(self, origin, query, mode="r", client_params=None, *args, **kwargs):
         """Initialize the reader with the data source.
 
         :param origin: The SPARQL endpoint from which to fetch the RDF data.
         :param query: The SPARQL query to execute.
         :param mode: Mode of operation (default is 'r' for reading).
+        :param client_params: Additional client parameters to pass to the SPARQL client.
         """
         self._origin = origin
         self._query = query
+        self._client_params = client_params or {}
+
         super().__init__(origin=origin, mode=mode, *args, **kwargs)
 
     def _iter(self, fp, *args, **kwargs):
@@ -430,7 +433,14 @@ class SPARQLReader(BaseReader):
                 "SPARQLReader does not support being chained after another reader"
             )
 
-        sparql_client = sparql.SPARQLWrapper(self._origin)
+        # Avoid overwriting SPARQLWrapper's default value for the user agent string
+        if self._client_params.get("user_agent"):
+            sparql_client = sparql.SPARQLWrapper(
+                self._origin, agent=self._client_params.get("user_agent")
+            )
+        else:
+            sparql_client = sparql.SPARQLWrapper(self._origin)
+
         sparql_client.setQuery(self._query)
         sparql_client.setReturnFormat(sparql.JSON)
 
