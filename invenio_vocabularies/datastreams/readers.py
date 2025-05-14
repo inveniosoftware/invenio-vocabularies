@@ -407,13 +407,13 @@ class RDFReader(BaseReader):
 class SPARQLReader(BaseReader):
     """Generic reader class to fetch and process RDF data from a SPARQL endpoint."""
 
-    def __init__(self, origin, query, client_params=None, mode="r", *args, **kwargs):
+    def __init__(self, origin, query, mode="r", client_params=None, *args, **kwargs):
         """Initialize the reader with the data source.
 
         :param origin: The SPARQL endpoint from which to fetch the RDF data.
         :param query: The SPARQL query to execute.
-        :client_params: Additional client parameters to pass to the SPARQL client.
         :param mode: Mode of operation (default is 'r' for reading).
+        :param client_params: Additional client parameters to pass to the SPARQL client.
         """
         self._origin = origin
         self._query = query
