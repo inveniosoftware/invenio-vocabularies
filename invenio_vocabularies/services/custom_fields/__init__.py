@@ -12,5 +12,6 @@ from .vocabulary import VocabularyCF
 
 __all__ = [
     "VocabularyCF",
-    "SUBJECT_FIELDS_UI" "SUBJECT_FIELDS",
+    "SUBJECT_FIELDS_UI",
+    "SUBJECT_FIELDS",
 ]
