@@ -446,7 +446,7 @@ ORCID_PRESET_DATASTREAM_CONFIG = {
     "batch_size": 1000,
     "write_many": True,
 }
-"""ORCiD Update Data Stream configuration.
+"""ORCiD Data Stream configuration.
 
 An origin is required for the reader.
 """

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2025 CERN.
+# Copyright (C) 2021-2024 CERN.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -163,12 +163,12 @@ class UpdateAwardsCordisJob(ProcessDataStreamJob):
         }
 
 
-class UpdateORCIDJob(ProcessDataStreamJob):
-    """Update ORCID data registered task."""
+class ImportORCIDJob(ProcessDataStreamJob):
+    """Import ORCID data registered task."""
 
-    description = _("Update ORCID data")
-    title = _("Update ORCID data")
-    id = "update_orcid"
+    description = _("Import ORCID data")
+    title = _("Import ORCID data")
+    id = "import_orcid"
 
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
