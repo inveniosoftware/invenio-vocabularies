@@ -41,6 +41,7 @@ class AwardsSearchOptions(SearchOptions):
             "acronym^100",
             "number^10",
             "identifiers.identifier^10",
+            "id",
         ],
     )
 

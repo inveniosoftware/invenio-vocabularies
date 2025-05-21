@@ -44,6 +44,7 @@ class FundersSearchOptions(SearchOptions):
             # Allow to search identifiers directly (e.g. ROR)
             "identifiers.identifier",
             "country_name",
+            "id",
         ],
     )
 
