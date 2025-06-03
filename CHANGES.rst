@@ -1,6 +1,6 @@
 ..
     Copyright (C) 2020-2024 CERN.
-    Copyright (C) 2024 Graz University of Technology.
+    Copyright (C) 2024-2025 Graz University of Technology.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,6 +8,10 @@
 
 Changes
 =======
+
+Version v8.0.0 (released 2025-06-03)
+
+- setup: bump major dependencies
 
 Version v7.5.0 (released 2025-06-03)
 
