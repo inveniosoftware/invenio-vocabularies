@@ -9,6 +9,18 @@
 Changes
 =======
 
+Version v7.5.0 (released 2025-06-03)
+
+- jobs: ORCID job update instead of import (insert-only)
+- readers: add SPARQLReader client params to allow setting user_agent (#472)
+- chore(i18n): removed deprecated languages from i18next
+- chore(tests): update MANIFEST.in
+- chore(i18n): init catalog & extract messages
+- refactor(i18n): use vocabularies i18next for funding ui
+- config: update idutils imports
+- logging: add basic logging for ROR HTTP reader
+- names: ORCID Public Data Sync: detect default keys
+
 Version v7.4.0 (released 2025-04-28)
 
 - i18n: Fix untranslated strings in vocabularies
