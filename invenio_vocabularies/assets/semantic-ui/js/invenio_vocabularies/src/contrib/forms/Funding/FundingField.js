@@ -176,7 +176,7 @@ function FundingFieldForm(props) {
           />
         </Overridable>
 
-        {fundingError && <FeedbackLabel errorMessage={fundingError} />}
+        {fundingError && <FeedbackLabel fieldPath={fieldPath} />}
       </Form.Field>
     </DndProvider>
   );
