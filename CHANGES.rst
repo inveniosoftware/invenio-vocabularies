@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v8.0.1 (released 2025-06-11)
+
+- funding: added fieldpath prop for feedback label
+
 Version v8.0.0 (released 2025-06-03)
 
 - setup: bump major dependencies
