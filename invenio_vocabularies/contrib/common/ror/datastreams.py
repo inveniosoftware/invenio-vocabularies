@@ -91,7 +91,7 @@ class RORHTTPReader(BaseReader):
         linkset_response.raise_for_status()
         linksets = linkset_response.json()["linkset"]
 
-        if self._since:
+        if self._since and self._since != "None":
             last_dump_date = self._get_last_dump_date(linksets)
             if last_dump_date < arrow.get(self._since):
                 current_app.logger.info(
