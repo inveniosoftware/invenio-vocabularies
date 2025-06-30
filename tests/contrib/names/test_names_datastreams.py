@@ -350,14 +350,15 @@ def test_orcid_transformer_name_filtering(orcid_data, name, is_valid_name):
     if is_valid_name:
         assert transformer.apply(StreamEntry(val)).entry
     else:
-        with pytest.raises(TransformerError):
-            val["person"]["name"]["given-names"] = name
-            val["person"]["name"]["family-name"] = ""
-            transformer.apply(StreamEntry(val))
-        with pytest.raises(TransformerError):
-            val["person"]["name"]["given-names"] = ""
-            val["person"]["name"]["family-name"] = name
-            transformer.apply(StreamEntry(val))
+        val["person"]["name"]["given-names"] = name
+        val["person"]["name"]["family-name"] = ""
+        stream_entry = transformer.apply(StreamEntry(val))
+        assert stream_entry.errors
+
+        val["person"]["name"]["given-names"] = ""
+        val["person"]["name"]["family-name"] = name
+        stream_entry = transformer.apply(StreamEntry(val))
+        assert stream_entry.errors
 
 
 @pytest.mark.parametrize("name", NAMES_TEST.keys())
