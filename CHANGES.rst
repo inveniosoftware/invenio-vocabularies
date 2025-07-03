@@ -9,6 +9,13 @@
 Changes
 =======
 
+Version v8.1.0 (released 2025-07-03)
+
+- fix: SADeprecationWarning
+- ror: fix handling of _since as "None"
+- chore: fix wrong module export strings
+- datastreams: add ror-http to funders and affiliations
+
 Version v8.0.1 (released 2025-06-11)
 
 - funding: added fieldpath prop for feedback label
