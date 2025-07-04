@@ -79,6 +79,7 @@ class DataStream:
         """Process a batch of entries."""
         current_app.logger.info(f"Processing batch of size: {len(batch)}")
         transformed_entries = []
+        transformed_entries_with_errors = []
         for stream_entry in batch:
             if stream_entry.errors:
                 current_app.logger.warning(
@@ -88,12 +89,17 @@ class DataStream:
             else:
                 transformed_entry = self.transform(stream_entry)
                 if transformed_entry.errors:
+                    transformed_entries_with_errors.append(transformed_entry)
                     yield transformed_entry
                 elif self.filter(transformed_entry):
                     transformed_entry.filtered = True
                     yield transformed_entry
                 else:
                     transformed_entries.append(transformed_entry)
+        if transformed_entries_with_errors:
+            current_app.logger.warning(
+                f"Skipping {len(transformed_entries_with_errors)} transformed entries with errors."
+            )
         if transformed_entries:
             if self.write_many:
                 yield from self.batch_write(transformed_entries)
