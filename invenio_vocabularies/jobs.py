@@ -8,8 +8,6 @@
 
 """Jobs module."""
 
-import datetime
-
 from invenio_i18n import lazy_gettext as _
 from invenio_jobs.jobs import JobType
 
@@ -40,7 +38,7 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
             "config": {
                 "readers": [
                     {
-                        "args": {"since": str(since)},
+                        "args": {"since": since},
                         "type": "ror-http",
                     },
                     {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
@@ -78,7 +76,7 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
             "config": {
                 "readers": [
                     {
-                        "args": {"since": str(since)},
+                        "args": {"since": since},
                         "type": "ror-http",
                     },
                     {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
