@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2021-2025 CERN.
 # Copyright (C) 2021 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -154,3 +154,18 @@ def test_suggest(client, h, prefix, example_subjects):
     res = client.get(f"{prefix}?suggest=acute%20abdo", headers=h)
     assert res.json["hits"]["total"] == 1
     assert res.json["hits"]["hits"][0]["subject"] == "Abdomen, Acute"
+
+    # Single filter
+    res = client.get(f"{prefix}?suggest=MeSH:abdo", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 2
+
+    # Multiple filters
+    res = client.get(f"{prefix}?suggest=MeSH,Other:abdo", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 3
+
+    # Ignore non existing filter
+    res = client.get(f"{prefix}?suggest=MeSH,Foo:abdo", headers=h)
+    assert res.status_code == 200
+    assert res.json["hits"]["total"] == 2
