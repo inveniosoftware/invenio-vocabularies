@@ -65,7 +65,6 @@ class OrcidDataSyncReader(BaseReader):
 
         Yield ORCiDs to sync until the last sync date is reached.
         """
-
         date_format = "%Y-%m-%d %H:%M:%S.%f"
         date_format_no_millis = "%Y-%m-%d %H:%M:%S"
 
