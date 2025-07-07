@@ -93,6 +93,7 @@ class RORHTTPReader(BaseReader):
 
         if self._since and self._since != "None":
             last_dump_date = self._get_last_dump_date(linksets)
+            # TODO: remove arrow usage
             if last_dump_date < arrow.get(self._since):
                 current_app.logger.info(
                     f"Skipping ROR data dump (last dump: {last_dump_date}, since: {self._since})"
