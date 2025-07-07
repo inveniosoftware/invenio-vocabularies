@@ -182,6 +182,7 @@ def test_ror_http_reader(_):
 
 @patch("requests.get", side_effect=side_effect)
 def test_ror_http_reader_since_before_publish(_):
+    # TODO: use datetime object for since
     reader = RORHTTPReader(since="2024-07-10")
     results = []
     app = Flask("testapp")

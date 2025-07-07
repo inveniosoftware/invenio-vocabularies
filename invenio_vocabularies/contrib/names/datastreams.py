@@ -11,13 +11,12 @@
 import csv
 import io
 import tarfile
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from contextvars import copy_context
-from datetime import timedelta
+from datetime import datetime, timedelta
 from itertools import islice
 from pathlib import Path
 
-import arrow
 import regex as re
 from flask import current_app
 from invenio_access.permissions import system_identity
@@ -66,14 +65,17 @@ class OrcidDataSyncReader(BaseReader):
 
         Yield ORCiDs to sync until the last sync date is reached.
         """
-        date_format = "YYYY-MM-DD HH:mm:ss.SSSSSS"
-        date_format_no_millis = "YYYY-MM-DD HH:mm:ss"
+
+        date_format = "%Y-%m-%d %H:%M:%S.%f"
+        date_format_no_millis = "%Y-%m-%d %H:%M:%S"
+
         if self.since:
-            last_sync = arrow.get(self.since)
+            last_sync = datetime.now()
         else:
-            last_sync = arrow.now() - timedelta(
+            last_sync = datetime.now() - timedelta(
                 **current_app.config["VOCABULARIES_ORCID_SYNC_SINCE"]
             )
+
         try:
             content = io.TextIOWrapper(fileobj, encoding="utf-8")
             csv_reader = csv.DictReader(content)
@@ -84,9 +86,11 @@ class OrcidDataSyncReader(BaseReader):
                 # Lambda file is ordered by last modified date
                 last_modified_str = row["last_modified"]
                 try:
-                    last_modified_date = arrow.get(last_modified_str, date_format)
-                except arrow.parser.ParserError:
-                    last_modified_date = arrow.get(
+                    last_modified_date = datetime.strptime(
+                        last_modified_str, date_format
+                    )
+                except Exception:
+                    last_modified_date = datetime.strptime(
                         last_modified_str, date_format_no_millis
                     )
 
