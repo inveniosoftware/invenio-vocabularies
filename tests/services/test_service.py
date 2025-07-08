@@ -10,6 +10,7 @@
 """Test the vocabulary service."""
 
 from datetime import datetime, timezone
+
 import pytest
 from invenio_cache import current_cache
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError

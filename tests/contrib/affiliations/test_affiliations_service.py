@@ -10,6 +10,7 @@
 """Test the affiliation vocabulary service."""
 
 from datetime import datetime, timezone
+
 import pytest
 from invenio_pidstore.errors import PIDAlreadyExists
 from marshmallow.exceptions import ValidationError

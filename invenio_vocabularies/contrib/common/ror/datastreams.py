@@ -9,8 +9,8 @@
 
 """ROR-related Datastreams Readers/Writers/Transformers module."""
 
-from datetime import datetime
 import io
+from datetime import datetime
 
 import requests
 from flask import current_app

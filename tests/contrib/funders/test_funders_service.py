@@ -10,6 +10,7 @@
 """Test the funder vocabulary service."""
 
 from datetime import datetime, timezone
+
 import pytest
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
