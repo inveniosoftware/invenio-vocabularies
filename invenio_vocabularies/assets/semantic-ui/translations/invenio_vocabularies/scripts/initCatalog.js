@@ -1,6 +1,6 @@
-// This file is part of Invenio-Vocabularies
+// This file is part of Invenio-vocabularies
 //
-// Invenio-administration is free software; you can redistribute it and/or modify it
+// Invenio-vocabularies is free software; you can redistribute it and/or modify it
 // under the terms of the MIT License; see LICENSE file for more details.
 
 const { writeFileSync } = require("fs");

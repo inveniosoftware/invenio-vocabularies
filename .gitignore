@@ -70,3 +70,6 @@ target/
 .*.sw?
 
 *.DS_Store
+
+# ignore node_modules in subdirectories
+**/node_modules/**
