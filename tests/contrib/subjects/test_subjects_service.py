@@ -10,6 +10,7 @@
 """Test the subject vocabulary service."""
 
 from datetime import datetime, timezone
+
 import pytest
 from invenio_pidstore.errors import PIDDeletedError
 
