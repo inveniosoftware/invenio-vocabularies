@@ -10,8 +10,8 @@
 """Test the award vocabulary service."""
 
 from copy import deepcopy
+from datetime import datetime, timezone
 
-import arrow
 import pytest
 from invenio_pidstore.errors import PIDAlreadyExists
 from invenio_records.systemfields.relations.errors import InvalidRelationValue
@@ -129,9 +129,9 @@ def test_award_dereferenced(
 def test_indexed_at_query(
     app, db, service, identity, award_full_data, example_funder_ec
 ):
-    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    before = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     _ = service.create(identity, award_full_data)
-    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     Award.index.refresh()
 
     # there is previous to before
