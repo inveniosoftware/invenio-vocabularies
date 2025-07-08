@@ -26,6 +26,7 @@ recursive-include invenio_vocabularies *.html
 recursive-include invenio_vocabularies *.json
 recursive-include invenio_vocabularies *.py
 recursive-include invenio_vocabularies/translations *.po *.pot *.mo
+recursive-include invenio_vocabularies *.po
 recursive-include invenio_vocabularies *.js *.prettierrc *.yml
 recursive-include invenio_vocabularies *.png
 recursive-include tests *.json
