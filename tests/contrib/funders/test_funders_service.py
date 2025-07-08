@@ -9,7 +9,7 @@
 
 """Test the funder vocabulary service."""
 
-import arrow
+from datetime import datetime, timezone
 import pytest
 from invenio_pidstore.errors import PIDAlreadyExists, PIDDeletedError
 from marshmallow.exceptions import ValidationError
@@ -96,9 +96,9 @@ def test_extra_fields(app, service, identity, funder_full_data):
 
 
 def test_indexed_at_query(app, db, service, identity, funder_full_data):
-    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    before = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     _ = service.create(identity, funder_full_data)
-    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     Funder.index.refresh()
 
     # there is previous to before

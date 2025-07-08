@@ -9,7 +9,7 @@
 
 """Test the subject vocabulary service."""
 
-import arrow
+from datetime import datetime, timezone
 import pytest
 from invenio_pidstore.errors import PIDDeletedError
 
@@ -70,9 +70,9 @@ def test_subject_simple_flow(
 
 
 def test_indexed_at_query(app, db, service, identity, subject_full_data):
-    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    before = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     _ = service.create(identity, subject_full_data)
-    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     Subject.index.refresh()
 
     # there is previous to before
