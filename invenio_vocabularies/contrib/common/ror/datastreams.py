@@ -52,9 +52,11 @@ class RORHTTPReader(BaseReader):
                     json_ld_reponse.raise_for_status()
                     json_ld_data = json_ld_reponse.json()
 
+                    last_dump_date = json_ld_data.get(
+                        "dateCreated"
+                    ) or json_ld_data.get("datePublished")
                     last_dump_date = datetime.fromisoformat(
-                        json_ld_data.get("dateCreated")
-                        or json_ld_data.get("datePublished")
+                        last_dump_date.replace("Z", "+00:00")
                     )
                     return last_dump_date
         else:
@@ -93,7 +95,13 @@ class RORHTTPReader(BaseReader):
 
         if self._since and self._since != "None":
             last_dump_date = self._get_last_dump_date(linksets)
-            if last_dump_date < datetime.fromisoformat(self._since):
+            """
+            In Python <3.10, `fromisoformat` does not support the `Z` suffix which is a part of ISO 8601 and is commonly used.
+            We replace the Z with the compatible and equivalent +00:00 suffix instead to ensure compatibility.
+            """
+            since = datetime.fromisoformat(self._since.replace("Z", "+00:00"))
+
+            if last_dump_date < since:
                 current_app.logger.info(
                     f"Skipping ROR data dump (last dump: {last_dump_date}, since: {self._since})"
                 )
