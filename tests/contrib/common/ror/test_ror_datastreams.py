@@ -182,8 +182,7 @@ def test_ror_http_reader(_):
 
 @patch("requests.get", side_effect=side_effect)
 def test_ror_http_reader_since_before_publish(_):
-    # TODO: use datetime object for since
-    reader = RORHTTPReader(since="2024-07-10")
+    reader = RORHTTPReader(since="2024-07-10T00:00:00.000Z")
     results = []
     app = Flask("testapp")
     with app.app_context():
@@ -195,7 +194,7 @@ def test_ror_http_reader_since_before_publish(_):
 
 @patch("requests.get", side_effect=side_effect)
 def test_ror_http_reader_since_after_publish(_):
-    reader = RORHTTPReader(since="2024-07-12")
+    reader = RORHTTPReader(since="2024-07-12T00:00:00.000Z")
     results = []
     app = Flask("testapp")
     with app.app_context():
@@ -224,7 +223,7 @@ def test_ror_http_reader_wrong_number_zip_items_error(_):
     ),
 )
 def test_ror_http_reader_no_json_ld(_):
-    reader = RORHTTPReader(since="2024-07-12")
+    reader = RORHTTPReader(since="2024-07-12T00:00:00.000Z")
     with pytest.raises(ReaderError):
         next(reader.read())
 
