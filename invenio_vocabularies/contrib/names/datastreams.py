@@ -262,26 +262,43 @@ class OrcidTransformer(BaseTransformer):
         record = stream_entry.entry
         person = record["person"]
         orcid_id = record["orcid-identifier"]["path"]
+        errors = []
 
-        name = person.get("name")
+        name = person.get("name", None)
+        family_name = name.get("family-name", None) if name else None
+        given_names = name.get("given-names", None) if name else None
+
         if name is None:
-            raise TransformerError(
-                f"Name not found in ORCiD entry for ORCiD ID: {orcid_id}."
+            errors.append(
+                TransformerError(
+                    f"Name not found in ORCiD entry for ORCiD ID: {orcid_id}."
+                )
             )
-        if name.get("family-name") is None:
-            raise TransformerError(
-                f"Family name not found in ORCiD entry for ORCiD ID: {orcid_id}."
+        if family_name is None:
+            errors.append(
+                TransformerError(
+                    f"Family name not found in ORCiD entry for ORCiD ID: {orcid_id}."
+                )
+            )
+        if not self._is_valid_name(given_names + family_name):
+            errors.append(
+                TransformerError(
+                    f"Invalid characters in name for ORCiD ID: {orcid_id}."
+                )
             )
 
-        if not self._is_valid_name(name["given-names"] + name["family-name"]):
-            raise TransformerError(
-                f"Invalid characters in name for ORCiD ID: {orcid_id}."
+        if errors:
+            all_errors = "\n".join(str(e) for e in errors)
+            error_message = (
+                f"ORCiD entry with ORCiD ID: #{orcid_id} failed transformation. "
+                f"See errors:\n{all_errors}"
             )
+            stream_entry.errors.append(error_message)
 
         entry = {
             "id": orcid_id,
-            "given_name": name.get("given-names"),
-            "family_name": name.get("family-name"),
+            "given_name": given_names,
+            "family_name": family_name,
             "identifiers": [{"scheme": "orcid", "identifier": orcid_id}],
             "affiliations": self._extract_affiliations(record),
         }
@@ -292,6 +309,8 @@ class OrcidTransformer(BaseTransformer):
 
     def _is_valid_name(self, name):
         """Check whether the name passes the regex."""
+        if not name:
+            return False
         if not self._names_exclude_regex:
             return True
         return not bool(re.search(self._names_exclude_regex, name, re.UNICODE | re.V1))
