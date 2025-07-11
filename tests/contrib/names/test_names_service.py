@@ -10,8 +10,8 @@
 """Test the names vocabulary service."""
 
 from copy import deepcopy
+from datetime import datetime, timezone
 
-import arrow
 import pytest
 from invenio_pidstore.errors import PIDDoesNotExistError
 from marshmallow.exceptions import ValidationError
@@ -140,9 +140,9 @@ def test_names_dereferenced(app, search_clear, service, identity, example_affili
 def test_indexed_at_query(
     app, db, service, identity, name_full_data, example_affiliation
 ):
-    before = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    before = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     _ = service.create(identity, name_full_data)
-    now = arrow.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")
     Name.index.refresh()
 
     # there is previous to before
