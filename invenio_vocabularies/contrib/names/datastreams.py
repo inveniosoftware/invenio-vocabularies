@@ -69,9 +69,9 @@ class OrcidDataSyncReader(BaseReader):
         date_format = "YYYY-MM-DD HH:mm:ss.SSSSSS"
         date_format_no_millis = "YYYY-MM-DD HH:mm:ss"
         time_shift = current_app.config["VOCABULARIES_ORCID_SYNC_SINCE"]
-        if self.since:
-            time_shift = self.since
         last_sync = arrow.now() - timedelta(**time_shift)
+        if self.since:
+            last_sync = arrow.get(self.since)
         try:
             content = io.TextIOWrapper(fileobj, encoding="utf-8")
             csv_reader = csv.DictReader(content)
