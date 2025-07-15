@@ -55,7 +55,6 @@ class RORHTTPReader(BaseReader):
                     last_dump_date = json_ld_data.get(
                         "dateCreated"
                     ) or json_ld_data.get("datePublished")
-                    print(last_dump_date)
                     last_dump_date = datetime.fromisoformat(
                         last_dump_date.replace("Z", "+00:00")
                     )
