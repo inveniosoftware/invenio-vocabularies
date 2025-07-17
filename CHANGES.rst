@@ -9,6 +9,20 @@
 Changes
 =======
 
+Version v8.2.0 (released 2025-07-17)
+
+- tasks: fix error name
+- i18n: pulled translations
+- chore: removed pycountry pinning to <23
+- datastreams: Add skip warning for errored transformed entries
+- names: datastreams: write and display errors instead of raise
+- i18n: include additional .po files in MANIFEST.in
+- i18n: compile js msgs
+- i18n: force pull languages
+- i18n: run js extract msgs
+- i18n: refactor compile catalog
+- i18n: run py extract msgs
+
 Version v8.1.0 (released 2025-07-03)
 
 - fix: SADeprecationWarning
