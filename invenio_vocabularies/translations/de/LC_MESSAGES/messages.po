@@ -6,20 +6,21 @@
 # 
 # Translators:
 # Alizee Pace <alizee.pace@gmail.com>, 2021
-# Hermann Schranzhofer <hermann.schranzhofer@tugraz.at>, 2021
 # David Eckhard <dabombeeer@gmail.com>, 2022
 # Tibor Simko <tibor.simko@cern.ch>, 2022
-# Mojib Wali <mojib.wali@tugraz.at>, 2024
-# c960a0736ea0fb7507bb1c3555e7d33f_88b575f <3cef15c38ce2563e884ec389656c9161_1006830>, 2025
+# c960a0736ea0fb7507bb1c3555e7d33f_88b575f <3cef15c38ce2563e884ec389656c9161_1006830>, 2022
+# Mojib Wali <mojib.wali@tugraz.at>, 2025
+# Frank Berkemeier, 2025
+# Hermann Schranzhofer <hermann.schranzhofer@tugraz.at>, 2025
 # Sarah Wiechers, 2025
 # Adienne Karsten-Welker, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-vocabularies 3.5.0\n"
+"Project-Id-Version: invenio-vocabularies 8.1.0\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2025-05-13 21:01+0000\n"
+"POT-Creation-Date: 2025-07-08 20:00+0000\n"
 "PO-Revision-Date: 2021-07-13 12:40+0000\n"
 "Last-Translator: Adienne Karsten-Welker, 2025\n"
 "Language-Team: German (https://app.transifex.com/inveniosoftware/teams/23537/de/)\n"
@@ -30,121 +31,196 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: invenio_vocabularies/config.py:37
+#: invenio_vocabularies/config.py:44
 msgid "GRID"
 msgstr "GRID"
 
-#: invenio_vocabularies/config.py:38 invenio_vocabularies/config.py:101
+#: invenio_vocabularies/config.py:45 invenio_vocabularies/config.py:126
+#: invenio_vocabularies/config.py:131
 msgid "GND"
 msgstr "GND"
 
-#: invenio_vocabularies/config.py:39 invenio_vocabularies/config.py:100
+#: invenio_vocabularies/config.py:46 invenio_vocabularies/config.py:125
 msgid "ISNI"
 msgstr "ISNI"
 
-#: invenio_vocabularies/config.py:40
+#: invenio_vocabularies/config.py:47
 msgid "ROR"
 msgstr "ROR"
 
-#: invenio_vocabularies/config.py:51 invenio_vocabularies/config.py:60
+#: invenio_vocabularies/config.py:68
+msgid "PIC"
+msgstr "PIC"
+
+#: invenio_vocabularies/config.py:69
+msgid "EDMO"
+msgstr "EDMO"
+
+#: invenio_vocabularies/config.py:75 invenio_vocabularies/config.py:84
 msgid "DOI"
 msgstr "DOI"
 
-#: invenio_vocabularies/config.py:59
+#: invenio_vocabularies/config.py:83 invenio_vocabularies/config.py:132
 msgid "URL"
 msgstr "URL"
 
-#: invenio_vocabularies/config.py:99
+#: invenio_vocabularies/config.py:124
 msgid "ORCID"
 msgstr "ORCID"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:38
-#: invenio_vocabularies/contrib/funders/config.py:43
-#: invenio_vocabularies/contrib/names/config.py:45
-#: invenio_vocabularies/contrib/subjects/config.py:38
-#: invenio_vocabularies/services/service.py:64
-msgid "Best match"
-msgstr "Beste Übereinstimmung"
-
-#: invenio_vocabularies/contrib/affiliations/config.py:42
-#: invenio_vocabularies/contrib/funders/config.py:47
-#: invenio_vocabularies/contrib/names/config.py:49
-#: invenio_vocabularies/contrib/subjects/config.py:42
+#: invenio_vocabularies/administration/views/vocabularies.py:37
+#: invenio_vocabularies/config.py:175
+#: invenio_vocabularies/contrib/affiliations/config.py:61
+#: invenio_vocabularies/contrib/funders/config.py:60
+#: invenio_vocabularies/contrib/names/config.py:55
+#: invenio_vocabularies/contrib/subjects/config.py:70
 msgid "Name"
 msgstr "Name"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:46
-#: invenio_vocabularies/contrib/funders/config.py:51
-#: invenio_vocabularies/contrib/names/config.py:53
-#: invenio_vocabularies/contrib/subjects/config.py:46
-#: invenio_vocabularies/services/service.py:72
+#: invenio_vocabularies/administration/views/vocabularies.py:38
+#: invenio_vocabularies/config.py:179
+msgid "Number of entries"
+msgstr "Anzahl der Einträge"
+
+#: invenio_vocabularies/jobs.py:30
+msgid "Process ROR affiliations"
+msgstr "Verarbeiten von ROR-Zugehörigkeiten"
+
+#: invenio_vocabularies/jobs.py:31
+msgid "Load ROR affiliations"
+msgstr "Laden von ROR-Zugehörigkeiten"
+
+#: invenio_vocabularies/jobs.py:68
+msgid "Process ROR funders"
+msgstr "Verarbeiten von ROR-Förderern"
+
+#: invenio_vocabularies/jobs.py:69
+msgid "Load ROR funders"
+msgstr "Laden von ROR-Förderern"
+
+#: invenio_vocabularies/jobs.py:106
+msgid "Import awards from OpenAIRE"
+msgstr "Importieren von Auszeichnungen aus OpenAIRE"
+
+#: invenio_vocabularies/jobs.py:107
+msgid "Import Awards OpenAIRE"
+msgstr "Importieren von OpenAIRE-Auszeichnungen"
+
+#: invenio_vocabularies/jobs.py:141
+msgid "Update awards from CORDIS"
+msgstr "Aktualisieren von Auszeichnungen aus CORDIS"
+
+#: invenio_vocabularies/jobs.py:142
+msgid "Update Awards CORDIS"
+msgstr "Aktualisieren von CORDIS-Auszeichnungen"
+
+#: invenio_vocabularies/jobs.py:169 invenio_vocabularies/jobs.py:170
+msgid "Import ORCID data"
+msgstr "Importieren von ORCID-Daten"
+
+#: invenio_vocabularies/administration/views/vocabularies.py:21
+#: invenio_vocabularies/administration/views/vocabularies.py:24
+msgid "Vocabulary Types"
+msgstr "Vokabulartypen"
+
+#: invenio_vocabularies/administration/views/vocabularies.py:25
+msgid "Site management"
+msgstr "Seitenverwaltung"
+
+#: invenio_vocabularies/contrib/affiliations/config.py:57
+#: invenio_vocabularies/contrib/funders/config.py:56
+#: invenio_vocabularies/contrib/names/config.py:51
+#: invenio_vocabularies/contrib/subjects/config.py:66
+#: invenio_vocabularies/services/config.py:67
+msgid "Best match"
+msgstr "Beste Übereinstimmung"
+
+#: invenio_vocabularies/contrib/affiliations/config.py:65
+#: invenio_vocabularies/contrib/funders/config.py:64
+#: invenio_vocabularies/contrib/names/config.py:59
+#: invenio_vocabularies/contrib/subjects/config.py:74
+#: invenio_vocabularies/services/config.py:75
 msgid "Newest"
 msgstr "Neuster"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:50
-#: invenio_vocabularies/contrib/funders/config.py:55
-#: invenio_vocabularies/contrib/names/config.py:57
-#: invenio_vocabularies/contrib/subjects/config.py:50
-#: invenio_vocabularies/services/service.py:76
+#: invenio_vocabularies/contrib/affiliations/config.py:69
+#: invenio_vocabularies/contrib/funders/config.py:68
+#: invenio_vocabularies/contrib/names/config.py:63
+#: invenio_vocabularies/contrib/subjects/config.py:78
+#: invenio_vocabularies/services/config.py:79
 msgid "Oldest"
 msgstr "Ältester"
+
+#: invenio_vocabularies/contrib/affiliations/schema.py:41
+#: invenio_vocabularies/contrib/funders/schema.py:36
+#: invenio_vocabularies/contrib/funders/schema.py:44
+msgid "Name cannot be blank."
+msgstr "Es muss ein Name angegeben werden."
+
+#: invenio_vocabularies/contrib/affiliations/schema.py:47
+#: invenio_vocabularies/contrib/awards/schema.py:69
+#: invenio_vocabularies/contrib/funders/schema.py:60
+msgid "PID cannot be blank."
+msgstr "Es muss eine PID angegeben werden."
 
 #: invenio_vocabularies/contrib/awards/config.py:49
 msgid "Funders"
 msgstr "Fördermittelgeber"
 
-#: invenio_vocabularies/contrib/awards/datastreams.py:47
+#: invenio_vocabularies/contrib/awards/datastreams.py:67
 #, python-brace-format
 msgid "Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
 msgstr ""
 "Unbekanntes Präfix für OpenAIRE-Fördermittelgeber {openaire_funder_prefix}"
 
-#: invenio_vocabularies/contrib/awards/schema.py:41
+#: invenio_vocabularies/contrib/awards/datastreams.py:108
+#, python-brace-format
+msgid "Missing title attribute for award {award_id}"
+msgstr "Titel-Attribut für Preis {award_id} fehlt"
+
+#: invenio_vocabularies/contrib/awards/datastreams.py:244
+#, python-brace-format
+msgid "No related legal basis programme found for project {project_id}"
+msgstr ""
+"Kein zugehöriges Rechtsgrundlagenprogramm für Projekt {project_id} gefunden"
+
+#: invenio_vocabularies/contrib/awards/schema.py:52
 msgid "Number cannot be blank."
 msgstr "Es muss eine Nummer angegeben werden."
 
-#: invenio_vocabularies/contrib/awards/schema.py:50
-#: invenio_vocabularies/contrib/funders/schema.py:57
-msgid "PID cannot be blank."
-msgstr "Es muss eine PID angegeben werden."
-
-#: invenio_vocabularies/contrib/awards/schema.py:80
-msgid "An existing id or number/title must be present."
+#: invenio_vocabularies/contrib/awards/schema.py:100
+msgid "An existing id or either number or title must be present."
 msgstr ""
-"Es muss eine existierende ID oder eine Nummer/ein Titel angegeben werden."
+"Es muss entweder eine vorhandene ID, eine Nummer oder ein Titel vorhanden "
+"sein."
 
-#: invenio_vocabularies/contrib/awards/schema.py:97
+#: invenio_vocabularies/contrib/awards/schema.py:118
 msgid "At least award or funder should be present."
 msgstr ""
 "Es muss mindestens ein Förderprogramm oder ein Fördermittelgeber angegeben "
 "werden."
 
-#: invenio_vocabularies/contrib/funders/datastreams.py:44
+#: invenio_vocabularies/contrib/common/ror/datastreams.py:147
 msgid "Id not found in ROR entry."
 msgstr "ID im ROR-Eintrag nicht gefunden."
 
-#: invenio_vocabularies/contrib/funders/datastreams.py:48
-msgid "Name not found in ROR entry."
-msgstr "Name im ROR-Eintrag nicht gefunden."
+#: invenio_vocabularies/contrib/common/ror/datastreams.py:179
+msgid "Name with type ror_display not found in ROR entry."
+msgstr "Namen vom Typ ror_display nicht im ROR-Eintrag gefunden."
 
-#: invenio_vocabularies/contrib/funders/schema.py:35
-#: invenio_vocabularies/contrib/funders/schema.py:43
-msgid "Name cannot be blank."
-msgstr "Es muss ein Name angegeben werden."
-
-#: invenio_vocabularies/contrib/funders/schema.py:65
+#: invenio_vocabularies/contrib/funders/schema.py:73
 #: invenio_vocabularies/services/schema.py:120
 msgid "Missing PID."
 msgstr "Fehlende PID."
 
-#: invenio_vocabularies/contrib/names/schema.py:54
+#: invenio_vocabularies/contrib/names/schema.py:76
 msgid ""
 "A name or the family name together with the given name must be present."
 msgstr ""
 "Es muss entweder ein Name oder der Familienname zusammen mit einem Vornamen "
 "angegeben werden."
 
-#: invenio_vocabularies/contrib/names/schema.py:68
+#: invenio_vocabularies/contrib/names/schema.py:90
 msgid "Duplicated affiliations."
 msgstr "Doppelte Affiliationen."
 
@@ -157,37 +233,61 @@ msgstr "Keine '%(banned_char)s' in VocabularyScheme.id erlaubt"
 msgid "The vocabulary type does not exists."
 msgstr "Der Vokabeltyp ist nicht vorhanden."
 
+#: invenio_vocabularies/services/config.py:71
+msgid "Title"
+msgstr "Titel"
+
+#: invenio_vocabularies/services/config.py:90
+msgid "ID"
+msgstr "ID"
+
+#: invenio_vocabularies/services/config.py:100
+msgid "Ascending"
+msgstr "Aufsteigend"
+
+#: invenio_vocabularies/services/config.py:101
+msgid "Descending"
+msgstr "Absteigend"
+
 #: invenio_vocabularies/services/schema.py:85
 #, python-brace-format
 msgid "An existing id or a free text {ftf_name} must be present."
 msgstr ""
 "Eine vorhandene ID oder ein freier Text {ftf_name} muss vorhanden sein."
 
-#: invenio_vocabularies/services/service.py:68
-msgid "Title"
-msgstr "Titel"
-
-#: invenio_vocabularies/services/custom_fields/subject.py:49
+#: invenio_vocabularies/services/custom_fields/subject.py:50
 msgid "Subjects"
 msgstr "Schlagwörter"
 
-#: invenio_vocabularies/services/custom_fields/subject.py:56
+#: invenio_vocabularies/services/custom_fields/subject.py:57
 msgid "Keywords and subjects"
 msgstr "Klassifikationen und Schlagwörter"
 
-#: invenio_vocabularies/services/custom_fields/subject.py:58
+#: invenio_vocabularies/services/custom_fields/subject.py:59
 msgid "The subjects related to the community"
 msgstr "Die Schlagwörter, die die Community betreffen"
 
-#: invenio_vocabularies/services/custom_fields/subject.py:59
+#: invenio_vocabularies/services/custom_fields/subject.py:60
 msgid "Search for a subject by name e.g. Psychology ..."
 msgstr ""
 "Suchen Sie anhand des Namens nach einem Schlagwort, z. B. Psychologie ..."
 
-#: invenio_vocabularies/services/custom_fields/subject.py:61
+#: invenio_vocabularies/services/custom_fields/subject.py:62
 msgid "Search for subjects..."
 msgstr "Suche nach Schlagwörtern ..."
 
 #: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:16
 msgid "Search results for "
 msgstr "Suchergebnis für "
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:26
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:31
+msgid "Schedule"
+msgstr "Planen"
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:36
+msgid "Run now"
+msgstr "Jetzt ausführen"

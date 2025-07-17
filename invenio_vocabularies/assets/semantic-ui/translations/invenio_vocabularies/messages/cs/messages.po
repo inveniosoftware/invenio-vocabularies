@@ -3,13 +3,14 @@
 # Jiří Kunčar <jiri.kuncar@gmail.com>, 2025
 # Tibor Simko <tibor.simko@cern.ch>, 2025
 # Mirek Simek <miroslav.simek@gmail.com>, 2025
+# daniela.hornickova, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2025-05-13T16:31:08.619Z\n"
+"POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
-"Last-Translator: Mirek Simek <miroslav.simek@gmail.com>, 2025\n"
+"Last-Translator: daniela.hornickova, 2025\n"
 "Language-Team: Czech (https://app.transifex.com/inveniosoftware/teams/23537/cs/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -68,17 +69,11 @@ msgstr "Otevřít externí odkaz"
 msgid "Funder is required."
 msgstr "Poskytovatel je povinný."
 
-msgid "Title must be set alongside number."
-msgstr "Název musí být vyplněn spolu s číslem."
-
-msgid "Number must be set alongside title."
-msgstr "Číslo musí být vyplněno spolu s názvem."
-
 msgid "URL must be valid."
 msgstr "URL musí být platná."
 
-msgid "URL must be set alongside title and number."
-msgstr "URL musí být vyplněna spolu s názvem a číslem."
+msgid "URL must be set alongside title or number."
+msgstr "URL musí být uvedena spolu s názvem nebo číslem."
 
 msgid "Add standard award/grant"
 msgstr "Přidat standardní grant/cenu"

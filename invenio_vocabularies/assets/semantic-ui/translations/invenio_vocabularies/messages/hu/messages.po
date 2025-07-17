@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2025-05-13T16:31:08.619Z\n"
+"POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
 "Last-Translator: Dora Szauter, 2025\n"
 "Language-Team: Hungarian (https://app.transifex.com/inveniosoftware/teams/23537/hu/)\n"
@@ -68,17 +68,11 @@ msgstr "Külső link megnyitása"
 msgid "Funder is required."
 msgstr "A finanszírozó megadása kötelező."
 
-msgid "Title must be set alongside number."
-msgstr "A címet a szám mellett kell megadni."
-
-msgid "Number must be set alongside title."
-msgstr "A számot a cím mellett kell megadni."
-
 msgid "URL must be valid."
 msgstr "Az URL-nek érvényesnek kell lennie."
 
-msgid "URL must be set alongside title and number."
-msgstr "Az URL-t a cím és a szám mellett kell megadni."
+msgid "URL must be set alongside title or number."
+msgstr ""
 
 msgid "Add standard award/grant"
 msgstr "Standard díj/támogatás hozzáadása"
