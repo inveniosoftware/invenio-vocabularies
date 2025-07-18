@@ -10,8 +10,8 @@
 """ROR-related Datastreams Readers/Writers/Transformers module."""
 
 import io
+from datetime import datetime
 
-import arrow
 import requests
 from flask import current_app
 from idutils import normalize_ror
@@ -52,9 +52,11 @@ class RORHTTPReader(BaseReader):
                     json_ld_reponse.raise_for_status()
                     json_ld_data = json_ld_reponse.json()
 
-                    last_dump_date = arrow.get(
-                        json_ld_data.get("dateCreated")
-                        or json_ld_data.get("datePublished")
+                    last_dump_date = json_ld_data.get(
+                        "dateCreated"
+                    ) or json_ld_data.get("datePublished")
+                    last_dump_date = datetime.fromisoformat(
+                        last_dump_date.replace("Z", "+00:00")
                     )
                     return last_dump_date
         else:
@@ -93,7 +95,9 @@ class RORHTTPReader(BaseReader):
 
         if self._since and self._since != "None":
             last_dump_date = self._get_last_dump_date(linksets)
-            if last_dump_date < arrow.get(self._since):
+            since = datetime.fromisoformat(self._since)
+
+            if last_dump_date < since:
                 current_app.logger.info(
                     f"Skipping ROR data dump (last dump: {last_dump_date}, since: {self._since})"
                 )
