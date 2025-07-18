@@ -8,8 +8,6 @@
 
 """Jobs module."""
 
-import datetime
-
 from invenio_i18n import lazy_gettext as _
 from invenio_jobs.jobs import JobType
 
@@ -173,4 +171,9 @@ class ImportORCIDJob(ProcessDataStreamJob):
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Process ORCID data."""
-        return {"config": {**ORCID_PRESET_DATASTREAM_CONFIG}}
+        task_args = {"config": {**ORCID_PRESET_DATASTREAM_CONFIG}}
+        for reader in task_args["config"]["readers"]:
+            # Assign since to all readers of the ORCID job
+            # It is the responsibility of the reader to handle it or ignore it
+            reader["args"] = {**reader.get("args", {}), "since": str(since)}
+        return task_args
