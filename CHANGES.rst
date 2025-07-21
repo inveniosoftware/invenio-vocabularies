@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v8.2.1 (released 2025-07-21)
+
+- fix(jobs): remove string casts from since
+
 Version v8.2.0 (released 2025-07-17)
 
 - tasks: fix error name
