@@ -45,8 +45,10 @@ class SubjectsSearchOptions(SearchOptions):
     """Search options."""
 
     suggest_parser_cls = CompositeSuggestQueryParser.factory(
+        filter_field="scheme",
         fields=[
             "subject^100",
+            "scheme^20",
             localized_title,
             "synonyms^20",
         ],
