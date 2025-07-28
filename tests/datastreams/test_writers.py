@@ -10,6 +10,7 @@
 
 from copy import deepcopy
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
@@ -122,17 +123,31 @@ def test_yaml_writer():
 ##
 
 
-def test_async_writer(app):
-    filepath = "writer_test.yaml"
-    yaml_writer_config = {"type": "yaml", "args": {"filepath": filepath}}
-    async_writer = AsyncWriter(yaml_writer_config)
+def test_async_writer():
+    """Test AsyncWriter calls celery task with correct args."""
+    dummy_writer = MagicMock()
+    stream_entry_1 = StreamEntry({"key_one": [{"inner_one": 1}]})
+    stream_entry_2 = StreamEntry({"key_two": [{"inner_two": "two"}]})
+    writer = AsyncWriter(writer=dummy_writer)
 
-    test_output = [{"key_one": [{"inner_one": 1}]}, {"key_two": [{"inner_two": "two"}]}]
-    for output in test_output:
-        async_writer.write(stream_entry=StreamEntry(output))
+    with patch(
+        "invenio_vocabularies.datastreams.writers.write_entry.apply_async"
+    ) as mock_write_entry:
+        writer.write(stream_entry_1, subtask_run_id="run-1")
+        mock_write_entry.assert_called_once()
+        _, kwargs = mock_write_entry.call_args
+        assert kwargs["args"][0] == dummy_writer
+        assert kwargs["args"][1] == stream_entry_1.entry
+        assert kwargs["args"][2] == "run-1"
+        assert kwargs["countdown"] == 1
 
-    filepath = Path(filepath)
-    with open(filepath) as file:
-        assert yaml.safe_load(file) == test_output
-
-    filepath.unlink()
+    with patch(
+        "invenio_vocabularies.datastreams.writers.write_many_entry.apply_async"
+    ) as mock_write_many_entry:
+        writer.write_many([stream_entry_1, stream_entry_2], subtask_run_id="run-2")
+        mock_write_many_entry.assert_called_once()
+        _, kwargs = mock_write_many_entry.call_args
+        assert kwargs["args"][0] == dummy_writer
+        assert kwargs["args"][1] == [stream_entry_1.entry, stream_entry_2.entry]
+        assert kwargs["args"][2] == "run-2"
+        assert kwargs["countdown"] == 1
