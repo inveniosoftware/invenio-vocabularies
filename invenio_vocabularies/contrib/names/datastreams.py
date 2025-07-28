@@ -280,7 +280,12 @@ class OrcidTransformer(BaseTransformer):
                     f"Family name not found in ORCiD entry for ORCiD ID: {orcid_id}."
                 )
             )
-        if not self._is_valid_name(given_names + family_name):
+        full_name = " ".join(
+            p.strip()
+            for p in (given_names, family_name)
+            if isinstance(p, str) and p.strip()
+        )
+        if not self._is_valid_name(full_name):
             errors.append(
                 TransformerError(
                     f"Invalid characters in name for ORCiD ID: {orcid_id}."

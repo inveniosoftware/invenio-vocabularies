@@ -28,6 +28,8 @@ from .tasks import write_entry, write_many_entry
 class BaseWriter(ABC):
     """Base writer."""
 
+    is_async = False
+
     def __init__(self, *args, **kwargs):
         """Base initialization logic."""
         # Add any base initialization here if needed
@@ -182,6 +184,8 @@ class YamlWriter(BaseWriter):
 class AsyncWriter(BaseWriter):
     """Writes the entries asynchronously (celery task)."""
 
+    is_async = True
+
     def __init__(self, writer, *args, **kwargs):
         """Constructor.
 
@@ -190,16 +194,25 @@ class AsyncWriter(BaseWriter):
         super().__init__(*args, **kwargs)
         self._writer = writer
 
-    def write(self, stream_entry, *args, **kwargs):
-        """Launches a celery task to write an entry."""
-        write_entry.delay(self._writer, stream_entry.entry)
+    def write(self, stream_entry, subtask_run_id=None, *args, **kwargs):
+        """Launches a celery task to write an entry with a delay."""
+        # Add some delay to avoid processing the tasks too fast
+        write_entry.apply_async(
+            args=(self._writer, stream_entry.entry, subtask_run_id), countdown=1
+        )
 
         return stream_entry
 
-    def write_many(self, stream_entries, *args, **kwargs):
-        """Launches a celery task to write an entry."""
-        write_many_entry.delay(
-            self._writer, [stream_entry.entry for stream_entry in stream_entries]
+    def write_many(self, stream_entries, subtask_run_id=None, *args, **kwargs):
+        """Launches a celery task to write entries with a delay."""
+        # Add some delay to avoid processing the tasks too fast
+        write_many_entry.apply_async(
+            args=(
+                self._writer,
+                [stream_entry.entry for stream_entry in stream_entries],
+                subtask_run_id,
+            ),
+            countdown=1,
         )
 
         return stream_entries
