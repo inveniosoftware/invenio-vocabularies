@@ -9,6 +9,11 @@
 """Base data stream."""
 
 from flask import current_app
+from invenio_access.permissions import system_identity
+from invenio_access.utils import get_identity
+from invenio_accounts.proxies import current_datastore
+from invenio_jobs.logging.jobs import EMPTY_JOB_CTX, job_context
+from invenio_jobs.proxies import current_runs_service
 
 from .errors import ReaderError, TransformerError, WriterError
 
@@ -78,6 +83,14 @@ class DataStream:
     def process_batch(self, batch):
         """Process a batch of entries."""
         current_app.logger.info(f"Processing batch of size: {len(batch)}")
+        if job_context.get() is not EMPTY_JOB_CTX:
+            run_id = job_context.get()["run_id"]
+            current_runs_service.add_total_entries(
+                system_identity,
+                run_id=run_id,
+                job_id=job_context.get()["job_id"],
+                total_entries=len(batch),
+            )
         transformed_entries = []
         transformed_entries_with_errors = []
         for stream_entry in batch:
@@ -168,12 +181,30 @@ class DataStream:
 
         return stream_entry
 
+    def _prepare_async_context(self):
+        """Prepare the async context for writers."""
+        job_ctx = job_context.get()
+        run_id = job_ctx.get("run_id")
+        identity_id = job_ctx.get("identity_id")
+        job_id = job_ctx.get("job_id")
+        user = current_datastore.get_user(identity_id)
+        identity = get_identity(user)
+
+        subtask_run = current_runs_service.create_subtask_run(
+            identity, parent_run_id=run_id, job_id=job_id
+        )
+        return str(subtask_run.id)
+
     def write(self, stream_entry, *args, **kwargs):
-        """Apply the transformations to an stream_entry."""
+        """Write a single stream entry."""
         current_app.logger.debug(f"Writing entry: {stream_entry.entry}")
         for writer in self._writers:
             try:
-                writer.write(stream_entry)
+                if writer.is_async and job_context.get() is not EMPTY_JOB_CTX:
+                    subtask_run_id = self._prepare_async_context()
+                    writer.write(stream_entry, subtask_run_id=subtask_run_id)
+                else:
+                    writer.write(stream_entry)
             except WriterError as err:
                 current_app.logger.error(f"Writer error: {str(err)}")
                 stream_entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
@@ -181,10 +212,21 @@ class DataStream:
         return stream_entry
 
     def batch_write(self, stream_entries, *args, **kwargs):
-        """Apply the transformations to an stream_entry. Errors are handler in the service layer."""
+        """Write a batch of stream entries."""
         current_app.logger.debug(f"Batch writing entries: {len(stream_entries)}")
         for writer in self._writers:
-            yield from writer.write_many(stream_entries)
+            try:
+                if writer.is_async and job_context.get() is not EMPTY_JOB_CTX:
+                    subtask_run_id = self._prepare_async_context()
+                    yield from writer.write_many(
+                        stream_entries, subtask_run_id=subtask_run_id
+                    )
+                else:
+                    yield from writer.write_many(stream_entries)
+            except WriterError as err:
+                current_app.logger.error(f"Writer error: {str(err)}")
+                for entry in stream_entries:
+                    entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
 
     def total(self, *args, **kwargs):
         """The total of entries obtained from the origin."""
