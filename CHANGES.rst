@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v8.3.0 (released 2025-07-31)
+
+- subjects: Add search scheme field configuration to enable composite and filter query support in subject search functionality
+
 Version v8.2.1 (released 2025-07-21)
 
 - fix(jobs): remove string casts from since
