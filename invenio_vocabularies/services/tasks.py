@@ -30,7 +30,9 @@ def process_datastream(config):
             for err in result.errors:
                 current_app.logger.error(err)
             entries_with_errors += 1
+
     if entries_with_errors:
         raise TaskExecutionPartialError(
-            message=f"Task execution succeeded with {entries_with_errors} entries with errors."
+            message=f"Task execution succeeded with {entries_with_errors} entries with errors.",
+            errored_entries_count=entries_with_errors,
         )
