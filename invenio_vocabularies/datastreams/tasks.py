@@ -39,6 +39,8 @@ def write_entry(writer_config, entry, subtask_run_id=None):
     try:
         processed_stream_entry = writer.write(StreamEntry(entry))
         errored_entries_count = 1 if processed_stream_entry.errors else 0
+        inserted_count = 1 if processed_stream_entry.op_type == "create" else 0
+        updated_count = 1 if processed_stream_entry.op_type == "update" else 0
         if subtask_run_id and job_id:
             current_runs_service.finalize_subtask(
                 system_identity,
@@ -46,6 +48,8 @@ def write_entry(writer_config, entry, subtask_run_id=None):
                 job_id,
                 success=True if not processed_stream_entry.errors else False,
                 errored_entries_count=errored_entries_count,
+                inserted_entries_count=inserted_count,
+                updated_entries_count=updated_count,
             )
     except Exception as exc:
         current_app.logger.error(f"Error writing entry {entry}: {exc}")
@@ -82,6 +86,12 @@ def write_many_entry(writer_config, entries, subtask_run_id=None):
         errored_entries_count = sum(
             1 for entry in processed_stream_entries if entry.errors
         )
+        inserted_count = sum(
+            1 for entry in processed_stream_entries if entry.op_type == "create"
+        )
+        updated_count = sum(
+            1 for entry in processed_stream_entries if entry.op_type == "update"
+        )
         if subtask_run_id and job_id:
             current_runs_service.finalize_subtask(
                 system_identity,
@@ -89,6 +99,8 @@ def write_many_entry(writer_config, entries, subtask_run_id=None):
                 job_id,
                 success=True,
                 errored_entries_count=errored_entries_count,
+                inserted_entries_count=inserted_count,
+                updated_entries_count=updated_count,
             )
     except Exception as exc:
         current_app.logger.error(
