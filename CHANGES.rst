@@ -1,5 +1,5 @@
 ..
-    Copyright (C) 2020-2024 CERN.
+    Copyright (C) 2020-2025 CERN.
     Copyright (C) 2024-2025 Graz University of Technology.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
@@ -8,6 +8,10 @@
 
 Changes
 =======
+
+Version v9.0.0 (released 2025-09-05)
+
+- setup: bump major version of invenio-jobs
 
 Version v8.3.0 (released 2025-07-31)
 
