@@ -9,7 +9,7 @@
 """Base data stream."""
 
 from flask import current_app
-from invenio_access.permissions import system_identity
+from invenio_access.permissions import system_identity, system_user_id
 from invenio_access.utils import get_identity
 from invenio_accounts.proxies import current_datastore
 from invenio_jobs.logging.jobs import EMPTY_JOB_CTX, job_context
@@ -187,8 +187,14 @@ class DataStream:
         run_id = job_ctx.get("run_id")
         identity_id = job_ctx.get("identity_id")
         job_id = job_ctx.get("job_id")
-        user = current_datastore.get_user(identity_id)
-        identity = get_identity(user)
+        # System user needs to be handled separately because it doesn't exist in the database
+        if identity_id == system_user_id:
+            identity = system_identity
+        else:
+            user = current_datastore.get_user(identity_id)
+            if user is None:
+                raise ValueError(f"User with ID:{identity_id} not found.")
+            identity = get_identity(user)
 
         subtask_run = current_runs_service.create_subtask_run(
             identity, parent_run_id=run_id, job_id=job_id
