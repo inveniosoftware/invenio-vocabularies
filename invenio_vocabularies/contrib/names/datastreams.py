@@ -69,12 +69,11 @@ class OrcidDataSyncReader(BaseReader):
         date_format_no_millis = "%Y-%m-%d %H:%M:%S"
 
         if self.since:
-            last_sync = datetime.now()
+            last_sync = datetime.strptime(self.since, date_format)
         else:
             last_sync = datetime.now() - timedelta(
                 **current_app.config["VOCABULARIES_ORCID_SYNC_SINCE"]
             )
-
         try:
             content = io.TextIOWrapper(fileobj, encoding="utf-8")
             csv_reader = csv.DictReader(content)
@@ -95,7 +94,10 @@ class OrcidDataSyncReader(BaseReader):
 
                 if last_modified_date < last_sync:
                     current_app.logger.debug(
-                        f"Skipping ORCiD {orcid} (last modified: {last_modified_date})"
+                        f"Skipping ORCiD {orcid}: last modified {last_modified_date} is older than cutoff {last_sync}"
+                    )
+                    current_app.logger.info(
+                        "Reached cutoff date. No more recent records to process."
                     )
                     break
                 current_app.logger.debug(f"Yielding ORCiD {orcid} for sync.")

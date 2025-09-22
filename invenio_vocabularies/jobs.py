@@ -8,6 +8,9 @@
 
 """Jobs module."""
 
+from datetime import datetime, timedelta
+
+from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from invenio_jobs.jobs import JobType
 
@@ -177,3 +180,28 @@ class ImportORCIDJob(ProcessDataStreamJob):
             # It is the responsibility of the reader to handle it or ignore it
             reader["args"] = {**reader.get("args", {}), "since": str(since)}
         return task_args
+
+    @classmethod
+    def _build_task_arguments(cls, job_obj, since=None, custom_args=None, **kwargs):
+        """Build dict of arguments injected on task execution.
+
+        :param job_obj (Job): the Job object.
+        :param since (datetime): last time the job was executed.
+        :param custom_args (dict): when provided, takes precedence over any other
+            provided argument.
+        :return: a dict of arguments to be injected on task execution.
+        """
+        if custom_args:
+            return custom_args
+
+        if since is None:
+            """We set since to a time in the past defined by the VOCABULARIES_ORCID_SYNC_SINCE."""
+
+            since = datetime.now() - timedelta(
+                **current_app.config["VOCABULARIES_ORCID_SYNC_SINCE"]
+            )
+        """
+        Otherwise, since is already specified as a datetime with a timezone (see PredefinedArgsSchema) or we have never
+        run the job before so there is no logical value.
+        """
+        return {**cls.build_task_arguments(job_obj, since=since, **kwargs)}
