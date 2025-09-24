@@ -474,7 +474,7 @@ ORCID_PRESET_DATASTREAM_CONFIG = {
             },
         }
     ],
-    "batch_size": 1,
+    "batch_size": 1000,
     "write_many": True,
 }
 """ORCiD Data Stream configuration.
