@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v9.1.0 (released 2025-09-05)
+
+- installation: bump major version of invenio-jobs
+
 Version v9.0.0 (released 2025-09-05)
 
 - setup: bump major version of invenio-jobs
