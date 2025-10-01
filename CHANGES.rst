@@ -9,7 +9,11 @@
 Changes
 =======
 
-Version v9.1.0 (released 2025-09-05)
+Version v9.1.1 (released 2025-10-01)
+
+- ui installation: bump react-overridable version
+
+Version v9.1.0 (released 2025-10-01)
 
 - installation: bump major version of invenio-jobs
 
