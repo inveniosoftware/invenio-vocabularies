@@ -1,0 +1,94 @@
+# 
+# Translators:
+# Matti Lassila <matti.lassila@gmail.com>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
+"PO-Revision-Date: 2025-05-13 21:01+0000\n"
+"Last-Translator: Matti Lassila <matti.lassila@gmail.com>, 2025\n"
+"Language-Team: Finnish (https://app.transifex.com/inveniosoftware/teams/23537/fi/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"mime-version: 1.0\n"
+
+msgid "Search for a funder by name"
+msgstr "Hae rahoittajaa nimellä"
+
+msgid "Funder"
+msgstr "Rahoittaja"
+
+msgid "Search for funder..."
+msgstr "Hae rahoittajaa..."
+
+msgid "Additional information"
+msgstr "Lisätiedot"
+
+msgid "optional"
+msgstr "valinnainen"
+
+msgid "Number"
+msgstr "Numero"
+
+msgid "Award/Grant number"
+msgstr "Palkinto-/apurahan numero"
+
+msgid "Title"
+msgstr "Otsikko"
+
+msgid "Award/Grant Title"
+msgstr "Palkinto-/apurahan nimi"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Award/Grant URL"
+msgstr "Palkinto-/apurahan URL"
+
+msgid "Add"
+msgstr "Lisää"
+
+msgid "Add custom"
+msgstr "Lisää mukautettu"
+
+msgid "Edit"
+msgstr "Muokkaa"
+
+msgid "Remove"
+msgstr "Poista"
+
+msgid "Open external link"
+msgstr "Avaa ulkoinen linkki"
+
+msgid "Funder is required."
+msgstr "Rahoittaja on pakollinen."
+
+msgid "URL must be valid."
+msgstr "URL-osoitteen on oltava kelvollinen."
+
+msgid "URL must be set alongside title or number."
+msgstr "URL on asetettava yhdessä otsikon tai numeron kanssa."
+
+msgid "Add standard award/grant"
+msgstr "Lisää vakiopalkinto/apuraha"
+
+msgid "Add custom funding"
+msgstr "Lisää mukautettu rahoitus"
+
+msgid "Search for awards/grants"
+msgstr "Hae palkintoja/apurahoja"
+
+msgid "Cancel"
+msgstr "Peruuta"
+
+msgid "Change"
+msgstr "Muuta"
+
+msgid "Did not find your award/grant? "
+msgstr "Etkö löytänyt palkintoasi/apurahaa? "
+
+msgid "Add a custom award/grant."
+msgstr "Lisää mukautettu palkinto/apuraha."
