@@ -2,16 +2,16 @@
 # Translators:
 # Rim Sharif, 2025
 # Tibor Simko <tibor.simko@cern.ch>, 2025
-# Lina Andrén, 2025
 # Mattias Vesterlund, 2025
 # Sam Arbid, 2025
+# Lina Andrén, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
 "POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
-"Last-Translator: Sam Arbid, 2025\n"
+"Last-Translator: Lina Andrén, 2025\n"
 "Language-Team: Swedish (https://app.transifex.com/inveniosoftware/teams/23537/sv/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -38,7 +38,7 @@ msgid "Number"
 msgstr "Nummer"
 
 msgid "Award/Grant number"
-msgstr "Projektbidrags-/Anslags-nummer"
+msgstr "Projektbidrags-/Anslagsnummer"
 
 msgid "Title"
 msgstr "Titel"
