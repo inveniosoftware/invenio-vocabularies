@@ -35,6 +35,7 @@ jobs:
     uses: inveniosoftware/workflows/.github/workflows/tests-python.yml@master
     with:
       extras: "tests,oaipmh,rdf,sparql"
+      python-version: '["3.9", "3.11", "3.14"]'
 
   JS:
     uses: inveniosoftware/workflows/.github/workflows/tests-js.yml@master
