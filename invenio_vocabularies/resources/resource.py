@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2020-2024 CERN.
 # Copyright (C) 2024 Uni Münster.
+# Copyright (C) 2025 Northwestern University.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -9,25 +10,15 @@
 
 """Vocabulary resource."""
 
-import json
 
-import marshmallow as ma
 from flask import g
 from flask_resources import (
-    BaseListSchema,
-    JSONSerializer,
-    MarshmallowSerializer,
-    ResponseHandler,
     resource_requestctx,
     response_handler,
 )
-from invenio_access.permissions import system_identity
 from invenio_records_resources.resources import (
     RecordResource,
-    RecordResourceConfig,
-    SearchRequestArgsSchema,
 )
-from invenio_records_resources.resources.records.headers import etag_headers
 from invenio_records_resources.resources.records.resource import (
     request_data,
     request_headers,
@@ -36,9 +27,6 @@ from invenio_records_resources.resources.records.resource import (
     route,
 )
 from invenio_records_resources.resources.records.utils import search_preference
-from marshmallow import fields
-
-from .serializer import VocabularyL10NItemSchema
 
 
 #
