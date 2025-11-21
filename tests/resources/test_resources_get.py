@@ -56,10 +56,8 @@ def test_get(client, example_records, h, prefix):
     res = client.get(f"{prefix}{id_}", headers=h)
     assert res.status_code == 200
     assert res.json["id"] == id_
-    # Test links
-    assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/vocabularies/licenses/cc-by"
-    }
+    expected_links = {"self": "https://127.0.0.1:5000/api/vocabularies/licenses/cc-by"}
+    assert expected_links == res.json["links"]
 
 
 def test_not_found(client, example_records, h, prefix):

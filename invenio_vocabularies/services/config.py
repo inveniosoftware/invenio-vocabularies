@@ -13,12 +13,11 @@ import sqlalchemy as sa
 from flask import current_app
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import (
-    Link,
+    RecordEndpointLink,
     RecordServiceConfig,
     SearchOptions,
-    pagination_links,
+    pagination_endpoint_links,
 )
-from invenio_records_resources.services.base import ConditionalLink
 from invenio_records_resources.services.records.components import DataComponent
 from invenio_records_resources.services.records.params import (
     FilterParam,
@@ -124,18 +123,18 @@ class VocabulariesServiceConfig(RecordServiceConfig):
     ]
 
     links_item = {
-        "self": Link(
-            "{+api}/vocabularies/{type}/{id}",
-            vars=lambda record, vars: vars.update(
-                {
-                    "id": record.pid.pid_value,
-                    "type": record.type.id,
-                }
-            ),
+        "self": RecordEndpointLink(
+            "vocabularies.read",
+            params=["type", "pid_value"],
+            # RecordEndpointLink takes care of the pid_value
+            vars=lambda record, vars: vars.update(type=record.type.id),
         ),
     }
 
-    links_search = pagination_links("{+api}/vocabularies/{type}{?args*}")
+    links_search = pagination_endpoint_links(
+        "vocabularies.search",
+        params=["type"],
+    )
 
 
 class VocabularyTypesServiceConfig(RecordServiceConfig):
@@ -147,19 +146,8 @@ class VocabularyTypesServiceConfig(RecordServiceConfig):
     schema = VocabularySchema  # Works but should be VocabularyTypeSchema if this is defined at some point
     result_list_cls = results.VocabularyTypeList
 
-    links_item = {
-        "self": ConditionalLink(
-            cond=is_custom_vocabulary_type,
-            if_=Link(
-                "{+api}/{id}",
-                vars=lambda vocab_type, vars: vars.update({"id": vocab_type["id"]}),
-            ),
-            else_=Link(
-                "{+api}/vocabularies/{id}",
-                vars=lambda vocab_type, vars: vars.update({"id": vocab_type["id"]}),
-            ),
-        )
-    }
+    # An individual vocabulary type endpoint doesn't exist
+    links_item = {}
 
     search = VocabularyTypeSearchOptions
 
@@ -170,4 +158,4 @@ class VocabularyTypesServiceConfig(RecordServiceConfig):
         PIDComponent,
     ]
 
-    links_search = pagination_links("{+api}/vocabularies/{type}{?args*}")
+    links_search = pagination_endpoint_links("vocabulary_types.search")
