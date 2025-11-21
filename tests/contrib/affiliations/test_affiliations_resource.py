@@ -69,10 +69,8 @@ def test_affiliations_get(client, example_affiliation, h, prefix):
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
     assert res.json["id"] == id_
-    # Test links
-    assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/affiliations/01ggx4157"
-    }
+    expected_links = {"self": "https://127.0.0.1:5000/api/affiliations/01ggx4157"}
+    assert expected_links == res.json["links"]
 
 
 def test_affiliations_search(client, example_affiliation, h, prefix):
@@ -82,6 +80,10 @@ def test_affiliations_search(client, example_affiliation, h, prefix):
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 1
     assert res.json["sortBy"] == "name"
+    expected_links = {
+        "self": "https://127.0.0.1:5000/api/affiliations?page=1&size=25&sort=name"
+    }
+    assert expected_links == res.json["links"]
 
 
 def _create_affiliations(service, identity):
