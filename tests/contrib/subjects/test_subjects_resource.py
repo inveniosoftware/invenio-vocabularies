@@ -37,11 +37,11 @@ def test_get(client, h, prefix, example_subject):
     res = client.get(f"{prefix}/{id_}", headers=h)
     assert res.status_code == 200
     assert res.json["id"] == id_
-    # links are encoded which seems weird
-    assert res.json["links"] == {
-        "self": "https://127.0.0.1:5000/api/subjects/http%3A%2F%2Fd-nb.info%2Fgnd%2F1062531973"  # noqa
+    expected_links = {
+        "self": "https://127.0.0.1:5000/api/subjects/http://d-nb.info/gnd/1062531973"  # noqa
     }
-    # but they should still resolve
+    assert expected_links == res.json["links"]
+    # link embeds url in it w/o encoding and should still resolve
     i = res.json["links"]["self"].find("subjects")
     link = res.json["links"]["self"][i:]
     res = client.get(link, headers=h)

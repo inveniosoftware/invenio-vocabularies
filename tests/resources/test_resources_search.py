@@ -82,6 +82,13 @@ def test_search(client, example_records, h, prefix):
     assert res.status_code == 200
     assert res.json["hits"]["total"] == 2
     assert res.json["sortBy"] == "title"
+    expected_links = {
+        "self": (
+            "https://127.0.0.1:5000/api/vocabularies/resourcetypes"
+            "?page=1&size=25&sort=title"
+        )
+    }
+    assert expected_links == res.json["links"]
 
 
 def test_query_q(client, example_records, h, prefix):
