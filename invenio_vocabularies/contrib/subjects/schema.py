@@ -3,6 +3,7 @@
 # Copyright (C) 2021 Northwestern University.
 # Copyright (C) 2021-2024 CERN.
 # Copyright (C) 2024 University of Münster.
+# Copyright (C) 2025 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -25,7 +26,7 @@ from ...services.schema import (
 from .config import subject_schemes
 
 
-class StringOrListOfStrings(fields.Field):
+class StringOrListOfStrings(fields.Raw):
     """Custom field to handle both string and list of strings."""
 
     # TODO: Move this to marshmallow-utils for broader type support.

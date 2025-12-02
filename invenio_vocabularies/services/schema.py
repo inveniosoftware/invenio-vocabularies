@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2024 CERN.
+# Copyright (C) 2025 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -139,7 +140,7 @@ class DatastreamObject(Schema):
     """Datastream object (reader, transformer, writer)."""
 
     type = fields.Str(required=True)
-    args = fields.Dict(keys=fields.Str(), values=fields.Field)
+    args = fields.Dict(keys=fields.Str(), values=fields.Raw)
 
 
 class TaskSchema(Schema):
