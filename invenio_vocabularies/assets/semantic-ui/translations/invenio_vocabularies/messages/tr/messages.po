@@ -3,13 +3,14 @@
 # Ben Translation and Interpreting Services <info@bentercume.com>, 2025
 # BEN TERCÜME, 2025
 # Berat Aldemir <berataldemir@gmail.com>, 2025
+# Eylül-1 -, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
 "POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
-"Last-Translator: Berat Aldemir <berataldemir@gmail.com>, 2025\n"
+"Last-Translator: Eylül-1 -, 2025\n"
 "Language-Team: Turkish (https://app.transifex.com/inveniosoftware/teams/23537/tr/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,43 +19,43 @@ msgstr ""
 "mime-version: 1.0\n"
 
 msgid "Search for a funder by name"
-msgstr ""
+msgstr "Ada göre fon sağlayıcı arayın"
 
 msgid "Funder"
-msgstr ""
+msgstr "Fon Sağlayıcı"
 
 msgid "Search for funder..."
-msgstr ""
+msgstr "Fon sağlayıcı ara..."
 
 msgid "Additional information"
-msgstr ""
+msgstr "Ek bilgiler"
 
 msgid "optional"
 msgstr "isteğe bağlı"
 
 msgid "Number"
-msgstr ""
+msgstr "Numara"
 
 msgid "Award/Grant number"
-msgstr ""
+msgstr "Araştırma Desteği / Hibe numarası"
 
 msgid "Title"
 msgstr "Başlık"
 
 msgid "Award/Grant Title"
-msgstr ""
+msgstr "Araştırma Desteği / Hibe Başlığı"
 
 msgid "URL"
 msgstr "URL"
 
 msgid "Award/Grant URL"
-msgstr ""
+msgstr "Araştırma Desteği / Hibe URL'si"
 
 msgid "Add"
 msgstr "Ekle"
 
 msgid "Add custom"
-msgstr "Özelleştirilmiş ekle: "
+msgstr "Özel ekle"
 
 msgid "Edit"
 msgstr "Düzenle"
@@ -66,22 +67,22 @@ msgid "Open external link"
 msgstr "Harici bağlantıyı aç"
 
 msgid "Funder is required."
-msgstr ""
+msgstr "Fon sağlayıcı gereklidir."
 
 msgid "URL must be valid."
-msgstr ""
+msgstr "URL geçerli olmalıdır."
 
 msgid "URL must be set alongside title or number."
-msgstr ""
+msgstr "URL, başlık veya numara ile yan yana ayarlanmalıdır."
 
 msgid "Add standard award/grant"
-msgstr ""
+msgstr "Standart araştırma desteği / hibe ekle"
 
 msgid "Add custom funding"
-msgstr ""
+msgstr "Özel finansman ekle"
 
 msgid "Search for awards/grants"
-msgstr ""
+msgstr "Araştırma desteği / hibe ara"
 
 msgid "Cancel"
 msgstr "İptal"
@@ -90,7 +91,7 @@ msgid "Change"
 msgstr "Değiştir"
 
 msgid "Did not find your award/grant? "
-msgstr ""
+msgstr "Araştırma desteğinizi / hibenizi bulamadınız mı?"
 
 msgid "Add a custom award/grant."
-msgstr ""
+msgstr "Özel bir araştırma desteği / hibe ekleyin."
