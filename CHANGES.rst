@@ -10,6 +10,10 @@
 Changes
 =======
 
+Version v8.3.3 (released 2025-12-17)
+
+- Updated file pattern in ROR dump
+
 Version v8.3.2 (released 2025-12-09)
 
 - i18n: pulled translations
