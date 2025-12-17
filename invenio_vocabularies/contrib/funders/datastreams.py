@@ -10,7 +10,6 @@
 """Funders datastreams, transformers, writers and readers."""
 
 from flask import current_app
-from invenio_i18n import lazy_gettext as _
 
 from ...datastreams.writers import ServiceWriter
 from ..common.ror.datastreams import RORTransformer
@@ -71,7 +70,7 @@ DATASTREAM_CONFIG = {
         {
             "type": "zip",
             "args": {
-                "regex": "_schema_v2\\.json$",
+                "regex": "-ror-data\\.json$",
             },
         },
         {"type": "json"},
