@@ -41,7 +41,7 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
                         "args": {"since": since},
                         "type": "ror-http",
                     },
-                    {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
+                    {"args": {"regex": "-ror-data\\.json$"}, "type": "zip"},
                     {"type": "json"},
                 ],
                 "writers": [
@@ -79,7 +79,7 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
                         "args": {"since": since},
                         "type": "ror-http",
                     },
-                    {"args": {"regex": "_schema_v2\\.json$"}, "type": "zip"},
+                    {"args": {"regex": "-ror-data\\.json$"}, "type": "zip"},
                     {"type": "json"},
                 ],
                 "writers": [
