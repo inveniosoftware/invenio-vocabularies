@@ -204,7 +204,7 @@ DATASTREAM_CONFIG = {
         {
             "type": "zip",
             "args": {
-                "regex": "_schema_v2\\.json$",
+                "regex": "-ror-data\\.json$",
             },
         },
         {"type": "json"},
