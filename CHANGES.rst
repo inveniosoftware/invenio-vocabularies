@@ -9,6 +9,11 @@
 Changes
 =======
 
+Version v9.1.2 (released 2025-12-17)
+
+- fix: ChangedInMarshmallow4Warning
+- Updated file pattern in ROR dump
+
 Version v9.1.1 (released 2025-10-01)
 
 - ui installation: bump react-overridable version
