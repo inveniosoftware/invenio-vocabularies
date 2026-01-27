@@ -16,6 +16,7 @@ import requests
 from flask import current_app
 from idutils import normalize_ror
 
+from invenio_vocabularies.contrib.common.utils import invenio_user_agent
 from invenio_vocabularies.datastreams.errors import ReaderError, TransformerError
 from invenio_vocabularies.datastreams.readers import BaseReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
@@ -47,7 +48,10 @@ class RORHTTPReader(BaseReader):
                 if format_link.get("type") == "application/ld+json":
                     json_ld_reponse = requests.get(
                         format_link["href"],
-                        headers={"Accept": format_link["type"]},
+                        headers={
+                            "Accept": format_link["type"],
+                            "User-Agent": invenio_user_agent(),
+                        },
                     )
                     json_ld_reponse.raise_for_status()
                     json_ld_data = json_ld_reponse.json()
@@ -78,7 +82,11 @@ class RORHTTPReader(BaseReader):
 
         # Follow the DOI to get the link of the linkset
         dataset_doi_link = "https://doi.org/10.5281/zenodo.6347574"
-        landing_page = requests.get(dataset_doi_link, allow_redirects=True)
+        landing_page = requests.get(
+            dataset_doi_link,
+            headers={"User-Agent": invenio_user_agent()},
+            allow_redirects=True,
+        )
         landing_page.raise_for_status()
 
         # Call the signposting `linkset+json` endpoint for
@@ -88,7 +96,10 @@ class RORHTTPReader(BaseReader):
             raise ReaderError("Linkset not found in the ROR dataset record.")
         linkset_response = requests.get(
             landing_page.links["linkset"]["url"],
-            headers={"Accept": "application/linkset+json"},
+            headers={
+                "Accept": "application/linkset+json",
+                "User-Agent": invenio_user_agent(),
+            },
         )
         linkset_response.raise_for_status()
         linksets = linkset_response.json()["linkset"]
@@ -119,7 +130,7 @@ class RORHTTPReader(BaseReader):
         # file-like object (as required by `zipfile.ZipFile`).
         # Using directly `file_resp.raw` is not possible since
         # `zipfile.ZipFile` requires the file-like object to be seekable.
-        file_resp = requests.get(file_url)
+        file_resp = requests.get(file_url, headers={"User-Agent": invenio_user_agent()})
         file_resp.raise_for_status()
         yield io.BytesIO(file_resp.content)
 
