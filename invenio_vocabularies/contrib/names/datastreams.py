@@ -275,18 +275,14 @@ class OrcidTransformer(BaseTransformer):
         family_name = name.get("family-name", None) if name else None
         given_names = name.get("given-names", None) if name else None
 
-        if name is None:
-            errors.append(
-                TransformerError(
-                    f"Name not found in ORCiD entry for ORCiD ID: {orcid_id}."
-                )
+        if name is None or family_name is None:
+            error = TransformerError(
+                f"Missing name or family name for ORCiD ID: {orcid_id}"
             )
-        if family_name is None:
-            errors.append(
-                TransformerError(
-                    f"Family name not found in ORCiD entry for ORCiD ID: {orcid_id}."
-                )
-            )
+            stream_entry.errors.append(error)
+            current_app.logger.warning(str(error))
+            return stream_entry
+            
         full_name = " ".join(
             p.strip()
             for p in (given_names, family_name)
