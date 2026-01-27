@@ -12,6 +12,7 @@ import io
 
 import requests
 
+from invenio_vocabularies.contrib.common.utils import invenio_user_agent
 from invenio_vocabularies.datastreams.errors import ReaderError
 from invenio_vocabularies.datastreams.readers import BaseReader
 
@@ -47,7 +48,10 @@ class OpenAIREHTTPReader(BaseReader):
 
         # Call the signposting `linkset+json` endpoint for the Concept DOI (i.e. latest version) of the OpenAIRE Graph Dataset.
         # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
-        headers = {"Accept": "application/linkset+json"}
+        headers = {
+            "Accept": "application/linkset+json",
+            "User-Agent": invenio_user_agent(),
+        }
         api_resp = requests.get(api_url, headers=headers)
         api_resp.raise_for_status()
 
@@ -70,7 +74,7 @@ class OpenAIREHTTPReader(BaseReader):
         # Download the matching tar file and fully load the response bytes content in memory.
         # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `tarfile.open`).
         # Using directly `file_resp.raw` is not possible since `tarfile.open` requires the file-like object to be seekable.
-        file_resp = requests.get(file_url)
+        file_resp = requests.get(file_url, headers={"User-Agent": invenio_user_agent()})
         file_resp.raise_for_status()
         yield io.BytesIO(file_resp.content)
 
