@@ -282,7 +282,7 @@ class OrcidTransformer(BaseTransformer):
             stream_entry.errors.append(error)
             current_app.logger.warning(str(error))
             return stream_entry
-            
+
         full_name = " ".join(
             p.strip()
             for p in (given_names, family_name)
