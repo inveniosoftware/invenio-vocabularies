@@ -158,12 +158,13 @@ class MockResponse:
 
 
 def side_effect(url, headers=None, allow_redirects=False):
-    if not headers:
-        return MockResponse({})
-    if headers["Accept"] == "application/ld+json":
+    accept = (headers or {}).get("Accept")
+    if accept == "application/ld+json":
         return MockResponse(API_JSON_RESPONSE_CONTENT_LD_JSON)
-    elif headers["Accept"] == "application/linkset+json":
+    elif accept == "application/linkset+json":
         return MockResponse(API_JSON_RESPONSE_CONTENT)
+    else:
+        return MockResponse({})
 
 
 @patch("requests.get", side_effect=side_effect)
