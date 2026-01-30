@@ -10,7 +10,6 @@
 
 """Vocabulary resource."""
 
-
 from flask import g
 from flask_resources import (
     resource_requestctx,

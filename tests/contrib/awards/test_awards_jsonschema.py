@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2026 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -43,8 +44,7 @@ def test_valid_full(appctx, schema):
             }
         ],
         "title": {
-            "en": "Personalised Treatment For Cystic Fibrosis Patients With \
-                Ultra-rare CFTR Mutations (and beyond)"
+            "en": "Personalised Treatment For Cystic Fibrosis Patients With Ultra-rare CFTR Mutations (and beyond)"
         },
         "number": "755021",
         "funder": {"id": "ria", "name": "Research annd Innovation action"},
