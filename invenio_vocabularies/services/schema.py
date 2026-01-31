@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2020-2024 CERN.
-# Copyright (C) 2025 Graz University of Technology.
+# Copyright (C) 2025-2026 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
 # details.
 
 """Vocabulary service schema."""
+
+from warnings import warn
 
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services.records.schema import BaseRecordSchema
@@ -21,6 +23,7 @@ from marshmallow import (
     validate,
     validates_schema,
 )
+from marshmallow_utils.context import context_schema
 from marshmallow_utils.fields import SanitizedUnicode
 
 i18n_strings = fields.Dict(
@@ -116,7 +119,20 @@ class ModePIDFieldVocabularyMixin:
     @validates_schema
     def validate_id(self, data, **kwargs):
         """Validates ID."""
-        is_create = "record" not in self.context
+        try:
+            is_create = "record" not in context_schema.get()
+        except LookupError:
+            # this lookup should never happen, but it does happen in the tests.
+            # it is not clear if the tests should be rewritten or if there is
+            # somewhere code around which needs this special treatment here. so
+            # better safe than sorry, we handle the LookupError and raise a
+            # warning.
+            warn(
+                "In ModePIDFieldVocabularyMixin the context_schema is not defined, check why not!",
+                UserWarning,
+                2,
+            )
+            is_create = True
         if is_create and "id" not in data:
             raise ValidationError(_("Missing PID."), "id")
         if not is_create:
