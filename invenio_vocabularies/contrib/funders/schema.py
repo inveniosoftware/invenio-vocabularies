@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2021-2022 CERN.
 # Copyright (C) 2024 California Institute of Technology.
+# Copyright (C) 2026 Graz University of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -13,17 +14,17 @@ from functools import partial
 
 from invenio_i18n import lazy_gettext as _
 from marshmallow import (
-    ValidationError,
     fields,
-    post_load,
-    pre_dump,
     validate,
-    validates_schema,
 )
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
-from ...services.schema import BaseVocabularySchema, ContribVocabularyRelationSchema
+from ...services.schema import (
+    BaseVocabularySchema,
+    ContribVocabularyRelationSchema,
+    ModePIDFieldVocabularyMixin,
+)
 from .config import funder_schemes
 
 
@@ -37,7 +38,7 @@ class FunderRelationSchema(ContribVocabularyRelationSchema):
     )
 
 
-class FunderSchema(BaseVocabularySchema):
+class FunderSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     """Service schema for funders."""
 
     name = SanitizedUnicode(
@@ -64,25 +65,3 @@ class FunderSchema(BaseVocabularySchema):
     aliases = fields.List(SanitizedUnicode())
     status = SanitizedUnicode()
     types = fields.List(SanitizedUnicode())
-
-    @validates_schema
-    def validate_id(self, data, **kwargs):
-        """Validates ID."""
-        is_create = "record" not in self.context
-        if is_create and "id" not in data:
-            raise ValidationError(_("Missing PID."), "id")
-        if not is_create:
-            data.pop("id", None)
-
-    @post_load(pass_many=False)
-    def move_id(self, data, **kwargs):
-        """Moves id to pid."""
-        if "id" in data:
-            data["pid"] = data.pop("id")
-        return data
-
-    @pre_dump(pass_many=False)
-    def extract_pid_value(self, data, **kwargs):
-        """Extracts the PID value."""
-        data["id"] = data.pid.pid_value
-        return data
