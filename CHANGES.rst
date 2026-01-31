@@ -1,6 +1,6 @@
 ..
     Copyright (C) 2020-2025 CERN.
-    Copyright (C) 2024-2025 Graz University of Technology.
+    Copyright (C) 2024-2026 Graz University of Technology.
 
     Invenio-Vocabularies is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -8,6 +8,16 @@
 
 Changes
 =======
+
+Version v10.0.0 (released 2026-01-31)
+
+- refactor: context_schema instead of self.context
+- refactor: deduplicate code ModePIDFieldVocabularyMixin
+- chore(black): update formatting to >= 26.0
+- refactor: refactor some resource tests for clarity + rm unused imports
+- chore+fix: replace deprecated usage of Link
+- chore(setup): bump dependencies
+- fix(chore): DeprecationWarning stdlib
 
 Version v9.1.2 (released 2025-12-17)
 
