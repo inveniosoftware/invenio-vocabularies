@@ -9,6 +9,12 @@
 Changes
 =======
 
+Version v10.1.0 (released 2026-02-16)
+
+- datastream: formatting and refactor updates
+- datastream: added user agent in reader http request
+- orcid: replaced error with warning for missing name
+
 Version v10.0.0 (released 2026-01-31)
 
 - refactor: context_schema instead of self.context
