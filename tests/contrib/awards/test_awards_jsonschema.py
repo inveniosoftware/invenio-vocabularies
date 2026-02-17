@@ -43,8 +43,9 @@ def test_valid_full(appctx, schema):
                 "scheme": "url",
             }
         ],
-        "title": {"en": "Personalised Treatment For Cystic Fibrosis Patients With \
-                Ultra-rare CFTR Mutations (and beyond)"},
+        "title": {
+            "en": "Personalised Treatment For Cystic Fibrosis Patients With Ultra-rare CFTR Mutations (and beyond)"
+        },
         "number": "755021",
         "funder": {"id": "ria", "name": "Research annd Innovation action"},
     }
