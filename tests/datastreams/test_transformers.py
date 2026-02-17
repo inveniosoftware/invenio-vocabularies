@@ -44,7 +44,7 @@ def expected_from_xml():
 
 
 def test_xml_transformer(expected_from_xml):
-    bytes_xml_entry = StreamEntry(b"""
+    entry = b"""
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         <ns:top_level_field>top-level single value</ns:top_level_field>
         <ns:top_level_object_field>
@@ -62,14 +62,15 @@ def test_xml_transformer(expected_from_xml):
                 </ns:array_element_object>
             </ns:nested_array_field array_attr="value">
         </ns:top_level_object_field>
-        """)
+        """
+    bytes_xml_entry = StreamEntry(entry)
 
     transformer = XMLTransformer()
     assert expected_from_xml == transformer.apply(bytes_xml_entry).entry
 
 
 def test_bad_xml_transformer():
-    bytes_xml_entry = StreamEntry(b"""
+    entry = b"""
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         <ns:top_level_field>top-level single value</ns:top_level_field>
         <ns:top_level_object_field>
@@ -87,7 +88,8 @@ def test_bad_xml_transformer():
                 </ns:array_element_object>
             </ns:nested_array_field array_attr="value">
         </ns:top_level_object_field>
-        """)
+        """
+    bytes_xml_entry = StreamEntry(entry)
 
     transformer = XMLTransformer(root_element="field_two")
 
