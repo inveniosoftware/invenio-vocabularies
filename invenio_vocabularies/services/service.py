@@ -146,7 +146,7 @@ class VocabulariesService(RecordService):
                 identity=identity,
                 record_cls=self.record_cls,
                 search_opts=self.config.search,
-                permission_action="search",
+                permission_action="read",
             ).query(search_query)
 
             results = dsl.response.Response(search, results)
