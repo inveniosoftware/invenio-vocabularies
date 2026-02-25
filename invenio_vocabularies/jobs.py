@@ -8,6 +8,7 @@
 
 """Jobs module."""
 
+import copy
 from datetime import datetime, timedelta
 
 from flask import current_app
@@ -17,6 +18,9 @@ from invenio_jobs.jobs import JobType
 from invenio_vocabularies.services.tasks import process_datastream
 
 from .contrib.names.datastreams import ORCID_PRESET_DATASTREAM_CONFIG
+from .contrib.subjects.euroscivoc.datastreams import (
+    DATASTREAM_CONFIG as EUROSCIVOC_DATASTREAM_CONFIG,
+)
 
 
 class ProcessDataStreamJob(JobType):
@@ -205,3 +209,16 @@ class ImportORCIDJob(ProcessDataStreamJob):
         run the job before so there is no logical value.
         """
         return {**cls.build_task_arguments(job_obj, since=since, **kwargs)}
+
+
+class ImportEuroSciVocSubjectsJob(ProcessDataStreamJob):
+    """Import subjects from EuroSciVoc registered task."""
+
+    description = _("Import subjects from EuroSciVoc")
+    title = _("Import Subjects EuroSciVoc")
+    id = "import_subjects_euroscivoc"
+
+    @classmethod
+    def build_task_arguments(cls, job_obj, since=None, **kwargs):
+        """Process subjects EuroSciVoc."""
+        return {"config": copy.deepcopy(EUROSCIVOC_DATASTREAM_CONFIG)}
