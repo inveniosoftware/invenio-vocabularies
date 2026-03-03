@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2024 CERN.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -359,6 +360,20 @@ def test_orcid_transformer_name_filtering(orcid_data, name, is_valid_name):
         val["person"]["name"]["family-name"] = name
         stream_entry = transformer.apply(StreamEntry(val))
         assert stream_entry.errors
+
+
+def test_orcid_transformer_missing_name_fields(app, orcid_data):
+    transformer = OrcidTransformer()
+    val = deepcopy(orcid_data["json"]["multi_employment"])
+
+    val["person"]["name"] = None
+    stream_entry = transformer.apply(StreamEntry(val))
+    assert stream_entry.errors
+
+    val = deepcopy(orcid_data["json"]["multi_employment"])
+    val["person"]["name"]["family-name"] = None
+    stream_entry = transformer.apply(StreamEntry(val))
+    assert stream_entry.errors
 
 
 @pytest.mark.parametrize("name", NAMES_TEST.keys())

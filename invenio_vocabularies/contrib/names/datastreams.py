@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2021-2026 CERN.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -276,10 +277,11 @@ class OrcidTransformer(BaseTransformer):
         given_names = name.get("given-names", None) if name else None
 
         if name is None or family_name is None:
-            current_app.logger.warning(
-                f"Missing name or family name for ORCID ID: {orcid_id}"
+            error = TransformerError(
+                f"Missing name or family name for ORCiD ID: {orcid_id}."
             )
-            stream_entry.filtered = True
+            stream_entry.errors.append(error)
+            current_app.logger.warning(error)
             return stream_entry
 
         full_name = " ".join(
