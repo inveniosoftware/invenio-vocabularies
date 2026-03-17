@@ -22,6 +22,7 @@ def process_datastream(config):
         transformers_config=config.get("transformers"),
         writers_config=config["writers"],
         batch_size=config.get("batch_size", 1000),
+        run_subtasks=config.get("run_subtasks", True),
         write_many=config.get("write_many", False),
     )
     entries_with_errors = 0

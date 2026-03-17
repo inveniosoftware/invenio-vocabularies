@@ -60,6 +60,7 @@ class DataStream:
         transformers=None,
         batch_size=100,
         write_many=False,
+        run_subtasks=True,
         *args,
         **kwargs,
     ):
@@ -74,6 +75,7 @@ class DataStream:
         self._writers = writers
         self.batch_size = batch_size
         self.write_many = write_many
+        self.run_subtasks = run_subtasks
 
     def filter(self, stream_entry, *args, **kwargs):
         """Checks if an stream_entry should be filtered out (skipped)."""
@@ -206,7 +208,11 @@ class DataStream:
         current_app.logger.debug(f"Writing entry: {stream_entry.entry}")
         for writer in self._writers:
             try:
-                if writer.is_async and job_context.get() is not EMPTY_JOB_CTX:
+                if (
+                    self.run_subtasks
+                    and writer.is_async
+                    and job_context.get() is not EMPTY_JOB_CTX
+                ):
                     subtask_run_id = self._prepare_async_context()
                     writer.write(stream_entry, subtask_run_id=subtask_run_id)
                 else:
@@ -222,7 +228,11 @@ class DataStream:
         current_app.logger.debug(f"Batch writing entries: {len(stream_entries)}")
         for writer in self._writers:
             try:
-                if writer.is_async and job_context.get() is not EMPTY_JOB_CTX:
+                if (
+                    self.run_subtasks
+                    and writer.is_async
+                    and job_context.get() is not EMPTY_JOB_CTX
+                ):
                     subtask_run_id = self._prepare_async_context()
                     yield from writer.write_many(
                         stream_entries, subtask_run_id=subtask_run_id
