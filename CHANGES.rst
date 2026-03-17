@@ -9,6 +9,12 @@
 Changes
 =======
 
+Version v11.0.0 (released 2026-03-17)
+
+- change(setup): upgrade invenio-jobs
+- feat(jobs): registered job to import euroscivoc subjects
+- add(awards): updated config with openaire funder prefix
+
 Version v10.1.0 (released 2026-02-16)
 
 - datastream: formatting and refactor updates
