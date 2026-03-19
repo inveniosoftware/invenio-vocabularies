@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v11.0.1 (released 2026-03-19)
+
+- fix(setup): register missing orcid_job
+
 Version v11.0.0 (released 2026-03-17)
 
 - change(setup): upgrade invenio-jobs
