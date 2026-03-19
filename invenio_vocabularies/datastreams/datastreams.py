@@ -18,6 +18,15 @@ from invenio_jobs.proxies import current_runs_service
 from .errors import ReaderError, TransformerError, WriterError
 
 
+def _log_with_extra(logger, level, message, extra=None):
+    """Log a message with optional structured context."""
+    log_func = getattr(logger, level)
+    if extra:
+        log_func(message, extra=extra)
+    else:
+        log_func(message)
+
+
 class StreamEntry:
     """Object to encapsulate streams processing."""
 
@@ -45,7 +54,16 @@ class StreamEntry:
         if logger is None:
             logger = current_app.logger
         for error in self.errors:
-            logger.error(f"Error in entry {self.entry}: {error}")
+            extra = {"entry": self.entry, "error_message": str(error)}
+            error_extra = getattr(error, "extra", None)
+            if error_extra:
+                extra.update(error_extra)
+            _log_with_extra(
+                logger,
+                "error",
+                "Error in stream entry.",
+                extra,
+            )
         if self.exc:
             logger.error(f"Exception in entry {self.entry}: {self.exc}")
 
@@ -174,6 +192,19 @@ class DataStream:
             try:
                 stream_entry = transformer.apply(stream_entry)
             except TransformerError as err:
+                extra = {
+                    "transformer": transformer.__class__.__name__,
+                    "error_message": str(err),
+                }
+                err_extra = getattr(err, "extra", None)
+                if isinstance(err_extra, dict):
+                    extra.update(err_extra)
+                _log_with_extra(
+                    current_app.logger,
+                    "warning",
+                    "Transformer failed.",
+                    extra,
+                )
                 stream_entry.errors.append(
                     f"{transformer.__class__.__name__}: {str(err)}"
                 )

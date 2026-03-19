@@ -16,6 +16,12 @@ class ReaderError(Exception):
 class TransformerError(Exception):
     """Transformer application exception."""
 
+    def __init__(self, message, *, extra=None, **kwargs):
+        """Initialise a transformer error with optional structured context."""
+        self.extra = dict(extra or {})
+        self.extra.update(kwargs)
+        super().__init__(message)
+
 
 class WriterError(Exception):
     """Transformer application exception."""
