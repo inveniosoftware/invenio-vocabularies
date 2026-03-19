@@ -361,6 +361,52 @@ def test_orcid_transformer_name_filtering(orcid_data, name, is_valid_name):
         assert stream_entry.errors
 
 
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda val: val["person"].update({"name": None}),
+        lambda val: val["person"]["name"].update({"family-name": None}),
+    ],
+)
+def test_orcid_transformer_missing_name_fields(orcid_data, caplog, mutate):
+    transformer = OrcidTransformer()
+    val = deepcopy(orcid_data["json"]["multi_employment"])
+    orcid_id = val["orcid-identifier"]["path"]
+    mutate(val)
+
+    with caplog.at_level("WARNING"):
+        stream_entry = transformer.apply(StreamEntry(val))
+
+    assert len(stream_entry.errors) == 1
+    assert isinstance(stream_entry.errors[0], TransformerError)
+    assert str(stream_entry.errors[0]) == "Missing name or family name for ORCiD entry."
+    assert stream_entry.errors[0].extra == {"orcid_id": orcid_id}
+    warning = next(
+        record
+        for record in caplog.records
+        if record.msg == "Missing name or family name for ORCiD entry."
+    )
+    assert warning.orcid_id == orcid_id
+
+
+def test_orcid_transformer_invalid_name_error_is_stable(orcid_data):
+    transformer = OrcidTransformer()
+    val = deepcopy(orcid_data["json"]["multi_employment"])
+    orcid_id = val["orcid-identifier"]["path"]
+    val["person"]["name"]["given-names"] = "Jane!"
+    val["person"]["name"]["family-name"] = ""
+
+    stream_entry = transformer.apply(StreamEntry(val))
+
+    assert len(stream_entry.errors) == 1
+    assert isinstance(stream_entry.errors[0], TransformerError)
+    assert str(stream_entry.errors[0]) == "ORCiD entry failed transformation."
+    assert stream_entry.errors[0].extra == {
+        "orcid_id": orcid_id,
+        "reasons": ["Invalid characters in name for ORCiD entry."],
+    }
+
+
 @pytest.mark.parametrize("name", NAMES_TEST.keys())
 def test_orcid_transformer_different_names_no_regex(orcid_data, name):
     transformer = OrcidTransformer(names_exclude_regex=None)

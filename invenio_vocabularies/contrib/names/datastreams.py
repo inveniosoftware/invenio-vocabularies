@@ -276,10 +276,12 @@ class OrcidTransformer(BaseTransformer):
         given_names = name.get("given-names", None) if name else None
 
         if name is None or family_name is None:
-            current_app.logger.warning(
-                f"Missing name or family name for ORCID ID: {orcid_id}"
+            error = TransformerError(
+                "Missing name or family name for ORCiD entry.",
+                orcid_id=orcid_id,
             )
-            stream_entry.filtered = True
+            stream_entry.errors.append(error)
+            current_app.logger.warning(str(error), extra=error.extra)
             return stream_entry
 
         full_name = " ".join(
@@ -290,17 +292,18 @@ class OrcidTransformer(BaseTransformer):
         if not self._is_valid_name(full_name):
             errors.append(
                 TransformerError(
-                    f"Invalid characters in name for ORCiD ID: {orcid_id}."
+                    "Invalid characters in name for ORCiD entry.",
+                    orcid_id=orcid_id,
                 )
             )
 
         if errors:
-            all_errors = "\n".join(str(e) for e in errors)
-            error_message = (
-                f"ORCiD entry with ORCiD ID: #{orcid_id} failed transformation. "
-                f"See errors:\n{all_errors}"
+            error = TransformerError(
+                "ORCiD entry failed transformation.",
+                orcid_id=orcid_id,
+                reasons=[str(e) for e in errors],
             )
-            stream_entry.errors.append(error_message)
+            stream_entry.errors.append(error)
 
         entry = {
             "id": orcid_id,
