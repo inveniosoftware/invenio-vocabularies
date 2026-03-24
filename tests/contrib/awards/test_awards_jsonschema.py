@@ -34,6 +34,9 @@ def fails(data):
 
 
 def test_valid_full(appctx, schema):
+    # Turning off formatting for Python 3.9 black compatability
+    # Remove these comments once Python 3.9 support is no longer needed
+    # fmt: off
     data = {
         "$schema": schema,
         "identifiers": [
@@ -47,6 +50,7 @@ def test_valid_full(appctx, schema):
         "number": "755021",
         "funder": {"id": "ria", "name": "Research annd Innovation action"},
     }
+    # fmt: on
 
     assert validates(data)
 
