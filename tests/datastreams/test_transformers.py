@@ -43,6 +43,9 @@ def expected_from_xml():
 
 
 def test_xml_transformer(expected_from_xml):
+    # Turning off formatting for Python 3.9 black compatability
+    # Remove these comments once Python 3.9 support is no longer needed
+    # fmt: off
     bytes_xml_entry = StreamEntry(b"""
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         <ns:top_level_field>top-level single value</ns:top_level_field>
@@ -62,12 +65,16 @@ def test_xml_transformer(expected_from_xml):
             </ns:nested_array_field array_attr="value">
         </ns:top_level_object_field>
         """)
+    # fmt: on
 
     transformer = XMLTransformer()
     assert expected_from_xml == transformer.apply(bytes_xml_entry).entry
 
 
 def test_bad_xml_transformer():
+    # Turning off formatting for Python 3.9 black compatability
+    # Remove these comments once Python 3.9 support is no longer needed
+    # fmt: off
     bytes_xml_entry = StreamEntry(b"""
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         <ns:top_level_field>top-level single value</ns:top_level_field>
@@ -87,6 +94,7 @@ def test_bad_xml_transformer():
             </ns:nested_array_field array_attr="value">
         </ns:top_level_object_field>
         """)
+    # fmt: on
 
     transformer = XMLTransformer(root_element="field_two")
 
