@@ -9,6 +9,14 @@
 Changes
 =======
 
+Version v9.1.3 (released 2026-03-24)
+
+- fix(formatting): ignore black formatting in some problematic areas
+- chore: reformat with black v26
+- fix(setup): pin setuptools for pkg_resources
+- i18n: pulled translations
+- i18n: pulled translations (#514)
+
 Version v9.1.2 (released 2025-12-17)
 
 - fix: ChangedInMarshmallow4Warning
