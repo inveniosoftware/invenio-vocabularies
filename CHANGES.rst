@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v9.1.4 (released 2026-03-24)
+
+- setup: relax pin on Invenio-Jobs
+
 Version v9.1.3 (released 2026-03-24)
 
 - fix(formatting): ignore black formatting in some problematic areas
