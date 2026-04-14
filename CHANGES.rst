@@ -8,6 +8,15 @@
 
 Changes
 =======
+Version v9.0.1 (released 2026-04-16)
+
+- fix(formatting): ignore black formatting in some problematic areas
+- chore: reformat with black v26
+- fix(setup): pin setuptools for pkg_resources
+- i18n: pulled translations
+- i18n: pulled translations (#514)
+- fix: ChangedInMarshmallow4Warning
+- Updated file pattern in ROR dump
 
 Version v9.0.0 (released 2025-09-05)
 
