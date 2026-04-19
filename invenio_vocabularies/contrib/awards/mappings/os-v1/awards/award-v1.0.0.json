@@ -12,7 +12,7 @@
       },
       {
         "i18n_description": {
-          "path_match": "description.*",
+          "path_match": "*description.*",
           "match_mapping_type": "string",
           "mapping": {
             "type": "text"
@@ -84,6 +84,10 @@
       },
       "program": {
         "type": "keyword"
+      },
+      "short_description": {
+        "type": "object",
+        "dynamic": "true"
       },
       "subjects": {
         "properties": {
