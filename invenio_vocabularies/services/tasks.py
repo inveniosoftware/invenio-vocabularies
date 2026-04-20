@@ -27,12 +27,13 @@ def process_datastream(config):
     entries_with_errors = 0
     for result in ds.process():
         if result.errors:
-            for err in result.errors:
-                current_app.logger.error(err)
+            current_app.logger.warning(
+                f"Skipped entry {result.entry} with errors: {result.errors}"
+            )
             entries_with_errors += 1
 
     if entries_with_errors:
         raise TaskExecutionPartialError(
-            message=f"Task execution succeeded with {entries_with_errors} entries with errors.",
+            message=f"Task execution partially succeeded with {entries_with_errors} entries with errors.",
             errored_entries_count=entries_with_errors,
         )
