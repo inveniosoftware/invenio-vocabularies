@@ -135,7 +135,7 @@ class OrcidDataSyncReader(BaseReader):
                         )
                         yield result
                 except Exception:
-                    current_app.logger.exception(
+                    current_app.logger.warning(
                         f"Error processing ORCiD record: {orcid}"
                     )
                 finally:
@@ -368,7 +368,7 @@ class OrcidTransformer(BaseTransformer):
 
                 result.append(aff)
         except Exception:
-            current_app.logger.error("Error extracting affiliations.")
+            current_app.logger.warning("Error extracting affiliations.")
         return result
 
     def _extract_affiliation_id(self, org):

@@ -134,7 +134,18 @@ class ServiceWriter(BaseWriter):
         """Writes the input entries using a given service."""
         current_app.logger.info(f"Writing {len(stream_entries)} entries")
         entries = [entry.entry for entry in stream_entries]
-        entries_with_id = [(self._entry_id(entry), entry) for entry in entries]
+        entries_with_id = []
+        entries_without_id = []
+        for entry in entries:
+            try:
+                entries_with_id.append((self._entry_id(entry), entry))
+            except KeyError:
+                # While reading the entries, we might not have the ID in the entry, so we skip them instead of erroring out the whole batch
+                entries_without_id.append(entry)
+        if entries_without_id:
+            current_app.logger.warning(
+                f"Skipping {len(entries_without_id)} entries without ID: {entries_without_id}"
+            )
         result_list = self._service.create_or_update_many(
             self._identity, entries_with_id
         )
