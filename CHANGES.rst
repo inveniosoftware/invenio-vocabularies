@@ -9,6 +9,10 @@
 Changes
 =======
 
+Version v11.1.0 (released 2026-04-22)
+
+- feat: added run_subtasks flag in datastream writer
+
 Version v11.0.1 (released 2026-03-19)
 
 - fix(setup): register missing orcid_job
