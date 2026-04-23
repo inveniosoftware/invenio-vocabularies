@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2020-2026 CERN.
 # Copyright (C) 2024-2026 Graz University of Technology.
+# Copyright (C) 2026 KTH Royal Institute of Technology.
 #
 # Invenio-Vocabularies is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -11,6 +12,6 @@
 
 from .ext import InvenioVocabularies
 
-__version__ = "11.1.0"
+__version__ = "11.1.1"
 
 __all__ = ("__version__", "InvenioVocabularies")
