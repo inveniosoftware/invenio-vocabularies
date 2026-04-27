@@ -175,11 +175,28 @@ class CORDISProjectTransformer(BaseTransformer):
             f"{current_app.config['VOCABULARIES_AWARDS_EC_ROR_ID']}::{record['id']}"
         )
 
+        article_data = (
+            record.get("relations", {}).get("associations", {}).get("article", {})
+        )
+
+        article_title = (
+            (
+                article_data[0]
+                if isinstance(article_data, list) and article_data
+                else article_data
+            ).get("title")
+            if article_data
+            else None
+        )
+
+        short_description = (article_title or record.get("teaser") or "")[:250]
+        if short_description:
+            award["short_description"] = {"en": short_description}
+
         categories = record.get("relations", {}).get("categories", {}).get("category")
         if categories:
             if isinstance(categories, dict):
                 categories = [categories]
-
             award["subjects"] = [
                 {"id": f"euroscivoc:{vocab_id}"}
                 for category in categories
@@ -265,7 +282,6 @@ class CORDISProjectTransformer(BaseTransformer):
                     )
                     if programme_related_legal_basis["uniqueprogrammepart"] == "true"
                 ][0]
-
             # Store the code of the programme.
             # For instance the code "HORIZON.1.2" which means "Marie Skłodowska-Curie Actions (MSCA)"
             # See https://cordis.europa.eu/programme/id/HORIZON.1.2
