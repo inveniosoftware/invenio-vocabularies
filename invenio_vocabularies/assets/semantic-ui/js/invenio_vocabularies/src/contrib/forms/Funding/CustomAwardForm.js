@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2021-2024 CERN.
  * SPDX-FileCopyrightText: 2021 Northwestern University.
+ * SPDX-FileCopyrightText: 2026 ZBW – Leibniz-Informationszentrum Wirtschaft.
  * SPDX-License-Identifier: MIT
  */
 
@@ -10,6 +11,7 @@ import { Form, Header } from "semantic-ui-react";
 import { TextField, RemoteSelectField } from "react-invenio-forms";
 import { i18next } from "@translations/invenio_vocabularies/i18next";
 import _isEmpty from "lodash/isEmpty";
+import { useFormikContext, getIn } from "formik";
 
 import Overridable from "react-overridable";
 
@@ -22,32 +24,89 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
     if (!funderName && !funderPID) {
       return {};
     }
+    const isVocabFunder = funderPID;
+    const funderText = [funderName, funderCountry, funderPID]
+      .filter(Boolean)
+      .join(", ");
+
+    const dropdownContent = isVocabFunder ? (
+      <div className="ui header">
+        {funderName} (
+        <span>
+          <a
+            href={`https://ror.org/${funderPID}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              alt={i18next.t("ROR logo")}
+              src="/static/images/ror-icon.svg"
+              className="inline-id-icon mr-5"
+            />
+            {funderPID}
+          </a>
+        </span>
+        ){funderCountry && <div className="sub header">{funderCountry}</div>}
+      </div>
+    ) : null;
 
     return {
-      text: [funderName, funderCountry, funderPID].filter((val) => val).join(", "),
-      value: funderItem.id,
-      key: funderItem.id,
+      id: funderPID,
+      // Used when selected
+      text: funderText,
+      // Used in dropdown list
+      content: dropdownContent || funderText,
+      value: funderPID || funderName,
+      key: funderPID || funderName,
       ...(funderName && { name: funderName }),
       ...(funderPID && { pid: funderPID }),
     };
   }
-
   function serializeFunderFromDropdown(funderDropObject) {
-    return {
-      id: funderDropObject.key,
-      ...(funderDropObject.name && { name: funderDropObject.name }),
-      ...(funderDropObject.pid && { pid: funderDropObject.pid }),
-    };
+    const isVocabFunder = funderDropObject.id;
+
+    let result;
+    if (isVocabFunder) {
+      result = {
+        id: funderDropObject.id,
+        ...(funderDropObject.name && { name: funderDropObject.name }),
+        ...(funderDropObject.pid && { pid: funderDropObject.pid }),
+      };
+    } else {
+      result = {
+        name: funderDropObject.name,
+      };
+    }
+    return result;
   }
+
+  const funderPath = "selectedFunding.funder";
+  const { values } = useFormikContext();
+  const currentFunder = getIn(values, funderPath);
+
+  const initialSuggestions = currentFunder
+    ? [deserializeFunderToDropdown(currentFunder)]
+    : [];
+
+  const handleFunderChange = ({ formikProps }, selectedFundersArray) => {
+    if (!selectedFundersArray || selectedFundersArray.length === 0) {
+      formikProps.form.setFieldValue(funderPath, undefined);
+    } else {
+      const deserializedFunder = serializeFunderFromDropdown(
+        selectedFundersArray.at(-1)
+      );
+      formikProps.form.setFieldValue(funderPath, deserializedFunder);
+    }
+  };
 
   return (
     <Form>
       <Overridable
         id="InvenioVocabularies.CustomAwardForm.RemoteSelectField.Container"
-        fieldPath="selectedFunding.funder.id"
+        fieldPath={funderPath}
       >
         <RemoteSelectField
-          fieldPath="selectedFunding.funder.id"
+          fieldPath={funderPath}
           suggestionAPIUrl="/api/funders"
           suggestionAPIHeaders={{
             Accept: "application/vnd.inveniordm.v1+json",
@@ -58,31 +117,21 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
               deserializeFunderToDropdown(deserializeFunder(funder))
             );
           }}
+          initialSuggestions={initialSuggestions}
           searchInput={{
             autoFocus: _isEmpty(selectedFunding),
           }}
           label={i18next.t("Funder")}
           noQueryMessage={i18next.t("Search for funder...")}
           clearable
-          allowAdditions={false}
+          allowAdditions
           multiple={false}
           selectOnBlur={false}
           selectOnNavigation={false}
           required
-          search={(options) => options}
-          isFocused
-          onValueChange={({ formikProps }, selectedFundersArray) => {
-            if (selectedFundersArray.length === 1) {
-              const selectedFunder = selectedFundersArray[0];
-              if (selectedFunder) {
-                const deserializedFunder = serializeFunderFromDropdown(selectedFunder);
-                formikProps.form.setFieldValue(
-                  "selectedFunding.funder",
-                  deserializedFunder
-                );
-              }
-            }
-          }}
+          value={currentFunder?.id || currentFunder?.name || ""}
+          isFocused={currentFunder ? false : true}
+          onValueChange={handleFunderChange}
         />
       </Overridable>
       <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformationHeader.Container">
