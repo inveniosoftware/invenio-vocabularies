@@ -1,9 +1,9 @@
-// This file is part of InvenioVocabularies
-// Copyright (C) 2021-2024 CERN.
-// Copyright (C) 2021 Northwestern University.
-//
-// Invenio is free software; you can redistribute it and/or modify it
-// under the terms of the MIT License; see LICENSE file for more details.
+/*
+ * SPDX-FileCopyrightText: 2021-2024 CERN.
+ * SPDX-FileCopyrightText: 2021 Northwestern University.
+ * SPDX-FileCopyrightText: 2026 ZBW – Leibniz-Informationszentrum Wirtschaft.
+ * SPDX-License-Identifier: MIT
+ */
 
 import { i18next } from "@translations/invenio_vocabularies/i18next";
 import { Formik } from "formik";
@@ -48,9 +48,18 @@ const StandardSchema = Yup.object().shape({
 
 const CustomFundingSchema = Yup.object().shape({
   selectedFunding: Yup.object().shape({
-    funder: Yup.object().shape({
-      id: Yup.string().required(i18next.t("Funder is required.")),
-    }),
+    funder: Yup.object()
+      .shape({
+        id: Yup.string(),
+        name: Yup.string(),
+      })
+      .test({
+        name: "funderRequired",
+        message: i18next.t("Funder is required."),
+        test: function (value) {
+          return value?.id || value?.name;
+        },
+      }),
     award: Yup.object().shape({
       title: Yup.string(),
       number: Yup.string(),
