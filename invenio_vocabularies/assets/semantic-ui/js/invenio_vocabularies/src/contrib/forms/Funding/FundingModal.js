@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2021-2024 CERN.
  * SPDX-FileCopyrightText: 2021 Northwestern University.
+ * SPDX-FileCopyrightText: 2026 ZBW – Leibniz-Informationszentrum Wirtschaft.
  * SPDX-License-Identifier: MIT
  */
 
@@ -47,9 +48,18 @@ const StandardSchema = Yup.object().shape({
 
 const CustomFundingSchema = Yup.object().shape({
   selectedFunding: Yup.object().shape({
-    funder: Yup.object().shape({
-      id: Yup.string().required(i18next.t("Funder is required.")),
-    }),
+    funder: Yup.object()
+      .shape({
+        id: Yup.string(),
+        name: Yup.string(),
+      })
+      .test({
+        name: "funderRequired",
+        message: i18next.t("Funder is required."),
+        test: function (value) {
+          return value?.id || value?.name;
+        },
+      }),
     award: Yup.object().shape({
       title: Yup.string(),
       number: Yup.string(),
