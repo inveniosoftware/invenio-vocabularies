@@ -55,7 +55,7 @@ class OrcidDataSyncReader(BaseReader):
             # and choose the sections we need to read (probably the summary)
             return self.s3_client.read_file(f"s3://{bucket}/{key}")
         except Exception:
-            app.logger.exception(f"Failed to fetch ORCiD record: {key}")
+            app.logger.exception("Failed to fetch ORCiD record: %s", key)
 
     def _process_lambda_file(self, fileobj):
         """Process the ORCiD lambda file and returns a list of ORCiDs to sync.
@@ -135,8 +135,8 @@ class OrcidDataSyncReader(BaseReader):
                         )
                         yield result
                 except Exception:
-                    current_app.logger.exception(
-                        f"Error processing ORCiD record: {orcid}"
+                    current_app.logger.warning(
+                        "Error processing ORCiD record: %s", orcid
                     )
                 finally:
                     # Explicitly release memory, as we don't need the future anymore.
@@ -368,7 +368,7 @@ class OrcidTransformer(BaseTransformer):
 
                 result.append(aff)
         except Exception:
-            current_app.logger.error("Error extracting affiliations.")
+            current_app.logger.warning("Error extracting affiliations.")
         return result
 
     def _extract_affiliation_id(self, org):
