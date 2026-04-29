@@ -46,10 +46,14 @@ class StreamEntry:
             logger = current_app.logger
         for error in self.errors:
             # Warning to avoid Sentry spam, as we are anyways attaching the error to the StreamEntry
-            logger.warning(f"Error in entry {self.entry}: {error}")
+            logger.warning("Error in entry: %s", error, extra={"entry": self.entry})
         if self.exc:
             # Exception to log the full stack trace
-            logger.exception(f"Exception in entry {self.entry}: {self.exc}")
+            logger.exception(
+                "Exception in entry: %s",
+                self.exc,
+                extra={"entry": self.entry, "exception": self.exc},
+            )
 
 
 class DataStream:
@@ -110,7 +114,8 @@ class DataStream:
                     transformed_entries.append(transformed_entry)
         if transformed_entries_with_errors:
             current_app.logger.warning(
-                f"Skipping {len(transformed_entries_with_errors)} transformed entries with errors."
+                "Skipping %s transformed entries with errors.",
+                len(transformed_entries_with_errors),
             )
         if transformed_entries:
             if self.write_many:
@@ -211,7 +216,9 @@ class DataStream:
                     writer.write(stream_entry)
             except WriterError as err:
                 # The actionable bugs are logged as errors to send to Sentry
-                current_app.logger.error(f"Writer error: {str(err)}")
+                current_app.logger.error(
+                    "Writer error: %s", str(err), extra={"entry": stream_entry.entry}
+                )
                 stream_entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
 
         return stream_entry
@@ -230,7 +237,7 @@ class DataStream:
                     yield from writer.write_many(stream_entries)
             except WriterError as err:
                 # The actionable bugs are logged as errors to send to Sentry
-                current_app.logger.error(f"Writer error: {str(err)}")
+                current_app.logger.error("Writer error: %s", str(err))
                 for entry in stream_entries:
                     entry.errors.append(f"{writer.__class__.__name__}: {str(err)}")
 

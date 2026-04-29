@@ -144,7 +144,9 @@ class ServiceWriter(BaseWriter):
                 entries_without_id.append(entry)
         if entries_without_id:
             current_app.logger.warning(
-                f"Skipping {len(entries_without_id)} entries without ID: {entries_without_id}"
+                "Skipping %s entries without ID: %s",
+                len(entries_without_id),
+                entries_without_id,
             )
         result_list = self._service.create_or_update_many(
             self._identity, entries_with_id
