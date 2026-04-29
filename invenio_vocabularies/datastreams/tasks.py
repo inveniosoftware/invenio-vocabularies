@@ -53,7 +53,7 @@ def write_entry(writer_config, entry, subtask_run_id=None):
             )
     except Exception as exc:
         # The actionable bugs are logged as errors to send to Sentry
-        current_app.logger.error(f"Error writing entry {entry}: {exc}")
+        current_app.logger.error("Error writing entry: %s", exc, extra={"entry": entry})
         if subtask_run_id and job_id:
             current_runs_service.finalize_subtask(
                 system_identity,
@@ -105,7 +105,9 @@ def write_many_entry(writer_config, entries, subtask_run_id=None):
             )
     except Exception as exc:
         current_app.logger.warning(
-            f"Error writing entries {entries}: {repr(exc)}. The errorred entries count might be incorrect as an entire batch might have failed"
+            "Error writing entries %s: %s. The errorred entries count might be incorrect as an entire batch might have failed",
+            entries,
+            repr(exc),
         )
         if subtask_run_id and job_id:
             current_runs_service.finalize_subtask(
