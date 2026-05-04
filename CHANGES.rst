@@ -10,6 +10,11 @@
 Changes
 =======
 
+Version v11.1.2 (released 2026-05-04)
+
+- fix(datastreams): Log ORCID read errors as warnings
+- fix(datastreams): replace f-strings in logging calls with %s formatting
+
 Version v11.1.1 (released 2026-04-23)
 
 - fix(names): skip invalid ORCID entries
