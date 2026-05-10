@@ -6,7 +6,14 @@
 from functools import partial
 
 from invenio_i18n import lazy_gettext as _
-from marshmallow import Schema, ValidationError, fields, validate, validates_schema
+from marshmallow import (
+    EXCLUDE,
+    Schema,
+    ValidationError,
+    fields,
+    validate,
+    validates_schema,
+)
 from marshmallow_utils.fields import IdentifierSet, ISODateString, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
@@ -16,18 +23,42 @@ from ...services.schema import (
     ModePIDFieldVocabularyMixin,
     i18n_strings,
 )
+from ..affiliations.config import affiliation_schemes
 from ..funders.schema import FunderRelationSchema
 from ..subjects.schema import SubjectRelationSchema
 from .config import award_schemes
 
 
 class AwardOrganizationRelationSchema(ContribVocabularyRelationSchema):
-    """Schema to define an organization relation in an award."""
+    """Schema to define an organization relation in an award.
+
+    ``id`` is dereferenced against the ``affiliations`` vocabulary,
+    so passing just ``{"id": "<ror>"}`` populates ``name`` and
+    ``identifiers`` on read.
+    """
+
+    # `ServiceWriter._do_update` merges the dumped entry back in, so dump-only
+    # `name`/`identifiers` would fail load validation on re-update without this.
+    class Meta:
+        """Metadata class."""
+
+        unknown = EXCLUDE
 
     ftf_name = "organization"
     parent_field_name = "organizations"
     organization = SanitizedUnicode()
     scheme = SanitizedUnicode()
+    name = SanitizedUnicode(dump_only=True)
+    identifiers = IdentifierSet(
+        fields.Nested(
+            partial(
+                IdentifierSchema,
+                allowed_schemes=affiliation_schemes,
+                identifier_required=False,
+            )
+        ),
+        dump_only=True,
+    )
 
 
 class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):

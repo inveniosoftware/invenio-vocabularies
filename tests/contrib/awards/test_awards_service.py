@@ -120,6 +120,37 @@ def test_award_dereferenced(
     assert list(res.hits)[0]["funder"] == expected_funder
 
 
+def test_award_organizations_dereferenced(
+    app,
+    search_clear,
+    service,
+    identity,
+    award_full_data,
+    example_funder_ec,
+    example_affiliation,
+):
+    """Award organizations resolve against the affiliations vocabulary."""
+    award_full_data["organizations"] = [{"id": "01ggx4157"}]
+
+    item = service.create(identity, award_full_data)
+    Award.index.refresh()
+    id_ = item.id
+
+    expected_organization = {
+        "id": "01ggx4157",
+        "name": "CERN",
+        "identifiers": [{"identifier": "01ggx4157", "scheme": "ror"}],
+    }
+    assert item["organizations"] == [expected_organization]
+
+    read_item = service.read(identity, id_)
+    assert read_item["organizations"] == [expected_organization]
+
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
+    assert res.total == 1
+    assert list(res.hits)[0]["organizations"] == [expected_organization]
+
+
 def test_indexed_at_query(
     app, db, service, identity, award_full_data, example_funder_ec
 ):

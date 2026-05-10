@@ -12,6 +12,7 @@ from invenio_i18n import lazy_gettext as _
 from invenio_indexer.proxies import current_indexer_registry
 from invenio_records_resources.proxies import current_service_registry
 
+from invenio_vocabularies.contrib.affiliations.api import Affiliation
 from invenio_vocabularies.contrib.awards.api import Award
 from invenio_vocabularies.contrib.funders.api import Funder
 
@@ -66,6 +67,36 @@ def funders_service():
 def funder_indexer():
     """Indexer instance with correct Record class."""
     return current_indexer_registry.get("funders")
+
+
+#
+# Affiliation related fixtures
+#
+@pytest.fixture(scope="module")
+def affiliations_service():
+    """Affiliations service object."""
+    return current_service_registry.get("affiliations")
+
+
+@pytest.fixture(scope="function")
+def example_affiliation(db, identity, affiliations_service):
+    """Example affiliation used to test award.organizations dereferencing."""
+    affiliation = affiliations_service.create(
+        identity,
+        {
+            "id": "01ggx4157",
+            "name": "CERN",
+            "acronym": "CERN",
+            "identifiers": [
+                {"identifier": "01ggx4157", "scheme": "ror"},
+            ],
+        },
+    )
+    Affiliation.index.refresh()
+    yield affiliation
+    affiliation._record.delete(force=True)
+    affiliations_service.indexer.delete(affiliation._record, refresh=True)
+    db.session.commit()
 
 
 #

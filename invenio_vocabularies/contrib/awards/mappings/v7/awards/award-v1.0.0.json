@@ -121,6 +121,9 @@
       },
       "organizations": {
         "properties": {
+          "@v": {
+            "type": "keyword"
+          },
           "scheme": {
             "type": "keyword"
           },
@@ -129,6 +132,19 @@
           },
           "organization": {
             "type": "keyword"
+          },
+          "name": {
+            "type": "text"
+          },
+          "identifiers": {
+            "properties": {
+              "identifier": {
+                "type": "keyword"
+              },
+              "scheme": {
+                "type": "keyword"
+              }
+            }
           }
         }
       },
