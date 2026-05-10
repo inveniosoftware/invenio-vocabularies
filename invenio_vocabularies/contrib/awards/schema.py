@@ -57,6 +57,8 @@ class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
 
     program = SanitizedUnicode()
 
+    short_description = i18n_strings
+
     subjects = fields.List(fields.Nested(SubjectRelationSchema))
 
     organizations = fields.List(fields.Nested(AwardOrganizationRelationSchema))
