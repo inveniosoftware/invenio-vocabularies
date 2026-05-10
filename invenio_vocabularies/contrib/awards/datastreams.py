@@ -3,16 +3,22 @@
 
 """Awards datastreams, transformers, writers and readers."""
 
+import csv
 import io
+import os
 
 import requests
 from flask import current_app
+from idutils import is_doi
 from invenio_access.permissions import system_identity
 from invenio_i18n import lazy_gettext as _
 
-from invenio_vocabularies.datastreams.errors import ReaderError
+from invenio_vocabularies.contrib.common.utils import (
+    DOIFileFetchError,
+    fetch_doi_file,
+)
 
-from ...datastreams.errors import TransformerError
+from ...datastreams.errors import ReaderError, TransformerError
 from ...datastreams.readers import BaseReader
 from ...datastreams.transformers import BaseTransformer
 from ...datastreams.writers import ServiceWriter
@@ -160,6 +166,95 @@ class CORDISProjectHTTPReader(BaseReader):
 class CORDISProjectTransformer(BaseTransformer):
     """Transforms a CORDIS project record into an award record."""
 
+    pic_mapping_params = {
+        "source": None,
+        "filename": "pic_mapping.csv",
+        "accepted_confidence": frozenset({"high", "medium", "manual"}),
+    }
+    """Defaults for the PIC -> ROR mapping loader.
+
+    - ``source``: Zenodo concept DOI or local CSV path. When ``None``, the
+      ``VOCABULARIES_AWARDS_PIC_MAPPING_SOURCE`` config is used.
+    - ``filename``: filename of the mapping CSV inside the Zenodo record.
+    - ``accepted_confidence``: rows whose ``confidence`` column is not in this set
+      are dropped.
+    """
+
+    def __init__(self, *args, pic_mapping=None, pic_mapping_params=None, **kwargs):
+        """Constructor.
+
+        :param pic_mapping: Explicit ``{pic: ror}`` dict (used by tests). When ``None``,
+            the mapping is lazy-loaded on first access from the merged
+            :attr:`pic_mapping_params`. If no ``source`` ends up set (neither in the
+            merged params nor in ``VOCABULARIES_AWARDS_PIC_MAPPING_SOURCE``), the
+            transformer falls back to the legacy PIC-only ``organizations`` shape.
+        :param pic_mapping_params: Per-instance overrides for
+            :attr:`pic_mapping_params`; kwarg keys win over the class default.
+        """
+        super().__init__(*args, **kwargs)
+        self._pic_mapping = pic_mapping
+        self._pic_mapping_params = {
+            **self.pic_mapping_params,
+            **(pic_mapping_params or {}),
+        }
+
+    @property
+    def pic_mapping(self):
+        """PIC -> ROR mapping. Loaded lazily on first access."""
+        if self._pic_mapping is None:
+            params = self._pic_mapping_params
+            source = params["source"] or current_app.config.get(
+                "VOCABULARIES_AWARDS_PIC_MAPPING_SOURCE"
+            )
+            self._pic_mapping = (
+                self._load_pic_mapping(
+                    source,
+                    filename=params["filename"],
+                    accepted_confidence=params["accepted_confidence"],
+                )
+                if source
+                else {}
+            )
+        return self._pic_mapping
+
+    @staticmethod
+    def _load_pic_mapping(source, *, filename, accepted_confidence):
+        """Load the PIC -> ROR mapping into a ``{pic: ror_id}`` dict.
+
+        The producer side merges human overrides into the published
+        CSV before publication, so the consumer reads a single file.
+
+        :param source: Concept DOI of the Zenodo record holding the mapping, or a
+            local file path to the CSV.
+        :param filename: Filename of the mapping CSV inside the Zenodo record (used to
+            pick the right item from the linkset).
+        :param accepted_confidence: Rows whose ``confidence`` column is not in this set
+            are dropped.
+        """
+        if is_doi(source):
+            try:
+                csv_bytes = fetch_doi_file(
+                    source,
+                    lambda item: item.get("href", "").endswith("/" + filename),
+                )
+            except DOIFileFetchError as e:
+                raise TransformerError(str(e)) from e
+        else:
+            if not os.path.isfile(source):
+                raise TransformerError(f"PIC mapping file not found at {source}")
+            with open(source, "rb") as fp:
+                csv_bytes = fp.read()
+
+        mapping = {}
+        for row in csv.DictReader(io.StringIO(csv_bytes.decode("utf-8"))):
+            if (row.get("confidence") or "").strip() not in accepted_confidence:
+                continue
+            pic = (row.get("pic") or "").strip()
+            ror = (row.get("ror_id") or "").strip()
+            if pic and ror:
+                mapping[pic] = ror
+        return mapping
+
     def apply(self, stream_entry, **kwargs):
         """Applies the transformation to the stream entry."""
         record = stream_entry.entry
@@ -208,6 +303,7 @@ class CORDISProjectTransformer(BaseTransformer):
             organizations = (
                 organizations if isinstance(organizations, list) else [organizations]
             )
+            pic_mapping = self.pic_mapping
             award["organizations"] = []
             for organization in organizations:
                 # Some organizations in FP7 projects do not have a "legalname" key,
@@ -216,22 +312,17 @@ class CORDISProjectTransformer(BaseTransformer):
                 if "legalname" not in organization:
                     continue
 
-                organization_data = {
-                    "organization": organization["legalname"],
-                }
-
                 # Some organizations in FP7 projects do not have an "id" key (the PIC identifier),
                 # for instance "AIlGreenVehicles" in "MOTORBRAIN" https://cordis.europa.eu/project/id/270693.
-                # In this case, still store the name but skip the identifier part.
-                if "id" in organization:
-                    organization_data.update(
-                        {
-                            "scheme": "pic",
-                            "id": organization["id"],
-                        }
-                    )
+                pic = organization.get("id")
+                ror = pic_mapping.get(pic) if pic else None
 
-                award["organizations"].append(organization_data)
+                if ror:
+                    award["organizations"].append({"id": ror})
+                else:
+                    award["organizations"].append(
+                        {"organization": organization["legalname"]}
+                    )
 
         programmes = (
             record.get("relations", {}).get("associations", {}).get("programme", {})
