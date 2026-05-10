@@ -70,6 +70,7 @@ DOWNLOAD_FILE_BYTES_CONTENT = b"The content of the file"
 
 class MockResponse:
     content = DOWNLOAD_FILE_BYTES_CONTENT
+    links = {"linkset": {"url": "https://example.com/api/records/10488385"}}
 
     def __init__(self, api_json_response_content):
         self.api_json_response_content = api_json_response_content
@@ -87,8 +88,10 @@ def download_file_bytes_content():
 
 
 @patch(
-    "requests.get",
-    side_effect=lambda url, headers=None: MockResponse(API_JSON_RESPONSE_CONTENT),
+    "requests.Session.get",
+    side_effect=lambda url, headers=None, **kwargs: MockResponse(
+        API_JSON_RESPONSE_CONTENT
+    ),
 )
 def test_openaire_http_reader(_, download_file_bytes_content):
     reader = OpenAIREHTTPReader(
@@ -104,8 +107,8 @@ def test_openaire_http_reader(_, download_file_bytes_content):
 
 
 @patch(
-    "requests.get",
-    side_effect=lambda url, headers=None: MockResponse(
+    "requests.Session.get",
+    side_effect=lambda url, headers=None, **kwargs: MockResponse(
         API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_PROJECT_TAR_ITEMS_ERROR
     ),
 )

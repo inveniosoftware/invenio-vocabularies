@@ -162,7 +162,7 @@ def side_effect(url, headers=None, allow_redirects=False):
         return MockResponse({})
 
 
-@patch("requests.get", side_effect=side_effect)
+@patch("requests.Session.get", side_effect=side_effect)
 def test_ror_http_reader(_):
     reader = RORHTTPReader()
     results = []
@@ -176,7 +176,7 @@ def test_ror_http_reader(_):
     assert results[0].read() == DOWNLOAD_FILE_BYTES_CONTENT
 
 
-@patch("requests.get", side_effect=side_effect)
+@patch("requests.Session.get", side_effect=side_effect)
 def test_ror_http_reader_since_before_publish(_):
     reader = RORHTTPReader(since="2024-07-10T00:00:00.000+00:00")
     results = []
@@ -188,7 +188,7 @@ def test_ror_http_reader_since_before_publish(_):
     assert len(results) == 1
 
 
-@patch("requests.get", side_effect=side_effect)
+@patch("requests.Session.get", side_effect=side_effect)
 def test_ror_http_reader_since_after_publish(_):
     reader = RORHTTPReader(since="2024-07-12T00:00:00.000+00:00")
     results = []
@@ -201,7 +201,7 @@ def test_ror_http_reader_since_after_publish(_):
 
 
 @patch(
-    "requests.get",
+    "requests.Session.get",
     side_effect=lambda url, headers=None, allow_redirects=False: MockResponse(
         API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_ZIP_ITEMS_ERROR
     ),
@@ -213,7 +213,7 @@ def test_ror_http_reader_wrong_number_zip_items_error(_):
 
 
 @patch(
-    "requests.get",
+    "requests.Session.get",
     side_effect=lambda url, headers=None, allow_redirects=False: MockResponse(
         API_JSON_RESPONSE_CONTENT_WITHOUT_JSON_LD
     ),

@@ -7,14 +7,18 @@
 import io
 from datetime import datetime
 
-import requests
 from flask import current_app
 from idutils import normalize_ror
 
-from invenio_vocabularies.contrib.common.utils import invenio_user_agent
+from invenio_vocabularies.contrib.common.utils import (
+    DOIFileFetchError,
+    fetch_doi_file,
+)
 from invenio_vocabularies.datastreams.errors import ReaderError, TransformerError
 from invenio_vocabularies.datastreams.readers import BaseReader
 from invenio_vocabularies.datastreams.transformers import BaseTransformer
+
+ROR_DATA_DUMP_DOI = "10.5281/zenodo.6347574"
 
 
 class RORHTTPReader(BaseReader):
@@ -35,35 +39,6 @@ class RORHTTPReader(BaseReader):
             "and therefore does not iterate through items"
         )
 
-    def _get_last_dump_date(self, linksets):
-        """Get the last dump date."""
-        for linkset in linksets:
-            metadata_formats = linkset.get("describedby", [])
-            for format_link in metadata_formats:
-                if format_link.get("type") == "application/ld+json":
-                    json_ld_reponse = requests.get(
-                        format_link["href"],
-                        headers={
-                            "Accept": format_link["type"],
-                            "User-Agent": invenio_user_agent(),
-                        },
-                    )
-                    json_ld_reponse.raise_for_status()
-                    json_ld_data = json_ld_reponse.json()
-
-                    last_dump_date = json_ld_data.get(
-                        "dateCreated"
-                    ) or json_ld_data.get("datePublished")
-                    last_dump_date = datetime.fromisoformat(
-                        last_dump_date.replace("Z", "+00:00")
-                    )
-                    return last_dump_date
-        else:
-            raise ReaderError(
-                "Couldn't find JSON-LD in publisher's linkset "
-                "to determine last dump date."
-            )
-
     def read(self, item=None, *args, **kwargs):
         """Reads the latest ROR data dump.
 
@@ -75,59 +50,23 @@ class RORHTTPReader(BaseReader):
                 "RORHTTPReader does not support being chained after another reader"
             )
 
-        # Follow the DOI to get the link of the linkset
-        dataset_doi_link = "https://doi.org/10.5281/zenodo.6347574"
-        landing_page = requests.get(
-            dataset_doi_link,
-            headers={"User-Agent": invenio_user_agent()},
-            allow_redirects=True,
+        since = (
+            datetime.fromisoformat(self._since)
+            if self._since and self._since != "None"
+            else None
         )
-        landing_page.raise_for_status()
-
-        # Call the signposting `linkset+json` endpoint for
-        # the Concept DOI (i.e. latest version) of the ROR data dump.
-        # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
-        if "linkset" not in landing_page.links:
-            raise ReaderError("Linkset not found in the ROR dataset record.")
-        linkset_response = requests.get(
-            landing_page.links["linkset"]["url"],
-            headers={
-                "Accept": "application/linkset+json",
-                "User-Agent": invenio_user_agent(),
-            },
-        )
-        linkset_response.raise_for_status()
-        linksets = linkset_response.json()["linkset"]
-
-        if self._since and self._since != "None":
-            last_dump_date = self._get_last_dump_date(linksets)
-            since = datetime.fromisoformat(self._since)
-
-            if last_dump_date < since:
-                current_app.logger.info(
-                    f"Skipping ROR data dump (last dump: {last_dump_date}, since: {self._since})"
-                )
-                return
-
-        for linkset in linksets:
-            items = linkset.get("item", [])
-            zip_files = [item for item in items if item["type"] == "application/zip"]
-            if len(zip_files) == 1:
-                file_url = zip_files[0]["href"]
-                break
-            if len(zip_files) > 1:
-                raise ReaderError(f"Expected 1 ZIP item but got {len(zip_files)}")
-
-        current_app.logger.info(f"Reading ROR data dump (URL: {file_url})")
-
-        # Download the ZIP file and fully load the response bytes content in memory.
-        # The bytes content are then wrapped by a BytesIO to be
-        # file-like object (as required by `zipfile.ZipFile`).
-        # Using directly `file_resp.raw` is not possible since
-        # `zipfile.ZipFile` requires the file-like object to be seekable.
-        file_resp = requests.get(file_url, headers={"User-Agent": invenio_user_agent()})
-        file_resp.raise_for_status()
-        yield io.BytesIO(file_resp.content)
+        try:
+            content = fetch_doi_file(
+                ROR_DATA_DUMP_DOI,
+                lambda i: i.get("type") == "application/zip",
+                since=since,
+            )
+        except DOIFileFetchError as e:
+            raise ReaderError(str(e)) from e
+        if content is None:
+            current_app.logger.info(f"Skipping ROR data dump (since: {self._since})")
+            return
+        yield io.BytesIO(content)
 
 
 VOCABULARIES_DATASTREAM_READERS = {

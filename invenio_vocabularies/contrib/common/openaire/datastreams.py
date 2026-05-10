@@ -5,9 +5,10 @@
 
 import io
 
-import requests
-
-from invenio_vocabularies.contrib.common.utils import invenio_user_agent
+from invenio_vocabularies.contrib.common.utils import (
+    DOIFileFetchError,
+    fetch_doi_file,
+)
 from invenio_vocabularies.datastreams.errors import ReaderError
 from invenio_vocabularies.datastreams.readers import BaseReader
 
@@ -33,45 +34,23 @@ class OpenAIREHTTPReader(BaseReader):
             )
 
         if self._origin == "full":
-            # OpenAIRE Graph Dataset
-            api_url = "https://zenodo.org/api/records/3516917"
+            # OpenAIRE Graph Dataset (concept DOI)
+            doi = "10.5281/zenodo.3516917"
         elif self._origin == "diff":
-            # OpenAIRE Graph dataset: new collected projects
-            api_url = "https://zenodo.org/api/records/6419021"
+            # OpenAIRE Graph Dataset: new collected projects (concept DOI)
+            doi = "10.5281/zenodo.6419021"
         else:
             raise ReaderError("The --origin option should be either 'full' or 'diff'")
 
-        # Call the signposting `linkset+json` endpoint for the Concept DOI (i.e. latest version) of the OpenAIRE Graph Dataset.
-        # See: https://github.com/inveniosoftware/rfcs/blob/master/rfcs/rdm-0071-signposting.md#provide-an-applicationlinksetjson-endpoint
-        headers = {
-            "Accept": "application/linkset+json",
-            "User-Agent": invenio_user_agent(),
-        }
-        api_resp = requests.get(api_url, headers=headers)
-        api_resp.raise_for_status()
-
-        # Extract the Landing page Link Set Object located as the first (index 0) item.
-        landing_page_linkset = api_resp.json()["linkset"][0]
-
-        # Extract the URL of the only tar file matching `tar_hrefs` linked to the record.
-        landing_page_matching_tar_items = [
-            item
-            for item in landing_page_linkset["item"]
-            if item["type"] == "application/x-tar"
-            and item["href"].endswith(tuple(self.tar_hrefs))
-        ]
-        if len(landing_page_matching_tar_items) != 1:
-            raise ReaderError(
-                f"Expected 1 tar item matching {self.tar_hrefs} but got {len(landing_page_matching_tar_items)}"
+        try:
+            file_bytes = fetch_doi_file(
+                doi,
+                lambda item: item.get("type") == "application/x-tar"
+                and item.get("href", "").endswith(tuple(self.tar_hrefs)),
             )
-        file_url = landing_page_matching_tar_items[0]["href"]
-
-        # Download the matching tar file and fully load the response bytes content in memory.
-        # The bytes content are then wrapped by a BytesIO to be file-like object (as required by `tarfile.open`).
-        # Using directly `file_resp.raw` is not possible since `tarfile.open` requires the file-like object to be seekable.
-        file_resp = requests.get(file_url, headers={"User-Agent": invenio_user_agent()})
-        file_resp.raise_for_status()
-        yield io.BytesIO(file_resp.content)
+        except DOIFileFetchError as e:
+            raise ReaderError(str(e)) from e
+        yield io.BytesIO(file_bytes)
 
 
 VOCABULARIES_DATASTREAM_READERS = {
