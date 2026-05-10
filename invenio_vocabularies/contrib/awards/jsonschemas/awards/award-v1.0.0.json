@@ -43,6 +43,9 @@
     "program": {
       "type": "string"
     },
+    "short_description": {
+      "$ref": "local://vocabularies/definitions-v1.0.0.json#/description"
+    },
     "start_date": {
       "type": "string"
     },
