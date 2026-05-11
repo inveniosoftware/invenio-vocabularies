@@ -29,7 +29,7 @@ from marshmallow_utils.fields import SanitizedUnicode
 i18n_strings = fields.Dict(
     allow_none=False,
     keys=fields.Str(validate=validate.Regexp("^[a-z]{2}$")),
-    values=fields.Str(),
+    values=SanitizedUnicode(),
 )
 """Field definition for language aware strings."""
 
