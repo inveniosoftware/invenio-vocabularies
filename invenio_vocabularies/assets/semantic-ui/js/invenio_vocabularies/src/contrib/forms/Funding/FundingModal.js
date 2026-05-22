@@ -1,9 +1,8 @@
-// This file is part of InvenioVocabularies
-// Copyright (C) 2021-2024 CERN.
-// Copyright (C) 2021 Northwestern University.
-//
-// Invenio is free software; you can redistribute it and/or modify it
-// under the terms of the MIT License; see LICENSE file for more details.
+/*
+ * SPDX-FileCopyrightText: 2021-2024 CERN.
+ * SPDX-FileCopyrightText: 2021 Northwestern University.
+ * SPDX-License-Identifier: MIT
+ */
 
 import { i18next } from "@translations/invenio_vocabularies/i18next";
 import { Formik } from "formik";
