@@ -1,6 +1,7 @@
 // This file is part of InvenioVocabularies
 // Copyright (C) 2021-2025 CERN.
 // Copyright (C) 2021 Northwestern University.
+// Copyright (C) 2025 CSC - IT Center for Science ltd.
 //
 // Invenio is free software; you can redistribute it and/or modify it
 // under the terms of the MIT License; see LICENSE file for more details.
@@ -8,7 +9,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { FieldArray, getIn } from "formik";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { manager } from "@js/invenio_rdm_records";
 import { DndProvider } from "react-dnd";
 import { Button, Form, Icon, List } from "semantic-ui-react";
 import { FieldLabel, FeedbackLabel } from "react-invenio-forms";
@@ -95,7 +96,7 @@ function FundingFieldForm(props) {
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider manager={manager}>
       <Form.Field required={required} className={className}>
         <FieldLabel htmlFor={fieldPath} icon={labelIcon} label={label} />
         <List>
