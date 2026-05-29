@@ -4,8 +4,6 @@
 
 """Affiliations schema."""
 
-from functools import partial
-
 from invenio_i18n import lazy_gettext as _
 from marshmallow import fields, validate
 from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
@@ -25,10 +23,8 @@ class AffiliationSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     acronym = SanitizedUnicode()
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=affiliation_schemes,
-                identifier_required=False,
+            IdentifierSchema(
+                allowed_schemes=affiliation_schemes, identifier_required=False
             )
         )
     )
@@ -56,10 +52,8 @@ class AffiliationRelationSchema(ContribVocabularyRelationSchema):
     name = SanitizedUnicode()
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=affiliation_schemes,
-                identifier_required=False,
+            IdentifierSchema(
+                allowed_schemes=affiliation_schemes, identifier_required=False
             )
         ),
         dump_only=True,

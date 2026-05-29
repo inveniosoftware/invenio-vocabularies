@@ -3,8 +3,6 @@
 
 """Awards schema."""
 
-from functools import partial
-
 from invenio_i18n import lazy_gettext as _
 from marshmallow import Schema, ValidationError, fields, validate, validates_schema
 from marshmallow_utils.fields import IdentifierSet, ISODateString, SanitizedUnicode
@@ -35,11 +33,7 @@ class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
 
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=award_schemes,
-                identifier_required=False,
-            )
+            IdentifierSchema(allowed_schemes=award_schemes, identifier_required=False)
         )
     )
     number = SanitizedUnicode(
@@ -73,11 +67,7 @@ class AwardRelationSchema(Schema):
     title = i18n_strings
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=award_schemes,
-                identifier_required=False,
-            )
+            IdentifierSchema(allowed_schemes=award_schemes, identifier_required=False)
         )
     )
     acronym = SanitizedUnicode()

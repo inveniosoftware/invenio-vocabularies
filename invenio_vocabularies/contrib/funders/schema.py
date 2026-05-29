@@ -5,8 +5,6 @@
 
 """Funders schema."""
 
-from functools import partial
-
 from invenio_i18n import lazy_gettext as _
 from marshmallow import (
     fields,
@@ -44,11 +42,7 @@ class FunderSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     location_name = SanitizedUnicode()
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=funder_schemes,
-                identifier_required=False,
-            )
+            IdentifierSchema(allowed_schemes=funder_schemes, identifier_required=False)
         )
     )
 

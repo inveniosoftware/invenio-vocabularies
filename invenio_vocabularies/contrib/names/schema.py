@@ -3,8 +3,6 @@
 
 """Names schema."""
 
-from functools import partial
-
 from invenio_i18n import lazy_gettext as _
 from marshmallow import (
     EXCLUDE,
@@ -48,13 +46,10 @@ class NameSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     family_name = SanitizedUnicode()
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                # It is intended to allow org schemes to be sent as personal
-                # and viceversa. This is a trade off learnt from running
-                # Zenodo in production.
-                allowed_schemes=names_schemes,
-            )
+            # It is intended to allow org schemes to be sent as personal
+            # and viceversa. This is a trade off learnt from running
+            # Zenodo in production.
+            IdentifierSchema(allowed_schemes=names_schemes)
         )
     )
     affiliations = fields.List(fields.Nested(AffiliationRelationSchema))
