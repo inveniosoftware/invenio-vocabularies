@@ -17,6 +17,9 @@ from invenio_jobs.jobs import JobType
 
 from invenio_vocabularies.services.tasks import process_datastream
 
+from .contrib.affiliations.datastreams import (
+    DATASTREAM_CONFIG_EDMO as EDMO_AFFILIATIONS_DATASTREAM_CONFIG,
+)
 from .contrib.names.datastreams import ORCID_PRESET_DATASTREAM_CONFIG
 from .contrib.subjects.euroscivoc.datastreams import (
     DATASTREAM_CONFIG as EUROSCIVOC_DATASTREAM_CONFIG,
@@ -222,3 +225,16 @@ class ImportEuroSciVocSubjectsJob(ProcessDataStreamJob):
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Process subjects EuroSciVoc."""
         return {"config": copy.deepcopy(EUROSCIVOC_DATASTREAM_CONFIG)}
+
+
+class ImportEDMOAffiliationsJob(ProcessDataStreamJob):
+    """Import affiliations from EDMO registered task."""
+
+    description = _("Import Affiliations from EDMO")
+    title = _("Import EDMO Affiliations")
+    id = "import_edmo_affiliations"
+
+    @classmethod
+    def build_task_arguments(cls, job_obj, since=None, **kwargs):
+        """Process EDMO affiliations."""
+        return {"config": copy.deepcopy(EDMO_AFFILIATIONS_DATASTREAM_CONFIG)}
