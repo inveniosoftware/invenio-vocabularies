@@ -29,6 +29,7 @@ from invenio_records_resources.resources.records.headers import etag_headers
 
 from invenio_vocabularies.services.permissions import PermissionPolicy
 
+from ..affiliations.api import Affiliation
 from ..funders.api import Funder
 from ..subjects.api import Subject
 from .config import AwardsSearchOptions, service_components
@@ -47,6 +48,12 @@ award_relations = MultiRelationsField(
         keys=["subject", "scheme", "identifiers", "props"],
         pid_field=Subject.pid,
         cache_key="subjects",
+    ),
+    organizations=PIDListRelation(
+        "organizations",
+        keys=["name", "identifiers"],
+        pid_field=Affiliation.pid,
+        cache_key="affiliations",
     ),
 )
 
