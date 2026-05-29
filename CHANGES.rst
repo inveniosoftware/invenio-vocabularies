@@ -10,6 +10,10 @@
 Changes
 =======
 
+Version v12.0.0 (released 2026-05-29)
+
+- chore(setup): bump dependencies
+
 Version v11.1.2 (released 2026-05-04)
 
 - fix(datastreams): Log ORCID read errors as warnings
