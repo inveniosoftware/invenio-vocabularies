@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2024 CERN.
-# Copyright (C) 2024 University of Münster.
-#
-# Invenio-Vocabularies is free software; you can redistringibute it and/or modify it
-# under the terms of the MIT License; see LICENSE file for more details.
+# SPDX-FileCopyrightText: 2024 CERN.
+# SPDX-FileCopyrightText: 2024 University of Münster.
+# SPDX-License-Identifier: MIT
 
 """Resources config."""
 
