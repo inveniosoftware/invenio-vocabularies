@@ -10,6 +10,11 @@
 Changes
 =======
 
+Version v13.0.0 (released 2026-06-05)
+
+- chore(setup): bump dependencies
+- fix(schema): use SanitizedUnicode for i18n_strings values
+
 Version v12.0.0 (released 2026-05-29)
 
 - chore(setup): bump dependencies
