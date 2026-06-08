@@ -293,11 +293,11 @@ class OAIPMHReader(BaseReader):
     ):
         """Constructor."""
         self._base_url = base_url
-        self._metadata_prefix = metadata_prefix if not None else "oai_dc"
+        self._metadata_prefix = metadata_prefix or "oai_dc"
         self._set = set
         self._until = until_date
         self._from = from_date
-        self._verb = verb if not None else "ListRecords"
+        self._verb = verb or "ListRecords"
         super().__init__(*args, **kwargs)
 
     def _iter(self, scythe, *args, **kwargs):
