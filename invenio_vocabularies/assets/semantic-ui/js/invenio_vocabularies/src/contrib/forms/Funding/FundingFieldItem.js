@@ -68,6 +68,9 @@ export const FundingFieldItem = ({
         className={hidden ? "deposit-drag-listitem hidden" : "deposit-drag-listitem"}
       >
         <List.Content floated="right">
+          <Button size="mini" type="button" onClick={() => removeFunding(index)}>
+            {i18next.t("Remove")}
+          </Button>
           <FundingModal
             searchConfig={searchConfig}
             onAwardChange={(selectedFunding) => {
@@ -85,9 +88,6 @@ export const FundingFieldItem = ({
             computeFundingContents={computeFundingContents}
             initialFunding={fundingItem}
           />
-          <Button size="mini" type="button" onClick={() => removeFunding(index)}>
-            {i18next.t("Remove")}
-          </Button>
         </List.Content>
 
         <Ref innerRef={drag}>
