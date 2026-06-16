@@ -7,6 +7,14 @@
 Changes
 =======
 
+Version v14.0.0 (released 2026-06-18)
+
+- chore(setup): bump dependencies
+- chore(git-blame): ignore the SPDX license header commit
+- chore(licenses): update license headers to use SPDX
+- funding: make funding item button order match
+- fix(datastreams): fix OAIPMHReader default parameters
+
 Version v13.0.0 (released 2026-06-05)
 
 - chore(setup): bump dependencies
