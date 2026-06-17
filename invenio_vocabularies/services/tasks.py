@@ -24,8 +24,11 @@ def process_datastream(config):
     entries_with_errors = 0
     for result in ds.process():
         if result.errors:
-            current_app.logger.warning(
-                "Skipped entry %s with errors: %s", result.entry, result.errors
+            current_app.logger.error(
+                "Skipped entry %s with errors: %s",
+                result.entry,
+                result.errors,
+                extra={"skip_sentry": True},
             )
             entries_with_errors += 1
 
