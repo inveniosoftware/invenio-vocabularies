@@ -65,13 +65,13 @@ def test_task_creation(app, client_with_credentials, h):
         "writers": [{"type": "test"}],
     }
 
-    with patch.object(
-        TestReader, "read", side_effect=TestReader.read
-    ) as p_read, patch.object(
-        TestTransformer, "apply", side_effect=TestTransformer.apply
-    ) as p_apply, patch.object(
-        TestWriter, "write", side_effect=TestWriter.write
-    ) as p_write:
+    with (
+        patch.object(TestReader, "read", side_effect=TestReader.read) as p_read,
+        patch.object(
+            TestTransformer, "apply", side_effect=TestTransformer.apply
+        ) as p_apply,
+        patch.object(TestWriter, "write", side_effect=TestWriter.write) as p_write,
+    ):
         resp = client.post(
             "/vocabularies/tasks", headers=h, data=json.dumps(task_config)
         )

@@ -100,9 +100,10 @@ def test_tar_reader_item_bytesio_not_tarfile_instance(tar_file, expected_from_ta
     reader = TarReader(regex=".yaml$")
 
     total = 0
-    with open(tar_file, "rb") as tar_file_stream, io.BytesIO(
-        tar_file_stream.read()
-    ) as tar_file_bytesio:
+    with (
+        open(tar_file, "rb") as tar_file_stream,
+        io.BytesIO(tar_file_stream.read()) as tar_file_bytesio,
+    ):
         for data in reader.read(tar_file_bytesio):
             assert yaml.safe_load(data) == expected_from_tar
             total += 1
@@ -134,9 +135,10 @@ def test_zip_reader_item_zipfile_instance(zip_file, json_list):
 def test_zip_reader_item_bytesio_not_zipfile_instance(zip_file, json_list):
     reader = ZipReader(regex=".json$")
     total = 0
-    with open(zip_file, "rb") as zip_file_stream, io.BytesIO(
-        zip_file_stream.read()
-    ) as zip_file_bytesio:
+    with (
+        open(zip_file, "rb") as zip_file_stream,
+        io.BytesIO(zip_file_stream.read()) as zip_file_bytesio,
+    ):
         for data in reader.read(zip_file_bytesio):
             assert json.load(data) == json_list
             total += 1
