@@ -1,3 +1,213 @@
+# SPDX-FileCopyrightText: 2020-2024 CERN.
+# SPDX-FileCopyrightText: 2021-2026 Graz University of Technology.
+# SPDX-FileCopyrightText: 2026 TU Wien.
+# SPDX-License-Identifier: MIT
+
+[project]
+name = "invenio-vocabularies"
+description = "Invenio module for managing vocabularies."
+readme = "README.rst"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+  { name = "CERN", email = "info@inveniosoftware.org" },
+]
+keywords = [
+  "invenio",
+  "management",
+  "vocabulary",
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+]
+dependencies = [
+  "invenio-administration>=6.0.0,<7.0.0",
+  "invenio-i18n>=3.0.0,<4.0.0",
+  "invenio-jobs>=10.0.0,<11.0.0",
+  "invenio-records-resources>=10.0.0,<11.0.0",
+  "lxml>=4.5.0",
+  "pycountry>=24.0.0",
+  "pyyaml>=5.4.1",
+  "regex>=2024.7.24",
+  "sparqlwrapper>=2.0.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/inveniosoftware/invenio-vocabularies"
+
+[project.entry-points."flask.commands"]
+vocabularies = "invenio_vocabularies.cli:vocabularies"
+
+[project.entry-points."invenio_administration.views"]
+vocabularies_list = "invenio_vocabularies.administration.views.vocabularies:VocabulariesListView"
+
+[project.entry-points."invenio_assets.webpack"]
+invenio_vocabularies = "invenio_vocabularies.webpack:theme"
+
+[project.entry-points."invenio_base.api_apps"]
+invenio_vocabularies = "invenio_vocabularies:InvenioVocabularies"
+
+[project.entry-points."invenio_base.api_blueprints"]
+invenio_vocabularies = "invenio_vocabularies.views:create_blueprint_from_app"
+invenio_vocabularies_affiliations = "invenio_vocabularies.views:create_affiliations_blueprint_from_app"
+invenio_vocabularies_awards = "invenio_vocabularies.views:create_awards_blueprint_from_app"
+invenio_vocabularies_ext = "invenio_vocabularies.views:blueprint"
+invenio_vocabularies_funders = "invenio_vocabularies.views:create_funders_blueprint_from_app"
+invenio_vocabularies_list = "invenio_vocabularies.views:create_list_blueprint_from_app"
+invenio_vocabularies_names = "invenio_vocabularies.views:create_names_blueprint_from_app"
+invenio_vocabularies_subjects = "invenio_vocabularies.views:create_subjects_blueprint_from_app"
+
+[project.entry-points."invenio_base.api_finalize_app"]
+invenio_vocabularies = "invenio_vocabularies.ext:api_finalize_app"
+
+[project.entry-points."invenio_base.apps"]
+invenio_vocabularies = "invenio_vocabularies:InvenioVocabularies"
+
+[project.entry-points."invenio_base.blueprints"]
+invenio_vocabularies_ext = "invenio_vocabularies.views:blueprint"
+
+[project.entry-points."invenio_base.finalize_app"]
+invenio_vocabularies = "invenio_vocabularies.ext:finalize_app"
+
+[project.entry-points."invenio_celery.tasks"]
+invenio_vocabularies_services = "invenio_vocabularies.services.tasks"
+
+[project.entry-points."invenio_db.alembic"]
+invenio_vocabularies = "invenio_vocabularies:alembic"
+
+[project.entry-points."invenio_db.models"]
+affiliations = "invenio_vocabularies.contrib.affiliations.models"
+awards = "invenio_vocabularies.contrib.awards.models"
+funders = "invenio_vocabularies.contrib.funders.models"
+names = "invenio_vocabularies.contrib.names.models"
+subjects = "invenio_vocabularies.contrib.subjects.models"
+vocabulary_model = "invenio_vocabularies.records.models"
+
+[project.entry-points."invenio_i18n.translations"]
+invenio_vocabularies = "invenio_vocabularies"
+
+[project.entry-points."invenio_jobs.jobs"]
+import_awards_openaire = "invenio_vocabularies.jobs:ImportAwardsOpenAIREJob"
+import_orcid_names = "invenio_vocabularies.jobs:ImportORCIDJob"
+import_subjects_euroscivoc = "invenio_vocabularies.jobs:ImportEuroSciVocSubjectsJob"
+process_ror_affiliations = "invenio_vocabularies.jobs:ProcessRORAffiliationsJob"
+process_ror_funders = "invenio_vocabularies.jobs:ProcessRORFundersJob"
+update_awards_cordis = "invenio_vocabularies.jobs:UpdateAwardsCordisJob"
+
+[project.entry-points."invenio_jsonschemas.schemas"]
+affiliations = "invenio_vocabularies.contrib.affiliations.jsonschemas"
+awards = "invenio_vocabularies.contrib.awards.jsonschemas"
+funders = "invenio_vocabularies.contrib.funders.jsonschemas"
+jsonschemas = "invenio_vocabularies.records.jsonschemas"
+names = "invenio_vocabularies.contrib.names.jsonschemas"
+subjects = "invenio_vocabularies.contrib.subjects.jsonschemas"
+
+[project.entry-points."invenio_search.mappings"]
+affiliations = "invenio_vocabularies.contrib.affiliations.mappings"
+awards = "invenio_vocabularies.contrib.awards.mappings"
+funders = "invenio_vocabularies.contrib.funders.mappings"
+names = "invenio_vocabularies.contrib.names.mappings"
+subjects = "invenio_vocabularies.contrib.subjects.mappings"
+vocabularies = "invenio_vocabularies.records.mappings"
+
+[project.optional-dependencies]
+elasticsearch7 = [
+  "invenio-search[elasticsearch7]>=3.0.0,<4.0.0",
+]
+mysql = []
+oaipmh = [
+  "invenio-oaipmh-scythe>=0.13.0",
+]
+opensearch1 = [
+  "invenio-search[opensearch1]>=3.0.0,<4.0.0",
+]
+opensearch2 = [
+  "invenio-search[opensearch2]>=3.0.0,<4.0.0",
+]
+postgresql = []
+rdf = [
+  "rdflib>=7.0.0",
+]
+s3fs = [
+  "s3fs>=2024.6.1",
+]
+sparql = [
+  "sparqlwrapper>=2.0.0",
+]
+sqlite = []
+tests = [
+  "invenio-app>=3.0.0,<4.0.0",
+  "invenio-db[postgresql,mysql]>=2.2.0,<3.0.0",
+  "pytest-black>=0.6.0",
+  "pytest-invenio>=4.0.0,<5.0.0",
+  "pytest_httpserver>=1.0.10",
+  "sphinx>=4.5",
+]
+
 [build-system]
-requires = ["setuptools", "wheel", "babel>2.8"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# see https://babel.pocoo.org/en/latest/messages.html#toml-configuration-format
+[tool.babel]
+[tool.babel.compile_catalog]
+directory = "invenio_vocabularies/translations/"
+use_fuzzy = true
+
+[tool.babel.extract_messages]
+copyright_holder = "CERN"
+msgid_bugs_address = "info@inveniosoftware.org"
+mapping_file = "pyproject.toml"
+output_file = "invenio_vocabularies/translations/messages.pot"
+add_comments = "NOTE"
+
+[tool.babel.init_catalog]
+input_file = "invenio_vocabularies/translations/messages.pot"
+output_dir = "invenio_vocabularies/translations/"
+
+[[tool.babel.mappings]]
+method = "javascript"
+pattern = "**.js"
+encoding = "utf-8"
+extract_messages = "$._, jQuery._"
+
+[[tool.babel.mappings]]
+method = "python"
+pattern = "**.py"
+encoding = "utf-8"
+
+[[tool.babel.mappings]]
+method = "jinja2"
+pattern = "**/templates/**.html"
+encoding = "utf-8"
+
+[tool.hatch.version]
+path = "invenio_vocabularies/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/invenio_vocabularies",
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.pydocstyle]
+add_ignore = "D401"
+
+[tool.pytest.ini_options]
+addopts = '--black --isort --pydocstyle --doctest-glob="*.rst" --doctest-modules --cov=invenio_vocabularies --cov-report=term-missing'
+testpaths = "tests invenio_vocabularies"
+live_server_scope = "module"
+
+# UV needs to be told explicitly which extras are conflicting:
+# https://docs.astral.sh/uv/concepts/projects/config/#conflicting-dependencies
+[tool.uv]
+conflicts = [
+  [
+    { extra = "opensearch1" },
+    { extra = "opensearch2" },
+    { extra = "elasticsearch7" },
+  ]
+]
