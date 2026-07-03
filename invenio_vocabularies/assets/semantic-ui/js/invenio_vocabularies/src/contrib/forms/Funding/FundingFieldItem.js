@@ -6,18 +6,18 @@
  */
 
 import { i18next } from "@translations/invenio_vocabularies/i18next";
-import React from "react";
+import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { Button, Icon, Label, List, Ref } from "semantic-ui-react";
+import { Button, Icon, Label, List } from "semantic-ui-react";
 
 import FundingModal from "./FundingModal";
 import PropTypes from "prop-types";
 
 export const FundingFieldItem = ({
-  compKey,
-  index,
-  fundingItem,
-  awardType,
+  compKey = undefined,
+  index = undefined,
+  fundingItem = undefined,
+  awardType = undefined,
   moveFunding,
   replaceFunding,
   removeFunding,
@@ -26,7 +26,7 @@ export const FundingFieldItem = ({
   deserializeFunder,
   computeFundingContents,
 }) => {
-  const dropRef = React.useRef(null);
+  const dropRef = useRef(null);
   // eslint-disable-next-line no-unused-vars
   const [_, drag, preview] = useDrag({
     item: { index, type: "award" },
@@ -61,71 +61,66 @@ export const FundingFieldItem = ({
   // Initialize the ref explicitely
   drop(dropRef);
   return (
-    <Ref innerRef={dropRef} key={compKey}>
-      <List.Item
-        key={compKey}
-        className={hidden ? "deposit-drag-listitem hidden" : "deposit-drag-listitem"}
-      >
-        <List.Content floated="right">
-          <Button size="mini" type="button" onClick={() => removeFunding(index)}>
-            {i18next.t("Remove")}
-          </Button>
-          <FundingModal
-            searchConfig={searchConfig}
-            onAwardChange={(selectedFunding) => {
-              replaceFunding(index, selectedFunding);
-            }}
-            mode={awardType}
-            action="edit"
-            trigger={
-              <Button size="mini" primary type="button">
-                {i18next.t("Edit")}
-              </Button>
-            }
-            deserializeAward={deserializeAward}
-            deserializeFunder={deserializeFunder}
-            computeFundingContents={computeFundingContents}
-            initialFunding={fundingItem}
-          />
-        </List.Content>
+    <List.Item
+      ref={dropRef}
+      key={compKey}
+      className={hidden ? "deposit-drag-listitem hidden" : "deposit-drag-listitem"}
+    >
+      <List.Content floated="right">
+        <Button size="mini" type="button" onClick={() => removeFunding(index)}>
+          {i18next.t("Remove")}
+        </Button>
+        <FundingModal
+          searchConfig={searchConfig}
+          onAwardChange={(selectedFunding) => {
+            replaceFunding(index, selectedFunding);
+          }}
+          mode={awardType}
+          action="edit"
+          trigger={
+            <Button size="mini" primary type="button">
+              {i18next.t("Edit")}
+            </Button>
+          }
+          deserializeAward={deserializeAward}
+          deserializeFunder={deserializeFunder}
+          computeFundingContents={computeFundingContents}
+          initialFunding={fundingItem}
+        />
+      </List.Content>
 
-        <Ref innerRef={drag}>
-          <List.Icon name="bars" className="drag-anchor" />
-        </Ref>
-        <Ref innerRef={preview}>
-          <List.Content>
-            <List.Header>
-              <>
-                <span className="mr-5">{headerContent}</span>
+      <List.Icon ref={drag} name="bars" className="drag-anchor" />
+      <List.Content ref={preview}>
+        <List.Header>
+          <>
+            <span className="mr-5">{headerContent}</span>
 
-                {awardOrFunder === "award"
-                  ? fundingItem?.award?.number && (
-                      <Label basic size="mini" className="mr-5">
-                        {fundingItem.award.number}
-                      </Label>
-                    )
-                  : ""}
-                {awardOrFunder === "award"
-                  ? fundingItem?.award?.url && (
-                      <a
-                        href={`${fundingItem.award.url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={i18next.t("Open external link")}
-                      >
-                        <Icon link name="external alternate" />
-                      </a>
-                    )
-                  : ""}
-              </>
-            </List.Header>
-            <List.Description>
-              {descriptionContent ? descriptionContent : <br />}
-            </List.Description>
-          </List.Content>
-        </Ref>
-      </List.Item>
-    </Ref>
+            {awardOrFunder === "award"
+              ? fundingItem?.award?.number && (
+                  <Label basic size="mini" className="mr-5">
+                    {fundingItem.award.number}
+                  </Label>
+                )
+              : ""}
+            {awardOrFunder === "award"
+              ? fundingItem?.award?.url && (
+                  <a
+                    href={`${fundingItem.award.url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={i18next.t("Open external link")}
+                  >
+                    <Icon link name="external alternate" />
+                  </a>
+                )
+              : ""}
+          </>
+        </List.Header>
+        <List.Description>
+          {descriptionContent ? descriptionContent : <br />}
+        </List.Description>
+      </List.Content>
+    </List.Item>
   );
 };
 
@@ -141,11 +136,4 @@ FundingFieldItem.propTypes = {
   deserializeAward: PropTypes.func.isRequired,
   deserializeFunder: PropTypes.func.isRequired,
   computeFundingContents: PropTypes.func.isRequired,
-};
-
-FundingFieldItem.defaultProps = {
-  compKey: undefined,
-  index: undefined,
-  fundingItem: undefined,
-  awardType: undefined,
 };
