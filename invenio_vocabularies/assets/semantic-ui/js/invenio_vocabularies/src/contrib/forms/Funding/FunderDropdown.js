@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import React from "react";
-
+import { useState, useEffect } from "react";
 import { Dropdown } from "semantic-ui-react";
 import { withState } from "react-searchkit";
 import { i18next } from "@translations/invenio_vocabularies/i18next";
@@ -39,8 +38,8 @@ export const FunderDropdown = withState(
      * @returns {object[]} an array of objects, each representing a facetted funder.
      */
     function useFundersFromFacets(awards) {
-      const [result, setResult] = React.useState([]);
-      React.useEffect(() => {
+      const [result, setResult] = useState([]);
+      useEffect(() => {
         /**
          * Retrieves funders from awards facets and sets the result in state 'result'.
          */
