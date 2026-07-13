@@ -186,8 +186,8 @@ class CORDISProjectTransformer(BaseTransformer):
         :param pic_mapping: Explicit ``{pic: ror}`` dict (used by tests). When ``None``,
             the mapping is lazy-loaded on first access from the merged
             :attr:`pic_mapping_params`. If no ``source`` ends up set (neither in the
-            merged params nor in ``VOCABULARIES_AWARDS_PIC_MAPPING_SOURCE``), the
-            transformer falls back to the legacy PIC-only ``organizations`` shape.
+            merged params nor in ``VOCABULARIES_AWARDS_PIC_MAPPING_SOURCE``), all
+            organizations are emitted as free-text names.
         :param pic_mapping_params: Per-instance overrides for
             :attr:`pic_mapping_params`; kwarg keys win over the class default.
         """

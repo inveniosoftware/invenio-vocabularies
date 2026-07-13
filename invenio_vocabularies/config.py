@@ -149,6 +149,13 @@ VOCABULARIES_AWARDS_OPENAIRE_FUNDERS = {
 VOCABULARIES_AWARDS_EC_ROR_ID = "00k4n6c32"
 """ROR ID for EC funder."""
 
+VOCABULARIES_AWARDS_PIC_MAPPING_SOURCE = "10.5281/zenodo.21345462"
+"""Source of the PIC -> ROR mapping used by the CORDIS awards datastream.
+
+Zenodo concept DOI of the record holding ``pic_mapping.csv``, or a local
+CSV file path. Set to ``None`` to disable PIC resolution.
+"""
+
 VOCABULARIES_NAMES_SCHEMES = {
     "orcid": {"label": _("ORCID"), "validator": is_orcid, "datacite": "ORCID"},
     "isni": {"label": _("ISNI"), "validator": is_isni, "datacite": "ISNI"},
