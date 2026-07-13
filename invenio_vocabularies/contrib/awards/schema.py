@@ -37,18 +37,19 @@ class AwardOrganizationRelationSchema(ContribVocabularyRelationSchema):
     ``identifiers`` on read.
     """
 
-    # `ServiceWriter._do_update` merges the dumped entry back in, so dump-only
-    # `name`/`identifiers` would fail load validation on re-update without this.
+    # `ServiceWriter._do_update` merges the dumped entry back in, so the
+    # dump-only `identifiers` would fail load validation on re-update without this.
     class Meta:
         """Metadata class."""
 
         unknown = EXCLUDE
 
-    ftf_name = "organization"
+    ftf_name = "name"
     parent_field_name = "organizations"
+    name = SanitizedUnicode()
+    # Deprecated in favor of `name`; kept so existing data still validates.
     organization = SanitizedUnicode()
     scheme = SanitizedUnicode()
-    name = SanitizedUnicode(dump_only=True)
     identifiers = IdentifierSet(
         fields.Nested(
             partial(
@@ -59,6 +60,13 @@ class AwardOrganizationRelationSchema(ContribVocabularyRelationSchema):
         ),
         dump_only=True,
     )
+
+    @validates_schema
+    def validate_relation_schema(self, data, **kwargs):
+        """Accept the legacy free-text `organization` key as alternative to `name`."""
+        if data.get("organization"):
+            return
+        super().validate_relation_schema(data, **kwargs)
 
 
 class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):

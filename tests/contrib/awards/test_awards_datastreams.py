@@ -177,7 +177,7 @@ def expected_from_cordis_project_xml():
         "id": "00k4n6c32::101117736",
         "program": "HORIZON.1.1",
         "subjects": [{"id": "euroscivoc:225"}],
-        "organizations": [{"organization": "TECHNISCHE UNIVERSITAET WIEN"}],
+        "organizations": [{"name": "TECHNISCHE UNIVERSITAET WIEN"}],
     }
 
 
@@ -343,7 +343,7 @@ def test_awards_cordis_transformer_unresolved_pic_keeps_name_only(app):
     transformed = cordis_transformer.apply(StreamEntry(award["project"]))
 
     assert transformed.entry["organizations"] == [
-        {"organization": "TECHNISCHE UNIVERSITAET WIEN"}
+        {"name": "TECHNISCHE UNIVERSITAET WIEN"}
     ]
 
 

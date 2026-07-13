@@ -320,9 +320,7 @@ class CORDISProjectTransformer(BaseTransformer):
                 if ror:
                     award["organizations"].append({"id": ror})
                 else:
-                    award["organizations"].append(
-                        {"organization": organization["legalname"]}
-                    )
+                    award["organizations"].append({"name": organization["legalname"]})
 
         programmes = (
             record.get("relations", {}).get("associations", {}).get("programme", {})

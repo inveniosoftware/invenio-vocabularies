@@ -83,8 +83,12 @@
             "description": "Identifier of the organization for the given scheme.",
             "$ref": "local://definitions-v1.0.0.json#/identifier"
           },
-          "organization": {
+          "name": {
             "description": "Human readable label.",
+            "type": "string"
+          },
+          "organization": {
+            "description": "Human readable label (deprecated, use name).",
             "type": "string"
           }
         }

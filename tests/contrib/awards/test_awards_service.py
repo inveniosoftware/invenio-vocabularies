@@ -151,6 +151,38 @@ def test_award_organizations_dereferenced(
     assert list(res.hits)[0]["organizations"] == [expected_organization]
 
 
+def test_award_organizations_free_text(
+    app,
+    search_clear,
+    service,
+    identity,
+    award_full_data,
+    example_funder_ec,
+):
+    """Free-text organizations are accepted via `name` and the legacy `organization` key."""
+    award_full_data["organizations"] = [
+        {"name": "New Org"},
+        {"organization": "Legacy Org"},
+    ]
+
+    item = service.create(identity, award_full_data)
+    Award.index.refresh()
+    id_ = item.id
+
+    read_item = service.read(identity, id_)
+    assert read_item["organizations"] == [
+        {"name": "New Org"},
+        {"organization": "Legacy Org"},
+    ]
+
+    res = service.search(identity, q=f"id:{id_}", size=25, page=1)
+    assert res.total == 1
+    assert list(res.hits)[0]["organizations"] == [
+        {"name": "New Org"},
+        {"organization": "Legacy Org"},
+    ]
+
+
 def test_indexed_at_query(
     app, db, service, identity, award_full_data, example_funder_ec
 ):
