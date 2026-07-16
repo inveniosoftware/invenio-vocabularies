@@ -50,7 +50,7 @@ API_JSON_RESPONSE_CONTENT_WRONG_NUMBER_PROJECT_TAR_ITEMS_ERROR = {
                     "type": "application/x-tar",
                 },
                 {
-                    "href": "https://example.com/another/project.tar",
+                    "href": "https://example.com/another/projects.tar",
                     "type": "application/x-tar",
                 },
             ],
@@ -91,7 +91,9 @@ def download_file_bytes_content():
     side_effect=lambda url, headers=None: MockResponse(API_JSON_RESPONSE_CONTENT),
 )
 def test_openaire_http_reader(_, download_file_bytes_content):
-    reader = OpenAIREHTTPReader(origin="full", tar_href="/project.tar")
+    reader = OpenAIREHTTPReader(
+        origin="full", tar_hrefs=["/project.tar", "/projects.tar"]
+    )
     results = []
     for entry in reader.read():
         results.append(entry)
@@ -108,7 +110,9 @@ def test_openaire_http_reader(_, download_file_bytes_content):
     ),
 )
 def test_openaire_http_reader_wrong_number_tar_items_error(_):
-    reader = OpenAIREHTTPReader(origin="full", tar_href="/project.tar")
+    reader = OpenAIREHTTPReader(
+        origin="full", tar_hrefs=["/project.tar", "/projects.tar"]
+    )
     with pytest.raises(ReaderError):
         next(reader.read())
 
