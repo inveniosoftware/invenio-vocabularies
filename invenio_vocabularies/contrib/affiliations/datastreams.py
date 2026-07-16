@@ -227,7 +227,7 @@ An origin is required for the reader.
 
 DATASTREAM_CONFIG_OPENAIRE = {
     "readers": [
-        {"type": "openaire-http", "args": {"tar_href": "/organization.tar"}},
+        {"type": "openaire-http", "args": {"tar_hrefs": ["/organization.tar"]}},
         {
             "type": "tar",
             "args": {
