@@ -286,6 +286,15 @@ class CORDISProjectTransformer(BaseTransformer):
         if "objective" in record:
             award["description"] = {"en": record["objective"]}
 
+        # Add the Grant DOI to the `identifiers` list (this is not provided by OpenAIRE).
+        if "grantdoi" in record.get("identifiers", {}):
+            award["identifiers"].append(
+                {
+                    "identifier": record["identifiers"]["grantdoi"],
+                    "scheme": "doi",
+                }
+            )
+
         # The `short_description` field.
         article_data = (
             record.get("relations", {}).get("associations", {}).get("article", {})

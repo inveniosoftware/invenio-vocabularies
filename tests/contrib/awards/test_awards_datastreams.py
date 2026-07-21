@@ -188,6 +188,10 @@ def expected_from_cordis_project_xml():
                 "identifier": "https://cordis.europa.eu/projects/101117736",
                 "scheme": "url",
             },
+            {
+                "identifier": "10.3030/101117736",
+                "scheme": "doi",
+            },
         ],
         "title": {
             "en": "Bioorthogonal Iontronic Chemistry: Spatiotemporal Drug Release with Electronic Precision"
