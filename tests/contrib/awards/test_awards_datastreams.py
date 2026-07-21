@@ -122,6 +122,12 @@ CORDIS_PROJECT_XML = bytes(
 	<identifiers>
 		<grantDoi>10.3030/101117736</grantDoi>
 	</identifiers>
+	<teaser>I envision a new drug delivery system capable spatiotemporal release with electronic precision.This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogonal Release (BR) and Iontronic transport to overcome the drawbacks of each individual technology and...</teaser>
+	<objective>I envision a new drug delivery system capable spatiotemporal release with electronic precision.
+This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogonal Release (BR) and Iontronic transport to overcome the drawbacks of each individual technology and combine their unique advantages.</objective>
+	<title>Bioorthogonal Iontronic Chemistry: Spatiotemporal Drug Release with Electronic Precision</title>
+	<startDate>2024-09-01</startDate>
+	<endDate>2029-08-31</endDate>
 	<relations>
 		<associations>
 			<organization type="coordinator" source="corda" order="1" ecContribution="1496795" terminated="false" sme="false" netEcContribution="1496795" totalCost="1496795">
@@ -175,6 +181,27 @@ CORDIS_PROJECT_XML = bytes(
 def expected_from_cordis_project_xml():
     return {
         "id": "00k4n6c32::101117736",
+        "funder": {"id": "00k4n6c32"},
+        "number": "101117736",
+        "identifiers": [
+            {
+                "identifier": "https://cordis.europa.eu/projects/101117736",
+                "scheme": "url",
+            },
+        ],
+        "title": {
+            "en": "Bioorthogonal Iontronic Chemistry: Spatiotemporal Drug Release with Electronic Precision"
+        },
+        "acronym": "Time2SWITCH",
+        "start_date": "2024-09-01",
+        "end_date": "2029-08-31",
+        "description": {
+            "en": """I envision a new drug delivery system capable spatiotemporal release with electronic precision.
+This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogonal Release (BR) and Iontronic transport to overcome the drawbacks of each individual technology and combine their unique advantages."""
+        },
+        "short_description": {
+            "en": "I envision a new drug delivery system capable spatiotemporal release with electronic precision.This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogonal Release (BR) and Iontronic transport to overcome the drawbacks of each "
+        },
         "program": "HORIZON.1.1",
         "subjects": [{"id": "euroscivoc:225"}],
         "organizations": [{"name": "TECHNISCHE UNIVERSITAET WIEN"}],

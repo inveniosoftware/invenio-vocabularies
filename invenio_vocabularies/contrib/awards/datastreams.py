@@ -260,11 +260,33 @@ class CORDISProjectTransformer(BaseTransformer):
         record = stream_entry.entry
         award = {}
 
-        # Here `id` is the project ID, which will be used to attach the update to the existing project.
-        award["id"] = (
-            f"{current_app.config['VOCABULARIES_AWARDS_EC_ROR_ID']}::{record['id']}"
-        )
+        funder_id = current_app.config["VOCABULARIES_AWARDS_EC_ROR_ID"]
+        grant_agreement_id = record["id"]
 
+        # The `id` field is used to uniquely identify an award and is mandatory.
+        award["id"] = f"{funder_id}::{grant_agreement_id}"
+
+        # Some fields also provided by OpenAIRE, but that we get here from CORDIS too.
+        award["funder"] = {"id": funder_id}
+        award["number"] = grant_agreement_id
+        award["identifiers"] = [
+            {
+                "identifier": f"https://cordis.europa.eu/projects/{grant_agreement_id}",
+                "scheme": "url",
+            }
+        ]
+        if "title" in record:
+            award["title"] = {"en": record["title"]}
+        if "acronym" in record:
+            award["acronym"] = record["acronym"]
+        if "startdate" in record:
+            award["start_date"] = record["startdate"]
+        if "enddate" in record:
+            award["end_date"] = record["enddate"]
+        if "objective" in record:
+            award["description"] = {"en": record["objective"]}
+
+        # The `short_description` field.
         article_data = (
             record.get("relations", {}).get("associations", {}).get("article", {})
         )
@@ -283,6 +305,7 @@ class CORDISProjectTransformer(BaseTransformer):
         if short_description:
             award["short_description"] = {"en": short_description}
 
+        # The `subjects` field.
         categories = record.get("relations", {}).get("categories", {}).get("category")
         if categories:
             if isinstance(categories, dict):
@@ -294,6 +317,7 @@ class CORDISProjectTransformer(BaseTransformer):
                 and (vocab_id := category["code"].split("/")[-1]).isdigit()
             ]
 
+        # The `organizations` field.
         organizations = (
             record.get("relations", {}).get("associations", {}).get("organization")
         )
@@ -322,6 +346,7 @@ class CORDISProjectTransformer(BaseTransformer):
                 else:
                     award["organizations"].append({"name": organization["legalname"]})
 
+        # The `program` field.
         programmes = (
             record.get("relations", {}).get("associations", {}).get("programme", {})
         )
