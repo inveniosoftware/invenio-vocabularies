@@ -132,6 +132,7 @@ def expected_from_ror_json():
             {"scheme": "ror", "identifier": "05dxps055"},
         ],
         "types": ["education", "funder"],
+        "website": "http://www.caltech.edu/",
     }
 
 

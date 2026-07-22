@@ -22,6 +22,18 @@
       "type": "string",
       "description": "Represents a affiliation's location name (usually a city)."
     },
+    "website": {
+      "description": "Affiliation's website.",
+      "type": "string"
+    },
+    "domains": {
+      "description": "Domains of the affiliation.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
     "acronym": {
       "type": "string"
     },
@@ -34,8 +46,8 @@
       "uniqueItems": true
     },
     "status": {
-        "type": "string",
-        "description": "Status of the affiliation organization."
+      "type": "string",
+      "description": "Status of the affiliation organization."
     },
     "aliases": {
       "description": "Alternate names for the affiliation.",

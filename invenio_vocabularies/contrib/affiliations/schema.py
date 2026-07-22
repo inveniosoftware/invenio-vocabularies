@@ -8,7 +8,7 @@ from functools import partial
 
 from invenio_i18n import lazy_gettext as _
 from marshmallow import fields, validate
-from marshmallow_utils.fields import IdentifierSet, SanitizedUnicode
+from marshmallow_utils.fields import URL, IdentifierSet, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import (
@@ -38,6 +38,8 @@ class AffiliationSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     country = SanitizedUnicode()
     country_name = SanitizedUnicode()
     location_name = SanitizedUnicode()
+    website = URL()
+    domains = fields.List(SanitizedUnicode())
     id = SanitizedUnicode(
         validate=validate.Length(min=1, error=_("PID cannot be blank."))
     )

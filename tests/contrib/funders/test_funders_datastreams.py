@@ -42,6 +42,7 @@ def expected_from_ror_json():
             {"scheme": "isni", "identifier": "0000 0001 0706 8890"},
         ],
         "types": ["education", "funder"],
+        "website": "http://www.caltech.edu/",
     }
 
 

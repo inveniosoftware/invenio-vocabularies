@@ -91,6 +91,17 @@ class RORTransformer(BaseTransformer):
         ror = {}
         ror["title"] = {}
 
+        domains = record.get("domains", "")
+        if domains:
+            ror["domains"] = domains
+
+        links = record.get("links", [])
+        website = next(
+            (link.get("value") for link in links if link.get("type") == "website"), None
+        )
+        if website:
+            ror["website"] = website
+
         ror["id"] = normalize_ror(record.get("id"))
         if not ror["id"]:
             raise TransformerError(_("Id not found in ROR entry."))

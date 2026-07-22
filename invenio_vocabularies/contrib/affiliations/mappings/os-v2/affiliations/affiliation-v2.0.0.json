@@ -33,10 +33,7 @@
         "accent_normalizer": {
           "type": "custom",
           "char_filter": ["strip_special_chars"],
-          "filter": [
-            "lowercase",
-            "asciifolding"
-          ]
+          "filter": ["lowercase", "asciifolding"]
         }
       },
       "filter": {
@@ -156,6 +153,12 @@
       },
       "location_name": {
         "type": "text"
+      },
+      "website": {
+        "type": "keyword"
+      },
+      "domains": {
+        "type": "keyword"
       },
       "status": {
         "type": "keyword"

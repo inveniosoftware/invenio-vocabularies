@@ -88,7 +88,7 @@
       },
       "tags": {
         "type": "keyword"
-      },    
+      },
       "country": {
         "type": "text"
       },
@@ -97,6 +97,12 @@
       },
       "location_name": {
         "type": "text"
+      },
+      "website": {
+        "type": "keyword"
+      },
+      "domains": {
+        "type": "keyword"
       },
       "status": {
         "type": "keyword"
