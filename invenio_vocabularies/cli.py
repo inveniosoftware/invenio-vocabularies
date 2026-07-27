@@ -71,7 +71,7 @@ def _output_process(vocabulary, op, success, errored, filtered):
 @click.option("-n", "--num-samples", type=click.INT)
 @with_appcontext
 def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
-    """Import a vocabulary."""
+    """Import a vocabulary (insert-only)."""
     if not filepath and not origin:
         click.secho("One of --filepath or --origin must be present.", fg="red")
         exit(1)
@@ -90,7 +90,7 @@ def import_vocab(vocabulary, filepath=None, origin=None, num_samples=None):
 @click.option("-o", "--origin", type=click.STRING)
 @with_appcontext
 def update(vocabulary, filepath=None, origin=None):
-    """Import a vocabulary."""
+    """Import a vocabulary (insert and update)."""
     if not filepath and not origin:
         click.secho("One of --filepath or --origin must be present.", fg="red")
         exit(1)
