@@ -1,17 +1,14 @@
-# Translators:
-# Tibor Simko <tibor.simko@cern.ch>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
 "POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
-"Last-Translator: Tibor Simko <tibor.simko@cern.ch>, 2025\n"
-"Language-Team: Slovak (https://app.transifex.com/inveniosoftware/teams/23537/sk/)\n"
+"Language-Team: Danish (Denmark) (https://app.transifex.com/inveniosoftware/teams/23537/da_DK/)\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
+"Language: da_DK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "mime-version: 1.0\n"
 
 msgid "Search for a funder by name"
@@ -27,7 +24,7 @@ msgid "Additional information"
 msgstr ""
 
 msgid "optional"
-msgstr "voliteľné"
+msgstr ""
 
 msgid "Number"
 msgstr ""
@@ -36,7 +33,7 @@ msgid "Award/Grant number"
 msgstr ""
 
 msgid "Title"
-msgstr "Názov"
+msgstr ""
 
 msgid "Award/Grant Title"
 msgstr ""
@@ -54,10 +51,10 @@ msgid "Add custom"
 msgstr ""
 
 msgid "Edit"
-msgstr "Editovať"
+msgstr ""
 
 msgid "Remove"
-msgstr "Zruš"
+msgstr ""
 
 msgid "Open external link"
 msgstr ""
@@ -81,7 +78,7 @@ msgid "Search for awards/grants"
 msgstr ""
 
 msgid "Cancel"
-msgstr "Preruš"
+msgstr ""
 
 msgid "Change"
 msgstr ""

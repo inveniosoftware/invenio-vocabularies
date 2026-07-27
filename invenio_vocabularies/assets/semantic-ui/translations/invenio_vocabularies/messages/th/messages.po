@@ -1,0 +1,93 @@
+# Translators:
+# Suthep Yonphimai <tomztt@gmail.com>, 2026
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
+"PO-Revision-Date: 2025-05-13 21:01+0000\n"
+"Last-Translator: Suthep Yonphimai <tomztt@gmail.com>, 2026\n"
+"Language-Team: Thai (https://app.transifex.com/inveniosoftware/teams/23537/th/)\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"mime-version: 1.0\n"
+
+msgid "Search for a funder by name"
+msgstr "ค้นหาผู้ให้ทุนตามชื่อ"
+
+msgid "Funder"
+msgstr "ผู้ให้ทุน"
+
+msgid "Search for funder..."
+msgstr "ค้นหาผู้ให้ทุน..."
+
+msgid "Additional information"
+msgstr "ข้อมูลเพิ่มเติม"
+
+msgid "optional"
+msgstr "ไม่บังคับ"
+
+msgid "Number"
+msgstr "หมายเลข"
+
+msgid "Award/Grant number"
+msgstr "หมายเลขรางวัล/ทุน"
+
+msgid "Title"
+msgstr "ชื่อเรื่อง"
+
+msgid "Award/Grant Title"
+msgstr "ชื่อรางวัล/ทุน"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Award/Grant URL"
+msgstr "URL รางวัล/ทุน"
+
+msgid "Add"
+msgstr "เพิ่ม"
+
+msgid "Add custom"
+msgstr "เพิ่มแบบกำหนดเอง"
+
+msgid "Edit"
+msgstr "แก้ไข"
+
+msgid "Remove"
+msgstr "ลบ"
+
+msgid "Open external link"
+msgstr "เปิดลิงก์ภายนอก"
+
+msgid "Funder is required."
+msgstr "จำเป็นต้องระบุผู้ให้ทุน"
+
+msgid "URL must be valid."
+msgstr "URL ต้องถูกต้อง"
+
+msgid "URL must be set alongside title or number."
+msgstr "URL ต้องระบุพร้อมกับชื่อเรื่องหรือหมายเลข"
+
+msgid "Add standard award/grant"
+msgstr "เพิ่มรางวัล/ทุนมาตรฐาน"
+
+msgid "Add custom funding"
+msgstr "เพิ่มการให้ทุนแบบกำหนดเอง"
+
+msgid "Search for awards/grants"
+msgstr "ค้นหารางวัล/ทุน"
+
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+msgid "Change"
+msgstr "เปลี่ยน"
+
+msgid "Did not find your award/grant? "
+msgstr "ไม่พบรางวัล/ทุนของคุณ? "
+
+msgid "Add a custom award/grant."
+msgstr "เพิ่มรางวัล/ทุนแบบกำหนดเอง"

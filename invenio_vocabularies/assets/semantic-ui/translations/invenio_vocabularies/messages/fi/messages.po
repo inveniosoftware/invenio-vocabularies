@@ -1,94 +1,93 @@
 # Translators:
-# Mart Jantson, 2025
-# Martin Jantson <martinjantson97@gmail.com>, 2025
+# Matti Lassila <matti.lassila@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
 "POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
-"Last-Translator: Martin Jantson <martinjantson97@gmail.com>, 2025\n"
-"Language-Team: Estonian (https://app.transifex.com/inveniosoftware/teams/23537/et/)\n"
+"Last-Translator: Matti Lassila <matti.lassila@gmail.com>, 2025\n"
+"Language-Team: Finnish (https://app.transifex.com/inveniosoftware/teams/23537/fi/)\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: et\n"
+"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "mime-version: 1.0\n"
 
 msgid "Search for a funder by name"
-msgstr "Otsi rahastajat nime järgi"
+msgstr "Hae rahoittajaa nimellä"
 
 msgid "Funder"
-msgstr "Rahastaja"
+msgstr "Rahoittaja"
 
 msgid "Search for funder..."
-msgstr "Otsi rahastajat..."
+msgstr "Hae rahoittajaa..."
 
 msgid "Additional information"
-msgstr ""
+msgstr "Lisätiedot"
 
 msgid "optional"
-msgstr "valikuline"
+msgstr "valinnainen"
 
 msgid "Number"
-msgstr "Number"
+msgstr "Numero"
 
 msgid "Award/Grant number"
-msgstr ""
+msgstr "Palkinto-/apurahan numero"
 
 msgid "Title"
-msgstr "Pealkiri"
+msgstr "Otsikko"
 
 msgid "Award/Grant Title"
-msgstr ""
+msgstr "Palkinto-/apurahan nimi"
 
 msgid "URL"
 msgstr "URL"
 
 msgid "Award/Grant URL"
-msgstr ""
+msgstr "Palkinto-/apurahan URL"
 
 msgid "Add"
-msgstr "Lisa"
+msgstr "Lisää"
 
 msgid "Add custom"
-msgstr "Lisa kohandus"
+msgstr "Lisää mukautettu"
 
 msgid "Edit"
-msgstr "Redigeeri"
+msgstr "Muokkaa"
 
 msgid "Remove"
-msgstr "Eemalda"
+msgstr "Poista"
 
 msgid "Open external link"
-msgstr "Ava väline link"
+msgstr "Avaa ulkoinen linkki"
 
 msgid "Funder is required."
-msgstr "Rahastaja on vajalik."
+msgstr "Rahoittaja on pakollinen."
 
 msgid "URL must be valid."
-msgstr "URL peab olema kehtiv."
+msgstr "URL-osoitteen on oltava kelvollinen."
 
 msgid "URL must be set alongside title or number."
-msgstr ""
+msgstr "URL on asetettava yhdessä otsikon tai numeron kanssa."
 
 msgid "Add standard award/grant"
-msgstr ""
+msgstr "Lisää vakiopalkinto/apuraha"
 
 msgid "Add custom funding"
-msgstr ""
+msgstr "Lisää mukautettu rahoitus"
 
 msgid "Search for awards/grants"
-msgstr ""
+msgstr "Hae palkintoja/apurahoja"
 
 msgid "Cancel"
-msgstr "Tühista"
+msgstr "Peruuta"
 
 msgid "Change"
-msgstr "Muuda"
+msgstr "Muuta"
 
 msgid "Did not find your award/grant? "
-msgstr ""
+msgstr "Etkö löytänyt palkintoasi/apurahaa? "
 
 msgid "Add a custom award/grant."
-msgstr ""
+msgstr "Lisää mukautettu palkinto/apuraha."

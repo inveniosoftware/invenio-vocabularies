@@ -1,8 +1,8 @@
 # Translations template for invenio-vocabularies.
-# Copyright (C) 2025 CERN
+# Copyright (C) 2026 CERN
 # This file is distributed under the same license as the
 # invenio-vocabularies project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 # 
 # Translators:
 # Tibor Simko <tibor.simko@cern.ch>, 2021
@@ -12,67 +12,67 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: invenio-vocabularies 8.1.0\n"
+"Project-Id-Version: invenio-vocabularies 13.0.0\n"
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
-"POT-Creation-Date: 2025-07-08 20:00+0000\n"
+"POT-Creation-Date: 2026-06-22 20:50+0000\n"
 "PO-Revision-Date: 2021-07-13 12:40+0000\n"
 "Last-Translator: Nicolaie Constantinescu, 2025\n"
 "Language-Team: Romanian (https://app.transifex.com/inveniosoftware/teams/23537/ro/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
-#: invenio_vocabularies/config.py:44
+#: invenio_vocabularies/config.py:39
 msgid "GRID"
 msgstr "GRID"
 
-#: invenio_vocabularies/config.py:45 invenio_vocabularies/config.py:126
-#: invenio_vocabularies/config.py:131
+#: invenio_vocabularies/config.py:40 invenio_vocabularies/config.py:155
+#: invenio_vocabularies/config.py:160
 msgid "GND"
 msgstr "GND"
 
-#: invenio_vocabularies/config.py:46 invenio_vocabularies/config.py:125
+#: invenio_vocabularies/config.py:41 invenio_vocabularies/config.py:154
 msgid "ISNI"
 msgstr "ISNI"
 
-#: invenio_vocabularies/config.py:47
+#: invenio_vocabularies/config.py:42
 msgid "ROR"
 msgstr "ROR"
 
-#: invenio_vocabularies/config.py:68
+#: invenio_vocabularies/config.py:63
 msgid "PIC"
 msgstr ""
 
-#: invenio_vocabularies/config.py:69
+#: invenio_vocabularies/config.py:64
 msgid "EDMO"
 msgstr ""
 
-#: invenio_vocabularies/config.py:75 invenio_vocabularies/config.py:84
+#: invenio_vocabularies/config.py:70 invenio_vocabularies/config.py:79
 msgid "DOI"
 msgstr "DOI"
 
-#: invenio_vocabularies/config.py:83 invenio_vocabularies/config.py:132
+#: invenio_vocabularies/config.py:78 invenio_vocabularies/config.py:161
 msgid "URL"
 msgstr "URL"
 
-#: invenio_vocabularies/config.py:124
+#: invenio_vocabularies/config.py:153
 msgid "ORCID"
 msgstr "ORCID"
 
-#: invenio_vocabularies/administration/views/vocabularies.py:37
-#: invenio_vocabularies/config.py:175
-#: invenio_vocabularies/contrib/affiliations/config.py:61
-#: invenio_vocabularies/contrib/funders/config.py:60
-#: invenio_vocabularies/contrib/names/config.py:55
-#: invenio_vocabularies/contrib/subjects/config.py:70
+#: invenio_vocabularies/administration/views/vocabularies.py:32
+#: invenio_vocabularies/config.py:204
+#: invenio_vocabularies/contrib/affiliations/config.py:56
+#: invenio_vocabularies/contrib/funders/config.py:55
+#: invenio_vocabularies/contrib/names/config.py:50
+#: invenio_vocabularies/contrib/subjects/config.py:67
 msgid "Name"
 msgstr "Nume"
 
-#: invenio_vocabularies/administration/views/vocabularies.py:38
-#: invenio_vocabularies/config.py:179
+#: invenio_vocabularies/administration/views/vocabularies.py:33
+#: invenio_vocabularies/config.py:208
 msgid "Number of entries"
 msgstr ""
 
@@ -112,169 +112,172 @@ msgstr ""
 msgid "Import ORCID data"
 msgstr ""
 
-#: invenio_vocabularies/administration/views/vocabularies.py:21
-#: invenio_vocabularies/administration/views/vocabularies.py:24
+#: invenio_vocabularies/jobs.py:212
+msgid "Import subjects from EuroSciVoc"
+msgstr ""
+
+#: invenio_vocabularies/jobs.py:213
+msgid "Import Subjects EuroSciVoc"
+msgstr ""
+
+#: invenio_vocabularies/administration/views/vocabularies.py:16
+#: invenio_vocabularies/administration/views/vocabularies.py:19
 msgid "Vocabulary Types"
 msgstr ""
 
-#: invenio_vocabularies/administration/views/vocabularies.py:25
+#: invenio_vocabularies/administration/views/vocabularies.py:20
 msgid "Site management"
 msgstr "Management site"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:57
-#: invenio_vocabularies/contrib/funders/config.py:56
-#: invenio_vocabularies/contrib/names/config.py:51
-#: invenio_vocabularies/contrib/subjects/config.py:66
-#: invenio_vocabularies/services/config.py:67
+#: invenio_vocabularies/contrib/affiliations/config.py:52
+#: invenio_vocabularies/contrib/funders/config.py:51
+#: invenio_vocabularies/contrib/names/config.py:46
+#: invenio_vocabularies/contrib/subjects/config.py:63
+#: invenio_vocabularies/services/config.py:61
 msgid "Best match"
 msgstr "Cel mai bun rezultat"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:65
-#: invenio_vocabularies/contrib/funders/config.py:64
-#: invenio_vocabularies/contrib/names/config.py:59
-#: invenio_vocabularies/contrib/subjects/config.py:74
-#: invenio_vocabularies/services/config.py:75
+#: invenio_vocabularies/contrib/affiliations/config.py:60
+#: invenio_vocabularies/contrib/funders/config.py:59
+#: invenio_vocabularies/contrib/names/config.py:54
+#: invenio_vocabularies/contrib/subjects/config.py:71
+#: invenio_vocabularies/services/config.py:69
 msgid "Newest"
 msgstr "Cel mai nou"
 
-#: invenio_vocabularies/contrib/affiliations/config.py:69
-#: invenio_vocabularies/contrib/funders/config.py:68
-#: invenio_vocabularies/contrib/names/config.py:63
-#: invenio_vocabularies/contrib/subjects/config.py:78
-#: invenio_vocabularies/services/config.py:79
+#: invenio_vocabularies/contrib/affiliations/config.py:64
+#: invenio_vocabularies/contrib/funders/config.py:63
+#: invenio_vocabularies/contrib/names/config.py:58
+#: invenio_vocabularies/contrib/subjects/config.py:75
+#: invenio_vocabularies/services/config.py:73
 msgid "Oldest"
 msgstr "Cel mai vechi"
 
-#: invenio_vocabularies/contrib/affiliations/schema.py:41
-#: invenio_vocabularies/contrib/funders/schema.py:36
-#: invenio_vocabularies/contrib/funders/schema.py:44
+#: invenio_vocabularies/contrib/affiliations/schema.py:36
+#: invenio_vocabularies/contrib/funders/schema.py:32
+#: invenio_vocabularies/contrib/funders/schema.py:40
 msgid "Name cannot be blank."
 msgstr "Numele nu poate fi vid."
 
-#: invenio_vocabularies/contrib/affiliations/schema.py:47
-#: invenio_vocabularies/contrib/awards/schema.py:69
-#: invenio_vocabularies/contrib/funders/schema.py:60
+#: invenio_vocabularies/contrib/affiliations/schema.py:42
+#: invenio_vocabularies/contrib/awards/schema.py:64
+#: invenio_vocabularies/contrib/funders/schema.py:56
 msgid "PID cannot be blank."
 msgstr "PID nu poate fi vid."
 
-#: invenio_vocabularies/contrib/awards/config.py:49
+#: invenio_vocabularies/contrib/awards/config.py:44
 msgid "Funders"
 msgstr "Finanțatori"
 
-#: invenio_vocabularies/contrib/awards/datastreams.py:67
+#: invenio_vocabularies/contrib/awards/datastreams.py:62
 #, python-brace-format
 msgid "Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
 msgstr ""
 "Prefix necunoscut pentru finanțator prezent în OpenAIRE "
 "{openaire_funder_prefix}"
 
-#: invenio_vocabularies/contrib/awards/datastreams.py:108
+#: invenio_vocabularies/contrib/awards/datastreams.py:103
 #, python-brace-format
 msgid "Missing title attribute for award {award_id}"
 msgstr ""
 
-#: invenio_vocabularies/contrib/awards/datastreams.py:244
+#: invenio_vocabularies/contrib/awards/datastreams.py:239
 #, python-brace-format
 msgid "No related legal basis programme found for project {project_id}"
 msgstr ""
 
-#: invenio_vocabularies/contrib/awards/schema.py:52
+#: invenio_vocabularies/contrib/awards/schema.py:47
 msgid "Number cannot be blank."
 msgstr "Numărul nu poate fi vid."
 
-#: invenio_vocabularies/contrib/awards/schema.py:100
+#: invenio_vocabularies/contrib/awards/schema.py:95
 msgid "An existing id or either number or title must be present."
 msgstr ""
 
-#: invenio_vocabularies/contrib/awards/schema.py:118
+#: invenio_vocabularies/contrib/awards/schema.py:113
 msgid "At least award or funder should be present."
 msgstr "Trebuie să fie prezent cel puțin contractul sau finanțatorul."
 
-#: invenio_vocabularies/contrib/common/ror/datastreams.py:147
+#: invenio_vocabularies/contrib/common/ror/datastreams.py:157
 msgid "Id not found in ROR entry."
 msgstr "Id negăsit în înregistrarea ROR."
 
-#: invenio_vocabularies/contrib/common/ror/datastreams.py:179
+#: invenio_vocabularies/contrib/common/ror/datastreams.py:189
 msgid "Name with type ror_display not found in ROR entry."
 msgstr ""
 
-#: invenio_vocabularies/contrib/funders/schema.py:73
-#: invenio_vocabularies/services/schema.py:120
-msgid "Missing PID."
-msgstr "PID lipsește."
-
-#: invenio_vocabularies/contrib/names/schema.py:76
+#: invenio_vocabularies/contrib/names/schema.py:71
 msgid ""
 "A name or the family name together with the given name must be present."
 msgstr ""
 "Un nume sau numele familiei împreună cu numele trebuie să fie trecute."
 
-#: invenio_vocabularies/contrib/names/schema.py:90
-msgid "Duplicated affiliations."
-msgstr ""
-
-#: invenio_vocabularies/records/models.py:84
+#: invenio_vocabularies/records/models.py:79
 #, python-format
 msgid "No '%(banned_char)s' allowed in VocabularyScheme.id"
 msgstr ""
 
-#: invenio_vocabularies/services/components.py:29
+#: invenio_vocabularies/services/components.py:24
 msgid "The vocabulary type does not exists."
 msgstr "Tipul vocabularului nu există."
 
-#: invenio_vocabularies/services/config.py:71
+#: invenio_vocabularies/services/config.py:65
 msgid "Title"
 msgstr "Titlul"
 
-#: invenio_vocabularies/services/config.py:90
+#: invenio_vocabularies/services/config.py:84
 msgid "ID"
 msgstr "ID"
 
-#: invenio_vocabularies/services/config.py:100
+#: invenio_vocabularies/services/config.py:94
 msgid "Ascending"
 msgstr "Crescător"
 
-#: invenio_vocabularies/services/config.py:101
+#: invenio_vocabularies/services/config.py:95
 msgid "Descending"
 msgstr "Descrescător"
 
-#: invenio_vocabularies/services/schema.py:85
+#: invenio_vocabularies/services/schema.py:84
 #, python-brace-format
 msgid "An existing id or a free text {ftf_name} must be present."
 msgstr "Trebuie să existe un id sau un text la liber {ftf_name}."
 
-#: invenio_vocabularies/services/custom_fields/subject.py:50
+#: invenio_vocabularies/services/schema.py:132
+msgid "Missing PID."
+msgstr "PID lipsește."
+
+#: invenio_vocabularies/services/custom_fields/subject.py:45
 msgid "Subjects"
 msgstr "Subiecte"
 
-#: invenio_vocabularies/services/custom_fields/subject.py:57
+#: invenio_vocabularies/services/custom_fields/subject.py:52
 msgid "Keywords and subjects"
 msgstr "Cuvinte cheie și subiecte"
 
-#: invenio_vocabularies/services/custom_fields/subject.py:59
+#: invenio_vocabularies/services/custom_fields/subject.py:54
 msgid "The subjects related to the community"
 msgstr ""
 
-#: invenio_vocabularies/services/custom_fields/subject.py:60
+#: invenio_vocabularies/services/custom_fields/subject.py:55
 msgid "Search for a subject by name e.g. Psychology ..."
 msgstr ""
 
-#: invenio_vocabularies/services/custom_fields/subject.py:62
+#: invenio_vocabularies/services/custom_fields/subject.py:57
 msgid "Search for subjects..."
 msgstr ""
 
-#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:16
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:14
 msgid "Search results for "
 msgstr "Caută rezultate pentru"
 
-#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:26
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:24
 msgid "Settings"
 msgstr "Setări"
 
-#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:31
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:29
 msgid "Schedule"
 msgstr ""
 
-#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:36
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:34
 msgid "Run now"
 msgstr ""
