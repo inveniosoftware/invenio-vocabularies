@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Tibor Simko <tibor.simko@cern.ch>, 2025
 # Zacharias Zacharodimos <zacharias.zacharodimos@cern.ch>, 2025
@@ -11,7 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
 "Last-Translator: Jesús Martín <jesusmartin@sallep.net>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/inveniosoftware/teams/23537/es/)\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"

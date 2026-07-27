@@ -1,90 +1,93 @@
+# Translators:
+# Minjae Kwon, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
 "POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
+"Last-Translator: Minjae Kwon, 2026\n"
 "Language-Team: Korean (https://app.transifex.com/inveniosoftware/teams/23537/ko/)\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "mime-version: 1.0\n"
 
 msgid "Search for a funder by name"
-msgstr ""
+msgstr "이름으로 지원 기관 검색"
 
 msgid "Funder"
-msgstr ""
+msgstr "지원 기관"
 
 msgid "Search for funder..."
-msgstr ""
+msgstr "지원 기관 검색..."
 
 msgid "Additional information"
-msgstr ""
+msgstr "추가 정보"
 
 msgid "optional"
-msgstr ""
+msgstr "선택"
 
 msgid "Number"
-msgstr ""
+msgstr "번호"
 
 msgid "Award/Grant number"
-msgstr ""
+msgstr "과제 번호"
 
 msgid "Title"
-msgstr ""
+msgstr "제목"
 
 msgid "Award/Grant Title"
-msgstr ""
+msgstr "과제 제목"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Award/Grant URL"
-msgstr ""
+msgstr "과제 URL"
 
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 msgid "Add custom"
-msgstr ""
+msgstr "직접 추가"
 
 msgid "Edit"
-msgstr ""
+msgstr "수정"
 
 msgid "Remove"
-msgstr ""
+msgstr "제거"
 
 msgid "Open external link"
-msgstr ""
+msgstr "외부 링크 열기"
 
 msgid "Funder is required."
-msgstr ""
+msgstr "지원 기관은 필수입니다."
 
 msgid "URL must be valid."
-msgstr ""
+msgstr "URL이 올바라야 합니다."
 
 msgid "URL must be set alongside title or number."
-msgstr ""
+msgstr "URL은 제목 또는 번호와 함께 입력해야 합니다."
 
 msgid "Add standard award/grant"
-msgstr ""
+msgstr "표준 과제 추가"
 
 msgid "Add custom funding"
-msgstr ""
+msgstr "사용자 지정 지원 정보 추가"
 
 msgid "Search for awards/grants"
-msgstr ""
+msgstr "과제 검색"
 
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 msgid "Change"
-msgstr ""
+msgstr "변경"
 
 msgid "Did not find your award/grant? "
-msgstr ""
+msgstr "과제를 찾지 못하셨나요? "
 
 msgid "Add a custom award/grant."
-msgstr ""
+msgstr "사용자 지정 과제를 추가하십시오."

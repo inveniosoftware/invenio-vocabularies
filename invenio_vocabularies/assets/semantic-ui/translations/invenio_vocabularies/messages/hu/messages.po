@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Dorottya Szemigán, 2025
 # Andrea Dömötör, 2025
@@ -11,7 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
 "Last-Translator: Dora Szauter, 2025\n"
 "Language-Team: Hungarian (https://app.transifex.com/inveniosoftware/teams/23537/hu/)\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"

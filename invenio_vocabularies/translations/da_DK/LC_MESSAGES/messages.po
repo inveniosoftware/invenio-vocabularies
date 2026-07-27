@@ -4,10 +4,6 @@
 # invenio-vocabularies project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 # 
-# Translators:
-# Mart Jantson, 2022
-# Martin Jantson <martinjantson97@gmail.com>, 2025
-# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -15,31 +11,30 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2026-06-22 20:50+0000\n"
 "PO-Revision-Date: 2021-07-13 12:40+0000\n"
-"Last-Translator: Martin Jantson <martinjantson97@gmail.com>, 2025\n"
-"Language-Team: Estonian (https://app.transifex.com/inveniosoftware/teams/23537/et/)\n"
+"Language-Team: Danish (Denmark) (https://app.transifex.com/inveniosoftware/teams/23537/da_DK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
-"Language: et\n"
+"Language: da_DK\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: invenio_vocabularies/config.py:39
 msgid "GRID"
-msgstr "GRID"
+msgstr ""
 
 #: invenio_vocabularies/config.py:40 invenio_vocabularies/config.py:155
 #: invenio_vocabularies/config.py:160
 msgid "GND"
-msgstr "GND"
+msgstr ""
 
 #: invenio_vocabularies/config.py:41 invenio_vocabularies/config.py:154
 msgid "ISNI"
-msgstr "ISNI"
+msgstr ""
 
 #: invenio_vocabularies/config.py:42
 msgid "ROR"
-msgstr "ROR"
+msgstr ""
 
 #: invenio_vocabularies/config.py:63
 msgid "PIC"
@@ -51,15 +46,15 @@ msgstr ""
 
 #: invenio_vocabularies/config.py:70 invenio_vocabularies/config.py:79
 msgid "DOI"
-msgstr "DOI"
+msgstr ""
 
 #: invenio_vocabularies/config.py:78 invenio_vocabularies/config.py:161
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: invenio_vocabularies/config.py:153
 msgid "ORCID"
-msgstr "ORCID"
+msgstr ""
 
 #: invenio_vocabularies/administration/views/vocabularies.py:32
 #: invenio_vocabularies/config.py:204
@@ -68,7 +63,7 @@ msgstr "ORCID"
 #: invenio_vocabularies/contrib/names/config.py:50
 #: invenio_vocabularies/contrib/subjects/config.py:67
 msgid "Name"
-msgstr "Nimi"
+msgstr ""
 
 #: invenio_vocabularies/administration/views/vocabularies.py:33
 #: invenio_vocabularies/config.py:208
@@ -134,7 +129,7 @@ msgstr ""
 #: invenio_vocabularies/contrib/subjects/config.py:63
 #: invenio_vocabularies/services/config.py:61
 msgid "Best match"
-msgstr "Parim vaste"
+msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/config.py:60
 #: invenio_vocabularies/contrib/funders/config.py:59
@@ -142,7 +137,7 @@ msgstr "Parim vaste"
 #: invenio_vocabularies/contrib/subjects/config.py:71
 #: invenio_vocabularies/services/config.py:69
 msgid "Newest"
-msgstr "Uusim"
+msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/config.py:64
 #: invenio_vocabularies/contrib/funders/config.py:63
@@ -150,28 +145,28 @@ msgstr "Uusim"
 #: invenio_vocabularies/contrib/subjects/config.py:75
 #: invenio_vocabularies/services/config.py:73
 msgid "Oldest"
-msgstr "Vanim"
+msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/schema.py:36
 #: invenio_vocabularies/contrib/funders/schema.py:32
 #: invenio_vocabularies/contrib/funders/schema.py:40
 msgid "Name cannot be blank."
-msgstr "Nime väli ei tohi olla tühi."
+msgstr ""
 
 #: invenio_vocabularies/contrib/affiliations/schema.py:42
 #: invenio_vocabularies/contrib/awards/schema.py:64
 #: invenio_vocabularies/contrib/funders/schema.py:56
 msgid "PID cannot be blank."
-msgstr "PID ei saa olla tühi."
+msgstr ""
 
 #: invenio_vocabularies/contrib/awards/config.py:44
 msgid "Funders"
-msgstr "Rahastajad"
+msgstr ""
 
 #: invenio_vocabularies/contrib/awards/datastreams.py:62
 #, python-brace-format
 msgid "Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
-msgstr "Tundmatu OpenAIRE rahastaja prefiks {openaire_funder_prefix}"
+msgstr ""
 
 #: invenio_vocabularies/contrib/awards/datastreams.py:103
 #, python-brace-format
@@ -185,7 +180,7 @@ msgstr ""
 
 #: invenio_vocabularies/contrib/awards/schema.py:47
 msgid "Number cannot be blank."
-msgstr "Numbri väli ei tohi olla tühi."
+msgstr ""
 
 #: invenio_vocabularies/contrib/awards/schema.py:95
 msgid "An existing id or either number or title must be present."
@@ -193,11 +188,11 @@ msgstr ""
 
 #: invenio_vocabularies/contrib/awards/schema.py:113
 msgid "At least award or funder should be present."
-msgstr "Vähemalt grandi või rahastaja olemasolu on vajalik."
+msgstr ""
 
 #: invenio_vocabularies/contrib/common/ror/datastreams.py:157
 msgid "Id not found in ROR entry."
-msgstr "Id-d ei leitud ROR kirjest."
+msgstr ""
 
 #: invenio_vocabularies/contrib/common/ror/datastreams.py:189
 msgid "Name with type ror_display not found in ROR entry."
@@ -206,7 +201,7 @@ msgstr ""
 #: invenio_vocabularies/contrib/names/schema.py:71
 msgid ""
 "A name or the family name together with the given name must be present."
-msgstr "Esineda peab nimi või perekonnanimi koos eesnimega."
+msgstr ""
 
 #: invenio_vocabularies/records/models.py:79
 #, python-format
@@ -215,40 +210,40 @@ msgstr ""
 
 #: invenio_vocabularies/services/components.py:24
 msgid "The vocabulary type does not exists."
-msgstr "Sellist sõnavara tüüpi ei ole olemas."
+msgstr ""
 
 #: invenio_vocabularies/services/config.py:65
 msgid "Title"
-msgstr "Pealkiri"
+msgstr ""
 
 #: invenio_vocabularies/services/config.py:84
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #: invenio_vocabularies/services/config.py:94
 msgid "Ascending"
-msgstr "Kasvav"
+msgstr ""
 
 #: invenio_vocabularies/services/config.py:95
 msgid "Descending"
-msgstr "Kahanev"
+msgstr ""
 
 #: invenio_vocabularies/services/schema.py:84
 #, python-brace-format
 msgid "An existing id or a free text {ftf_name} must be present."
-msgstr "Olemas peab olema olemasolev ID või vaba tekst {ftf_name}."
+msgstr ""
 
 #: invenio_vocabularies/services/schema.py:132
 msgid "Missing PID."
-msgstr "PID puudub."
+msgstr ""
 
 #: invenio_vocabularies/services/custom_fields/subject.py:45
 msgid "Subjects"
-msgstr "Teemad"
+msgstr ""
 
 #: invenio_vocabularies/services/custom_fields/subject.py:52
 msgid "Keywords and subjects"
-msgstr "Märksõnad ja teemad"
+msgstr ""
 
 #: invenio_vocabularies/services/custom_fields/subject.py:54
 msgid "The subjects related to the community"
@@ -264,11 +259,11 @@ msgstr ""
 
 #: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:14
 msgid "Search results for "
-msgstr "Otsi tulemusi"
+msgstr ""
 
 #: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:24
 msgid "Settings"
-msgstr "Seaded"
+msgstr ""
 
 #: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:29
 msgid "Schedule"
