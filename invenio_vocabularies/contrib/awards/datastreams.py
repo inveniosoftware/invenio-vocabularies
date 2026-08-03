@@ -30,8 +30,8 @@ class AwardsServiceWriter(ServiceWriter):
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
-        service_or_name = kwargs.pop("service_or_name", "awards")
-        super().__init__(service_or_name=service_or_name, *args, **kwargs)
+        kwargs.setdefault("service_or_name", "awards")
+        super().__init__(*args, **kwargs)
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
@@ -414,12 +414,13 @@ class CORDISAwardsServiceWriter(ServiceWriter):
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
-        service_or_name = kwargs.pop("service_or_name", "awards")
-        # Here we only update and we do not insert, since CORDIS data is used to augment existing awards
-        # (with subjects, organizations, and program information) and is not used to create new awards.
-        super().__init__(
-            service_or_name=service_or_name, insert=False, update=True, *args, **kwargs
-        )
+        kwargs.setdefault("service_or_name", "awards")
+        # By default we only update and we do not insert, since CORDIS data is used to augment
+        # existing awards (with subjects, organizations, and program information) and is not
+        # used to create new awards.
+        kwargs.setdefault("insert", False)
+        kwargs.setdefault("update", True)
+        super().__init__(*args, **kwargs)
 
     def _entry_id(self, entry):
         """Get the id from an entry."""

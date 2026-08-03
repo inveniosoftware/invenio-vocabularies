@@ -22,8 +22,8 @@ class AffiliationsServiceWriter(ServiceWriter):
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
-        service_or_name = kwargs.pop("service_or_name", "affiliations")
-        super().__init__(service_or_name=service_or_name, *args, **kwargs)
+        kwargs.setdefault("service_or_name", "affiliations")
+        super().__init__(*args, **kwargs)
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
@@ -85,12 +85,12 @@ class OpenAIREAffiliationsServiceWriter(ServiceWriter):
 
     def __init__(self, *args, **kwargs):
         """Constructor."""
-        service_or_name = kwargs.pop("service_or_name", "affiliations")
-        # Here we only update and we do not insert, since OpenAIRE data is used to augment existing affiliations
-        # (with PIC identifiers) and is not used to create new affiliations.
-        super().__init__(
-            service_or_name=service_or_name, insert=False, update=True, *args, **kwargs
-        )
+        kwargs.setdefault("service_or_name", "affiliations")
+        # By default we only update and we do not insert, since OpenAIRE data is used to augment
+        # existing affiliations (with PIC identifiers) and is not used to create new affiliations.
+        kwargs.setdefault("insert", False)
+        kwargs.setdefault("update", True)
+        super().__init__(*args, **kwargs)
 
     def _entry_id(self, entry):
         """Get the id from an entry."""
