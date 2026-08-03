@@ -91,7 +91,7 @@ class RORTransformer(BaseTransformer):
         ror = {}
         ror["title"] = {}
 
-        domains = record.get("domains", "")
+        domains = record.get("domains")
         if domains:
             ror["domains"] = domains
 
