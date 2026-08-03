@@ -48,7 +48,9 @@ def write_entry(writer_config, entry, subtask_run_id=None):
             )
     except Exception as exc:
         # The actionable bugs are logged as errors to send to Sentry
-        current_app.logger.error("Error writing entry: %s", exc, extra={"entry": entry})
+        current_app.logger.error(
+            "Error writing entry: %s", exc, exc_info=True, extra={"entry": entry}
+        )
         if subtask_run_id and job_id:
             current_runs_service.finalize_subtask(
                 system_identity,
