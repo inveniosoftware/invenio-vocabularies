@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version v14.2.1 (released 2026-08-03)
+
+- fix(datastreams): log write_entry failures with a stack trace
+- fix(ror): drop invalid string default for domains
+- fix(datastreams): allow overriding writer defaults
+- cli: document import and update command difference
+
 Version v14.2.0 (released 2026-07-24)
 
 - feat(ror): updated datastream & mappings to include website & domains
