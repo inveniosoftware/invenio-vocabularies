@@ -7,6 +7,10 @@
 Changes
 =======
 
+Version v13.1.1 (released 2026-08-04)
+
+- fix(contrib): display all funders api search results
+
 Version v13.1.0 (released 2026-07-28)
 
 - fix(build): include mo files
