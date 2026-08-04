@@ -118,6 +118,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
             );
           }}
           initialSuggestions={initialSuggestions}
+          search={(options) => [...options]}
           searchInput={{
             autoFocus: _isEmpty(selectedFunding),
           }}
