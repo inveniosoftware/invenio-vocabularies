@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v14.3.1 (released 2026-08-12)
+
+- Patch retrigger because of GH actions workflow failure.
+
 Version v14.3.0 (released 2026-08-12)
 
 - feat(awards): add website field populated from CORDIS
