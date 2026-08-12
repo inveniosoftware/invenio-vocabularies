@@ -6,8 +6,6 @@
 
 """Subjects schema."""
 
-from functools import partial
-
 from invenio_i18n import get_locale
 from marshmallow import EXCLUDE, Schema, ValidationError, fields, pre_load, validate
 from marshmallow_utils.fields import URL, IdentifierSet, SanitizedUnicode
@@ -49,11 +47,7 @@ class SubjectSchema(BaseVocabularySchema):
     props = fields.Dict(keys=SanitizedUnicode(), values=StringOrListOfStrings())
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=subject_schemes,
-                identifier_required=False,
-            )
+            IdentifierSchema(allowed_schemes=subject_schemes, identifier_required=False)
         )
     )
     synonyms = fields.List(SanitizedUnicode())
@@ -86,11 +80,7 @@ class SubjectRelationSchema(ContribVocabularyRelationSchema):
     props = fields.Dict(dump_only=True)
     identifiers = IdentifierSet(
         fields.Nested(
-            partial(
-                IdentifierSchema,
-                allowed_schemes=subject_schemes,
-                identifier_required=False,
-            )
+            IdentifierSchema(allowed_schemes=subject_schemes, identifier_required=False)
         )
     )
     synonyms = fields.List(SanitizedUnicode(), dump_only=True)
