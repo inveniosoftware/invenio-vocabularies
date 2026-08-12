@@ -85,6 +85,9 @@
       "program": {
         "type": "keyword"
       },
+      "website": {
+        "type": "keyword"
+      },
       "short_description": {
         "type": "object",
         "dynamic": "true"

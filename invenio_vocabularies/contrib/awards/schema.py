@@ -14,7 +14,7 @@ from marshmallow import (
     validate,
     validates_schema,
 )
-from marshmallow_utils.fields import IdentifierSet, ISODateString, SanitizedUnicode
+from marshmallow_utils.fields import URL, IdentifierSet, ISODateString, SanitizedUnicode
 from marshmallow_utils.schemas import IdentifierSchema
 
 from ...services.schema import (
@@ -90,6 +90,8 @@ class AwardSchema(BaseVocabularySchema, ModePIDFieldVocabularyMixin):
     acronym = SanitizedUnicode()
 
     program = SanitizedUnicode()
+
+    website = URL()
 
     short_description = i18n_strings
 

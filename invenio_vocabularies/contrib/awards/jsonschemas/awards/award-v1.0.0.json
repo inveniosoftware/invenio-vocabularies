@@ -43,6 +43,10 @@
     "program": {
       "type": "string"
     },
+    "website": {
+      "description": "Award's website.",
+      "type": "string"
+    },
     "short_description": {
       "$ref": "local://vocabularies/definitions-v1.0.0.json#/description"
     },

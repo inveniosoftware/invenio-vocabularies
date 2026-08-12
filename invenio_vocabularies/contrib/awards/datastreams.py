@@ -314,6 +314,27 @@ class CORDISProjectTransformer(BaseTransformer):
         if short_description:
             award["short_description"] = {"en": short_description}
 
+        # The `website` field, i.e. the project's own website. CORDIS lists it
+        # among the web links, alongside deliverables and social media accounts.
+        web_links = (
+            record.get("relations", {}).get("associations", {}).get("weblink") or []
+        )
+        # Projects with a single web link are not wrapped in a list.
+        if isinstance(web_links, dict):
+            web_links = [web_links]
+        website = next(
+            (
+                link["physurl"]
+                for link in web_links
+                if link.get("@type") == "relatedWebsite"
+                and link.get("@represents") == "project"
+                and link.get("physurl")
+            ),
+            None,
+        )
+        if website:
+            award["website"] = website
+
         # The `subjects` field.
         categories = record.get("relations", {}).get("categories", {}).get("category")
         if categories:

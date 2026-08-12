@@ -160,6 +160,14 @@ This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogo
 				<code>ERC-2023-STG</code>
 				<frameworkProgramme>HORIZON</frameworkProgramme>
 			</programme>
+			<webLink type="projectDeliverable" source="corda">
+				<title>Data management plan</title>
+				<physUrl>https://ec.europa.eu/research/participants/documents/downloadPublic?documentIds=080166e5&amp;appId=PPGMS</physUrl>
+			</webLink>
+			<webLink type="relatedWebsite" source="editorial" represents="project">
+				<title>project website</title>
+				<physUrl>https://time2switch.eu/</physUrl>
+			</webLink>
 		</associations>
 		<categories>
 			<category classification="euroSciVoc" type="isInFieldOfScience">
@@ -207,6 +215,7 @@ This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogo
             "en": "I envision a new drug delivery system capable spatiotemporal release with electronic precision.This technology is based on; Biontronic Chemistry (BC) which combines Bioorthogonal Release (BR) and Iontronic transport to overcome the drawbacks of each "
         },
         "program": "HORIZON.1.1",
+        "website": "https://time2switch.eu/",
         "subjects": [{"id": "euroscivoc:225"}],
         "organizations": [{"name": "TECHNISCHE UNIVERSITAET WIEN"}],
     }
