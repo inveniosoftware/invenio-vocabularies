@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v14.3.0 (released 2026-08-12)
+
+- feat(awards): add website field populated from CORDIS
+- fix(contrib): display all funders api search results
+
 Version v14.2.1 (released 2026-08-03)
 
 - fix(datastreams): log write_entry failures with a stack trace
