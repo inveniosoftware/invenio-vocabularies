@@ -143,15 +143,11 @@ class AwardRelationSchema(Schema):
 class FundingRelationSchema(Schema):
     """Funding schema."""
 
-    funder = fields.Nested(FunderRelationSchema)
+    # Matches invenio-rdm-records' FundingSchema and the funding UI, both of which
+    # already require a funder.
+    funder = fields.Nested(
+        FunderRelationSchema,
+        required=True,
+        error_messages={"required": _("Funder is required.")},
+    )
     award = fields.Nested(AwardRelationSchema)
-
-    @validates_schema
-    def validate_data(self, data, **kwargs):
-        """Validate either funder or award is present."""
-        funder = data.get("funder")
-        award = data.get("award")
-        if not funder and not award:
-            raise ValidationError(
-                {"funding": _("At least award or funder should be present.")}
-            )

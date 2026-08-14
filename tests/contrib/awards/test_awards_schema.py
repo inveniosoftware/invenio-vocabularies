@@ -128,16 +128,25 @@ FUNDER = {
 
 
 def test_valid_award_funding():
-    valid_funding = {"award": AWARD}
+    valid_funding = {"funder": FUNDER, "award": AWARD}
     assert valid_funding == FundingRelationSchema().load(valid_funding)
 
     # Test a valid award with different representation
-    valid_funding = {"award": {"id": "test-award-id"}}
+    valid_funding = {"funder": FUNDER, "award": {"id": "test-award-id"}}
     assert valid_funding == FundingRelationSchema().load(valid_funding)
 
 
 def test_invalid_award_funding():
-    invalid_funding = {"award": {"identifiers": [AWARD.get("identifiers")]}}
+    invalid_funding = {
+        "funder": FUNDER,
+        "award": {"identifiers": [AWARD.get("identifiers")]},
+    }
+    with pytest.raises(ValidationError):
+        data = FundingRelationSchema().load(invalid_funding)
+
+
+def test_invalid_award_only_funding():
+    invalid_funding = {"award": AWARD}
     with pytest.raises(ValidationError):
         data = FundingRelationSchema().load(invalid_funding)
 
