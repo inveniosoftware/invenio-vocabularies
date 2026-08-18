@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v14.3.2 (released 2026-08-18)
+
+- fix(awards): make `funder` required
+
 Version v14.3.1 (released 2026-08-12)
 
 - Patch retrigger because of GH actions workflow failure.
