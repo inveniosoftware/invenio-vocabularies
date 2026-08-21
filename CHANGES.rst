@@ -7,6 +7,10 @@
 Changes
 =======
 
+Version v13.1.2 (released 2026-08-21)
+
+- i18n: pulled translations
+
 Version v13.1.1 (released 2026-08-04)
 
 - fix(contrib): display all funders api search results
