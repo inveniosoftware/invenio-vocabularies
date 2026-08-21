@@ -8,7 +8,7 @@
 # Alizee Pace <alizee.pace@gmail.com>, 2021
 # Tibor Simko <tibor.simko@cern.ch>, 2022
 # Zacharias Zacharodimos <zacharias.zacharodimos@cern.ch>, 2025
-# Jesús Martín <jesusmartin@sallep.net>, 2025
+# Jesús Martín <jesusmartin@sallep.net>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
 "POT-Creation-Date: 2026-06-22 20:50+0000\n"
 "PO-Revision-Date: 2021-07-13 12:40+0000\n"
-"Last-Translator: Jesús Martín <jesusmartin@sallep.net>, 2025\n"
+"Last-Translator: Jesús Martín <jesusmartin@sallep.net>, 2026\n"
 "Language-Team: Spanish (https://app.transifex.com/inveniosoftware/teams/23537/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -45,11 +45,11 @@ msgstr "ROR"
 
 #: invenio_vocabularies/config.py:63
 msgid "PIC"
-msgstr ""
+msgstr "PIC"
 
 #: invenio_vocabularies/config.py:64
 msgid "EDMO"
-msgstr ""
+msgstr "EDMO"
 
 #: invenio_vocabularies/config.py:70 invenio_vocabularies/config.py:79
 msgid "DOI"
@@ -79,52 +79,52 @@ msgstr "Número de entradas"
 
 #: invenio_vocabularies/jobs.py:30
 msgid "Process ROR affiliations"
-msgstr ""
+msgstr "Proceso de afiliaciones ROR"
 
 #: invenio_vocabularies/jobs.py:31
 msgid "Load ROR affiliations"
-msgstr ""
+msgstr "Cargar afiliaciones ROR"
 
 #: invenio_vocabularies/jobs.py:68
 msgid "Process ROR funders"
-msgstr ""
+msgstr "Proceso de financiadores de ROR"
 
 #: invenio_vocabularies/jobs.py:69
 msgid "Load ROR funders"
-msgstr ""
+msgstr "Cargar financiadores de ROR"
 
 #: invenio_vocabularies/jobs.py:106
 msgid "Import awards from OpenAIRE"
-msgstr ""
+msgstr "Importar ayudas de OpenAIRE"
 
 #: invenio_vocabularies/jobs.py:107
 msgid "Import Awards OpenAIRE"
-msgstr ""
+msgstr "Importar subvención OpenAIRE"
 
 #: invenio_vocabularies/jobs.py:141
 msgid "Update awards from CORDIS"
-msgstr ""
+msgstr "Actualizar subvenciones desde CORDIS"
 
 #: invenio_vocabularies/jobs.py:142
 msgid "Update Awards CORDIS"
-msgstr ""
+msgstr "Actualizar subvenciones CORDIS"
 
 #: invenio_vocabularies/jobs.py:169 invenio_vocabularies/jobs.py:170
 msgid "Import ORCID data"
-msgstr ""
+msgstr "Importar datos ORCID"
 
 #: invenio_vocabularies/jobs.py:212
 msgid "Import subjects from EuroSciVoc"
-msgstr ""
+msgstr "Importar temas de EuroSciVoc"
 
 #: invenio_vocabularies/jobs.py:213
 msgid "Import Subjects EuroSciVoc"
-msgstr ""
+msgstr "Importar temas EuroSciVoc"
 
 #: invenio_vocabularies/administration/views/vocabularies.py:16
 #: invenio_vocabularies/administration/views/vocabularies.py:19
 msgid "Vocabulary Types"
-msgstr ""
+msgstr "Tipos de vocabulario"
 
 #: invenio_vocabularies/administration/views/vocabularies.py:20
 msgid "Site management"
@@ -179,12 +179,14 @@ msgstr ""
 #: invenio_vocabularies/contrib/awards/datastreams.py:103
 #, python-brace-format
 msgid "Missing title attribute for award {award_id}"
-msgstr "Falta el atributo de título para el premio {award_id}"
+msgstr "Falta el atributo de título para la subvención {award_id}"
 
 #: invenio_vocabularies/contrib/awards/datastreams.py:239
 #, python-brace-format
 msgid "No related legal basis programme found for project {project_id}"
 msgstr ""
+"No se encontró ningún programa de base legal relacionado con el proyecto "
+"{project_id}."
 
 #: invenio_vocabularies/contrib/awards/schema.py:47
 msgid "Number cannot be blank."
@@ -192,11 +194,11 @@ msgstr "El número no puede estar en blanco."
 
 #: invenio_vocabularies/contrib/awards/schema.py:95
 msgid "An existing id or either number or title must be present."
-msgstr ""
+msgstr "Debe estar presente un ID existente, ya sea un número o un título."
 
 #: invenio_vocabularies/contrib/awards/schema.py:113
 msgid "At least award or funder should be present."
-msgstr "Debe estar presente al menos el premio o el financiador."
+msgstr "Debe estar presente al menos la subvención o el financiador."
 
 #: invenio_vocabularies/contrib/common/ror/datastreams.py:157
 msgid "Id not found in ROR entry."
@@ -215,7 +217,7 @@ msgstr ""
 #: invenio_vocabularies/records/models.py:79
 #, python-format
 msgid "No '%(banned_char)s' allowed in VocabularyScheme.id"
-msgstr ""
+msgstr "Ningún '%(banned_char)s'' permitido en VocabularyScheme.id"
 
 #: invenio_vocabularies/services/components.py:24
 msgid "The vocabulary type does not exists."
@@ -257,15 +259,15 @@ msgstr "Palabras clave y temas"
 
 #: invenio_vocabularies/services/custom_fields/subject.py:54
 msgid "The subjects related to the community"
-msgstr ""
+msgstr "Los temas relacionados con la comunidad"
 
 #: invenio_vocabularies/services/custom_fields/subject.py:55
 msgid "Search for a subject by name e.g. Psychology ..."
-msgstr ""
+msgstr "Busque una materia por su nombre, por ejemplo, Psicología..."
 
 #: invenio_vocabularies/services/custom_fields/subject.py:57
 msgid "Search for subjects..."
-msgstr ""
+msgstr "Buscar temas..."
 
 #: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:14
 msgid "Search results for "
