@@ -1,14 +1,14 @@
 # Translators:
 # Tibor Simko <tibor.simko@cern.ch>, 2025
 # Zacharias Zacharodimos <zacharias.zacharodimos@cern.ch>, 2025
-# Jesús Martín <jesusmartin@sallep.net>, 2025
+# Jesús Martín <jesusmartin@sallep.net>, 2026
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
 "POT-Creation-Date: 2025-07-08T15:47:17.169Z\n"
 "PO-Revision-Date: 2025-05-13 21:01+0000\n"
-"Last-Translator: Jesús Martín <jesusmartin@sallep.net>, 2025\n"
+"Last-Translator: Jesús Martín <jesusmartin@sallep.net>, 2026\n"
 "Language-Team: Spanish (https://app.transifex.com/inveniosoftware/teams/23537/es/)\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -53,7 +53,7 @@ msgid "Add"
 msgstr "Añadir"
 
 msgid "Add custom"
-msgstr "Añadir a medida"
+msgstr "Añadir personalizada"
 
 msgid "Edit"
 msgstr "Editar"
@@ -71,7 +71,7 @@ msgid "URL must be valid."
 msgstr "La URL debe ser válida."
 
 msgid "URL must be set alongside title or number."
-msgstr ""
+msgstr "La URL debe establecerse junto al título o el número."
 
 msgid "Add standard award/grant"
 msgstr "Añadir premio/subvención estándar"
