@@ -7,6 +7,7 @@ from celery import shared_task
 from flask import current_app
 from invenio_jobs.errors import TaskExecutionPartialError
 
+from ..datastreams.errors import IncompleteReadError
 from ..datastreams.factories import DataStreamFactory
 
 
@@ -22,13 +23,19 @@ def process_datastream(config):
         write_many=config.get("write_many", False),
     )
     entries_with_errors = 0
-    for result in ds.process():
-        if result.errors:
-            current_app.logger.warning(
-                "Skipped entry with errors: %s",
-                result.errors,
-            )
-            entries_with_errors += 1
+    try:
+        for result in ds.process():
+            if result.errors:
+                current_app.logger.warning(
+                    "Skipped entry with errors: %s",
+                    result.errors,
+                )
+                entries_with_errors += 1
+    except IncompleteReadError as err:
+        raise TaskExecutionPartialError(
+            message=str(err),
+            errored_entries_count=entries_with_errors,
+        ) from err
 
     if entries_with_errors:
         raise TaskExecutionPartialError(

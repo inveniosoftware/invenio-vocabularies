@@ -10,7 +10,7 @@ from invenio_accounts.proxies import current_datastore
 from invenio_jobs.logging.jobs import EMPTY_JOB_CTX, job_context
 from invenio_jobs.proxies import current_runs_service
 
-from .errors import ReaderError, TransformerError, WriterError
+from .errors import IncompleteReadError, ReaderError, TransformerError, WriterError
 
 
 class StreamEntry:
@@ -130,12 +130,22 @@ class DataStream:
         """
         current_app.logger.info("Starting data stream processing")
         batch = []
-        for stream_entry in self.read():
-            batch.append(stream_entry)
-            if len(batch) >= self.batch_size:
-                current_app.logger.debug(f"Processing batch of size: {len(batch)}")
+        try:
+            for stream_entry in self.read():
+                batch.append(stream_entry)
+                if len(batch) >= self.batch_size:
+                    current_app.logger.debug(f"Processing batch of size: {len(batch)}")
+                    yield from self.process_batch(batch)
+                    batch = []
+        except IncompleteReadError:
+            # Reader finished early after yielding entries; flush the last batch
+            # before surfacing the incomplete read to the caller.
+            if batch:
+                current_app.logger.debug(
+                    f"Processing final batch of size: {len(batch)}"
+                )
                 yield from self.process_batch(batch)
-                batch = []
+            raise
 
         # Process any remaining entries in the last batch
         if batch:
