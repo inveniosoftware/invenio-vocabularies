@@ -7,6 +7,7 @@ from copy import deepcopy
 
 import yaml
 from invenio_records_resources.proxies import current_service_registry
+from invenio_search.engine import dsl
 
 from .contrib.affiliations.datastreams import (
     DATASTREAM_CONFIG as affiliations_ds_config,
@@ -29,6 +30,7 @@ from .contrib.subjects.euroscivoc.datastreams import (
 )
 from .contrib.subjects.gemet.datastreams import DATASTREAM_CONFIG as gemet_ds_config
 from .contrib.subjects.nvs.datastreams import DATASTREAM_CONFIG as nvs_ds_config
+from .records.models import VocabularyType
 
 
 class VocabularyConfig:
@@ -51,6 +53,41 @@ class VocabularyConfig:
     def get_service(self):
         """Get the service for the vocabulary."""
         return current_service_registry.get(self.vocabulary_name)
+
+    def item_id(self, id_):
+        """Get the service identifier of a vocabulary item."""
+        return id_
+
+    def scan(self, identity):
+        """Scan all items of the vocabulary."""
+        return self.get_service().scan(identity)
+
+
+class GenericVocabularyConfig(VocabularyConfig):
+    """Generic Vocabulary Config.
+
+    Used for vocabularies stored as a ``VocabularyType`` (e.g. languages,
+    licenses or instance specific ones), all backed by the generic
+    vocabularies service.
+    """
+
+    def __init__(self, vocabulary_type):
+        """Constructor."""
+        self.vocabulary_type = vocabulary_type
+
+    def get_service(self):
+        """Get the service for the vocabulary."""
+        return current_service_registry.get("vocabularies")
+
+    def item_id(self, id_):
+        """Get the service identifier of a vocabulary item."""
+        return (self.vocabulary_type, id_)
+
+    def scan(self, identity):
+        """Scan all items of the vocabulary type."""
+        return self.get_service().scan(
+            identity, extra_filter=dsl.Q("term", type__id=self.vocabulary_type)
+        )
 
 
 class NamesVocabularyConfig(VocabularyConfig):
@@ -185,4 +222,10 @@ def get_vocabulary_config(vocabulary):
         "subjects:nvs": SubjectsNVSVocabularyConfig,
         "subjects:euroscivoc": SubjectsEuroSciVocVocabularyConfig,
     }
-    return vocab_config.get(vocabulary, VocabularyConfig)()
+    if vocabulary in vocab_config:
+        return vocab_config[vocabulary]()
+
+    if VocabularyType.query.filter_by(id=vocabulary).one_or_none():
+        return GenericVocabularyConfig(vocabulary)
+
+    return VocabularyConfig()

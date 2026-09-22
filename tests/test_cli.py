@@ -24,6 +24,8 @@ from invenio_vocabularies.contrib.names.datastreams import (
     VOCABULARIES_DATASTREAM_WRITERS as NAMES_WRITERS,
 )
 from invenio_vocabularies.factories import get_vocabulary_config
+from invenio_vocabularies.records.api import Vocabulary
+from invenio_vocabularies.records.models import VocabularyType
 
 
 @pytest.fixture(scope="module")
@@ -114,3 +116,71 @@ def test_update_cmd(app, names_tar_file):
         ["update", "-v", "names", "--origin", names_tar_file.absolute()],
     )
     assert result.exit_code == 0
+
+
+@pytest.fixture()
+def license_items(db, service, identity):
+    """Create a second generic vocabulary with a couple of items."""
+    VocabularyType.create(id="licenses", pid_type="lic")
+    db.session.commit()
+    for id_ in ["cc-by-4.0", "cc0-1.0"]:
+        service.create(identity, {"id": id_, "title": {"en": id_}, "type": "licenses"})
+    Vocabulary.index.refresh()
+
+
+def _ids(service, identity, type_):
+    """Return the ids of the non-deleted items of a vocabulary type."""
+    Vocabulary.index.refresh()
+    return {hit["id"] for hit in service.search(identity, type=type_).hits}
+
+
+def test_delete_generic_item(app, search_clear, service, identity, lang_data_many):
+    runner = app.test_cli_runner()
+    result = runner.invoke(vocabularies, ["delete", "-v", "languages", "-i", "fr"])
+
+    assert result.exit_code == 0
+    assert "fr deleted from languages" in result.output
+    assert _ids(service, identity, "languages") == {"tr", "gr", "ger", "es"}
+
+
+def test_delete_generic_multiple_ids(
+    app, search_clear, service, identity, lang_data_many
+):
+    runner = app.test_cli_runner()
+    result = runner.invoke(
+        vocabularies, ["delete", "-v", "languages", "-i", "fr", "-i", "es"]
+    )
+
+    assert result.exit_code == 0
+    assert "2 items deleted" in result.output
+    assert _ids(service, identity, "languages") == {"tr", "gr", "ger"}
+
+
+def test_delete_generic_all_scoped_to_type(
+    app, search_clear, service, identity, lang_data_many, license_items
+):
+    runner = app.test_cli_runner()
+    result = runner.invoke(vocabularies, ["delete", "-v", "languages", "--all"])
+
+    assert result.exit_code == 0
+    assert _ids(service, identity, "languages") == set()
+    assert _ids(service, identity, "licenses") == {"cc-by-4.0", "cc0-1.0"}
+
+
+def test_delete_generic_not_found(app, search_clear, service, identity, lang_data_many):
+    runner = app.test_cli_runner()
+    result = runner.invoke(
+        vocabularies, ["delete", "-v", "languages", "-i", "does-not-exist"]
+    )
+
+    assert result.exit_code == 0
+    assert "PID does-not-exist not found" in result.output
+    assert "1 not found" in result.output
+
+
+def test_delete_unknown_vocabulary(app, db):
+    runner = app.test_cli_runner()
+    result = runner.invoke(vocabularies, ["delete", "-v", "unknown", "-i", "foo"])
+
+    assert result.exit_code == 1
+    assert "Unknown vocabulary unknown" in result.output
