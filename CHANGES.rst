@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v14.5.0 (released 2026-09-29)
+
+- feat(datastreams): raise IncompleteReadError for partial reads
+
 Version v14.4.0 (released 2026-09-21)
 
 - refactor(schema): Use reusable IdentifierSchema instances instead of partial calls
