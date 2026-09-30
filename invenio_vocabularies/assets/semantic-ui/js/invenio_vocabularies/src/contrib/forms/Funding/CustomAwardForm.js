@@ -124,6 +124,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
           }}
           label={i18next.t("Funder")}
           noQueryMessage={i18next.t("Search for funder...")}
+          noResultsMessage={i18next.t("No results found.")}
           clearable
           allowAdditions
           multiple={false}
