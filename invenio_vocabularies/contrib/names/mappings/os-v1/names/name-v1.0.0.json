@@ -76,6 +76,16 @@
                 "type": "search_as_you_type"
               }
             }
+          },
+          "identifiers": {
+            "properties": {
+              "identifier": {
+                "type": "keyword"
+              },
+              "scheme": {
+                "type": "keyword"
+              }
+            }
           }
         }
       },

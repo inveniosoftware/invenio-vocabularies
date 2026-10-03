@@ -17,11 +17,11 @@ from invenio_vocabularies.contrib.names.api import Name
 from invenio_vocabularies.contrib.names.datastreams import (
     NamesServiceWriter,
     OrcidHTTPReader,
-    OrcidTransformer,
+    OrcidNameSchema,
 )
 from invenio_vocabularies.datastreams import StreamEntry
 from invenio_vocabularies.datastreams.errors import TransformerError, WriterError
-from invenio_vocabularies.datastreams.transformers import XMLTransformer
+from invenio_vocabularies.datastreams.transformers import XMLTransformer, MarshmallowTransformer
 
 
 @pytest.fixture(scope="function")
@@ -314,7 +314,7 @@ def test_orcid_xml_transform(orcid_data):
 
 def test_orcid_transformer(app, orcid_data, expected_from_xml):
     """Test ORCiD transformer data."""
-    transformer = OrcidTransformer()
+    transformer = MarshmallowTransformer(schema=OrcidNameSchema)
     input_data = orcid_data["json"]
 
     for key, data in input_data.items():
@@ -328,7 +328,7 @@ def test_orcid_transformer_org_ids_mapping_from_file(
     org_ids_mapping_file_config,
 ):
     """Test ORCiD transformer data with org IDs mapping file."""
-    transformer = OrcidTransformer()
+    transformer = MarshmallowTransformer(schema=OrcidNameSchema)
     input_data = orcid_data["json"]["multi_employment"]
     expected = deepcopy(expected_from_xml["multi_employment"])
     expected["affiliations"] = [
@@ -341,7 +341,7 @@ def test_orcid_transformer_org_ids_mapping_from_file(
 
 @pytest.mark.parametrize("name,is_valid_name", NAMES_TEST.items())
 def test_orcid_transformer_name_filtering(orcid_data, name, is_valid_name):
-    transformer = OrcidTransformer()
+    transformer = MarshmallowTransformer(schema=OrcidNameSchema)
     val = deepcopy(orcid_data["json"]["multi_employment"])
     if is_valid_name:
         assert transformer.apply(StreamEntry(val)).entry
@@ -358,7 +358,7 @@ def test_orcid_transformer_name_filtering(orcid_data, name, is_valid_name):
 
 
 def test_orcid_transformer_missing_name_fields(app, orcid_data):
-    transformer = OrcidTransformer()
+    transformer = MarshmallowTransformer(schema=OrcidNameSchema)
     val = deepcopy(orcid_data["json"]["multi_employment"])
 
     val["person"]["name"] = None
@@ -373,7 +373,7 @@ def test_orcid_transformer_missing_name_fields(app, orcid_data):
 
 @pytest.mark.parametrize("name", NAMES_TEST.keys())
 def test_orcid_transformer_different_names_no_regex(orcid_data, name):
-    transformer = OrcidTransformer(names_exclude_regex=None)
+    transformer = MarshmallowTransformer(schema=OrcidNameSchema(names_exclude_regex=None))
     val = deepcopy(orcid_data["json"]["multi_employment"])
     val["person"]["name"]["given-names"] = name
     val["person"]["name"]["family-name"] = ""
