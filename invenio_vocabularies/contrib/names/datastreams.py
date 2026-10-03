@@ -15,6 +15,7 @@ from pathlib import Path
 
 import regex as re
 from flask import current_app
+from marshmallow import Schema, fields, pre_load, validates, validates_schema, ValidationError
 from invenio_access.permissions import system_identity
 from werkzeug.utils import cached_property
 
@@ -393,6 +394,109 @@ class NamesServiceWriter(ServiceWriter):
         return entry["id"]
 
 
+
+
+class OrcidNameSchema(Schema):
+    """Marshmallow schema for ORCiD records."""
+
+    id = fields.String(required=True)
+    given_name = fields.String(allow_none=True)
+    family_name = fields.String(allow_none=True)
+    identifiers = fields.List(fields.Dict())
+    affiliations = fields.List(fields.Dict())
+
+    def __init__(self, *args, **kwargs):
+        self._names_exclude_regex = kwargs.pop("names_exclude_regex", DEFAULT_NAMES_EXCLUDE_REGEX)
+        self._org_id_to_affiliation_id_func = kwargs.pop("org_id_to_affiliation_id_func", None) or OrcidOrgToAffiliationMapper()
+        super().__init__(*args, **kwargs)
+
+    @pre_load
+    def flatten_orcid(self, data, **kwargs):
+        """Flatten the deeply nested ORCiD XML dict."""
+        person = data.get("person", {})
+        orcid_id = data.get("orcid-identifier", {}).get("path")
+        
+        name = person.get("name") or {}
+        family_name = name.get("family-name")
+        given_names = name.get("given-names")
+
+        if not name or family_name is None:
+            raise ValidationError(f"Missing name or family name for ORCiD ID: {orcid_id}.")
+
+        affiliations = self._extract_affiliations(data)
+
+        return {
+            "id": orcid_id,
+            "given_name": given_names,
+            "family_name": family_name,
+            "identifiers": [{"scheme": "orcid", "identifier": orcid_id}] if orcid_id else [],
+            "affiliations": affiliations
+        }
+
+    @validates("id")
+    def validate_name(self, value):
+        # We validate the full name on the whole object? 
+        # Actually it's better to use validates_schema to validate the combined name!
+        pass
+
+    @validates_schema
+    def validate_full_name(self, data, **kwargs):
+        given_names = data.get("given_name")
+        family_name = data.get("family_name")
+        full_name = " ".join(
+            p.strip()
+            for p in (given_names, family_name)
+            if isinstance(p, str) and p.strip()
+        )
+        if not full_name:
+            return
+        if self._names_exclude_regex:
+            if bool(re.search(self._names_exclude_regex, full_name, re.UNICODE | re.V1)):
+                raise ValidationError(f"Invalid characters in name for ORCiD ID: {data.get('id')}.")
+
+    def _extract_affiliations(self, record):
+        result = []
+        try:
+            employments = (
+                record.get("activities-summary", {})
+                .get("employments", {})
+                .get("affiliation-group", [])
+            )
+            if isinstance(employments, dict):
+                employments = [employments]
+            employments = [
+                employment.get("employment-summary", {}) for employment in employments
+            ]
+
+            for employment in employments:
+                if employment.get("end-date"):
+                    continue
+                org = employment.get("organization", {})
+                aff_id = self._extract_affiliation_id(org)
+
+                if aff_id and any(aff.get("id") == aff_id for aff in result):
+                    continue
+                if any(aff.get("name") == org.get("name") and "id" not in aff for aff in result):
+                    continue
+
+                aff = {"name": org.get("name")}
+                if aff_id:
+                    aff["id"] = aff_id
+                result.append(aff)
+        except Exception as e:
+            current_app.logger.warning(f"Error extracting affiliations: {e}")
+        return result
+
+    def _extract_affiliation_id(self, org):
+        dis_org = org.get("disambiguated-organization")
+        if not dis_org:
+            return
+        org_id = dis_org.get("disambiguated-organization-identifier")
+        org_scheme = dis_org.get("disambiguation-source")
+        if org_id and org_scheme:
+            return self._org_id_to_affiliation_id_func(org_scheme, org_id)
+        return None
+
 VOCABULARIES_DATASTREAM_READERS = {
     "orcid-http": OrcidHTTPReader,
     "orcid-data-sync": OrcidDataSyncReader,
@@ -426,7 +530,7 @@ DATASTREAM_CONFIG = {
             },
         },
     ],
-    "transformers": [{"type": "orcid"}],
+    "transformers": [{"type": "marshmallow", "args": {"schema": OrcidNameSchema}}],
     "writers": [
         {
             "type": "names-service",
@@ -454,7 +558,7 @@ ORCID_PRESET_DATASTREAM_CONFIG = {
             },
         },
     ],
-    "transformers": [{"type": "orcid"}],
+    "transformers": [{"type": "marshmallow", "args": {"schema": OrcidNameSchema}}],
     "writers": [
         {
             "type": "async",

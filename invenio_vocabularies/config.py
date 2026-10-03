@@ -24,7 +24,7 @@ from .datastreams.readers import (
     YamlReader,
     ZipReader,
 )
-from .datastreams.transformers import XMLTransformer
+from .datastreams.transformers import XMLTransformer, MarshmallowTransformer
 from .datastreams.writers import AsyncWriter, ServiceWriter, YamlWriter
 from .resources import VocabulariesResourceConfig
 from .services.config import VocabulariesServiceConfig
@@ -196,6 +196,7 @@ VOCABULARIES_DATASTREAM_READERS = {
 
 VOCABULARIES_DATASTREAM_TRANSFORMERS = {
     "xml": XMLTransformer,
+    "marshmallow": MarshmallowTransformer,
 }
 """Data Streams transformers."""
 
