@@ -143,29 +143,41 @@ def convert(vocabulary, filepath=None, origin=None, target=None, num_samples=Non
     "-i",
     "--identifier",
     type=click.STRING,
-    help="Identifier of the vocabulary item to delete.",
+    multiple=True,
+    help="Identifier of the vocabulary item to delete (can be repeated).",
 )
 @click.option("--all", is_flag=True, default=False)
 @with_appcontext
 def delete(vocabulary, identifier, all):
-    """Delete all items or a specific one of the vocabulary."""
+    """Delete all items or specific ones of the vocabulary."""
     if not identifier and not all:
         click.secho("An identifier or the --all flag must be present.", fg="red")
         exit(1)
 
     vc = get_vocabulary_config(vocabulary)
-    service = vc.get_service()
+    try:
+        service = vc.get_service()
+    except KeyError:
+        click.secho(f"Unknown vocabulary {vocabulary}.", fg="red")
+        exit(1)
+
     if identifier:
+        ids = identifier
+    else:
+        # --all
+        ids = [item["id"] for item in vc.scan(system_identity).hits]
+
+    deleted, not_found = 0, 0
+    for id_ in ids:
         try:
-            if service.delete(system_identity, identifier):
-                click.secho(f"{identifier} deleted from {vocabulary}.", fg="green")
+            if service.delete(system_identity, vc.item_id(id_)):
+                click.secho(f"{id_} deleted from {vocabulary}.", fg="green")
+                deleted += 1
         except (PIDDeletedError, PIDDoesNotExistError):
-            click.secho(f"PID {identifier} not found.")
-    elif all:
-        items = service.scan(system_identity)
-        for item in items.hits:
-            try:
-                if service.delete(system_identity, item["id"]):
-                    click.secho(f"{item['id']} deleted from {vocabulary}.", fg="green")
-            except (PIDDeletedError, PIDDoesNotExistError):
-                click.secho(f"PID {item['id']} not found.")
+            click.secho(f"PID {id_} not found.")
+            not_found += 1
+
+    click.secho(
+        f"Vocabulary {vocabulary}: {deleted} items deleted, {not_found} not found.",
+        fg="yellow" if not_found else "green",
+    )
