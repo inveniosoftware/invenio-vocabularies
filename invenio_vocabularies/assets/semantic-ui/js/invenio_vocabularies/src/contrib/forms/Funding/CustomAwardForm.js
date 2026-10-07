@@ -6,7 +6,6 @@
  */
 
 import PropTypes from "prop-types";
-import React from "react";
 import { Form, Header } from "semantic-ui-react";
 import { TextField, RemoteSelectField } from "react-invenio-forms";
 import { i18next } from "@translations/invenio_vocabularies/i18next";
@@ -15,7 +14,7 @@ import { useFormikContext, getIn } from "formik";
 
 import Overridable from "react-overridable";
 
-function CustomAwardForm({ deserializeFunder, selectedFunding }) {
+function CustomAwardForm({ deserializeFunder, selectedFunding = undefined }) {
   function deserializeFunderToDropdown(funderItem) {
     const funderName = funderItem?.name;
     const funderPID = funderItem?.id;
@@ -180,10 +179,6 @@ function CustomAwardForm({ deserializeFunder, selectedFunding }) {
 CustomAwardForm.propTypes = {
   deserializeFunder: PropTypes.func.isRequired,
   selectedFunding: PropTypes.object,
-};
-
-CustomAwardForm.defaultProps = {
-  selectedFunding: undefined,
 };
 
 export default CustomAwardForm;

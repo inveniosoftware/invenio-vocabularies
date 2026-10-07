@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-import React from "react";
 import PropTypes from "prop-types";
 import { FieldArray, getIn } from "formik";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -20,6 +19,32 @@ import { i18next } from "@translations/invenio_vocabularies/i18next";
 import Overridable from "react-overridable";
 
 function FundingFieldForm(props) {
+  props = {
+    ...props,
+    label: typeof props.label === "undefined" ? undefined : props.label,
+    labelIcon: typeof props.labelIcon === "undefined" ? undefined : props.labelIcon,
+    form: typeof props.form === "undefined" ? undefined : props.form,
+    move: typeof props.move === "undefined" ? undefined : props.move,
+    push: typeof props.push === "undefined" ? undefined : props.push,
+    remove: typeof props.remove === "undefined" ? undefined : props.remove,
+    replace: typeof props.replace === "undefined" ? undefined : props.replace,
+    required: typeof props.required === "undefined" ? undefined : props.required,
+    deserializeAward:
+      typeof props.deserializeAward === "undefined"
+        ? undefined
+        : props.deserializeAward,
+    deserializeFunder:
+      typeof props.deserializeFunder === "undefined"
+        ? undefined
+        : props.deserializeFunder,
+    computeFundingContents:
+      typeof props.computeFundingContents === "undefined"
+        ? undefined
+        : props.computeFundingContents,
+    searchConfig:
+      typeof props.searchConfig === "undefined" ? undefined : props.searchConfig,
+  };
+
   const {
     label,
     labelIcon,
@@ -197,22 +222,29 @@ FundingFieldForm.propTypes = {
   searchConfig: PropTypes.object,
 };
 
-FundingFieldForm.defaultProps = {
-  label: undefined,
-  labelIcon: undefined,
-  form: undefined,
-  move: undefined,
-  push: undefined,
-  remove: undefined,
-  replace: undefined,
-  required: undefined,
-  deserializeAward: undefined,
-  deserializeFunder: undefined,
-  computeFundingContents: undefined,
-  searchConfig: undefined,
-};
-
 export function FundingField(props) {
+  props = {
+    ...props,
+    label: typeof props.label === "undefined" ? "Awards" : props.label,
+    labelIcon:
+      typeof props.labelIcon === "undefined"
+        ? "money bill alternate outline"
+        : props.labelIcon,
+    required: typeof props.required === "undefined" ? false : props.required,
+    deserializeAward:
+      typeof props.deserializeAward === "undefined"
+        ? undefined
+        : props.deserializeAward,
+    deserializeFunder:
+      typeof props.deserializeFunder === "undefined"
+        ? undefined
+        : props.deserializeFunder,
+    computeFundingContents:
+      typeof props.computeFundingContents === "undefined"
+        ? undefined
+        : props.computeFundingContents,
+  };
+
   const { fieldPath } = props;
   return (
     <FieldArray
@@ -231,13 +263,4 @@ FundingField.propTypes = {
   deserializeAward: PropTypes.func,
   deserializeFunder: PropTypes.func,
   computeFundingContents: PropTypes.func,
-};
-
-FundingField.defaultProps = {
-  label: "Awards",
-  labelIcon: "money bill alternate outline",
-  required: false,
-  deserializeAward: undefined,
-  deserializeFunder: undefined,
-  computeFundingContents: undefined,
 };

@@ -7,15 +7,16 @@
 {% if subjects %}
   <ul class="ui horizontal list no-bullets subjects">
     {%- for subject in subjects %}
-    <li class="item">
-      {%- set q = 'metadata.subjects.subject:"' + subject.subject + '"' %}
-      <a href="{{ url_for('invenio_search_ui.search', q=q) }}"
+      <li class="item">
+        {%- set q = 'metadata.subjects.subject:"' + subject.subject + '"' %}
+        <a
+          href="{{ url_for('invenio_search_ui.search', q=q) }}"
           class="subject"
           title="{{ _('Search results for ') + subject.subject }}"
-      >
-        {{ subject.subject }}
-      </a>
-    </li>
+        >
+          {{ subject.subject }}
+        </a>
+      </li>
     {%- endfor %}
   </ul>
 {% endif %}

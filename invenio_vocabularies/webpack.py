@@ -17,9 +17,7 @@ theme = WebpackThemeBundle(
             entry={},
             dependencies={
                 "@babel/runtime": "^7.9.0",
-                "@ckeditor/ckeditor5-build-classic": "^16.0.0",
-                "@ckeditor/ckeditor5-react": "^2.1.0",
-                "formik": "^2.1.0",
+                "formik": "^2.4.9",
                 "i18next": "^20.3.0",
                 "i18next-browser-languagedetector": "^6.1.0",
                 "luxon": "^1.23.0",
@@ -30,8 +28,8 @@ theme = WebpackThemeBundle(
                 "react-dnd-html5-backend": "^11.1.0",
                 "react-dropzone": "^11.0.0",
                 "react-i18next": "^11.11.0",
-                "react-invenio-forms": "^4.6.0",
-                "react-searchkit": "^3.0.0",
+                "react-invenio-forms": "^5.0.0-alpha.3",
+                "react-searchkit": "^4.0.0-alpha.2",
                 "yup": "^0.32.0",
             },
             aliases={
