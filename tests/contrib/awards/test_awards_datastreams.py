@@ -498,3 +498,19 @@ def test_cordis_datastream_end_to_end_pic_resolves(
             "identifiers": [{"identifier": "01ggx4157", "scheme": "ror"}],
         }
     ]
+
+
+def test_cordis_writer_can_create(
+    app, search_clear, example_funder_ec, award_full_data
+):
+    """Verify creation of an award record from CORDIS."""
+    writer = CORDISAwardsServiceWriter(insert=True, update=True)
+    # insert/update do not collide with the hardcoded defaults
+    assert writer._insert is True
+    assert writer._update is True
+    award_rec = writer.write(StreamEntry(award_full_data))
+
+    assert award_rec.op_type == "create"
+
+    # cleanup
+    award_rec.entry._record.delete(force=True)
