@@ -137,6 +137,9 @@ class ImportAwardsOpenAIREJob(ProcessDataStreamJob):
                 "writers": [
                     {"args": {"writer": {"type": "awards-service"}}, "type": "async"}
                 ],
+                "filters": current_app.config.get(
+                    "VOCABULARIES_AWARDS_OPENAIRE_FILTERS", []
+                ),
             }
         }
 
