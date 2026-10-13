@@ -7,6 +7,7 @@ from flask import current_app
 from invenio_access.permissions import system_identity, system_user_id
 from invenio_access.utils import get_identity
 from invenio_accounts.proxies import current_datastore
+from invenio_base.utils import obj_or_import_string
 from invenio_jobs.logging.jobs import EMPTY_JOB_CTX, job_context
 from invenio_jobs.proxies import current_runs_service
 
@@ -78,7 +79,7 @@ class DataStream:
         self.batch_size = batch_size
         self.write_many = write_many
         self.run_subtasks = run_subtasks
-        self._filters = filters or []
+        self._filters = [obj_or_import_string(f) for f in filters or []]
 
     def filter(self, stream_entry, *args, **kwargs):
         """Checks if an stream_entry should be filtered out (skipped)."""
