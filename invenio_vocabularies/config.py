@@ -156,6 +156,15 @@ Zenodo concept DOI of the record holding ``pic_mapping.csv``, or a local
 CSV file path. Set to ``None`` to disable PIC resolution.
 """
 
+VOCABULARIES_AWARDS_OPENAIRE_FILTERS = []
+"""Filters to apply to the stream entry."""
+
+VOCABULARIES_AWARDS_CORDIS_INSERT = False
+"""Whether the CORDIS awards job can create new award records."""
+
+VOCABULARIES_AWARDS_CORDIS_UPDATE = True
+"""Whether the CORDIS awards job can update existing award records."""
+
 VOCABULARIES_NAMES_SCHEMES = {
     "orcid": {"label": _("ORCID"), "validator": is_orcid, "datacite": "ORCID"},
     "isni": {"label": _("ISNI"), "validator": is_isni, "datacite": "ISNI"},
