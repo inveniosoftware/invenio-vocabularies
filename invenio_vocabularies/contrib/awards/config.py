@@ -52,3 +52,6 @@ service_components = [
     ModelPIDComponent,
     RelationsComponent,
 ]
+
+VOCABULARIES_AWARDS_OPENAIRE_FILTERS = []
+"""Filters to apply to the stream entry."""
