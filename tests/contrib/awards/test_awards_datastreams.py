@@ -485,7 +485,7 @@ def test_cordis_datastream_end_to_end_pic_resolves(
     # Run the real readers/transformer/writer chain on the fixture XML.
     award = next(XMLReader().read(CORDIS_PROJECT_XML))
     transformer = CORDISProjectTransformer()
-    writer = CORDISAwardsServiceWriter()
+    writer = CORDISAwardsServiceWriter(insert=False, update=True)
     transformed = transformer.apply(StreamEntry(award["project"]))
     writer.write(transformed)
     Award.index.refresh()

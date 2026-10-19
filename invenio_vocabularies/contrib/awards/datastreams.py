@@ -436,11 +436,6 @@ class CORDISAwardsServiceWriter(ServiceWriter):
     def __init__(self, *args, **kwargs):
         """Constructor."""
         kwargs.setdefault("service_or_name", "awards")
-        # By default we only update and we do not insert, since CORDIS data is used to augment
-        # existing awards (with subjects, organizations, and program information) and is not
-        # used to create new awards.
-        kwargs.setdefault("insert", False)
-        kwargs.setdefault("update", True)
         super().__init__(*args, **kwargs)
 
     def _entry_id(self, entry):
