@@ -2,39 +2,33 @@
   SPDX-FileCopyrightText: 2024 CERN.
   SPDX-License-Identifier: MIT
 #}
-
 {%- from "invenio_administration/macros.html" import go_back %}
 
 {% extends "invenio_administration/search.html" %}
 
 {% block admin_main_column %}
-  <main id="admin-main-content"
-        class="ten wide mobile twelve wide tablet thirteen wide computer fourteen wide widescreen column">
-
+  <main
+    id="admin-main-content"
+    class="ten wide mobile twelve wide tablet thirteen wide computer fourteen wide widescreen column"
+  >
     <div class="ui container fluid pl-10 pr-10 pt-10 pb-10">
       {{ go_back() }}
-    <div class="ui grid">
-      <div class="column six wide">
-        <h1 class="ui header">{{ title or name }}</h1>
+      <div class="ui grid">
+        <div class="column six wide">
+          <h1 class="ui header">{{ title or name }}</h1>
+        </div>
+        <div class="column ten wide right aligned">
+          <a class="ui icon labeled button" href="{{ edit_endpoint }}">
+            <i aria-hidden="true" class="cog icon"></i>{{ _("Settings") }}
+          </a>
+          <a class="ui icon labeled button" href="{{ create_ui_endpoint }}">
+            <i aria-hidden="true" class="calendar icon"></i>{{ _("Schedule") }}
+          </a>
+          <a class="ui icon labeled button" href="{{ run_endpoint }}">
+            <i aria-hidden="true" class="play icon"></i>{{ _("Run now") }}
+          </a>
+        </div>
       </div>
-      <div class="column ten wide right aligned">
-        <a class="ui icon labeled button"
-            href="{{ edit_endpoint }}">
-          <i aria-hidden="true"
-              class="cog icon"></i>{{ _("Settings") }}
-        </a>
-        <a class="ui icon labeled button"
-            href="{{ create_ui_endpoint }}">
-          <i aria-hidden="true"
-              class="calendar icon"></i>{{ _("Schedule") }}
-        </a>
-        <a class="ui icon labeled button"
-            href="{{ run_endpoint }}">
-          <i aria-hidden="true"
-              class="play icon"></i>{{ _("Run now") }}
-        </a>
-      </div>
-    </div>
       {% block admin_page_content %}
         <div class="ui divider" aria-hidden="true"></div>
 
@@ -55,8 +49,7 @@
             data-pid-path='{{ pid_path | tojson }}'
             data-create-endpoint='{{ create_ui_endpoint }}'
             data-list-endpoint='{{ list_ui_endpoint }}'
-          >
-          </div>
+          ></div>
         {%- endblock search_app %}
       {% endblock admin_page_content %}
     </div>
