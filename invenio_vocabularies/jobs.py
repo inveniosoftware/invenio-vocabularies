@@ -137,6 +137,9 @@ class ImportAwardsOpenAIREJob(ProcessDataStreamJob):
                 "writers": [
                     {"args": {"writer": {"type": "awards-service"}}, "type": "async"}
                 ],
+                "filters": current_app.config.get(
+                    "VOCABULARIES_AWARDS_OPENAIRE_FILTERS", []
+                ),
             }
         }
 
@@ -161,7 +164,19 @@ class UpdateAwardsCordisJob(ProcessDataStreamJob):
                 "transformers": [{"type": "cordis-award"}],
                 "writers": [
                     {
-                        "args": {"writer": {"type": "cordis-awards-service"}},
+                        "args": {
+                            "writer": {
+                                "type": "cordis-awards-service",
+                                "args": {
+                                    "insert": current_app.config[
+                                        "VOCABULARIES_AWARDS_CORDIS_INSERT"
+                                    ],
+                                    "update": current_app.config[
+                                        "VOCABULARIES_AWARDS_CORDIS_UPDATE"
+                                    ],
+                                },
+                            }
+                        },
                         "type": "async",
                     }
                 ],

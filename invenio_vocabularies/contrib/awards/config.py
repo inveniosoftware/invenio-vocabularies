@@ -52,3 +52,12 @@ service_components = [
     ModelPIDComponent,
     RelationsComponent,
 ]
+
+VOCABULARIES_AWARDS_OPENAIRE_FILTERS = []
+"""Filters to apply to the stream entry."""
+
+VOCABULARIES_AWARDS_CORDIS_INSERT = False
+"""Whether the CORDIS awards job can create new award records."""
+
+VOCABULARIES_AWARDS_CORDIS_UPDATE = True
+"""Whether the CORDIS awards job can update existing award records."""

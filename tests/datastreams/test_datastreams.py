@@ -140,3 +140,21 @@ def test_piping_readers(app, zip_file, json_element):
             assert entry.errors == expected_errors
 
     assert count == 5  # 2 good + 1 bad + 2 good
+
+
+def test_datastream_filter_skips_entries(app, vocabulary_config):
+    custom_config = dict(vocabulary_config)
+    datastream = DataStreamFactory.create(
+        readers_config=custom_config["readers"],
+        transformers_config=custom_config.get("transformers"),
+        writers_config=custom_config["writers"],
+        filters=[lambda stream_entry: stream_entry.entry == 2],
+    )
+    stream_iter = datastream.process()
+
+    entry = next(stream_iter)
+    assert entry.filtered is True
+    assert not entry.errors
+
+    invalid = next(stream_iter)
+    assert invalid.errors

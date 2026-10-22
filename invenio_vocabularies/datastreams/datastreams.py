@@ -62,6 +62,7 @@ class DataStream:
         batch_size=100,
         write_many=False,
         run_subtasks=True,
+        filters=None,
         *args,
         **kwargs,
     ):
@@ -77,10 +78,15 @@ class DataStream:
         self.batch_size = batch_size
         self.write_many = write_many
         self.run_subtasks = run_subtasks
+        self._filters = filters or []
 
     def filter(self, stream_entry, *args, **kwargs):
         """Checks if an stream_entry should be filtered out (skipped)."""
-        current_app.logger.debug(f"Filtering entry: {stream_entry.entry}")
+        for f in self._filters:
+            result = f(stream_entry)
+            if result:
+                current_app.logger.debug(f"Filtering entry: {stream_entry.entry}")
+                return True
         return False
 
     def process_batch(self, batch):
