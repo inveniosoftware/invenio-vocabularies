@@ -8,7 +8,7 @@
 import { i18next } from "@translations/invenio_vocabularies/i18next";
 import { Formik } from "formik";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import { cloneElement, useState } from "react";
 import {
   EmptyResults,
   Error,
@@ -93,6 +93,12 @@ function FundingModal({
   computeFundingContents,
   ...props
 }) {
+  props = {
+    ...props,
+    initialFunding:
+      typeof props.initialFunding === "undefined" ? undefined : props.initialFunding,
+  };
+
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(initialMode);
   const openModal = () => setOpen(true);
@@ -132,7 +138,7 @@ function FundingModal({
           centered={false}
           onOpen={openModal}
           open={open}
-          trigger={React.cloneElement(trigger, {
+          trigger={cloneElement(trigger, {
             "aria-expanded": open,
             "aria-haspopup": "dialog",
           })}
@@ -246,10 +252,6 @@ FundingModal.propTypes = {
   deserializeFunder: PropTypes.func.isRequired,
   computeFundingContents: PropTypes.func.isRequired,
   initialFunding: PropTypes.object,
-};
-
-FundingModal.defaultProps = {
-  initialFunding: undefined,
 };
 
 export default FundingModal;
