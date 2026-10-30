@@ -8,6 +8,13 @@
 
 Changes
 =======
+
+Version v9.0.2 (released 2026-10-30)
+
+- fix(datastreams): OpenAIREHTTPReader allowing to match several tar filenames
+- fix(contrib): adding custom funders
+- funding: make funding item button order match
+
 Version v9.0.1 (released 2026-04-16)
 
 - fix(formatting): ignore black formatting in some problematic areas
