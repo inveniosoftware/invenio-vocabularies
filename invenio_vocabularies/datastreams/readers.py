@@ -303,9 +303,11 @@ class OAIPMHReader(BaseReader):
 
             def get_metadata(self):
                 """Extract and return the record's metadata as a dictionary."""
-                return xml_to_dict(
-                    self.xml.find(f".//{self._oai_namespace}metadata").getchildren()[0],
-                )
+                metadata_el = self.xml.find(f".//{self._oai_namespace}metadata")
+                children = metadata_el.getchildren() if metadata_el is not None else []
+                if not children:
+                    return {}
+                return xml_to_dict(children[0])
 
         if self._verb == "ListRecords":
             scythe.class_mapping["ListRecords"] = OAIRecord
