@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version v14.6.0 (released 2026-11-04)
+
+- feat(awards): configurable CORDIS insert/update
+- feat(datastreams): support configurable filter functions
+- Update ORCID summaries bucket name
+
 Version v14.5.0 (released 2026-09-29)
 
 - feat(datastreams): raise IncompleteReadError for partial reads
