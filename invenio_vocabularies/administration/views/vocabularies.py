@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2020-2024 CERN.
 # SPDX-FileCopyrightText: 2024 Uni Münster.
+# SPDX-FileCopyrightText: 2026 Northwestern University.
 # SPDX-License-Identifier: MIT
 
 """Vocabularies admin interface."""
@@ -11,7 +12,8 @@ from invenio_i18n import lazy_gettext as _
 class VocabulariesListView(AdminResourceListView):
     """Configuration for vocabularies list view."""
 
-    api_endpoint = "/vocabularies/"
+    api_endpoint = "/vocabularies/"  # Deprecated
+    api_endpoint_name = "vocabulary_types.search"
     name = "vocabulary-types"
     menu_label = _("Vocabulary Types")
     resource_config = "vocabulary_admin_resource"
