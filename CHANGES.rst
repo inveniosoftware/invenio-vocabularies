@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v15.0.0 (released 2026-11-10)
+
+- chore(setup): bump dependencies
+- feat: upgrade to react 18
+
 Version v14.6.0 (released 2026-11-04)
 
 - feat(awards): configurable CORDIS insert/update
