@@ -21,9 +21,9 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
 ]
 dependencies = [
-  "invenio-administration>=7.0.0,<8.0.0",
+  "invenio-administration>=8.0.0,<9.0.0",
   "invenio-i18n>=4.0.0,<5.0.0",
-  "invenio-jobs>=11.0.0,<12.0.0",
+  "invenio-jobs>=12.0.0,<13.0.0",
   "invenio-records-resources>=11.0.0,<12.0.0",
   "lxml>=4.5.0",
   "pycountry>=24.0.0",
