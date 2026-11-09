@@ -8,6 +8,6 @@
 
 from .ext import InvenioVocabularies
 
-__version__ = "14.6.0"
+__version__ = "15.0.0"
 
 __all__ = ("__version__", "InvenioVocabularies")
