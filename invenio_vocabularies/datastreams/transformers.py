@@ -8,6 +8,9 @@ from urllib.parse import urlparse
 
 from lxml import etree
 
+from marshmallow import ValidationError
+from werkzeug.utils import import_string
+
 from .errors import TransformerError
 from .xml import etree_to_dict
 
@@ -123,3 +126,30 @@ class RDFTransformer(BaseTransformer):
             stream_entry.entry["subject"], stream_entry.entry["rdf_graph"]
         )
         return stream_entry
+
+
+
+class MarshmallowTransformer(BaseTransformer):
+    """Marshmallow transformer."""
+
+    def __init__(self, schema, *args, **kwargs):
+        """Initializes the transformer."""
+        self.schema = schema
+        super().__init__(*args, **kwargs)
+
+    def apply(self, stream_entry, **kwargs):
+        """Applies the transformation to the stream entry."""
+        if isinstance(self.schema, str):
+            schema_inst = import_string(self.schema)()
+        elif isinstance(self.schema, type):
+            schema_inst = self.schema()
+        else:
+            schema_inst = self.schema
+            
+        try:
+            stream_entry.entry = schema_inst.load(stream_entry.entry)
+        except ValidationError as e:
+            stream_entry.errors.append(TransformerError(f"Validation error: {e.messages}"))
+            
+        return stream_entry
+

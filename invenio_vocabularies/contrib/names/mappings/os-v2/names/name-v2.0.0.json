@@ -136,6 +136,16 @@
                 "normalizer": "accent_normalizer"
               }
             }
+          },
+          "identifiers": {
+            "properties": {
+              "identifier": {
+                "type": "keyword"
+              },
+              "scheme": {
+                "type": "keyword"
+              }
+            }
           }
         }
       },

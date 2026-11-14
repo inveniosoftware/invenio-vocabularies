@@ -31,7 +31,11 @@ def example_affiliation(db, identity, affiliations_service):
     """Example affiliation."""
     aff = affiliations_service.create(
         identity,
-        {"id": "cern", "name": "European Organization for Nuclear Research"},
+        {
+            "id": "cern",
+            "name": "European Organization for Nuclear Research",
+            "identifiers": [{"scheme": "ror", "identifier": "01ggx4157"}],
+        },
     )
     affiliations_service.record_cls.index.refresh()
     yield aff
