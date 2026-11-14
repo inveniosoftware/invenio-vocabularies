@@ -65,7 +65,12 @@ class OrcidDataSyncReader(BaseReader):
         date_format_no_millis = "%Y-%m-%d %H:%M:%S"
 
         if self.since:
-            last_sync = datetime.strptime(self.since, date_format)
+            try:
+                last_sync = datetime.fromisoformat(self.since)
+                if last_sync.tzinfo is not None:
+                    last_sync = last_sync.replace(tzinfo=None)
+            except ValueError:
+                last_sync = datetime.strptime(self.since, date_format)
         else:
             last_sync = datetime.now() - timedelta(
                 **current_app.config["VOCABULARIES_ORCID_SYNC_SINCE"]

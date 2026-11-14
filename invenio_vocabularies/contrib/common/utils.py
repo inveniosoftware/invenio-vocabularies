@@ -61,6 +61,9 @@ def fetch_doi_file(doi, select_func, since=None):
 
         # If `since` is set, skip when the record's publication date is older.
         if since is not None:
+            if since.tzinfo is None:
+                from datetime import timezone
+                since = since.replace(tzinfo=timezone.utc)
             ld_link = next(
                 (
                     fmt
