@@ -167,6 +167,10 @@ input_file = "invenio_vocabularies/translations/messages.pot"
 output_dir = "invenio_vocabularies/translations/"
 
 [[tool.babel.mappings]]
+method = "ignore"
+pattern = "**/node_modules/**"
+
+[[tool.babel.mappings]]
 method = "javascript"
 pattern = "**.js"
 encoding = "utf-8"

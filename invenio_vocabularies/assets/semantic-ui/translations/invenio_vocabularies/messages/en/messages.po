@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-07-08T15:47:17.217Z\n"
-"PO-Revision-Date: 2025-07-08T15:47:17.217Z\n"
+"POT-Creation-Date: 2026-11-13T23:01:26.357Z\n"
+"PO-Revision-Date: 2026-11-13T23:01:26.357Z\n"
 "Language: en\n"
 
 msgid "Search for a funder by name"
@@ -17,12 +17,6 @@ msgstr "Funder"
 
 msgid "Search for funder..."
 msgstr "Search for funder..."
-
-msgid "Additional information"
-msgstr "Additional information"
-
-msgid "optional"
-msgstr "optional"
 
 msgid "Number"
 msgstr "Number"
@@ -81,8 +75,18 @@ msgstr "Cancel"
 msgid "Change"
 msgstr "Change"
 
-msgid "Did not find your award/grant? "
-msgstr "Did not find your award/grant? "
+msgid "ROR logo"
+msgstr "ROR logo"
 
-msgid "Add a custom award/grant."
-msgstr "Add a custom award/grant."
+msgid "No results found."
+msgstr "No results found."
+
+msgid "Additional information (optional)"
+msgstr "Additional information (optional)"
+
+msgid ""
+"Did not find your award/grant? <customLink>Add a custom "
+"award/grant.</customLink>"
+msgstr ""
+"Did not find your award/grant? <customLink>Add a custom "
+"award/grant.</customLink>"

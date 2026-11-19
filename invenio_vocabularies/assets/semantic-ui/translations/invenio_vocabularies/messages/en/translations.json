@@ -2,8 +2,6 @@
   "Search for a funder by name": "Search for a funder by name",
   "Funder": "Funder",
   "Search for funder...": "Search for funder...",
-  "Additional information": "Additional information",
-  "optional": "optional",
   "Number": "Number",
   "Award/Grant number": "Award/Grant number",
   "Title": "Title",
@@ -23,6 +21,8 @@
   "Search for awards/grants": "Search for awards/grants",
   "Cancel": "Cancel",
   "Change": "Change",
-  "Did not find your award/grant? ": "Did not find your award/grant? ",
-  "Add a custom award/grant.": "Add a custom award/grant."
+  "ROR logo": "ROR logo",
+  "No results found.": "No results found.",
+  "Additional information (optional)": "Additional information (optional)",
+  "Did not find your award/grant? <customLink>Add a custom award/grant.</customLink>": "Did not find your award/grant? <customLink>Add a custom award/grant.</customLink>"
 }

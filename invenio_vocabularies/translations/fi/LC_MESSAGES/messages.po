@@ -1,0 +1,277 @@
+# Translations template for invenio-vocabularies.
+# Copyright (C) 2026 CERN
+# This file is distributed under the same license as the
+# invenio-vocabularies project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+# 
+# Translators:
+# Matti Lassila <matti.lassila@gmail.com>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: invenio-vocabularies 13.0.0\n"
+"Report-Msgid-Bugs-To: info@inveniosoftware.org\n"
+"POT-Creation-Date: 2026-06-22 20:50+0000\n"
+"PO-Revision-Date: 2021-07-13 12:40+0000\n"
+"Last-Translator: Matti Lassila <matti.lassila@gmail.com>, 2025\n"
+"Language-Team: Finnish (https://app.transifex.com/inveniosoftware/teams/23537/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: invenio_vocabularies/config.py:39
+msgid "GRID"
+msgstr "GRID"
+
+#: invenio_vocabularies/config.py:40 invenio_vocabularies/config.py:155
+#: invenio_vocabularies/config.py:160
+msgid "GND"
+msgstr "GND"
+
+#: invenio_vocabularies/config.py:41 invenio_vocabularies/config.py:154
+msgid "ISNI"
+msgstr "ISNI"
+
+#: invenio_vocabularies/config.py:42
+msgid "ROR"
+msgstr "ROR"
+
+#: invenio_vocabularies/config.py:63
+msgid "PIC"
+msgstr "PIC"
+
+#: invenio_vocabularies/config.py:64
+msgid "EDMO"
+msgstr "EDMO"
+
+#: invenio_vocabularies/config.py:70 invenio_vocabularies/config.py:79
+msgid "DOI"
+msgstr "DOI"
+
+#: invenio_vocabularies/config.py:78 invenio_vocabularies/config.py:161
+msgid "URL"
+msgstr "URL"
+
+#: invenio_vocabularies/config.py:153
+msgid "ORCID"
+msgstr "ORCID"
+
+#: invenio_vocabularies/administration/views/vocabularies.py:32
+#: invenio_vocabularies/config.py:204
+#: invenio_vocabularies/contrib/affiliations/config.py:56
+#: invenio_vocabularies/contrib/funders/config.py:55
+#: invenio_vocabularies/contrib/names/config.py:50
+#: invenio_vocabularies/contrib/subjects/config.py:67
+msgid "Name"
+msgstr "Nimi"
+
+#: invenio_vocabularies/administration/views/vocabularies.py:33
+#: invenio_vocabularies/config.py:208
+msgid "Number of entries"
+msgstr "Merkintöjen määrä"
+
+#: invenio_vocabularies/jobs.py:30
+msgid "Process ROR affiliations"
+msgstr "Käsittele ROR-affiliaatiot"
+
+#: invenio_vocabularies/jobs.py:31
+msgid "Load ROR affiliations"
+msgstr "Lataa ROR-affiliaatiot"
+
+#: invenio_vocabularies/jobs.py:68
+msgid "Process ROR funders"
+msgstr "Käsittele ROR-rahoittajat"
+
+#: invenio_vocabularies/jobs.py:69
+msgid "Load ROR funders"
+msgstr "Lataa ROR-rahoittajat"
+
+#: invenio_vocabularies/jobs.py:106
+msgid "Import awards from OpenAIRE"
+msgstr "Tuo apurahat OpenAIREsta"
+
+#: invenio_vocabularies/jobs.py:107
+msgid "Import Awards OpenAIRE"
+msgstr "Tuo apurahat OpenAIREsta"
+
+#: invenio_vocabularies/jobs.py:141
+msgid "Update awards from CORDIS"
+msgstr "Päivitä apurahat CORDISista"
+
+#: invenio_vocabularies/jobs.py:142
+msgid "Update Awards CORDIS"
+msgstr "Päivitä apurahat CORDISista"
+
+#: invenio_vocabularies/jobs.py:169 invenio_vocabularies/jobs.py:170
+msgid "Import ORCID data"
+msgstr "Tuo ORCID-tiedot"
+
+#: invenio_vocabularies/jobs.py:212
+msgid "Import subjects from EuroSciVoc"
+msgstr ""
+
+#: invenio_vocabularies/jobs.py:213
+msgid "Import Subjects EuroSciVoc"
+msgstr ""
+
+#: invenio_vocabularies/administration/views/vocabularies.py:16
+#: invenio_vocabularies/administration/views/vocabularies.py:19
+msgid "Vocabulary Types"
+msgstr "Sanastotyypit"
+
+#: invenio_vocabularies/administration/views/vocabularies.py:20
+msgid "Site management"
+msgstr "Sivuston hallinta"
+
+#: invenio_vocabularies/contrib/affiliations/config.py:52
+#: invenio_vocabularies/contrib/funders/config.py:51
+#: invenio_vocabularies/contrib/names/config.py:46
+#: invenio_vocabularies/contrib/subjects/config.py:63
+#: invenio_vocabularies/services/config.py:61
+msgid "Best match"
+msgstr "Paras osuma"
+
+#: invenio_vocabularies/contrib/affiliations/config.py:60
+#: invenio_vocabularies/contrib/funders/config.py:59
+#: invenio_vocabularies/contrib/names/config.py:54
+#: invenio_vocabularies/contrib/subjects/config.py:71
+#: invenio_vocabularies/services/config.py:69
+msgid "Newest"
+msgstr "Uusimmat"
+
+#: invenio_vocabularies/contrib/affiliations/config.py:64
+#: invenio_vocabularies/contrib/funders/config.py:63
+#: invenio_vocabularies/contrib/names/config.py:58
+#: invenio_vocabularies/contrib/subjects/config.py:75
+#: invenio_vocabularies/services/config.py:73
+msgid "Oldest"
+msgstr "Vanhimmat"
+
+#: invenio_vocabularies/contrib/affiliations/schema.py:36
+#: invenio_vocabularies/contrib/funders/schema.py:32
+#: invenio_vocabularies/contrib/funders/schema.py:40
+msgid "Name cannot be blank."
+msgstr "Nimi ei voi olla tyhjä."
+
+#: invenio_vocabularies/contrib/affiliations/schema.py:42
+#: invenio_vocabularies/contrib/awards/schema.py:64
+#: invenio_vocabularies/contrib/funders/schema.py:56
+msgid "PID cannot be blank."
+msgstr "PID ei voi olla tyhjä."
+
+#: invenio_vocabularies/contrib/awards/config.py:44
+msgid "Funders"
+msgstr "Rahoittajat"
+
+#: invenio_vocabularies/contrib/awards/datastreams.py:62
+#, python-brace-format
+msgid "Unknown OpenAIRE funder prefix {openaire_funder_prefix}"
+msgstr "Tuntematon OpenAIRE-rahoittajan etuliite {openaire_funder_prefix}"
+
+#: invenio_vocabularies/contrib/awards/datastreams.py:103
+#, python-brace-format
+msgid "Missing title attribute for award {award_id}"
+msgstr "Palkinnon {award_id} otsikko-attribuutti puuttuu"
+
+#: invenio_vocabularies/contrib/awards/datastreams.py:239
+#, python-brace-format
+msgid "No related legal basis programme found for project {project_id}"
+msgstr "Hankkeelle {project_id} ei löytynyt liittyvää oikeusperustaohjelmaa"
+
+#: invenio_vocabularies/contrib/awards/schema.py:47
+msgid "Number cannot be blank."
+msgstr "Numero ei voi olla tyhjä."
+
+#: invenio_vocabularies/contrib/awards/schema.py:95
+msgid "An existing id or either number or title must be present."
+msgstr "Täytyy olla joko olemassa oleva tunnus tai numero tai otsikko."
+
+#: invenio_vocabularies/contrib/awards/schema.py:113
+msgid "At least award or funder should be present."
+msgstr "Vähintään palkinto tai rahoittaja on annettava."
+
+#: invenio_vocabularies/contrib/common/ror/datastreams.py:157
+msgid "Id not found in ROR entry."
+msgstr "Tunnusta ei löytynyt ROR-merkinnästä."
+
+#: invenio_vocabularies/contrib/common/ror/datastreams.py:189
+msgid "Name with type ror_display not found in ROR entry."
+msgstr "Nimeä tyypillä ror_display ei löytynyt ROR-merkinnästä."
+
+#: invenio_vocabularies/contrib/names/schema.py:71
+msgid ""
+"A name or the family name together with the given name must be present."
+msgstr "Nimi tai sukunimi yhdessä etunimen kanssa on annettava."
+
+#: invenio_vocabularies/records/models.py:79
+#, python-format
+msgid "No '%(banned_char)s' allowed in VocabularyScheme.id"
+msgstr "Merkkiä '%(banned_char)s' ei sallita kentässä VocabularyScheme.id"
+
+#: invenio_vocabularies/services/components.py:24
+msgid "The vocabulary type does not exists."
+msgstr "Sanastotyyppiä ei ole olemassa."
+
+#: invenio_vocabularies/services/config.py:65
+msgid "Title"
+msgstr "Otsikko"
+
+#: invenio_vocabularies/services/config.py:84
+msgid "ID"
+msgstr "Tunnus"
+
+#: invenio_vocabularies/services/config.py:94
+msgid "Ascending"
+msgstr "Nouseva"
+
+#: invenio_vocabularies/services/config.py:95
+msgid "Descending"
+msgstr "Laskeva"
+
+#: invenio_vocabularies/services/schema.py:84
+#, python-brace-format
+msgid "An existing id or a free text {ftf_name} must be present."
+msgstr "Olemassa oleva tunnus tai vapaamuotoinen {ftf_name} on annettava."
+
+#: invenio_vocabularies/services/schema.py:132
+msgid "Missing PID."
+msgstr "PID puuttuu."
+
+#: invenio_vocabularies/services/custom_fields/subject.py:45
+msgid "Subjects"
+msgstr "Aiheet"
+
+#: invenio_vocabularies/services/custom_fields/subject.py:52
+msgid "Keywords and subjects"
+msgstr "Avainsanat ja aiheet"
+
+#: invenio_vocabularies/services/custom_fields/subject.py:54
+msgid "The subjects related to the community"
+msgstr "Yhteisöön liittyvät aiheet"
+
+#: invenio_vocabularies/services/custom_fields/subject.py:55
+msgid "Search for a subject by name e.g. Psychology ..."
+msgstr "Hae aihetta nimellä, esim. Psychology ..."
+
+#: invenio_vocabularies/services/custom_fields/subject.py:57
+msgid "Search for subjects..."
+msgstr "Hae aiheita..."
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/subjects.html:14
+msgid "Search results for "
+msgstr "Hakutulokset haulle "
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:24
+msgid "Settings"
+msgstr "Asetukset"
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:29
+msgid "Schedule"
+msgstr "Ajoitus"
+
+#: invenio_vocabularies/templates/semantic-ui/invenio_vocabularies/vocabulary-details.html:34
+msgid "Run now"
+msgstr "Aja nyt"

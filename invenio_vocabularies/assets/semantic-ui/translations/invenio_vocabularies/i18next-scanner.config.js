@@ -14,7 +14,6 @@ const extensions = [".js", ".jsx"];
 
 module.exports = {
   options: {
-    compatibilityJSON: "v4",
     debug: true,
     removeUnusedKeys: true,
     browserLanguageDetection: true,

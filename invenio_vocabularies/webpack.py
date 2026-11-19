@@ -19,7 +19,7 @@ theme = WebpackThemeBundle(
             dependencies={
                 "@babel/runtime": "^7.9.0",
                 "formik": "^2.4.9",
-                "i18next": "^27.0.1",
+                "i18next": "^27.1.1",
                 "i18next-browser-languagedetector": "^8.3.0",
                 "luxon": "^1.23.0",
                 "path": "^0.12.7",
