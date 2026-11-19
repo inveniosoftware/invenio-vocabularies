@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2021-2024 CERN.
  * SPDX-FileCopyrightText: 2021 Northwestern University.
  * SPDX-FileCopyrightText: 2026 ZBW – Leibniz-Informationszentrum Wirtschaft.
+ * SPDX-FileCopyrightText: 2026 KTH Royal Institute of Technology.
  * SPDX-License-Identifier: MIT
  */
 
@@ -137,7 +138,7 @@ function CustomAwardForm({ deserializeFunder, selectedFunding = undefined }) {
       </Overridable>
       <Overridable id="InvenioVocabularies.CustomAwardForm.AwardInformationHeader.Container">
         <Header as="h3" size="small">
-          {i18next.t("Additional information")} ({i18next.t("optional")})
+          {i18next.t("Additional information (optional)")}
         </Header>
       </Overridable>
       <Form.Group widths="equal">
