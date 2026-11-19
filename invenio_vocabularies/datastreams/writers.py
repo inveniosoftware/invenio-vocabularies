@@ -82,11 +82,23 @@ class ServiceWriter(BaseWriter):
     def _resolve(self, id_):
         return self._service.read(self._identity, id_)
 
+    def _is_unchanged(self, current, entry):
+        """Return True when all incoming entry fields already match current."""
+        for key, value in entry.items():
+            if current.get(key) != value:
+                return False
+        return True
+
     def _do_update(self, entry):
         vocab_id = self._entry_id(entry)
         current_app.logger.debug(f"Resolving entry with ID: {vocab_id}")
         current = self._resolve(vocab_id)
-        updated = dict(current.to_dict(), **entry)
+        current_dict = current.to_dict()
+        if self._is_unchanged(current_dict, entry):
+            current_app.logger.debug(f"Skipping unchanged entry with ID: {vocab_id}")
+            return StreamEntry(entry, record=current, op_type="skip")
+
+        updated = dict(current_dict, **entry)
         current_app.logger.debug(f"Updating entry with ID: {vocab_id}")
         return StreamEntry(
             self._service.update(self._identity, vocab_id, updated), op_type="update"

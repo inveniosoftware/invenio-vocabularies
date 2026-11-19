@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v15.1.0
+
+- feat(datastreams): skip unchanged vocabulary entries on update
+- fix(jobs): enable ROR affiliations/funders updates without erroring on existing entries
+
 Version v15.0.0 (released 2026-11-10)
 
 - chore(setup): bump dependencies
