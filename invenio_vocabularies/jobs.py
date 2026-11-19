@@ -37,8 +37,6 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Process ROR affiliations."""
-        # NOTE: Update is set to False for now given we don't have the logic to re-index dependent records yet.
-        # Since jobs support custom args, update true can be passed via that.
         return {
             "config": {
                 "readers": [
@@ -54,7 +52,7 @@ class ProcessRORAffiliationsJob(ProcessDataStreamJob):
                         "args": {
                             "writer": {
                                 "type": "affiliations-service",
-                                "args": {"update": False},
+                                "args": {"update": True},
                             }
                         },
                         "type": "async",
@@ -75,8 +73,6 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
     @classmethod
     def build_task_arguments(cls, job_obj, since=None, **kwargs):
         """Process ROR funders."""
-        # NOTE: Update is set to False for now given we don't have the logic to re-index dependent records yet.
-        # Since jobs support custom args, update true can be passed via that.
         return {
             "config": {
                 "readers": [
@@ -92,7 +88,7 @@ class ProcessRORFundersJob(ProcessDataStreamJob):
                         "args": {
                             "writer": {
                                 "type": "funders-service",
-                                "args": {"update": False},
+                                "args": {"update": True},
                             }
                         },
                         "type": "async",

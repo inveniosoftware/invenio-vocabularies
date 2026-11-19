@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version v15.1.0
+
+- feat(datastreams): skip unchanged vocabulary entries on update
+- fix(jobs): enable ROR affiliations/funders updates without erroring on existing entries
+
 Version v15.0.1 (released 2026-11-23)
 
 - fix(orcid): update lambda file S3 bucket name

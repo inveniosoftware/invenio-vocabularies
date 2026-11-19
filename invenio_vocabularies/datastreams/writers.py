@@ -82,11 +82,30 @@ class ServiceWriter(BaseWriter):
     def _resolve(self, id_):
         return self._service.read(self._identity, id_)
 
+    def _normalize(self, data, record):
+        """Load data through the service schema (same cleaning as create/update)."""
+        normalized, _ = self._service.schema.load(
+            data,
+            context={
+                "identity": self._identity,
+                "pid": record.pid,
+                "record": record,
+            },
+        )
+        return normalized
+
     def _do_update(self, entry):
         vocab_id = self._entry_id(entry)
         current_app.logger.debug(f"Resolving entry with ID: {vocab_id}")
         current = self._resolve(vocab_id)
-        updated = dict(current.to_dict(), **entry)
+        current_dict = current.to_dict()
+        updated = dict(current_dict, **entry)
+        # Compare after Marshmallow so SanitizedUnicode etc. don't fake a change.
+        record = current._obj
+        if self._normalize(current_dict, record) == self._normalize(updated, record):
+            current_app.logger.debug(f"Skipping unchanged entry with ID: {vocab_id}")
+            return StreamEntry(entry, record=current, op_type="skip")
+
         current_app.logger.debug(f"Updating entry with ID: {vocab_id}")
         return StreamEntry(
             self._service.update(self._identity, vocab_id, updated), op_type="update"
