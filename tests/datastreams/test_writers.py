@@ -51,11 +51,28 @@ def test_service_writer_update_existing(lang_type, lang_data, service, identity)
     updated_lang["description"]["en"] = "Updated english description"
     updated_lang["tags"].append("updated")
     # check changes vocabulary
-    _ = writer.write(stream_entry=StreamEntry(updated_lang))
+    result = writer.write(stream_entry=StreamEntry(updated_lang))
+    assert result.op_type == "update"
     record = service.read(identity, ("languages", lang.entry.id))
     record = record.to_dict()
 
     assert dict(record, **updated_lang) == record
+
+
+def test_service_writer_skip_unchanged(lang_type, lang_data, service, identity):
+    writer = ServiceWriter(service, identity=identity, update=True)
+    created = writer.write(stream_entry=StreamEntry(lang_data))
+    assert created.op_type == "create"
+
+    before = service.read(identity, ("languages", created.entry.id)).to_dict()
+
+    # Same payload again: skip instead of update or error
+    result = writer.write(stream_entry=StreamEntry(lang_data))
+    assert result.op_type == "skip"
+    assert not result.errors
+
+    after = service.read(identity, ("languages", created.entry.id)).to_dict()
+    assert after["revision_id"] == before["revision_id"]
 
 
 def test_service_writer_update_non_existing(lang_type, lang_data, service, identity):
