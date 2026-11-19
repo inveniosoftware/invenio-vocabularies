@@ -1,7 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2023 CERN.
  * SPDX-FileCopyrightText: 2025 CESNET.
- * SPDX-FileCopyrightText: 2025 KTH Royal Institute of Technology.
+ * SPDX-FileCopyrightText: 2025-2026 KTH Royal Institute of Technology.
  * SPDX-License-Identifier: MIT
  */
 

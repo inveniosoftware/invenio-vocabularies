@@ -9,7 +9,6 @@
 # Fare Fare <fare@polito.it>, 2025
 # Alizee Pace <alizee.pace@gmail.com>, 2025
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: invenio-vocabularies 8.1.0\n"

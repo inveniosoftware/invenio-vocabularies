@@ -16,15 +16,13 @@
   "Remove": "Ta bort",
   "Open external link": "Öppna extern länk",
   "Funder is required.": "Finansiär krävs.",
-  "Title must be set alongside number.": "Titel måste anges tillsammans med nummer.",
-  "Number must be set alongside title.": "Nummer måste anges tillsammans med titel.",
   "URL must be valid.": "URL måste vara giltig.",
-  "URL must be set alongside title and number.": "URL måste anges tillsammans med titel och nummer.",
+  "URL must be set alongside title or number.": "URL måste anges tillsammans med titel eller nummer.",
   "Add standard award/grant": "Lägg till projektbidrag/anslag",
   "Add custom funding": "Ange annan finansiering",
   "Search for awards/grants": "Sök efter projektbidrag/anslag",
   "Cancel": "Avbryt",
   "Change": "Ändra",
-  "Did not find your award/grant? ": "Hittade du inte ditt projektbidrag/anslag?",
+  "Did not find your award/grant? ": "Hittade du inte ditt projektbidrag/anslag? ",
   "Add a custom award/grant.": "Lägg till anpassat projektbidrag/anslag."
 }
