@@ -9,7 +9,6 @@
 # Júlia Babos, 2025
 # Andrea Dömötör, 2025
 # 
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: invenio-vocabularies 8.1.0\n"
