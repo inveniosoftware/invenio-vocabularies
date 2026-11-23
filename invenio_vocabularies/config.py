@@ -255,6 +255,8 @@ VOCABULARIES_ORCID_SECRET_KEY = "CHANGEME"
 """ORCID secret key to access the s3 bucket."""
 VOCABULARIES_ORCID_SUMMARIES_BUCKET = "v3.0-summaries-prod-use2"
 """ORCID summaries bucket name."""
+VOCABULARIES_ORCID_LAMBDA_BUCKET = "orcid-lambda-file-prod-use2"
+"""ORCID lambda file bucket name (last_modified.csv.tar)."""
 VOCABULARIES_ORCID_SYNC_MAX_WORKERS = 32
 """ORCID max number of simultaneous workers/connections."""
 VOCABULARIES_ORCID_SYNC_SINCE = {

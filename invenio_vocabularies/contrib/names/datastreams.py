@@ -143,9 +143,8 @@ class OrcidDataSyncReader(BaseReader):
     def read(self, item=None, *args, **kwargs):
         """Streams the ORCiD lambda file, process it to get the ORCiDS to sync and yields it's data."""
         # Read the file from S3
-        tar_content = self.s3_client.read_file(
-            "s3://orcid-lambda-file/last_modified.csv.tar"
-        )
+        bucket = current_app.config["VOCABULARIES_ORCID_LAMBDA_BUCKET"]
+        tar_content = self.s3_client.read_file(f"s3://{bucket}/last_modified.csv.tar")
         current_app.logger.info("Fetching ORCiD lambda file")
         # Opens tar file and process it
         with tarfile.open(fileobj=io.BytesIO(tar_content)) as tar:
