@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version v15.0.1 (released 2026-11-23)
+
+- fix(orcid): update lambda file S3 bucket name
+
 Version v15.0.0 (released 2026-11-10)
 
 - chore(setup): bump dependencies
