@@ -7,7 +7,10 @@ from flask import current_app
 from invenio_i18n import get_locale
 from invenio_i18n import lazy_gettext as _
 from invenio_records_resources.services import SearchOptions
-from invenio_records_resources.services.records.components import DataComponent
+from invenio_records_resources.services.records.components import (
+    ChangeNotificationsComponent,
+    DataComponent,
+)
 from invenio_records_resources.services.records.queryparser import (
     CompositeSuggestQueryParser,
 )
@@ -70,4 +73,5 @@ service_components = [
     # Order of components are important!
     DataComponent,
     ModelPIDComponent,
+    ChangeNotificationsComponent,
 ]
